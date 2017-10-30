@@ -1,0 +1,14 @@
+{
+  "dataStudio": {
+    "name": "Stack Overflow Questions",
+    "logoUrl": "https://cdn.sstatic.net/Sites/stackoverflow/company/img/logos/se/se-icon.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/stackoverflow-questions",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "Get Stack Overflow questions and relevant metadata by tag.",
+    "sources": [
+      "Stack Overflow"
+    ]
+  }
+}
