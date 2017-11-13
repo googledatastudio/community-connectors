@@ -1,0 +1,20 @@
+{
+  "timeZone": "Asia/Tokyo",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "OAuth2",
+      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+      "version": "22"
+    }]
+  },
+  "exceptionLogging": "CLOUD",
+  "dataStudio": {
+    "name": "Google Fit",
+    "company": "Google",
+    "company_url": "https://fit.google.com/",
+    "logoUrl": "https://developers.google.com/fit/images/fit_icon_512x512.png",
+    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/google-fit",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "The Google Fit connector for DataStudio allows you to retrieve Google Fit activity data and create time based graphs of your activity."
+  }
+}
