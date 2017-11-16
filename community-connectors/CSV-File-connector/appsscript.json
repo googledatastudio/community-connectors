@@ -1,0 +1,10 @@
+{
+  "dataStudio": {
+    "name": "CSV-File-Connector",
+    "company": "Nicky Reinert",
+    "logoUrl": "https://www.gstatic.com/images/branding/product/1x/google_fonts_48dp.png",
+    "addonUrl": "https://www.nickyreinert.de",
+    "supportUrl": "https://www.nickyreinert.de",
+    "description": "This connector loads a CSV file from GoogleDrive or any other location to be display in DataStudio."
+  }
+}
