@@ -1,0 +1,25 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "OAuth2",
+        "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+        "version": "24"
+      }
+    ]
+  },
+  "dataStudio": {
+    "name": "GitHub",
+    "logoUrl": "https://assets-cdn.github.com/images/modules/open_graph/github-mark.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/github",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "Get GitHub star data for specific repositories.",
+    "sources": ["GitHub"],
+    "templates": {
+      "default": "1kxUk9GtGOdLL3NmPVIfScIKRIMV2h5gq"
+    }
+  }
+}
