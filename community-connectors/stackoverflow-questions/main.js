@@ -85,16 +85,22 @@ connector.schema = [
   {
     name: 'owner.display_name',
     label: 'Question Owner',
+    description: 'The display name of the question owner.',
     dataType: 'STRING',
     semantics: {
+      semanticType: 'TEXT',
+      semanticGroup: 'TEXT',
       conceptType: 'DIMENSION'
     }
   },
   {
     name: 'owner.reputation',
     label: 'Owner\'s reputation',
+    description: 'The reputation of the question owner.',
     dataType: 'NUMBER',
     semantics: {
+      semanticType: 'NUMBER',
+      semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
       isReaggregatable: true
     }
@@ -102,32 +108,42 @@ connector.schema = [
   {
     name: 'is_answered',
     label: 'Answered',
+    description: 'Whether or not the question is answered.',
     dataType: 'BOOLEAN',
     semantics: {
+      semanticType: 'BOOLEAN',
+      semanticGroup: 'BOOLEAN',
       conceptType: 'DIMENSION'
     }
   },
   {
     name: 'title',
     label: 'Title',
+    description: 'The question\'s title.',
     dataType: 'STRING',
     semantics: {
+      semanticType: 'TEXT',
       conceptType: 'DIMENSION'
     }
   },
   {
     name: 'link',
     label: 'Link',
+    description: 'A link to the question.',
     dataType: 'STRING',
     semantics: {
+      semanticType: 'URL',
       conceptType: 'DIMENSION'
     }
   },
   {
     name: 'view_count',
     label: 'View Count',
+    description: 'How many views the question has received.',
     dataType: 'NUMBER',
     semantics: {
+      semanticType: 'NUMBER',
+      semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
       isReaggregatable: true
     }
@@ -135,8 +151,11 @@ connector.schema = [
   {
     name: 'answer_count',
     label: 'Answer Count',
+    description: 'How many answers the question has received.',
     dataType: 'NUMBER',
     semantics: {
+      semanticType: 'NUMBER',
+      semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
       isReaggregatable: true
     }
@@ -144,8 +163,12 @@ connector.schema = [
   {
     name: 'score',
     label: 'Score',
+    description: 'The score of the question.',
     dataType: 'NUMBER',
+    isDefault: true,
     semantics: {
+      semanticType: 'NUMBER',
+      semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
       isReaggregatable: true
     }
@@ -153,8 +176,11 @@ connector.schema = [
   {
     name: 'question_id',
     label: 'Question ID',
+    description: 'The id of the question.',
     dataType: 'NUMBER',
     semantics: {
+      semanticType: 'NUMBER',
+      semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
       isReaggregatable: false
     }
@@ -162,51 +188,50 @@ connector.schema = [
   {
     name: 'last_activity_date',
     label: 'Last Activity Date',
+    description: 'When the last activity on the question happened.',
     dataType: 'STRING',
+    isDefault: true,
     semantics: {
+      semanticType: 'YEAR_MONTH_DAY',
+      semanticGroup: 'DATE_TIME',
       conceptType: 'DIMENSION'
     }
   },
   {
     name: 'creation_date',
     label: 'Creation Date',
+    description: 'When the question was created.',
     dataType: 'STRING',
     semantics: {
+      semanticType: 'YEAR_MONTH_DAY',
+      semanticGroup: 'DATE_TIME',
       conceptType: 'DIMENSION'
     }
   },
   {
     name: 'last_edit_date',
     label: 'Last Edit Date',
+    description: 'When the question was last edited.',
     dataType: 'STRING',
     semantics: {
+      semanticType: 'YEAR_MONTH_DAY',
+      semanticGroup: 'DATE_TIME',
       conceptType: 'DIMENSION'
+    }
+  },
+  {
+    name: 'question_count',
+    label: 'Question Count',
+    description: 'Count of questions.',
+    dataType: 'NUMBER',
+    formula: 'COUNT_DISTINCT(question_id)',
+    semantics: {
+      semanticType: 'NUMBER',
+      semanticGroup: 'NUMERIC',
+      conceptType: 'METRIC'
     }
   }
 ];
-
-/**
- * Sample data that will be returned when `sampleExtraction` is set to `true`
- * for `getData()`. Dates are formatted in Unix time.
- *
- * @const
- */
-connector.sampleData = [{
-  owner: {
-    display_name: 'Sample name',
-    reputation: 13
-  },
-  is_answered: true,
-  title: 'Sample Title',
-  link: 'http://stackoverflow.com',
-  view_count: 13,
-  answer_count: 13,
-  score: 13,
-  question_id: 13,
-  last_activity_date: 1507845020,
-  creation_date: 1507845020,
-  last_edit_date: 1507845020
-}];
 
 /** @const */
 connector.logEnabled = false;
@@ -383,15 +408,11 @@ connector.getData = function (request) {
 
   request.configParams = connector.validateConfig(request.configParams);
 
-  if (request.scriptParams && request.scriptParams.sampleExtraction) {
-    var response = connector.sampleData;
-  } else {
-    var responseString = connector.getCachedData(request);
-    try {
-      var response = JSON.parse(responseString).items;
-    } catch (e) {
-      connector.throwError('Unable to fetch data from source.', true);
-    }
+  var responseString = connector.getCachedData(request);
+  try {
+    var response = JSON.parse(responseString).items;
+  } catch (e) {
+    connector.throwError('Unable to fetch data from source.', true);
   }
 
   var data = response.map(function (question) {
