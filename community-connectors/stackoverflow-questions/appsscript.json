@@ -9,6 +9,9 @@
     "description": "Get Stack Overflow questions and relevant metadata by tag.",
     "sources": [
       "Stack Overflow"
-    ]
+    ],
+    "templates": {
+      "default": "1lR9CGfx3uyQp6oz7oAgA1rsqZViA-IQs"
+    }
   }
 }
