@@ -4,7 +4,7 @@
     "libraries": [{
       "userSymbol": "OAuth2",
       "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
-      "version": "22"
+      "version": "24"
     }]
   },
   "exceptionLogging": "CLOUD",
