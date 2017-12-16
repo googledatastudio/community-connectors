@@ -503,7 +503,7 @@ connector.getAuthType = function() {
  * @see {@link https://developers.google.com/datastudio/connector/reference#isauthvalid|isAuthValid reference}
  */
 connector.isAuthValid = function() {
-  var fit = new GoogleFit(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET);
+  var fit = new GoogleFit(connector.config.OAUTH_CLIENT_ID, connector.config.OAUTH_CLIENT_SECRET);
   var service = fit.getService();
   if (service == null) {
     return false;
