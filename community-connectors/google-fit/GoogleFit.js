@@ -246,7 +246,7 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   // The Google Fit API takes timestamps in nanoseconds so we must convert milliseconds
   // returned by Date.getTime() to nanoseconds.
   var nanoSecondsPerMillisecond = 1000000;
-  var uri = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/' + dataSource + '/datasets/' + (startTime.getTime() * nanoSecondsPerMilliSecond) + '-' + (endTime.getTime() * nanoSecondsPerMillisecond);
+  var uri = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/' + dataSource + '/datasets/' + (startTime.getTime() * nanoSecondsPerMillisecond) + '-' + (endTime.getTime() * nanoSecondsPerMillisecond);
   return JSON.parse(UrlFetchApp.fetch(uri, {
     headers: {
       Authorization: 'Bearer ' + service.getAccessToken()
