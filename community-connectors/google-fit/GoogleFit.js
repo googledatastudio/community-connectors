@@ -198,11 +198,7 @@ GoogleFit.prototype.getService = function() {
       .setParam('login_hint', Session.getActiveUser().getEmail())
 
       // Requests offline access.
-      .setParam('access_type', 'offline')
-
-      // Forces the approval prompt every time. This is useful for testing,
-      // but not desirable in a production application.
-      .setParam('approval_prompt', 'force');
+      .setParam('access_type', 'offline');
 
   return this._service;
 };
@@ -246,7 +242,11 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   // TODO: Implement paging using pageToken
   //       See: https://developers.google.com/fit/rest/v1/reference/users/dataSources/datasets/get
   var service = this.getService();
-  var uri = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/' + dataSource + '/datasets/' + (startTime.getTime() * 1000000) + '-' + (endTime.getTime() * 1000000);
+
+  // The Google Fit API takes timestamps in nanoseconds so we must convert milliseconds
+  // returned by Date.getTime() to nanoseconds.
+  var nanoSecondsPerMillisecond = 1000000;
+  var uri = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/' + dataSource + '/datasets/' + (startTime.getTime() * nanoSecondsPerMilliSecond) + '-' + (endTime.getTime() * nanoSecondsPerMillisecond);
   return JSON.parse(UrlFetchApp.fetch(uri, {
     headers: {
       Authorization: 'Bearer ' + service.getAccessToken()

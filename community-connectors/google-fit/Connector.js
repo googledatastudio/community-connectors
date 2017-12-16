@@ -15,10 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-var OAUTH_CLIENT_ID = "<oauth client id>";
-var OAUTH_CLIENT_SECRET = "<oauth client secret>";
-
 var connector = connector || {};
+connector.config = connector.config || {};
+
+var scriptProps = PropertiesService.getScriptProperties();
+connector.config.OAUTH_CLIENT_ID = scriptProps.getProperty('OAUTH_CLIENT_ID');
+connector.config.OAUTH_CLIENT_SECRET = scriptProps.getProperty('OAUTH_CLIENT_SECRET');
 
 /** @const */
 connector.logEnabled = true;
@@ -281,7 +283,7 @@ connector.getSchema = function(request) {
  * @param {Response} response - A JavaScript object that contains the schema and data for the given request.
  */
 connector.getData = function(request) {
-  var fit = new GoogleFit(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET);
+  var fit = new GoogleFit(connector.config.OAUTH_CLIENT_ID, connector.config.OAUTH_CLIENT_SECRET);
 
   var dataType = request.configParams.googleFitDataType||"activity";
 
@@ -464,7 +466,7 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
  * @param {Object} request the oauth callback request
  */
 connector.authCallback = function(request) {
-  var fit = new GoogleFit(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET);
+  var fit = new GoogleFit(connector.config.OAUTH_CLIENT_ID, connector.config.OAUTH_CLIENT_SECRET);
   var service = fit.getService();
 
   var authorized = service.handleCallback(request);
@@ -536,18 +538,6 @@ connector.resetAuth = function() {
 }
 
 /**
- * This checks whether the current user is an admin user of the connector.
- *
- * @returns {boolean} Returns true if the current authenticated user at the time
- * of function execution is an admin user of the connector. If the function is
- * omitted or if it returns false, then the current user will not be considered
- * an admin user of the connector.
- */
-connector.isAdminUser = function () {
-  return true;
-};
-
-/**
  * Stringifies parameters and responses for a given function and logs them to
  * Stackdriver.
  *
@@ -556,14 +546,14 @@ connector.isAdminUser = function () {
  * @returns {any} Returns the response of `functionName` function.
  */
 connector.logAndExecute = function(functionName, parameter) {
-  if (connector.logEnabled && connector.isAdminUser()) {
+  if (connector.logEnabled) {
     var paramString = JSON.stringify(parameter, null, 2);
     console.log([functionName, 'request', paramString]);
   }
 
   var returnObject = connector[functionName](parameter);
 
-  if (connector.logEnabled && connector.isAdminUser()) {
+  if (connector.logEnabled) {
     var returnString = JSON.stringify(returnObject, null, 2);
     console.log([functionName, 'response', returnString]);
   }
