@@ -38,6 +38,16 @@ connector.OAUTH_CLIENT_SECRET = 'OAUTH_CLIENT_SECRET';
 /** @const */
 connector.logEnabled = false;
 
+/** @return {object} The CustomCache namespace. Enables mocking. */
+connector.getCustomCacheNS = function() {
+  return CustomCache;
+};
+
+/** @return {object} The UrlFetchApp object. Enables mocking. */
+connector.getUrlFetchApp = function() {
+  return UrlFetchApp;
+};
+
 
 /**
  * Wrapper function for `connector.getAuthType()`.
@@ -193,80 +203,28 @@ connector.getSchema = function(request) {
  */
 connector.validateConfig = function(configParams) {
   configParams = configParams || {};
-
-  configParams.Organization = configParams.Organization ||
-      connector.throwError('You must provide an Organization.', true);
-
-  configParams.Repository = configParams.Repository ||
-      connector.throwError('You must provide a Repository.', true);
+  configParams.Organization = configParams.Organization || 'google';
+  configParams.Repository = configParams.Repository || 'datastudio';
 };
 
 /**
  * Builds a parameterized url.
  *
- * @param {int} pageNumber - The page of data you are requesting.
- * @param {string} organization - The GitHub organization the repository is under.
- * @param {string} repository - The repository you are getting star data for.
+ * @param {object} request - Schema request parameters.
  *
  * @returns {string} A url for requesting star data.
  */
-connector.paginatedUrl = function(pageNumber, organization, repository) {
+connector.buildURL = function(request) {
+  var configParams = request.configParams;
+  var organization = configParams.Organization;
+  var repository = configParams.Repository;
   var urlParts = [
     'https://api.github.com/repos/', organization, '/', repository,
-    '/stargazers',
-    // URL Parameters
-    '?', 'page=', pageNumber, '&per_page=', 100
+    '/stargazers'
   ];
-  var url = urlParts.join('');
+  var urlParams = ['?per_page=100'];
+  var url = urlParts.join('') + urlParams.join('&');
   return url;
-};
-
-/**
- * Fetches the response based on requested page number.
- *
- * @param {object} request - The request passed to `connector.getData(request)`.
- * @param {int} pageNumber - The page number you would like to fetch.
- *
- * @returns {object} the response from the `UrlFetchApp.fetch()`.
- */
-connector.fetchURL = function(request, pageNumber) {
-  var organization = request.configParams.Organization;
-  var repository = request.configParams.Repository;
-  var options = {
-    headers: {
-      'Accept': 'application/vnd.github.v3.star+json',
-      'Authorization': 'token ' + getOAuthService().getAccessToken()
-    }
-  };
-  var url = connector.paginatedUrl(pageNumber, organization, repository);
-  var response;
-  try {
-    response = UrlFetchApp.fetch(url, options);
-  } catch (e) {
-    connector.throwError('Unable to fetch data from source.', true);
-  }
-  return response;
-};
-
-/**
- * Returns the total number of pages that need to be requested.
- *
- * @param {object} initialResponse - The response from the first api call.
- *
- * @returns {int} Total number of pages.
- */
-connector.numberOfPages = function(initialResponse) {
-  var headers = initialResponse.getAllHeaders();
-  if (connector.LINK_KEY in headers) {
-    var link = headers[connector.LINK_KEY];
-    var lastPageRegEx = /\?page=([0-9]+)&per_page=[0-9]+>; rel="last"/;
-    var matches = link.match(lastPageRegEx);
-    var lastPageStr = matches[1];
-    var pages = parseInt(lastPageStr, 10);
-    return pages;
-  } else {
-    return 1;
-  }
 };
 
 /**
@@ -316,9 +274,127 @@ connector.rowifyStarData = function(stars, dataSchema) {
       }
     });
     // Individual row format.
-    // { values: ["017-10-13T11:52:44Z", 1]}
+    // { values: ["2017-10-13T11:52:44Z", 1]}
     return {values: values};
   });
+};
+
+/**
+ * Gets data from the cache using a paginated strategy.
+ *
+ * @param {object} cache The cache.
+ * @param {object} cacheKey The key to lokup in the cache.
+ * @return {object|undefined} either the aggregated values from the cache or undefined, if the key was not found.
+ */
+connector.getFromCachePaginated = function(cache, cacheKey) {
+  var cached = cache.getRestFrom(cacheKey, function(acc, row) {
+    const cachedValue = JSON.parse(row[1]);
+    const results = acc.json.concat(cachedValue.json);
+    const nextLink = cachedValue.nextLink;
+    return {
+      json: results,
+      nextLink: nextLink
+    };
+  }, {json: [], nextLink: undefined});
+  return cached;
+};
+
+/**
+ * Attempts to get the data from the cache. If it fails, it makes all necessary
+ * requests, caches results as it goes.
+ *
+ * @param {object} request - The request passed to `Connector.getData(request)`.
+ * @param {string} url - The url to request.
+ * @param {object} options - The options to use for the UrlFetchApp, if necessary.
+ * @return {object} The response from the cache, or `UrlFetchApp.fetch`.
+ */
+connector.getCachedData = function(request, url, options) {
+  if (connector.cache === null || connector.cache === undefined) {
+    connector.cache = new (connector.getCustomCacheNS())(
+        request.configParams.url_name, request.configParams.api_type);
+  }
+  var cache = connector.cache;
+  var cacheKey = url;
+  var cached = connector.getFromCachePaginated(cache, cacheKey);
+  var nextUrl = url;
+  if (cached) {
+    return cached;
+  } else {
+    try {
+      var shouldCache = true;
+      var response = connector.getUrlFetchApp().fetch(nextUrl, options);
+      var results = JSON.parse(response);
+      nextUrl = connector.getNextLink(response);
+
+      if (!nextUrl || results.length !== 100) {
+        shouldCache = false;
+      }
+
+      var toCache = {json: results, nextLink: nextUrl};
+
+      if (shouldCache) {
+        cache.put(cacheKey, toCache);
+      }
+      return toCache;
+    } catch (e) {
+      console.log(e);
+      connector.throwError('Unable to get data from GitHub.com', true);
+    }
+  }
+};
+
+
+/**
+ * Parses out the next link from the response headers. Returns undefined if no
+ * next link was found.
+ *
+ * @param {object} response - The response from `UrlFetchApp.fetch`
+ * @return {string|undefined} the next link, or undefined if there was none.
+ */
+connector.getNextLink = function(response) {
+  var regex = /<(.*)>; rel="next"/;
+  var headers = response.getAllHeaders();
+  var linkHeaders = headers['Link'] || [];
+  if (typeof linkHeaders === 'string') {
+    // make it where it's always an array, even if there is only 1 response.
+    linkHeaders = [linkHeaders];
+  }
+  var nextUrl;
+  for (var j = 0; j < linkHeaders.length; j++) {
+    var link = linkHeaders[j];
+    var nextUrl = link && link.match(regex) && link.match(regex)[1];
+    if (nextUrl) {
+      return nextUrl;
+    }
+  }
+  return undefined;
+};
+
+/**
+ * Chains all necessary requests together respecting pagination.
+ *
+ * @param {object} request - The request passed to `Connector.getData(request)`.
+ * @param {string} url - The first url to call in the pagination chain.
+ * @return {object} All responses from the api joined together.
+ */
+connector.paginatedResult = function(request, url) {
+  // make request
+  var options = {
+    headers: {
+      'Accept': 'application/vnd.github.v3.star+json',
+      'Authorization': 'token ' + getOAuthService().getAccessToken()
+    }
+  };
+
+  var response = connector.getCachedData(request, url, options);
+  var nextUrl = response.nextLink;
+  var responses = response.json;
+  while (nextUrl) {
+    var r = connector.getCachedData(request, nextUrl, options);
+    responses = responses.concat(r.json);
+    nextUrl = r.nextLink;
+  }
+  return responses;
 };
 
 /**
@@ -330,23 +406,13 @@ connector.rowifyStarData = function(stars, dataSchema) {
 connector.getData = function(request) {
   connector.validateConfig(request.configParams);
 
+  var url = connector.buildURL(request);
+
   var stars = [];
   if (request.scriptParams && request.scriptParams.sampleExtraction === true) {
     stars = connector.sampleData;
   } else {
-    var initialResponse = connector.fetchURL(request, 1);
-    var totalPages = connector.numberOfPages(initialResponse);
-    for (var i = 1; i <= totalPages; i++) {
-      // Intentionally makes an extra request to avoid special casing the first
-      // vs subsequent requests
-      var currentResponse = connector.fetchURL(request, i);
-      try {
-        var currentStarData = JSON.parse(currentResponse);
-      } catch (e) {
-        connector.throwError('Unable to parse data fetched from source.', true);
-      }
-      stars = stars.concat(currentStarData);
-    }
+    stars = connector.paginatedResult(request, url);
   }
   var dataSchema = connector.getDataSchema(request);
   var rows = connector.rowifyStarData(stars, dataSchema);
