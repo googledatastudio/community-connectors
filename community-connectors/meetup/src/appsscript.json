@@ -1,0 +1,23 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "OAuth2",
+      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+      "version": "24"
+    }]
+  },
+  "dataStudio": {
+    "name": "Meetup",
+    "logoUrl": "TODO.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/meetup",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "TODO",
+    "sources": ["Meetup"],
+    "templates": {
+      "default": "1SCkPDeMw0rB_EmTELbXoEQ1qzYRlu7pC"
+    }
+  }
+}
