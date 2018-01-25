@@ -1,0 +1,11 @@
+{
+  "dataStudio": {
+    "name": "RSS & ATOM Connector",
+    "company": "Gus Inc.",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png",
+    "addonUrl": "https://www.dailyblogtips.com/wp-content/uploads/bigrss.gif",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "Connect to your RSS 2.0 and Atom 1.0 feeds"
+  }
+}
