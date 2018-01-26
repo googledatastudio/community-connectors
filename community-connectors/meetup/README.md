@@ -20,7 +20,7 @@ your script and create an OAUTH consumer through Meetup.com.
     **Note: You should only do the steps under the "Setup" heading. The rest
     will be covered in "Meetup OAUTH App" below.**
 
-### Meetup OAUTH App
+### Configure Meetup OAUTH App
 
 1.  Go to the [Your OAuth Consumers
     page](https://secure.meetup.com/meetup_api/oauth_consumers/#).

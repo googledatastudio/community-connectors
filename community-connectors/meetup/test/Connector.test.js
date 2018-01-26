@@ -660,7 +660,7 @@ test('isAdminUser test', () => {
   expect(actual).toBe(false);
 });
 
-test('logAndExecute test1', () => {
+test('logAndExecute defined function name, isAdminUser true, and log enabled true', () => {
   const functionName = 'myFunctionName';
   const parameter = 5;
   c[functionName] = (x) => x;
@@ -674,7 +674,7 @@ test('logAndExecute test1', () => {
   ]);
 });
 
-test('logAndExecute test2', () => {
+test('logAndExecute defined function name, isAdminUser true, and log enabled false', () => {
   const functionName = 'myFunctionName';
   const parameter = 5;
   c[functionName] = (x) => x;
@@ -685,7 +685,7 @@ test('logAndExecute test2', () => {
   expect(consoleLogMock.mock.calls).toEqual([]);
 });
 
-test('logAndExecute test3', () => {
+test('logAndExecute defined function name, isAdminUser false, and log enabled true', () => {
   const functionName = 'myFunctionName';
   const parameter = 5;
   c[functionName] = (x) => x;
@@ -696,7 +696,7 @@ test('logAndExecute test3', () => {
   expect(consoleLogMock.mock.calls).toEqual([]);
 });
 
-test('logAndExecute test4', () => {
+test('logAndExecute undefined function name', () => {
   const functionName = 'myFunctionName';
   const parameter = 5;
   c.logAndExecute(functionName, parameter);
@@ -705,12 +705,12 @@ test('logAndExecute test4', () => {
   ]);
 });
 
-test('timestampToUTCTime1', () => {
+test('timestampToUTCTime before miltary time different', () => {
   const actual = c.timeStampToUTCTime(1515028145088);
   expect(actual).toEqual('01:09');
 });
 
-test('timestampToUTCTime2', () => {
+test('timestampToUTCTime after military time different', () => {
   const actual = c.timeStampToUTCTime(1515088245088);
   expect(actual).toEqual('17:50');
 });

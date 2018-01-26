@@ -39,8 +39,10 @@ function CustomCache(urlName, apiType) {
   return this;
 }
 
+/** @const */
 CustomCache.SCRIPT_ID_KEY = 'sheets cache script id';
 
+/** @const */
 CustomCache.SPREADSHEET_NAME = 'user cache for meetup.com connector.';
 
 /**

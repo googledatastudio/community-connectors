@@ -15,14 +15,21 @@ Connector.MILLIS_PER_SECOND = 1000;
 Connector.SECONDS_PER_MINUTE = 60;
 
 /** @const */
+Connector.LOCK_TIMEOUT_MINUTES = 5;
+
+/** @const */
 Connector.DEFAULT_URL_NAME = 'Igniter';
 
+/** @const */
 Connector.API_TYPE_MEMBERS = 'members';
 
+/** @const */
 Connector.API_TYPE_EVENTS = 'events';
 
+/** @const */
 Connector.API_TYPE_GENERAL_INFO = 'general_info';
 
+/** @const */
 Connector.API_TYPE_PRO_GROUPS = 'pro_groups';
 
 /** @const */
@@ -127,7 +134,9 @@ Connector.prototype.buildURL = function(request) {
 };
 
 /**
- * Gets data from the cache using a paginated strategy.
+ * Gets data from the cache using a paginated strategy. Since this data was put
+ * into the cache in order, we can return the rest of the results from the cache
+ * after our first cache hit.
  *
  * @param {object} cache The cache.
  * @param {object} cacheKey The key to lokup in the cache.
@@ -146,12 +155,12 @@ Connector.prototype.getFromCachePaginated = function(cache, cacheKey) {
 
 /**
  * Attempts to get the data from the cache. If it fails, it makes all necessary
- * requests, caches results as it goes.
+ * requests, and caches results as it goes.
  *
  * @param {object} request - The request passed to `Connector.getData(request)`.
  * @param {string} url - The url to request.
  * @param {object} options - The options to use for the UrlFetchApp, if necessary.
- * @return {object} The response from the cache, or `UrlFetchApp.fetch`.
+ * @return {object} The response from the cache, or `this.wrappedFetch`.
  */
 Connector.prototype.getCachedData = function(request, url, options) {
   if (this.cache === null) {
@@ -168,7 +177,7 @@ Connector.prototype.getCachedData = function(request, url, options) {
     try {
       var results = [];
       var shouldCache = true;
-      var response = UrlFetchApp.fetch(nextUrl, options);
+      var response = this.wrappedFetch(nextUrl, options);
       var JSONed = JSON.parse(response);
       results = results.concat(JSONed);
       nextUrl = this.getNextLink(response);
@@ -195,7 +204,7 @@ Connector.prototype.getCachedData = function(request, url, options) {
  * Parses out the next link from the response headers. Returns undefined if no
  * next link was found.
  *
- * @param {object} response - The response from `UrlFetchApp.fetch`
+ * @param {object} response - The response from `this.wrappedFetch`
  * @return {string|undefined} the next link, or undefined if there was none.
  */
 Connector.prototype.getNextLink = function(response) {
@@ -227,7 +236,7 @@ Connector.prototype.getNextLink = function(response) {
 Connector.prototype.paginatedResult = function(request, url) {
   var lock = LockService.getUserLock();
   // Will throw an exception if the lock is not obtained within 5 minutes.
-  var timeout = Connector.MILLIS_PER_SECOND * Connector.SECONDS_PER_MINUTE * 5;
+  var timeout = Connector.MILLIS_PER_SECOND * Connector.SECONDS_PER_MINUTE * Connector.LOCK_TIMEOUT_MINUTES;
   lock.waitLock(timeout);
   var options = this.getFetchOptions();
   var response = this.getCachedData(request, url, options);
@@ -267,7 +276,8 @@ Connector.prototype.timeStampToUTCTime = function(timestamp) {
 };
 
 /**
- * Takes the apiResults and formats them into rows as needed by Data Studio.
+ * Takes the apiResults and formats them into rows as needed by Data Studio for
+ * the member data.
  *
  * @param {object} apiResults - The results obtained by calling the api.
  * @param {object} dataSchema - The schema for this api request.
@@ -282,7 +292,7 @@ Connector.prototype.rowifyMemberData = function(apiResults, dataSchema) {
         case 'joined': {
           // using the epoch date constructor.
           var d = new Date(entry['joined']);
-          var formattedDate = d.toISOString().slice(0, 10).replace(/-/g, '');
+          var formattedDate = that.timeStampToYearMonthDay(d);
           return values.push(formattedDate);
         }
         case 'id':
@@ -325,13 +335,14 @@ Connector.prototype.getFetchOptions = function() {
  */
 Connector.prototype.requestGeneralInfo = function(request, url) {
   var options = this.getFetchOptions();
-  var response = UrlFetchApp.fetch(url, options);
+  var response = this.wrappedFetch(url, options);
   var JSONed = JSON.parse(response);
   return JSONed;
 };
 
 /**
- * Takes the apiResults and formats them into rows as needed by Data Studio.
+ * Takes the apiResults and formats them into rows as needed by Data Studio for
+ * the general info data.
  *
  * @param {object} apiResults - The results obtained by calling the api.
  * @param {object} dataSchema - The schema for this api request.
@@ -370,6 +381,22 @@ Connector.prototype.rowifyGeneralInfo = function(apiResults, dataSchema) {
 };
 
 /**
+ * Wraps the call to UrlFetchApp with error handling.
+ *
+ * @param {string} url The url to fetch.
+ * @param {object} options The options to use for the fetch.
+ */
+Connector.prototype.wrappedFetch = function(url, options) {
+  var result;
+  try {
+    result = UrlFetchApp.fetch(url, options);
+  } catch (e) {
+    this.throwError(e);
+  }
+  return result;
+}
+
+/**
  * Returns the data for events.
  * @param {object} request - The request passed to `Connector.getData(request)`.
  * @param {string} url - The url to call.
@@ -377,13 +404,14 @@ Connector.prototype.rowifyGeneralInfo = function(apiResults, dataSchema) {
  */
 Connector.prototype.requestEventsData = function(request, url) {
   var options = this.getFetchOptions();
-  var response = UrlFetchApp.fetch(url, options);
+  var response = this.wrappedFetch(url, options);
   var JSONed = JSON.parse(response);
   return JSONed;
 };
 
 /**
- * Takes the apiResults and formats them into rows as needed by Data Studio.
+ * Takes the apiResults and formats them into rows as needed by Data Studio for
+ * the event data.
  *
  * @param {object} apiResults - The results obtained by calling the api.
  * @param {object} dataSchema - The schema for this api request.
@@ -420,7 +448,8 @@ Connector.prototype.rowifyEventData = function(apiResults, dataSchema) {
 };
 
 /**
- * Takes the apiResults and formats them into rows as needed by Data Studio.
+ * Takes the apiResults and formats them into rows as needed by Data Studio for
+ * the pro group data.
  *
  * @param {object} apiResults - The results obtained by calling the api.
  * @param {object} dataSchema - The schema for this api request.
