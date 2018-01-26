@@ -38,6 +38,15 @@ connector.OAUTH_CLIENT_SECRET = 'OAUTH_CLIENT_SECRET';
 /** @const */
 connector.logEnabled = false;
 
+/** @const */
+connector.defaultOrganization = 'google';
+
+/** @const */
+connector.defaultRepository = 'datastudio';
+
+/** @const */
+connector.resultsPerPage = 100;
+
 /** @return {object} The CustomCache namespace. Enables mocking. */
 connector.getCustomCacheNS = function() {
   return CustomCache;
@@ -132,14 +141,14 @@ connector.customConfig = [
     displayName: 'Organization',
     helpText:
     'Enter the name of the organization for which you would like to retrieve information.',
-    placeholder: 'google'
+    placeholder: connector.defaultOrganization
   },
   {
     name: 'Repository',
     displayName: 'Repository',
     helpText:
     'Enter the name of the repository for which you would like to retrieve information.',
-    placeholder: 'datastudio'
+    placeholder: connector.defaultRepository
   }
 ];
 
@@ -203,8 +212,8 @@ connector.getSchema = function(request) {
  */
 connector.validateConfig = function(configParams) {
   configParams = configParams || {};
-  configParams.Organization = configParams.Organization || 'google';
-  configParams.Repository = configParams.Repository || 'datastudio';
+  configParams.Organization = configParams.Organization || connector.defaultOrganization;
+  configParams.Repository = configParams.Repository || connector.defaultRepository;
 };
 
 /**
@@ -222,7 +231,7 @@ connector.buildURL = function(request) {
     'https://api.github.com/repos/', organization, '/', repository,
     '/stargazers'
   ];
-  var urlParams = ['?per_page=100'];
+  var urlParams = ['?per_page=' + connector.resultsPerPage];
   var url = urlParts.join('') + urlParams.join('&');
   return url;
 };
@@ -326,7 +335,7 @@ connector.getCachedData = function(request, url, options) {
       var results = JSON.parse(response);
       nextUrl = connector.getNextLink(response);
 
-      if (!nextUrl || results.length !== 100) {
+      if (!nextUrl || results.length !== connector.resultsPerPage) {
         shouldCache = false;
       }
 

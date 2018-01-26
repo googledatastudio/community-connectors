@@ -35,20 +35,29 @@ function CustomCache(organization, repository) {
   return this;
 }
 
+/** @const */
 CustomCache.SCRIPT_ID_KEY = 'sheets cache script id';
 
+/** @const */
 CustomCache.SPREADSHEET_NAME = 'user cache for GitHub.com connector.';
 
+/** Returns the global for SpreadsheetApp. Allows for testing */
 CustomCache.getSpreadsheetAppNS = function() {
   return SpreadsheetApp;
 };
 
+/** Returns the global for PropertiesService. Allows for testing */
 CustomCache.getPropertiesServiceNS = function() {
   return PropertiesService;
 };
 
-function clearUserProperties() {
-  CustomCache.getPropertiesServiceNS().getUserProperties().deleteAllProperties();
+/**
+ * Deletes the `CustomCache.SCRIPT_ID_KEY` from the userProperties. This
+ * effectively deletes the cache.
+ */
+function clearScriptId() {
+  var userProperties = CustomCache.getPropertiesServiceNS().getUserProperties();
+  userProperties.deleteProperty(CustomCache.SCRIPT_ID_KEY);
 };
 
 
@@ -109,6 +118,12 @@ CustomCache.prototype.getEntireRange = function() {
   return this.sheet.getRange(1, 1, lastRow, 2);
 };
 
+/**
+ * Calls `predicate` on every row of the the spreadsheet, and returns the first
+ * index that matches it, or -1 if none match.
+ *
+ * @return {number} The index or -1 if not found.
+ */
 CustomCache.prototype.findIndex = function(predicate) {
   var range = this.getEntireRange();
   var values = range.getValues();
