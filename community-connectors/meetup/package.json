@@ -1,0 +1,26 @@
+{
+  "name": "meetup",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "push": "cd src && clasp push",
+    "pre-deploy": "yarn config set version-tag-prefix \"meetup-v\" && yarn version",
+    "clasp-deploy": "cd src && clasp push && clasp version $npm_package_version && clasp deploy $(clasp versions | tail -n 1 | cut -f1 -d'-') $npm_package_version",
+    "deploy": "yarn pre-deploy && yarn clasp-deploy"
+  },
+  "author": "Matt Hamrick",
+  "license": "MIT",
+  "devDependencies": {
+    "jest-cli": "^22.0.4"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js"
+    ],
+    "bail": true,
+    "testEnvironment": "node"
+  }
+}
