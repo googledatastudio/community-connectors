@@ -1,0 +1,25 @@
+{
+  "name": "google-fit",
+  "version": "0.0.3",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "push": "cd src && clasp push",
+    "pre-deploy": "yarn config set version-tag-prefix \"google-fit-v\" && yarn version",
+    "clasp-deploy": "cd src && clasp push && clasp version $npm_package_version && clasp deploy $(clasp versions | tail -n 1 | cut -f1 -d'-') $npm_package_version",
+    "deploy": "yarn pre-deploy && yarn clasp-deploy"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^1.1.1",
+    "jest-cli": "^22.0.4"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js"
+    ],
+    "bail": true,
+    "testEnvironment": "node"
+  }
+}

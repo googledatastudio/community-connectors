@@ -19,8 +19,6 @@ var connector = connector || {};
 connector.config = connector.config || {};
 
 var scriptProps = PropertiesService.getScriptProperties();
-connector.config.OAUTH_CLIENT_ID = scriptProps.getProperty('OAUTH_CLIENT_ID');
-connector.config.OAUTH_CLIENT_SECRET = scriptProps.getProperty('OAUTH_CLIENT_SECRET');
 
 /** @const */
 connector.logEnabled = true;
@@ -136,21 +134,21 @@ connector.SAMPLE_DATA = {
         endTimeNanos: 1509208320000000000,
         // WALKING
         value: [{intVal: 7}]
-      }, 
+      },
       {
         // 2100 seconds
         startTimeNanos: 1509204420000000000,
         endTimeNanos: 1509206520000000000,
         // RUNNING
         value: [{intVal: 8}]
-      }, 
+      },
       {
         // 64560 seconds
         startTimeNanos: 1509393360000000000,
         endTimeNanos: 1509457920000000000,
         // MOUNTAIN BIKING
         value: [{intVal: 15}]
-      }, 
+      },
     ]
   },
   steps: {
@@ -160,19 +158,19 @@ connector.SAMPLE_DATA = {
         startTimeNanos: 1509207120000000000,
         endTimeNanos: 1509208320000000000,
         value: [{intVal: 150}]
-      }, 
+      },
       {
         // 2100 seconds
         startTimeNanos: 1509204420000000000,
         endTimeNanos: 1509206520000000000,
         value: [{intVal: 99}]
-      }, 
+      },
       {
         // 64560 seconds
         startTimeNanos: 1509393360000000000,
         endTimeNanos: 1509457920000000000,
         value: [{intVal: 230}]
-      }, 
+      },
     ]
   },
   weight: {
@@ -181,21 +179,21 @@ connector.SAMPLE_DATA = {
         startTimeNanos: 1509207120000000000,
         endTimeNanos: 1509207120000000000,
         value: [{fpVal: 85.2}]
-      }, 
+      },
       {
         startTimeNanos: 1509204420000000000,
         endTimeNanos: 1509204420000000000,
         value: [{fpVal: 88.8}]
-      }, 
+      },
       {
         startTimeNanos: 1509393360000000000,
         endTimeNanos: 1509393360000000000,
         value: [{fpVal: 87.3}]
-      }, 
+      },
     ]
   }
 };
- 
+
 /**
  * Returns a configuration object for the connector. DataStudio uses this to set up the connector.
  *
@@ -252,9 +250,9 @@ connector.getSchema = function(request) {
  * @property {string} semantics.conceptType - Indicates whether the field is a dimension or metric.
  * @property {boolean} semantics.isReaggregatable - true indicates that Aggregation can be applied to this field; In Data Studio Aggregation will be set to SUM by default and the user will be allowed to change the Aggregation.  false indicates Aggregation should not be applied to this field; In Data Studio Aggregation will be set to Auto by default and the user will not be able to change the Aggregation. Default value is true. Note: This property only affects metric fields.
  * @see {@link https://developers.google.com/datastudio/connector/reference#field|Field reference}
- * 
+ *
 
-/**
+ /**
  * A DataStudio data request object
  * @typedef {Object} Request
  * @property {Object} configParams - A JavaScript object containing the user provided values for the config parameters defined by the connector.
@@ -283,7 +281,7 @@ connector.getSchema = function(request) {
  * @param {Response} response - A JavaScript object that contains the schema and data for the given request.
  */
 connector.getData = function(request) {
-  var fit = new GoogleFit(connector.config.OAUTH_CLIENT_ID, connector.config.OAUTH_CLIENT_SECRET);
+  var fit = new GoogleFit();
 
   var dataType = request.configParams.googleFitDataType||"activity";
 
@@ -322,7 +320,7 @@ connector.dataFuncs.activity = function(request, fit, startDate, endDate) {
 
   var data = [];
   for (var i=0; i < activity.point.length; i++) {
-    var values = []; 
+    var values = [];
     var segment = activity.point[i];
 
     // Provide values in the order defined by the schema.
@@ -374,12 +372,12 @@ connector.dataFuncs.steps = function(request, fit, startDate, endDate) {
   } else {
     // TODO: Get the data from the Apps Script Cache service if it exists otherwise get the data from the Google Fit API.
     // See: https://developers.google.com/datastudio/connector/build#fetch_and_return_data_with_getdata
-      var steps = fit.getSteps(startDate, endDate);
+    var steps = fit.getSteps(startDate, endDate);
   }
 
   var data = [];
   for (var i=0; i < steps.point.length; i++) {
-    var values = []; 
+    var values = [];
     var segment = steps.point[i];
 
     // Provide values in the order defined by the schema.
@@ -429,7 +427,7 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
 
   var data = [];
   for (var i=0; i < weight.point.length; i++) {
-    var values = []; 
+    var values = [];
     var segment = weight.point[i];
 
     // Provide values in the order defined by the schema.
@@ -461,82 +459,16 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
 }
 
 /**
- * Implements the callback for the OAuth authorization flow.
- * 
- * @param {Object} request the oauth callback request
- */
-connector.authCallback = function(request) {
-  var fit = new GoogleFit(connector.config.OAUTH_CLIENT_ID, connector.config.OAUTH_CLIENT_SECRET);
-  var service = fit.getService();
-
-  var authorized = service.handleCallback(request);
-  if (authorized) {
-    return HtmlService.createHtmlOutput('Success! You can close this tab.');
-  } else {
-    return HtmlService.createHtmlOutput('Denied. You can close this tab');
-  };
-};
-
-/**
- * An authentication type object.
- * @typedef {Object} AuthType
- * @property {string} type - One of "NONE" or "OAUTH2"
- * @see {@link https://developers.google.com/datastudio/connector/reference#authtype|AuthType reference}
- */
-
-/**
  * Used by DataStudio to get the authorization type used by this connector.
- * 
+ *
  * @return {AuthType} an object representing the auth type.
  */
 connector.getAuthType = function() {
   var response = {
-    "type": "OAUTH2"
+    "type": "NONE"
   };
   return response;
 };
-
-/**
- * Used by DataStudio to get whether the connector is currently authorized.
- *
- * @return {boolean} whether the connector is currently authorized.
- * @see {@link https://developers.google.com/datastudio/connector/reference#isauthvalid|isAuthValid reference}
- */
-connector.isAuthValid = function() {
-  var fit = new GoogleFit(connector.config.OAUTH_CLIENT_ID, connector.config.OAUTH_CLIENT_SECRET);
-  var service = fit.getService();
-  if (service == null) {
-    return false;
-  }
-  return service.hasAccess();
-};
-
-/**
- * Used by DataStudio to initiate OAuth 2.0 flow for a 3rd-party service.
- *
- * @return {string} Returns the authorization URL for the 3rd-party service. The authorization URL will be presented to the user to initiate the OAuth 2.0 flow to grant access to the 3rd-party service.
- * @see {@link https://developers.google.com/datastudio/connector/reference#get3pauthorizationurls|get3PAuthorizationUrls reference}
- */
-connector.get3PAuthorizationUrls = function() {
-  var fit = new GoogleFit(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET);
-  var service = fit.getService();
-  if (service == null) {
-    return '';
-  }
-  return service.getAuthorizationUrl();
-};
-
-/**
- * Used by DataStudio to reset authorization for the connector.
- *
- * @see {@link https://developers.google.com/datastudio/connector/reference#resetauth|resetAuth reference}
- */
-connector.resetAuth = function() {
-  var fit = new GoogleFit(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET);
-  var service = fit.getService();
-  service.reset();
-}
-
 /**
  * Stringifies parameters and responses for a given function and logs them to
  * Stackdriver.

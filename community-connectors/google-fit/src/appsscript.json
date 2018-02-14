@@ -16,5 +16,11 @@
     "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/google-fit",
     "supportUrl": "https://github.com/google/datastudio/issues",
     "description": "The Google Fit connector for DataStudio allows you to retrieve Google Fit activity data and create time based graphs of your activity."
-  }
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/fitness.activity.read",
+    "https://www.googleapis.com/auth/fitness.body.read"
+  ]
 }

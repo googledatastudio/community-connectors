@@ -27,22 +27,6 @@ function getAuthType() {
   return connector.logAndExecute('getAuthType');
 }
 
-function isAuthValid() {
-  return connector.logAndExecute('isAuthValid');
-}
-
-function get3PAuthorizationUrls() {
-  return connector.logAndExecute('get3PAuthorizationUrls');
-}
-
-function authCallback(request) {
-  return connector.logAndExecute('authCallback', request);
-}
-
-function resetAuth() {
-  return connector.logAndExecute('resetAuth');
-}
-
 function getData(request) {
   return connector.logAndExecute('getData', request);
 }

@@ -15,10 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-function GoogleFit(client_id, client_secret) {
+function GoogleFit() {
   this.config = {};
-  this.config.OAUTH_CLIENT_ID = client_id;
-  this.config.OAUTH_CLIENT_SECRET = client_secret;
 
   /*
    * A map of activity type names to activity code.
@@ -160,58 +158,12 @@ GoogleFit.prototype.getActivityDescription = function(id) {
 };
 
 /**
- * Gets an OAuth2 service abject for Google Fit.
- *
- * @return {Object} OAuth2 library service object.
- */
-GoogleFit.prototype.getService = function() {
-  if (this._service) {
-    return this._service;
-  }
-  // Create a new service with the given name. The name will be used when
-  // persisting the authorized token, so ensure it is unique within the
-  // scope of the property store.
-  this._service = OAuth2.createService('fitness')
-
-      // Set the endpoint URLs, which are the same for all Google services.
-      .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/auth')
-      .setTokenUrl('https://accounts.google.com/o/oauth2/token')
-
-      // Set the client ID and secret, from the Google Developers Console.
-      .setClientId(this.config.OAUTH_CLIENT_ID)
-      .setClientSecret(this.config.OAUTH_CLIENT_SECRET)
-
-      // Set the name of the callback function in the script referenced
-      // above that should be invoked to complete the OAuth flow.
-      .setCallbackFunction('authCallback')
-
-      // Set the property store where authorized tokens should be persisted.
-      .setPropertyStore(PropertiesService.getUserProperties())
-
-      // Set the scopes to request (space-separated for Google services).
-      .setScope('https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.body.read')
-
-      // Below are Google-specific OAuth2 parameters.
-
-      // Sets the login hint, which will prevent the account chooser screen
-      // from being shown to users logged in with multiple accounts.
-      .setParam('login_hint', Session.getActiveUser().getEmail())
-
-      // Requests offline access.
-      .setParam('access_type', 'offline');
-
-  return this._service;
-};
-
-
-
-/**
  * Gets activity for the signed in user during the given time period.
  *
  * @param{Date} startTime the start time for the period to get activity
  * @param{Date} endTime the end time for the period to get activity
  * @return {Object} a Google Fit activity API JSON response.
-*/
+ */
 GoogleFit.prototype.getActivity = function(startTime, endTime) {
   return this._getDatasets('derived:com.google.activity.segment:com.google.android.gms:merge_activity_segments', startTime, endTime);
 };
@@ -222,7 +174,7 @@ GoogleFit.prototype.getActivity = function(startTime, endTime) {
  * @param{Date} startTime the start time for the period to get steps
  * @param{Date} endTime the end time for the period to get steps
  * @return {Object} a Google Fit steps API JSON response.
-*/
+ */
 GoogleFit.prototype.getSteps = function(startTime, endTime) {
   return this._getDatasets('derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas', startTime, endTime);
 };
@@ -230,10 +182,10 @@ GoogleFit.prototype.getSteps = function(startTime, endTime) {
 /**
  * Gets weight for the signed in user during the given time period.
  *
- * @param{Date} startTime the start time for the period to get weight 
- * @param{Date} endTime the end time for the period to get weight 
+ * @param{Date} startTime the start time for the period to get weight
+ * @param{Date} endTime the end time for the period to get weight
  * @return {Object} a Google Fit weight API JSON response.
-*/
+ */
 GoogleFit.prototype.getWeight = function(startTime, endTime) {
   return this._getDatasets('derived:com.google.weight:com.google.android.gms:merge_weight', startTime, endTime);
 };
@@ -241,7 +193,6 @@ GoogleFit.prototype.getWeight = function(startTime, endTime) {
 GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   // TODO: Implement paging using pageToken
   //       See: https://developers.google.com/fit/rest/v1/reference/users/dataSources/datasets/get
-  var service = this.getService();
 
   // The Google Fit API takes timestamps in nanoseconds so we must convert milliseconds
   // returned by Date.getTime() to nanoseconds.
@@ -249,7 +200,7 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   var uri = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/' + dataSource + '/datasets/' + (startTime.getTime() * nanoSecondsPerMillisecond) + '-' + (endTime.getTime() * nanoSecondsPerMillisecond);
   return JSON.parse(UrlFetchApp.fetch(uri, {
     headers: {
-      Authorization: 'Bearer ' + service.getAccessToken()
+      Authorization: 'Bearer ' + ScriptApp.getOAuthToken()
     }
   }));
 };
