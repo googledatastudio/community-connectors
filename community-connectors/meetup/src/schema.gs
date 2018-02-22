@@ -367,6 +367,17 @@ Schema.prototype.getSchema = function(apiType) {
       }
     },
     {
+      'name': 'manual_attendance_count',
+      'label': 'Manual Attendance Count',
+      'description': 'The manually entered attendance count.',
+      'dataType': 'NUMBER',
+      'semantics': {
+        'conceptType': 'METRIC',
+        'semanticType': 'NUMBER',
+        'semanticGroup': 'NUMERIC'
+      }
+    },
+    {
       'name': 'link',
       'label': 'Event URL',
       'description': 'The URL to the event page.',
