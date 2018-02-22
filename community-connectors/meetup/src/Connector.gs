@@ -97,10 +97,10 @@ Connector.prototype.buildURL = function(request) {
     }
     case Connector.API_TYPE_EVENTS: {
       var onlyParam = 'only=' + [
-        'name', 'time', 'waitlist_count', 'yes_rsvp_count', 'link', 'fee'
+        'name', 'time', 'waitlist_count', 'yes_rsvp_count', 'link', 'fee', 'manual_attendance_count'
       ].join(',');
 
-      urlParams = ['?', 'page=100', onlyParam].join('&');
+      urlParams = ['?', 'page=100', 'status=upcoming,past', onlyParam].join('&');
 
       url = [baseURL, urlName, 'events'].join('/');
       break;
@@ -433,6 +433,8 @@ Connector.prototype.rowifyEventData = function(apiResults, dataSchema) {
           return values.push(entry['yes_rsvp_count']);
         case 'link':
           return values.push(entry['link']);
+        case 'manual_attendance_count':
+          return values.push(entry['manual_attendance_count']);
         case 'fee':
           return values.push(entry['fee'] && entry['fee']['amount'] || 0);
         case 'event_time':
