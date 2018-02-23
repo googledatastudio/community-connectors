@@ -17,7 +17,7 @@
 # then turns it into
 # AKfycbwFrL1OLXR3wqfnxowGFF3w3D4eq-54vAwjxDWcWRjiZMxX7jhII_1Ddx6y76GDHrxIew
 SRC=$1
-LATEST_DEPLOYMENT=$(cd $SRC; npx @google/clasp deployments  | tail -n 1 | sed -r 's|- (.*)@[0-9]+.*|\1|')
+LATEST_DEPLOYMENT=$(cd $SRC; npx @google/clasp deployments | head -n 2 | tail -n 1 | sed -r 's|- (.*)@HEAD.*|\1|')
 
 # We then embed this id into the base link for deeplinking, then print it out to the console.
 echo "https://datastudio.google.com/datasources/create?connectorId=$LATEST_DEPLOYMENT"
