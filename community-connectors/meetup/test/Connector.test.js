@@ -80,7 +80,7 @@ test('Build event url test', () => {
   const request = eventRequest();
   var actual = c.buildURL(request);
   var expected =
-      'https://api.meetup.com/Igniter/events?&page=100&only=name,time,waitlist_count,yes_rsvp_count,link,fee';
+      'https://api.meetup.com/Igniter/events?&page=100&status=past,upcoming&only=name,time,waitlist_count,yes_rsvp_count,link,fee,manual_attendance_count,local_date,local_time';
 
   expect(actual).toEqual(expected);
 });
@@ -523,14 +523,20 @@ test('rowify event data works as expected', () => {
       'yes_rsvp_count': 12,
       'name': 'event 1 name',
       'waitlist_count': 1,
-      'time': 1519354800000
+      'time': 1519354800000,
+      'manual_attendance_count': 6,
+      'local_date': "2017-08-02",
+      'local_time': "18:30"
     },
     {
       'link': 'fakeLink',
       'yes_rsvp_count': 12,
       'name': 'event 1 name',
       'waitlist_count': 1,
-      'time': 1519354800000
+      'time': 1519354800000,
+      'manual_attendance_count': 6,
+      'local_date': "2017-06-06",
+      'local_time': "19:00"
     },
     {
       'fee': {'amount': 25},
@@ -538,7 +544,10 @@ test('rowify event data works as expected', () => {
       'yes_rsvp_count': 10,
       'name': 'event 2 name',
       'waitlist_count': 0,
-      'time': 1529632800000
+      'time': 1529632800000,
+      'manual_attendance_count': 5,
+      'local_date': "2017-02-28",
+      'local_time': "12:00"
     }
   ];
   var request = buildFakeRequest({
