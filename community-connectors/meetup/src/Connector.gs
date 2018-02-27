@@ -100,7 +100,7 @@ Connector.prototype.buildURL = function(request) {
         'name', 'time', 'waitlist_count', 'yes_rsvp_count', 'link', 'fee', 'manual_attendance_count', 'local_date', 'local_time'
       ].join(',');
 
-      urlParams = ['?', 'page=100', 'status=upcoming,past', onlyParam].join('&');
+      urlParams = ['?', 'page=100', 'status=past,upcoming', onlyParam].join('&');
 
       url = [baseURL, urlName, 'events'].join('/');
       break;
