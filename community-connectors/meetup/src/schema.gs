@@ -325,6 +325,17 @@ Schema.prototype.getSchema = function(apiType) {
     {
       'name': 'event_date',
       'label': 'Event Date',
+      'description': 'The day that the event will be held in UTC.',
+      'dataType': 'STRING',
+      'semantics': {
+        'conceptType': 'DIMENSION',
+        'semanticType': 'YEAR_MONTH_DAY',
+        'semanticGroup': 'DATETIME'
+      }
+    },
+     {
+      'name': 'local_date',
+      'label': 'Local Event Date',
       'description': 'The day that the event will be held.',
       'dataType': 'STRING',
       'semantics': {
@@ -336,6 +347,17 @@ Schema.prototype.getSchema = function(apiType) {
     {
       'name': 'event_time',
       'label': 'Event Time',
+      'description': 'The time that the event will be held.',
+      'dataType': 'STRING',
+      'semantics': {
+        'conceptType': 'DIMENSION',
+        'semanticType': 'TEXT',
+        'semanticGroup': 'TEXT'
+      }
+    },
+    {
+      'name': 'local_time',
+      'label': 'Local Event Time',
       'description': 'The time that the event will be held.',
       'dataType': 'STRING',
       'semantics': {
@@ -359,6 +381,17 @@ Schema.prototype.getSchema = function(apiType) {
       'name': 'yes_rsvp_count',
       'label': 'RSVP Count',
       'description': 'The number of yes RSVPs.',
+      'dataType': 'NUMBER',
+      'semantics': {
+        'conceptType': 'METRIC',
+        'semanticType': 'NUMBER',
+        'semanticGroup': 'NUMERIC'
+      }
+    },
+    {
+      'name': 'manual_attendance_count',
+      'label': 'Manual Attendance Count',
+      'description': 'The manually entered attendance count.',
       'dataType': 'NUMBER',
       'semantics': {
         'conceptType': 'METRIC',
