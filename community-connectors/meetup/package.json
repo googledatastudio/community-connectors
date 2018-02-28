@@ -1,20 +1,20 @@
 {
   "name": "meetup",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "main.js",
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
-    "push": "cd src && npx clasp push",
+    "push": "cd src && clasp push",
     "pre-deploy": "yarn config set version-tag-prefix \"meetup-v\" && yarn version",
-    "npx clasp-deploy": "cd src && npx clasp push && npx clasp version $npm_package_version && npx clasp deploy $(npx clasp versions | tail -n 1 | cut -f1 -d'-') $npm_package_version",
-    "deploy": "yarn pre-deploy && yarn npx clasp-deploy"
+    "clasp-deploy": "cd src && clasp push && clasp version $npm_package_version && clasp deploy $(clasp versions | tail -n 1 | cut -f1 -d'-') $npm_package_version",
+    "deploy": "yarn pre-deploy && yarn clasp-deploy"
   },
   "author": "Matt Hamrick",
   "license": "MIT",
   "devDependencies": {
-    "@google/npx clasp": "^1.1.5",
+    "@google/clasp": "^1.1.5",
     "jest-cli": "^22.0.4"
   },
   "jest": {
