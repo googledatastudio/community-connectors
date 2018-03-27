@@ -11,7 +11,7 @@
   },
   "dataStudio": {
     "name": "GitHub",
-    "logoUrl": "https://assets-cdn.github.com/images/modules/open_graph/github-mark.png",
+    "logoUrl": "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/github",
