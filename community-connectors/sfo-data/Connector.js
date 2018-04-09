@@ -50,63 +50,28 @@ Connector.prototype.isAdminUser = function() {
 Connector.prototype.getData = function(request) {
   this.validateConfig(request);
   var dataSchema = this.getDataSchema(request);
-  
+
   var url = 'https://data.sfgov.org/resource/rptz-7xyh.json?$limit=50000';
-  
+
   var response = JSON.parse(this.fetch(url));
   var data = [];
   response.forEach(function(row) {
     var values = [];
+
     dataSchema.forEach(function(field) {
-      switch(field.name) {
-        case 'activity_period':
-          values.push(row.activity_period);
-          break;
-        case 'activity_type_code':
-          values.push(row.activity_type_code);
-          break;
-        case 'boarding_area':
-          values.push(row.boarding_area);
-          break;
-        case 'geo_region':
-          values.push(row.geo_region);
-          break;
-        case 'geo_summary':
-          values.push(row.geo_summary);
-          break;
-        case 'operating_airline':
-          values.push(row.operating_airline);
-          break;
-        case 'operating_airline_iata_code':
-          values.push(row.operating_airline_iata_code);
-          break;
-        case 'passenger_count':
-          values.push(row.passenger_count);
-          break;
-        case 'price_category_code':
-          values.push(row.price_category_code);
-          break;
-        case 'published_airline':
-          values.push(row.published_airline);
-          break;
-        case 'published_airline_iata_code':
-          values.push(row.published_airline_iata_code);
-          break;
-        case 'terminal':
-          values.push(row.terminal);
-          break;
-        default:
-          values.push('');
+      if (field.name in row) {
+	values.push(row[field.name]);
+      } else {
+	values.push('');
       }
     }) // end of dataSchema forEach
-
     data.push({
-      values: values
-    });
-              
+	values: values
+      });
+
 
   }); // end of response forEach
-  
+
   var results = {schema: dataSchema, rows: data};
   return results;
 };
