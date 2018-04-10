@@ -4,7 +4,7 @@ var CUSTOM_CONFIG = [
 ];
 
 /** @const */
-var LOG_ENABLED = true;
+var LOG_ENABLED = false;
 
 /** @const */
 var AUTH_TYPE = 'none';
@@ -38,7 +38,7 @@ Connector.prototype.validateConfig = function(request) {
  * an admin user of the AbstractConnector.
  */
 Connector.prototype.isAdminUser = function() {
-  return true;
+  return false;
 };
 
 /**
