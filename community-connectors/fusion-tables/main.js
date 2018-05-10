@@ -22,10 +22,9 @@ var fTbl = fTbl || {};
  * @const
  */
 var exampleFusionTable = {
-  "value": "1g5pO21XASHlIUm3zBq0Od-e_Y-Q4ck_taKigktca",
-  "label": "Example: 2017 Fuel Efficiency Data from fueleconomy.gov"
+  value: '1g5pO21XASHlIUm3zBq0Od-e_Y-Q4ck_taKigktca',
+  label: 'Example: 2017 Fuel Efficiency Data from fueleconomy.gov',
 };
-
 
 /**
  * Return the list of Fusion Tables that the user has direct access to. Also
@@ -33,16 +32,16 @@ var exampleFusionTable = {
  *
  * @returns {Array} List of Fusion tables.
  */
-fTbl.listTables = function () {
+fTbl.listTables = function() {
   var tables = FusionTables.Table.list();
   var tableList = [];
   if (tables.items) {
     for (var i = 0; i < tables.items.length; i++) {
       var table = tables.items[i];
       var tableInfo = {
-        "value": table.tableId,
-        "label": table.name
-      }
+        value: table.tableId,
+        label: table.name,
+      };
       tableList.push(tableInfo);
     }
   }
@@ -56,7 +55,7 @@ fTbl.listTables = function () {
  * @param {Object} column A single column from a Fusion table.
  * @returns {Object} The schema for the passed column
  */
-fTbl.mapColumn = function (column) {
+fTbl.mapColumn = function(column) {
   var field = {};
   field.name = 'c_' + column.columnId;
   field.label = column.name;
@@ -79,7 +78,7 @@ fTbl.mapColumn = function (column) {
  * @param {string} tableId ID for the table in Fusion Tables.
  * @returns {array} Schema for the table.
  */
-fTbl.getColumns = function (tableId) {
+fTbl.getColumns = function(tableId) {
   var columnList = FusionTables.Column.list(tableId).items;
   var schema = columnList.map(fTbl.mapColumn);
   return schema;
@@ -94,18 +93,19 @@ fTbl.getColumns = function (tableId) {
 function getConfig(request) {
   var customConfig = [
     {
-      "type": "INFO",
-      'name': 'Unique1',
-      'text': 'In addition to all Fusion Tables in your account, the following list will include an example Fusion table with a fuel economy public dataset.'
+      type: 'INFO',
+      name: 'Unique1',
+      text:
+        'In addition to all Fusion Tables in your account, the following list will include an example Fusion table with a fuel economy public dataset.',
     },
     {
-      "type": "SELECT_SINGLE",
-      "name": "tableId",
-      "displayName": "Select your Fusion Table",
-      "options": fTbl.listTables()
-    }
+      type: 'SELECT_SINGLE',
+      name: 'tableId',
+      displayName: 'Select your Fusion Table',
+      options: fTbl.listTables(),
+    },
   ];
-  return { configParams: customConfig };
+  return {configParams: customConfig};
 }
 
 /**
@@ -116,7 +116,7 @@ function getConfig(request) {
  */
 function getSchema(request) {
   fTbl.Schema = fTbl.getColumns(request.configParams.tableId);
-  return { schema: fTbl.Schema };
+  return {schema: fTbl.Schema};
 }
 
 /**
@@ -127,12 +127,14 @@ function getSchema(request) {
  */
 function getData(request) {
   // Add a smaller limit if sampleExtration is `true`
-  var limitSuffix = (request.scriptParams &&
-    request.scriptParams.sampleExtraction) ? ' LIMIT 50' : '';
+  var limitSuffix =
+    request.scriptParams && request.scriptParams.sampleExtraction
+      ? ' LIMIT 50'
+      : '';
   fTbl.Schema = fTbl.getColumns(request.configParams.tableId);
   var dataSchema = [];
   var fieldOriginalNames = [];
-  request.fields.forEach(function (field) {
+  request.fields.forEach(function(field) {
     for (var i = 0; i < fTbl.Schema.length; i++) {
       if (fTbl.Schema[i].name == field.name) {
         dataSchema.push(fTbl.Schema[i]);
@@ -142,13 +144,19 @@ function getData(request) {
     }
   });
 
-  var sql = "SELECT '" + fieldOriginalNames.join("', '") + "' FROM " +
-    request.configParams.tableId + limitSuffix;
+  var sql =
+    "SELECT '" +
+    fieldOriginalNames.join("', '") +
+    "' FROM " +
+    request.configParams.tableId +
+    limitSuffix;
   var result = FusionTables.Query.sqlGet(sql);
 
   return {
     schema: dataSchema,
-    rows: result.rows.map(function (row) { return { values: row }; })
+    rows: result.rows.map(function(row) {
+      return {values: row};
+    }),
   };
 }
 
@@ -159,5 +167,5 @@ function getData(request) {
  * @returns {Object} `AuthType` used by the connector.
  */
 function getAuthType() {
-  return { "type": "NONE" };
+  return {type: 'NONE'};
 }

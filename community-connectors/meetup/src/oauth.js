@@ -18,12 +18,12 @@ function getOAuthService() {
   var clientId = scriptProps.getProperty(oauth.OAUTH_CLIENT_ID);
   var clientSecret = scriptProps.getProperty(oauth.OAUTH_CLIENT_SECRET);
   return OAuth2.createService('meetup')
-      .setAuthorizationBaseUrl('https://secure.meetup.com/oauth2/authorize')
-      .setTokenUrl('https://secure.meetup.com/oauth2/access')
-      .setClientId(clientId)
-      .setClientSecret(clientSecret)
-      .setPropertyStore(PropertiesService.getUserProperties())
-      .setCallbackFunction('authCallback');
+    .setAuthorizationBaseUrl('https://secure.meetup.com/oauth2/authorize')
+    .setTokenUrl('https://secure.meetup.com/oauth2/access')
+    .setClientId(clientId)
+    .setClientSecret(clientSecret)
+    .setPropertyStore(PropertiesService.getUserProperties())
+    .setCallbackFunction('authCallback');
 }
 
 /**

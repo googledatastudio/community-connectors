@@ -2,133 +2,133 @@ function getConfig(request) {
   var config = {
     configParams: [
       {
-        "type": "SELECT_SINGLE",
-        "name": "resource",
-        "displayName": "Select Data Type",
-        "helpText": "The connector will retrieve data for the selected type.",
-        "options": [       
+        type: 'SELECT_SINGLE',
+        name: 'resource',
+        displayName: 'Select Data Type',
+        helpText: 'The connector will retrieve data for the selected type.',
+        options: [
           {
-            "label": "Films",
-            "value": "films"
+            label: 'Films',
+            value: 'films',
           },
           {
-            "label": "People",
-            "value": "people"
+            label: 'People',
+            value: 'people',
           },
           {
-            "label": "Planets",
-            "value": "planets"
+            label: 'Planets',
+            value: 'planets',
           },
           {
-            "label": "Species",
-            "value": "species"
+            label: 'Species',
+            value: 'species',
           },
           {
-            "label": "Starships",
-            "value": "starships"
+            label: 'Starships',
+            value: 'starships',
           },
           {
-            "label": "Vehicles",
-            "value": "vehicles"
-          }          
-        ]
-      }     
-    ]
+            label: 'Vehicles',
+            value: 'vehicles',
+          },
+        ],
+      },
+    ],
   };
   return config;
-};
+}
 
-var fixedSchema = { 
-  'films': [
+var fixedSchema = {
+  films: [
     {
       name: 'title',
       label: 'Title',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'episode_id',
       label: 'Episode ID',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'opening_crawl',
       label: 'Opening Crawl',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'director',
       label: 'Director',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'producer',
       label: 'Producer',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'release_date',
       label: 'Release Date',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    }
+        conceptType: 'DIMENSION',
+      },
+    },
   ],
-  'people':[
+  people: [
     {
       name: 'name',
       label: 'Name',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'birth_year',
       label: 'Birth Year',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'eye_color',
       label: 'Eye Color',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'gender',
       label: 'Gender',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'hair_color',
       label: 'Hair Color',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'height',
@@ -136,8 +136,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'mass',
@@ -145,26 +145,26 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'skin_color',
       label: 'Skin Color',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    }  
+        conceptType: 'DIMENSION',
+      },
+    },
   ],
-  'planets':[
+  planets: [
     {
       name: 'name',
       label: 'Name',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'diameter',
@@ -172,8 +172,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'rotation_period',
@@ -181,8 +181,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'orbital_period',
@@ -190,8 +190,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'gravity',
@@ -199,8 +199,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'population',
@@ -208,24 +208,24 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    },    
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'climate',
       label: 'Climate',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'terrain',
       label: 'Terrain',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'surface_water',
@@ -233,43 +233,43 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    }   
+        isReaggregatable: true,
+      },
+    },
   ],
-  'species':[
+  species: [
     {
       name: 'name',
       label: 'Name',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'classification',
       label: 'Classification',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'designation',
       label: 'Designation',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    },    
+        conceptType: 'DIMENSION',
+      },
+    },
     {
       name: 'average_height',
       label: 'Average Height',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'average_lifespan',
@@ -277,83 +277,83 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    },  
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'eye_colors',
       label: 'Eye Colors',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'hair_colors',
       label: 'Hair Colors',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    }, 
+        conceptType: 'DIMENSION',
+      },
+    },
     {
       name: 'skin_colors',
       label: 'Skin Colors',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    }, 
+        conceptType: 'DIMENSION',
+      },
+    },
     {
       name: 'language',
       label: 'Language',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    }  
+        conceptType: 'DIMENSION',
+      },
+    },
   ],
-  'starships':[
+  starships: [
     {
       name: 'name',
       label: 'Name',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'model',
       label: 'Model',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'starship_class',
       label: 'Starship Class',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'manufacturer',
       label: 'Manufacturer',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    },    
+        conceptType: 'DIMENSION',
+      },
+    },
     {
       name: 'cost_in_credits',
       label: 'Cost in Credits',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'length',
@@ -361,8 +361,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'crew',
@@ -370,17 +370,17 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    }, 
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'passengers',
       label: 'Passengers',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'max_atmosphering_speed',
@@ -388,16 +388,16 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    },    
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'hyperdrive_rating',
       label: 'Hyperdrive Rating',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'MGLT',
@@ -405,69 +405,68 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    }, 
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'cargo_capacity',
       label: 'Cargo Capacity',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    },     
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'consumables',
       label: 'Consumables Capacity',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    } 
-    
+        conceptType: 'DIMENSION',
+      },
+    },
   ],
-  'vehicles':[
+  vehicles: [
     {
       name: 'name',
       label: 'Name',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'model',
       label: 'Model',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'vehicle_class',
       label: 'Vehicle Class',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'manufacturer',
       label: 'Manufacturer',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    },    
+        conceptType: 'DIMENSION',
+      },
+    },
     {
       name: 'cost_in_credits',
       label: 'Cost in Credits',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'length',
@@ -475,8 +474,8 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'crew',
@@ -484,17 +483,17 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    }, 
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'passengers',
       label: 'Passengers',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
+        isReaggregatable: true,
+      },
     },
     {
       name: 'max_atmosphering_speed',
@@ -502,32 +501,32 @@ var fixedSchema = {
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    },    
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'cargo_capacity',
       label: 'Cargo Capacity',
       dataType: 'NUMBER',
       semantics: {
         conceptType: 'METRIC',
-        isReaggregatable: true
-      }
-    },     
+        isReaggregatable: true,
+      },
+    },
     {
       name: 'consumables',
       label: 'Consumables Capacity',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
-    } 
-  ]
+        conceptType: 'DIMENSION',
+      },
+    },
+  ],
 };
 
 function getSchema(request) {
   return {schema: fixedSchema[request.configParams.resource]};
-};
+}
 
 function getData(request) {
   var dataSchema = [];
@@ -544,53 +543,51 @@ function getData(request) {
   var fullResponse = [];
   var next;
   var pageNum = 1;
-  
+
   do {
     var url = [
       'https://swapi.co/api/',
       request.configParams.resource,
       '/?page=',
-      pageNum
+      pageNum,
     ];
-    
+
     var response = JSON.parse(UrlFetchApp.fetch(url.join('')));
     var results = response.results;
     fullResponse = fullResponse.concat(results);
 
     next = !!response.next;
     pageNum++;
-    
-  } while(next);
+  } while (next);
 
   var data = [];
   fullResponse.forEach(function(item) {
-    var values = [];         
+    var values = [];
     dataSchema.forEach(function(field) {
-      if(!!item[field.name]) {
+      if (!!item[field.name]) {
         values.push(item[field.name]);
       } else {
         values.push('');
       }
     });
     data.push({
-      values: values
+      values: values,
     });
   });
 
   return {
     schema: dataSchema,
-    rows: data
-  };  
-  
-};
+    rows: data,
+  };
+}
 
 function getAuthType() {
   var response = {
-    "type": "NONE"
+    type: 'NONE',
   };
   return response;
-};
+}
 
 function isAdminUser() {
   return false;
-};
+}

@@ -1,0 +1,18 @@
+{
+  "name": "community-connectors",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prettier": "prettier --write \"**/*.js\""
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "bracketSpacing": false,
+    "arrowParens": "always"
+  },
+  "devDependencies": {
+    "prettier": "^1.12.1"
+  }
+}

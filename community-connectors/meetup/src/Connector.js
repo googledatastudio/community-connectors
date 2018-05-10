@@ -42,8 +42,8 @@ Connector.customConfig = [
     name: 'url_name',
     displayName: 'Meetup Group Name in URL',
     helpText:
-        'E.g. if the URL for your Meetup is https://www.meetup.com/gdg-silicon-valley/, enter "gdg-silicon-valley" here.',
-    placeholder: 'Igniter'
+      'E.g. if the URL for your Meetup is https://www.meetup.com/gdg-silicon-valley/, enter "gdg-silicon-valley" here.',
+    placeholder: 'Igniter',
   },
   {
     type: 'SELECT_SINGLE',
@@ -54,9 +54,9 @@ Connector.customConfig = [
       {label: 'Members', value: Connector.API_TYPE_MEMBERS},
       {label: 'General Info', value: Connector.API_TYPE_GENERAL_INFO},
       {label: 'Pro Groups', value: Connector.API_TYPE_PRO_GROUPS},
-      {label: 'Events', value: Connector.API_TYPE_EVENTS}
-    ]
-  }
+      {label: 'Events', value: Connector.API_TYPE_EVENTS},
+    ],
+  },
 ];
 
 /**
@@ -68,9 +68,9 @@ Connector.customConfig = [
 Connector.prototype.validateConfig = function(request) {
   request.configParams = request.configParams || {};
   request.configParams.url_name =
-      request.configParams.url_name || Connector.DEFAULT_URL_NAME;
+    request.configParams.url_name || Connector.DEFAULT_URL_NAME;
   request.configParams.api_type =
-      request.configParams.api_type || Connector.DEFAULT_API_TYPE;
+    request.configParams.api_type || Connector.DEFAULT_API_TYPE;
   return request;
 };
 
@@ -89,45 +89,83 @@ Connector.prototype.buildURL = function(request) {
   switch (request.configParams.api_type) {
     case Connector.API_TYPE_MEMBERS: {
       urlParams = [
-        '?', 'sign=true', 'photo-host=public',
-        'only=id,joined,status,lat,lon,city,state', 'page=100'
+        '?',
+        'sign=true',
+        'photo-host=public',
+        'only=id,joined,status,lat,lon,city,state',
+        'page=100',
       ].join('&');
       url = [baseURL, urlName, 'members'].join('/');
       break;
     }
     case Connector.API_TYPE_EVENTS: {
-      var onlyParam = 'only=' + [
-        'name', 'time', 'waitlist_count', 'yes_rsvp_count', 'link', 'fee', 'manual_attendance_count', 'local_date', 'local_time'
-      ].join(',');
+      var onlyParam =
+        'only=' +
+        [
+          'name',
+          'time',
+          'waitlist_count',
+          'yes_rsvp_count',
+          'link',
+          'fee',
+          'manual_attendance_count',
+          'local_date',
+          'local_time',
+        ].join(',');
 
-      urlParams = ['?', 'page=100', 'status=past,upcoming', onlyParam].join('&');
+      urlParams = ['?', 'page=100', 'status=past,upcoming', onlyParam].join(
+        '&'
+      );
 
       url = [baseURL, urlName, 'events'].join('/');
       break;
     }
     case Connector.API_TYPE_GENERAL_INFO: {
-      var onlyParam = 'only=' + [
-        'name', 'link', 'members', 'group_photo.photo_link', 'meta_category'
-      ].join(',');
+      var onlyParam =
+        'only=' +
+        [
+          'name',
+          'link',
+          'members',
+          'group_photo.photo_link',
+          'meta_category',
+        ].join(',');
       urlParams = ['?', onlyParam].join('&');
       url = [baseURL, urlName].join('/');
       break;
     }
     case Connector.API_TYPE_PRO_GROUPS:
-      var onlyParam = 'only=' + [
-        'id', 'name', 'lat', 'lon', 'city', 'country', 'member_count',
-        'average_age', 'founded_date', 'past_events', 'upcoming_events',
-        'past_rsvps', 'rsvps_per_event', 'repeat_rsvpers', 'gender_unknown',
-        'gender_female', 'gender_male', 'gender_other'
-      ].join(',');
+      var onlyParam =
+        'only=' +
+        [
+          'id',
+          'name',
+          'lat',
+          'lon',
+          'city',
+          'country',
+          'member_count',
+          'average_age',
+          'founded_date',
+          'past_events',
+          'upcoming_events',
+          'past_rsvps',
+          'rsvps_per_event',
+          'repeat_rsvpers',
+          'gender_unknown',
+          'gender_female',
+          'gender_male',
+          'gender_other',
+        ].join(',');
       urlParams = ['?', 'page=100', onlyParam].join('&');
       url = [baseURL, 'pro', urlName, 'groups'].join('/');
       break;
     default: {
       this.throwError(
-          'An invalid value was passed to api type: ' +
-              request.configParams.api_type,
-          false);
+        'An invalid value was passed to api type: ' +
+          request.configParams.api_type,
+        false
+      );
     }
   }
   return url + urlParams;
@@ -143,15 +181,18 @@ Connector.prototype.buildURL = function(request) {
  * @return {object|undefined} either the aggregated values from the cache or undefined, if the key was not found.
  */
 Connector.prototype.getFromCachePaginated = function(cache, cacheKey) {
-  var cached = cache.getRestFrom(cacheKey, function(acc, row) {
-    const cachedValue = JSON.parse(row[1]);
-    const results = acc.json.concat(cachedValue.json);
-    const nextLink = cachedValue.nextLink;
-    return {json: results, nextLink: nextLink};
-  }, {json: [], nextLink: undefined});
+  var cached = cache.getRestFrom(
+    cacheKey,
+    function(acc, row) {
+      const cachedValue = JSON.parse(row[1]);
+      const results = acc.json.concat(cachedValue.json);
+      const nextLink = cachedValue.nextLink;
+      return {json: results, nextLink: nextLink};
+    },
+    {json: [], nextLink: undefined}
+  );
   return cached;
 };
-
 
 /**
  * Attempts to get the data from the cache. If it fails, it makes all necessary
@@ -165,7 +206,9 @@ Connector.prototype.getFromCachePaginated = function(cache, cacheKey) {
 Connector.prototype.getCachedData = function(request, url, options) {
   if (this.cache === null) {
     this.cache = new CustomCache(
-        request.configParams.url_name, request.configParams.api_type);
+      request.configParams.url_name,
+      request.configParams.api_type
+    );
   }
   var cache = this.cache;
   var cacheKey = url;
@@ -181,7 +224,6 @@ Connector.prototype.getCachedData = function(request, url, options) {
       var JSONed = JSON.parse(response);
       results = results.concat(JSONed);
       nextUrl = this.getNextLink(response);
-
 
       if (!nextUrl || JSONed.length !== 100) {
         shouldCache = false;
@@ -236,7 +278,10 @@ Connector.prototype.getNextLink = function(response) {
 Connector.prototype.paginatedResult = function(request, url) {
   var lock = LockService.getUserLock();
   // Will throw an exception if the lock is not obtained within 5 minutes.
-  var timeout = Connector.MILLIS_PER_SECOND * Connector.SECONDS_PER_MINUTE * Connector.LOCK_TIMEOUT_MINUTES;
+  var timeout =
+    Connector.MILLIS_PER_SECOND *
+    Connector.SECONDS_PER_MINUTE *
+    Connector.LOCK_TIMEOUT_MINUTES;
   lock.waitLock(timeout);
   var options = this.getFetchOptions();
   var response = this.getCachedData(request, url, options);
@@ -258,7 +303,10 @@ Connector.prototype.paginatedResult = function(request, url) {
  */
 Connector.prototype.timeStampToYearMonthDay = function(timestamp) {
   var d = new Date(timestamp);
-  var yearMonthDay = d.toISOString().slice(0, 10).replace(/-/g, '');
+  var yearMonthDay = d
+    .toISOString()
+    .slice(0, 10)
+    .replace(/-/g, '');
   return yearMonthDay;
 };
 
@@ -271,8 +319,11 @@ Connector.prototype.timeStampToUTCTime = function(timestamp) {
   var d = new Date(timestamp);
   var hours = d.getUTCHours();
   var minutes = d.getUTCMinutes();
-  return (hours < 10 ? '0' + hours : hours) + ':' +
-      (minutes < 10 ? '0' + minutes : minutes);
+  return (
+    (hours < 10 ? '0' + hours : hours) +
+    ':' +
+    (minutes < 10 ? '0' + minutes : minutes)
+  );
 };
 
 /**
@@ -307,8 +358,9 @@ Connector.prototype.rowifyMemberData = function(apiResults, dataSchema) {
           return values.push(entry['state']);
         default:
           that.throwError(
-              'A field was requested that is not in the schema: ' + field.name,
-              true);
+            'A field was requested that is not in the schema: ' + field.name,
+            true
+          );
       }
     });
     return {values: values};
@@ -322,7 +374,7 @@ Connector.prototype.rowifyMemberData = function(apiResults, dataSchema) {
  */
 Connector.prototype.getFetchOptions = function() {
   var options = {
-    headers: {'Authorization': 'Bearer ' + getOAuthService().getAccessToken()}
+    headers: {Authorization: 'Bearer ' + getOAuthService().getAccessToken()},
   };
   return options;
 };
@@ -355,16 +407,18 @@ Connector.prototype.rowifyGeneralInfo = function(apiResults, dataSchema) {
     switch (field.name) {
       case 'category':
         return values.push(
-            apiResults['meta_category'] && apiResults['meta_category']['name']);
+          apiResults['meta_category'] && apiResults['meta_category']['name']
+        );
       case 'category_photo_url':
         return values.push(
-            apiResults['meta_category'] &&
-              apiResults['meta_category']['photo'] &&
-              apiResults['meta_category']['photo']['photo_link']);
+          apiResults['meta_category'] &&
+            apiResults['meta_category']['photo'] &&
+            apiResults['meta_category']['photo']['photo_link']
+        );
       case 'group_photo_url':
         return values.push(
-            apiResults['group_photo'] &&
-              apiResults['group_photo']['photo_link']);
+          apiResults['group_photo'] && apiResults['group_photo']['photo_link']
+        );
       case 'members_count':
         return values.push(apiResults['members']);
       case 'group_link':
@@ -373,8 +427,9 @@ Connector.prototype.rowifyGeneralInfo = function(apiResults, dataSchema) {
         return values.push(apiResults['name']);
       default:
         that.throwError(
-            'A field was requested that is not in the schema: ' + field.name,
-            true);
+          'A field was requested that is not in the schema: ' + field.name,
+          true
+        );
     }
   });
   return [{values: values}];
@@ -394,7 +449,7 @@ Connector.prototype.wrappedFetch = function(url, options) {
     this.throwError(e);
   }
   return result;
-}
+};
 
 /**
  * Returns the data for events.
@@ -436,17 +491,18 @@ Connector.prototype.rowifyEventData = function(apiResults, dataSchema) {
         case 'local_date':
           return values.push(entry['local_date']);
         case 'local_time':
-          return values.push(entry['local_time']); 
+          return values.push(entry['local_time']);
         case 'manual_attendance_count':
           return values.push(entry['manual_attendance_count']);
         case 'fee':
-          return values.push(entry['fee'] && entry['fee']['amount'] || 0);
+          return values.push((entry['fee'] && entry['fee']['amount']) || 0);
         case 'event_time':
           return values.push(that.timeStampToUTCTime(entry['time']));
         default:
           that.throwError(
-              'A field was requested that is not in the schema: ' + field.name,
-              true);
+            'A field was requested that is not in the schema: ' + field.name,
+            true
+          );
       }
     });
     return {values: values};
@@ -483,7 +539,8 @@ Connector.prototype.rowifyProGroupData = function(apiResults, dataSchema) {
           return values.push(entry['average_age']);
         case 'founded_date':
           return values.push(
-              that.timeStampToYearMonthDay(entry['founded_date']));
+            that.timeStampToYearMonthDay(entry['founded_date'])
+          );
         case 'past_events':
           return values.push(entry['past_events']);
         case 'upcoming_events':
@@ -496,20 +553,25 @@ Connector.prototype.rowifyProGroupData = function(apiResults, dataSchema) {
           return values.push(entry['repeat_rsvpers']);
         case 'gender_unknown':
           return values.push(
-              Math.ceil(entry['gender_unknown'] * entry['member_count']));
+            Math.ceil(entry['gender_unknown'] * entry['member_count'])
+          );
         case 'gender_female':
           return values.push(
-              Math.ceil(entry['gender_female'] * entry['member_count']));
+            Math.ceil(entry['gender_female'] * entry['member_count'])
+          );
         case 'gender_male':
           return values.push(
-              Math.ceil(entry['gender_male'] * entry['member_count']));
+            Math.ceil(entry['gender_male'] * entry['member_count'])
+          );
         case 'gender_other':
           return values.push(
-              Math.ceil(entry['gender_other'] * entry['member_count']));
+            Math.ceil(entry['gender_other'] * entry['member_count'])
+          );
         default:
           that.throwError(
-              'A field was requested that is not in the schema: ' + field.name,
-              true);
+            'A field was requested that is not in the schema: ' + field.name,
+            true
+          );
       }
     });
     return {values: values};
@@ -546,9 +608,10 @@ Connector.prototype.getData = function(request) {
       break;
     default:
       this.throwError(
-          'An invalid value was passed to apiType: ' +
-              request.configParams.api_type,
-          false);
+        'An invalid value was passed to apiType: ' +
+          request.configParams.api_type,
+        false
+      );
   }
   var url = this.buildURL(request);
   var apiResults = dataRequestFn.call(this, request, url);
@@ -567,12 +630,15 @@ Connector.prototype.getData = function(request) {
  */
 Connector.prototype.getDataSchema = function(request) {
   var that = this;
-  var schemaByName =
-      this.getSchema(request).schema.reduce(function(acc, schemaEntry) {
-        var name = schemaEntry.name;
-        acc[name] = schemaEntry;
-        return acc;
-      }, {});
+  var schemaByName = this.getSchema(request).schema.reduce(function(
+    acc,
+    schemaEntry
+  ) {
+    var name = schemaEntry.name;
+    acc[name] = schemaEntry;
+    return acc;
+  },
+  {});
 
   var dataSchema = [];
   request.fields.forEach(function(field) {
@@ -580,8 +646,9 @@ Connector.prototype.getDataSchema = function(request) {
       dataSchema.push(schemaByName[field.name]);
     } else {
       that.throwError(
-          'A field was requested that was not in the schema: ' + field.name,
-          false);
+        'A field was requested that was not in the schema: ' + field.name,
+        false
+      );
     }
   });
 
@@ -599,8 +666,9 @@ Connector.prototype.getDataSchema = function(request) {
 Connector.prototype.logAndExecute = function(functionName, parameter) {
   if (this[functionName] === undefined) {
     this.throwError(
-        'The function you are trying to log is not defined: ' + functionName,
-        false);
+      'The function you are trying to log is not defined: ' + functionName,
+      false
+    );
   } else {
     if (this.logEnabled && this.isAdminUser()) {
       var paramString = JSON.stringify(parameter, null, 2);
@@ -639,7 +707,7 @@ Connector.prototype.isAdminUser = function() {
  * @return {Object} `AuthType` used by the Connector.
  */
 Connector.prototype.getAuthType = function() {
-  var response = {'type': Connector.OAUTH_CONST};
+  var response = {type: Connector.OAUTH_CONST};
   return response;
 };
 
@@ -655,7 +723,6 @@ Connector.prototype.getConfig = function(request) {
   var config = {configParams: Connector.customConfig};
   return config;
 };
-
 
 /**
  * Returns the schema for the given request.

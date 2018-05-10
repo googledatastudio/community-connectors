@@ -27,17 +27,19 @@ connector.defaultPackage = 'googleapis';
 /** @const */
 connector.Config = [
   {
-    'type': 'INFO',
-    'name': 'Unique1',
-    'text': 'Enter npm package names to fetch their download count. An invalid or blank entry will revert to the default value.'
+    type: 'INFO',
+    name: 'Unique1',
+    text:
+      'Enter npm package names to fetch their download count. An invalid or blank entry will revert to the default value.',
   },
   {
-    'type': 'TEXTINPUT',
-    'name': 'package',
-    'displayName': 'Enter a single package name or multiple names separated by commas (no spaces!)',
-    'helpText': 'e.g. "googleapis" or "package,somepackage,anotherpackage"',
-    'placeholder': connector.defaultPackage
-  }
+    type: 'TEXTINPUT',
+    name: 'package',
+    displayName:
+      'Enter a single package name or multiple names separated by commas (no spaces!)',
+    helpText: 'e.g. "googleapis" or "package,somepackage,anotherpackage"',
+    placeholder: connector.defaultPackage,
+  },
 ];
 
 /** @const */
@@ -47,16 +49,16 @@ connector.schema = [
     label: 'Package',
     dataType: 'STRING',
     semantics: {
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'day',
     label: 'Date',
     dataType: 'STRING',
     semantics: {
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'downloads',
@@ -64,11 +66,10 @@ connector.schema = [
     dataType: 'NUMBER',
     semantics: {
       conceptType: 'METRIC',
-      isReaggregatable: true
-    }
-  }
+      isReaggregatable: true,
+    },
+  },
 ];
-
 
 /**
  * Returns the authentication method required by the connector to authorize the
@@ -77,10 +78,9 @@ connector.schema = [
  * @returns {Object} `AuthType` used by the connector.
  */
 function getAuthType() {
-  var response = { 'type': 'NONE' };
+  var response = {type: 'NONE'};
   return response;
 }
-
 
 /**
  * Returns the user configurable options for the connector.
@@ -91,11 +91,10 @@ function getAuthType() {
 function getConfig(request) {
   var config = {
     configParams: connector.Config,
-    dateRangeRequired: true
+    dateRangeRequired: true,
   };
   return config;
 }
-
 
 /**
  * Returns the schema for the given request.
@@ -104,9 +103,8 @@ function getConfig(request) {
  * @returns {Object} Schema for the given request.
  */
 function getSchema(request) {
-  return { schema: connector.schema };
+  return {schema: connector.schema};
 }
-
 
 /**
  * Returns the tabular data for the given request.
@@ -117,7 +115,7 @@ function getSchema(request) {
 function getData(request) {
   request.configParams = connector.validateConfig(request.configParams);
 
-  var dataSchema = request.fields.map(function (field) {
+  var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < connector.schema.length; i++) {
       if (connector.schema[i].name == field.name) {
         return connector.schema[i];
@@ -145,10 +143,9 @@ function getData(request) {
 
   return {
     schema: dataSchema,
-    rows: data
+    rows: data,
   };
 }
-
 
 /**
  * This checks whether the current user is an admin user of the connector.
@@ -162,7 +159,6 @@ function isAdminUser() {
   return true;
 }
 
-
 /**
  * Formats the parsed response from external data source into correct tabular
  * format and returns only the fields included in the original getData request
@@ -175,23 +171,22 @@ function isAdminUser() {
  * @returns {Array} Array containing rows of data in key-value pairs for each
  *     field.
  */
-connector.getFormattedData = function (parsedResponse, dataSchema) {
+connector.getFormattedData = function(parsedResponse, dataSchema) {
   var data = [];
   for (var packageName in parsedResponse) {
-    if (parsedResponse.hasOwnProperty(packageName) &&
-      parsedResponse[packageName]) {
+    if (
+      parsedResponse.hasOwnProperty(packageName) &&
+      parsedResponse[packageName]
+    ) {
       var downloadData = parsedResponse[packageName].downloads;
-      var formatted_data = downloadData.map(
-        function (dailyDownload) {
-          return connector.formatData(dataSchema, packageName, dailyDownload);
-        }
-      );
+      var formatted_data = downloadData.map(function(dailyDownload) {
+        return connector.formatData(dataSchema, packageName, dailyDownload);
+      });
       data = data.concat(formatted_data);
     }
   }
   return data;
 };
-
 
 /**
  * Validates config parameters and provides missing values.
@@ -199,17 +194,19 @@ connector.getFormattedData = function (parsedResponse, dataSchema) {
  * @param {Object} configParams Config parameters from `request`.
  * @returns {Object} Updated Config parameters.
  */
-connector.validateConfig = function (configParams) {
+connector.validateConfig = function(configParams) {
   configParams = configParams || {};
   configParams.package = configParams.package || connector.defaultPackage;
 
-  configParams.package = configParams.package.split(",").map(
-    function (x) { return x.trim(); }
-  ).join(",");
+  configParams.package = configParams.package
+    .split(',')
+    .map(function(x) {
+      return x.trim();
+    })
+    .join(',');
 
   return configParams;
 };
-
 
 /**
  * Gets response for UrlFetchApp.
@@ -217,19 +214,18 @@ connector.validateConfig = function (configParams) {
  * @param {Object} request Data request parameters.
  * @returns {string} Response text for UrlFetchApp.
  */
-connector.fetchDataFromApi = function (request) {
+connector.fetchDataFromApi = function(request) {
   var url = [
     'https://api.npmjs.org/downloads/range/',
     request.dateRange.startDate,
     ':',
     request.dateRange.endDate,
     '/',
-    request.configParams.package
+    request.configParams.package,
   ];
   var response = UrlFetchApp.fetch(url.join(''));
   return response;
 };
-
 
 /**
  * Parses response string into an object. Also standardizes the object structure
@@ -240,7 +236,7 @@ connector.fetchDataFromApi = function (request) {
  * @return {Object} Contains package names as keys and associated download count
  *     information(object) as values.
  */
-connector.parseData = function (request, responseString) {
+connector.parseData = function(request, responseString) {
   var response = JSON.parse(responseString);
   var package_list = request.configParams.package.split(',');
   var mapped_response = {};
@@ -254,22 +250,21 @@ connector.parseData = function (request, responseString) {
   return mapped_response;
 };
 
-
 /**
-* Formats a single row of data into the required format.
-*
-* @param {Object} dataSchema Filtered schema containing fields in the request.
-* @param {string} packageName Name of the package who's download data is being
-*    processed.
-* @param {Object} dailyDownload Contains the download data for a certain day.
-* @returns {Object} Contains values for requested fields in predefined format.
-*/
-connector.formatData = function (dataSchema, packageName, dailyDownload) {
+ * Formats a single row of data into the required format.
+ *
+ * @param {Object} dataSchema Filtered schema containing fields in the request.
+ * @param {string} packageName Name of the package who's download data is being
+ *    processed.
+ * @param {Object} dailyDownload Contains the download data for a certain day.
+ * @returns {Object} Contains values for requested fields in predefined format.
+ */
+connector.formatData = function(dataSchema, packageName, dailyDownload) {
   var values = [];
-  dataSchema.forEach(function (field) {
+  dataSchema.forEach(function(field) {
     switch (field.name) {
       case 'day':
-        values.push(dailyDownload.day.replace(/-/g, ""));
+        values.push(dailyDownload.day.replace(/-/g, ''));
         break;
       case 'downloads':
         values.push(dailyDownload.downloads);
@@ -281,9 +276,8 @@ connector.formatData = function (dataSchema, packageName, dailyDownload) {
         values.push('');
     }
   });
-  return { values: values };
+  return {values: values};
 };
-
 
 /**
  * Throws errors messages with the correct prefix to be shown to users.
@@ -293,7 +287,7 @@ connector.formatData = function (dataSchema, packageName, dailyDownload) {
  *      regular users (as opposed to debug error messages meant for admin users
  *      only).
  */
-connector.throwError = function (message, userSafe) {
+connector.throwError = function(message, userSafe) {
   if (userSafe) {
     message = 'DS_USER:' + message;
   }
