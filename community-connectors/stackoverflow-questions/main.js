@@ -40,44 +40,45 @@ connector.cacheTag = 'ulrFetch-results';
 /** @const */
 connector.customConfig = [
   {
-    'type': 'INFO',
-    'name': 'Unique1',
-    'text': 'Enter the tag you want to search for in StackExchange, the maximum result count, and the sorting method.'
+    type: 'INFO',
+    name: 'Unique1',
+    text:
+      'Enter the tag you want to search for in StackExchange, the maximum result count, and the sorting method.',
   },
   {
-    'type': 'TEXTINPUT',
-    'name': 'tagged',
-    'displayName': 'Tag',
-    'helpText': 'Enter the tag you want to search for',
-    'placeholder': connector.defaultTag
+    type: 'TEXTINPUT',
+    name: 'tagged',
+    displayName: 'Tag',
+    helpText: 'Enter the tag you want to search for',
+    placeholder: connector.defaultTag,
   },
   {
-    'type': 'TEXTINPUT',
-    'name': 'pagesize',
-    'displayName': 'Result Count (max 100)',
-    'helpText': 'Enter how many questions should be shown',
-    'placeholder': '20'
+    type: 'TEXTINPUT',
+    name: 'pagesize',
+    displayName: 'Result Count (max 100)',
+    helpText: 'Enter how many questions should be shown',
+    placeholder: '20',
   },
   {
-    'type': 'SELECT_SINGLE',
-    'name': 'sort',
-    'displayName': 'Sort',
-    'helpText': 'Enter the sorting method for results',
-    'options': [
+    type: 'SELECT_SINGLE',
+    name: 'sort',
+    displayName: 'Sort',
+    helpText: 'Enter the sorting method for results',
+    options: [
       {
-        'label': 'activity (default)',
-        'value': 'activity'
+        label: 'activity (default)',
+        value: 'activity',
       },
       {
-        'label': 'votes',
-        'value': 'votes'
+        label: 'votes',
+        value: 'votes',
       },
       {
-        'label': 'creation',
-        'value': 'creation'
-      }
-    ]
-  }
+        label: 'creation',
+        value: 'creation',
+      },
+    ],
+  },
 ];
 
 /** @const */
@@ -90,20 +91,20 @@ connector.schema = [
     semantics: {
       semanticType: 'TEXT',
       semanticGroup: 'TEXT',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'owner.reputation',
-    label: 'Owner\'s reputation',
+    label: "Owner's reputation",
     description: 'The reputation of the question owner.',
     dataType: 'NUMBER',
     semantics: {
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true
-    }
+      isReaggregatable: true,
+    },
   },
   {
     name: 'is_answered',
@@ -113,18 +114,18 @@ connector.schema = [
     semantics: {
       semanticType: 'BOOLEAN',
       semanticGroup: 'BOOLEAN',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'title',
     label: 'Title',
-    description: 'The question\'s title.',
+    description: "The question's title.",
     dataType: 'STRING',
     semantics: {
       semanticType: 'TEXT',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'link',
@@ -133,8 +134,8 @@ connector.schema = [
     dataType: 'STRING',
     semantics: {
       semanticType: 'URL',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'view_count',
@@ -145,8 +146,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true
-    }
+      isReaggregatable: true,
+    },
   },
   {
     name: 'answer_count',
@@ -157,8 +158,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true
-    }
+      isReaggregatable: true,
+    },
   },
   {
     name: 'score',
@@ -170,8 +171,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true
-    }
+      isReaggregatable: true,
+    },
   },
   {
     name: 'question_id',
@@ -182,8 +183,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: false
-    }
+      isReaggregatable: false,
+    },
   },
   {
     name: 'last_activity_date',
@@ -194,8 +195,8 @@ connector.schema = [
     semantics: {
       semanticType: 'YEAR_MONTH_DAY',
       semanticGroup: 'DATE_TIME',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'creation_date',
@@ -205,8 +206,8 @@ connector.schema = [
     semantics: {
       semanticType: 'YEAR_MONTH_DAY',
       semanticGroup: 'DATE_TIME',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'last_edit_date',
@@ -216,8 +217,8 @@ connector.schema = [
     semantics: {
       semanticType: 'YEAR_MONTH_DAY',
       semanticGroup: 'DATE_TIME',
-      conceptType: 'DIMENSION'
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
     name: 'question_count',
@@ -228,9 +229,9 @@ connector.schema = [
     semantics: {
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
-      conceptType: 'METRIC'
-    }
-  }
+      conceptType: 'METRIC',
+    },
+  },
 ];
 
 /** @const */
@@ -295,8 +296,8 @@ function isAdminUser() {
  *
  * @returns {Object} `AuthType` used by the connector.
  */
-connector.getAuthType = function () {
-  var response = { 'type': 'NONE' };
+connector.getAuthType = function() {
+  var response = {type: 'NONE'};
   return response;
 };
 
@@ -308,7 +309,7 @@ connector.getAuthType = function () {
  * @param {Object} request Config request parameters.
  * @returns {Object} Connector configuration to be displayed to the user.
  */
-connector.getConfig = function (request) {
+connector.getConfig = function(request) {
   var config = {
     configParams: connector.customConfig,
   };
@@ -321,7 +322,7 @@ connector.getConfig = function (request) {
  * @param {Object} configParams Config parameters from `request`.
  * @returns {Object} Updated Config parameters.
  */
-connector.validateConfig = function (configParams) {
+connector.validateConfig = function(configParams) {
   configParams = configParams || {};
   configParams.tagged = configParams.tagged || connector.defaultTag;
   configParams.pagesize = Math.min(configParams.pagesize, 100) || 100;
@@ -335,8 +336,8 @@ connector.validateConfig = function (configParams) {
  * @param {Object} request Schema request parameters.
  * @returns {Object} Schema for the given request.
  */
-connector.getSchema = function (request) {
-  return { schema: connector.schema };
+connector.getSchema = function(request) {
+  return {schema: connector.schema};
 };
 
 /**
@@ -346,14 +347,16 @@ connector.getSchema = function (request) {
  * @param {int} date Unix epoch.
  * @returns {string} Date in YYYYMMDD format.
  */
-connector.formatDate = function (date) {
+connector.formatDate = function(date) {
   if (!date) {
     return '';
   }
   var dateObj = new Date(date * 1000);
-  return dateObj.toISOString().slice(0, 10).replace(/-/g, '');
+  return dateObj
+    .toISOString()
+    .slice(0, 10)
+    .replace(/-/g, '');
 };
-
 
 /**
  * Gets cached response for UrlFetch. If the response has not been cached, make
@@ -362,7 +365,7 @@ connector.formatDate = function (date) {
  * @param {Object} request Data request parameters.
  * @returns {string} The response text for UrlFetch.
  */
-connector.getCachedData = function (request) {
+connector.getCachedData = function(request) {
   var cache = CacheService.getUserCache();
   var cachedData = cache.get(connector.cacheKey);
 
@@ -377,7 +380,8 @@ connector.getCachedData = function (request) {
       '&pagesize=',
       request.configParams.pagesize,
       '&sort=',
-      request.configParams.sort];
+      request.configParams.sort,
+    ];
 
     try {
       var response = UrlFetchApp.fetch(url.join(''));
@@ -396,9 +400,8 @@ connector.getCachedData = function (request) {
  * @param {Object} request Data request parameters.
  * @returns {Object} Contains the schema and data for the given request.
  */
-connector.getData = function (request) {
-
-  var dataSchema = request.fields.map(function (field) {
+connector.getData = function(request) {
+  var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < connector.schema.length; i++) {
       if (connector.schema[i].name == field.name) {
         return connector.schema[i];
@@ -415,9 +418,9 @@ connector.getData = function (request) {
     connector.throwError('Unable to fetch data from source.', true);
   }
 
-  var data = response.map(function (question) {
+  var data = response.map(function(question) {
     var values = [];
-    dataSchema.forEach(function (field) {
+    dataSchema.forEach(function(field) {
       switch (field.name) {
         case 'owner.display_name':
           values.push(question.owner.display_name);
@@ -459,12 +462,12 @@ connector.getData = function (request) {
           values.push('');
       }
     });
-    return { values: values };
+    return {values: values};
   });
 
   return {
     schema: dataSchema,
-    rows: data
+    rows: data,
   };
 };
 
@@ -476,7 +479,7 @@ connector.getData = function (request) {
  *      regular users (as opposed to debug error messages meant for admin users
  *      only.)
  */
-connector.throwError = function (message, userSafe) {
+connector.throwError = function(message, userSafe) {
   if (userSafe) {
     message = 'DS_USER:' + message;
   }
@@ -491,7 +494,7 @@ connector.throwError = function (message, userSafe) {
  * omitted or if it returns false, then the current user will not be considered
  * an admin user of the connector.
  */
-connector.isAdminUser = function () {
+connector.isAdminUser = function() {
   return true;
 };
 
@@ -503,7 +506,7 @@ connector.isAdminUser = function () {
  * @param {Object} parameter Parameter for the `functionName` function.
  * @returns {any} Returns the response of `functionName` function.
  */
-connector.logAndExecute = function (functionName, parameter) {
+connector.logAndExecute = function(functionName, parameter) {
   if (connector.logEnabled && connector.isAdminUser()) {
     var paramString = JSON.stringify(parameter, null, 2);
     console.log([functionName, 'request', paramString]);

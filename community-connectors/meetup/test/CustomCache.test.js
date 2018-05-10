@@ -9,8 +9,10 @@ test('initialization test no existing spreadsheet', () => {
   const getPropertyMock = jest.fn(() => null);
   const setPropertyMock = jest.fn();
   CustomCache.getPropertiesServiceNS = () => ({
-    getUserProperties: () =>
-        ({getProperty: getPropertyMock, setProperty: setPropertyMock})
+    getUserProperties: () => ({
+      getProperty: getPropertyMock,
+      setProperty: setPropertyMock,
+    }),
   });
 
   const mySheet = {};
@@ -23,16 +25,17 @@ test('initialization test no existing spreadsheet', () => {
     create: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock
-    })
+      insertSheet: insertSheetMock,
+    }),
   });
 
   const cache = new CustomCache(urlName, apiType);
 
-  expect(insertSheetMock.mock.calls).toEqual([[CustomCache.buildSheetName(
-      urlName, apiType)]]);
+  expect(insertSheetMock.mock.calls).toEqual([
+    [CustomCache.buildSheetName(urlName, apiType)],
+  ]);
   expect(setPropertyMock.mock.calls).toEqual([
-    [CustomCache.SCRIPT_ID_KEY, scriptId]
+    [CustomCache.SCRIPT_ID_KEY, scriptId],
   ]);
   expect(cache.spreadsheet).toBeTruthy();
   expect(cache.sheet).toBeTruthy();
@@ -46,8 +49,10 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
   const getPropertyMock = jest.fn(() => scriptId);
   const setPropertyMock = jest.fn();
   CustomCache.getPropertiesServiceNS = () => ({
-    getUserProperties: () =>
-        ({getProperty: getPropertyMock, setProperty: setPropertyMock})
+    getUserProperties: () => ({
+      getProperty: getPropertyMock,
+      setProperty: setPropertyMock,
+    }),
   });
 
   const mySheet = {};
@@ -60,14 +65,15 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
     openById: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock
-    })
+      insertSheet: insertSheetMock,
+    }),
   });
 
   const cache = new CustomCache(urlName, apiType);
 
-  expect(insertSheetMock.mock.calls).toEqual([[CustomCache.buildSheetName(
-      urlName, apiType)]]);
+  expect(insertSheetMock.mock.calls).toEqual([
+    [CustomCache.buildSheetName(urlName, apiType)],
+  ]);
   expect(setPropertyMock.mock.calls).toEqual([]);
   expect(cache.spreadsheet).toBeTruthy();
   expect(cache.sheet).toBeTruthy();
@@ -81,8 +87,10 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
   const getPropertyMock = jest.fn(() => scriptId);
   const setPropertyMock = jest.fn();
   CustomCache.getPropertiesServiceNS = () => ({
-    getUserProperties: () =>
-        ({getProperty: getPropertyMock, setProperty: setPropertyMock})
+    getUserProperties: () => ({
+      getProperty: getPropertyMock,
+      setProperty: setPropertyMock,
+    }),
   });
 
   const mySheet = {};
@@ -93,8 +101,8 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
     openById: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock
-    })
+      insertSheet: insertSheetMock,
+    }),
   });
 
   const cache = new CustomCache(urlName, apiType);
@@ -113,8 +121,10 @@ test('initialization test spreadsheet deleted', () => {
   const getPropertyMock = jest.fn(() => scriptId);
   const setPropertyMock = jest.fn();
   CustomCache.getPropertiesServiceNS = () => ({
-    getUserProperties: () =>
-        ({getProperty: getPropertyMock, setProperty: setPropertyMock})
+    getUserProperties: () => ({
+      getProperty: getPropertyMock,
+      setProperty: setPropertyMock,
+    }),
   });
 
   const mySheet = {};
@@ -127,20 +137,22 @@ test('initialization test spreadsheet deleted', () => {
     create: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock
+      insertSheet: insertSheetMock,
     }),
     openById: () => {
       throw Error(
-          'Document ' + scriptId + ' is missing (perhaps it was deleted).');
-    }
+        'Document ' + scriptId + ' is missing (perhaps it was deleted).'
+      );
+    },
   });
 
   const cache = new CustomCache(urlName, apiType);
 
-  expect(insertSheetMock.mock.calls).toEqual([[CustomCache.buildSheetName(
-      urlName, apiType)]]);
+  expect(insertSheetMock.mock.calls).toEqual([
+    [CustomCache.buildSheetName(urlName, apiType)],
+  ]);
   expect(setPropertyMock.mock.calls).toEqual([
-    [CustomCache.SCRIPT_ID_KEY, scriptId]
+    [CustomCache.SCRIPT_ID_KEY, scriptId],
   ]);
   expect(cache.spreadsheet).toBeTruthy();
   expect(cache.sheet).toBeTruthy();
@@ -154,8 +166,10 @@ test('initialization test other error', () => {
   const getPropertyMock = jest.fn(() => scriptId);
   const setPropertyMock = jest.fn();
   CustomCache.getPropertiesServiceNS = () => ({
-    getUserProperties: () =>
-        ({getProperty: getPropertyMock, setProperty: setPropertyMock})
+    getUserProperties: () => ({
+      getProperty: getPropertyMock,
+      setProperty: setPropertyMock,
+    }),
   });
 
   const mySheet = {};
@@ -169,11 +183,11 @@ test('initialization test other error', () => {
     create: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock
+      insertSheet: insertSheetMock,
     }),
     openById: () => {
       throw Error('error text');
-    }
+    },
   });
 
   try {
@@ -186,7 +200,7 @@ test('initialization test other error', () => {
 test('put & get', () => {
   const cache = initCache({cacheData: [['key', 'value']]});
   const key = '3';
-  const value = {'my': 'value'};
+  const value = {my: 'value'};
   cache.put(key, value);
   const getValue = cache.get(key);
   expect(getValue).toEqual(value);

@@ -31,41 +31,41 @@ connector.SCHEMA = {
       label: 'Activity Code',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'ActivityDescription',
       label: 'Activity Description',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'StartTime',
       label: 'Start Time',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'EndTime',
       label: 'End Time',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'ActiveSeconds',
       label: 'Active Time (s)',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'METRIC'
-      }
-    }
+        conceptType: 'METRIC',
+      },
+    },
   ],
   steps: [
     {
@@ -73,25 +73,25 @@ connector.SCHEMA = {
       label: 'Start Time',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'EndTime',
       label: 'End Time',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'Steps',
       label: 'Steps',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'METRIC'
-      }
-    }
+        conceptType: 'METRIC',
+      },
+    },
   ],
   weight: [
     {
@@ -99,26 +99,26 @@ connector.SCHEMA = {
       label: 'Start Time',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'EndTime',
       label: 'End Time',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'DIMENSION'
-      }
+        conceptType: 'DIMENSION',
+      },
     },
     {
       name: 'Weight',
       label: 'Weight',
       dataType: 'NUMBER',
       semantics: {
-        conceptType: 'METRIC'
-      }
-    }
-  ]
+        conceptType: 'METRIC',
+      },
+    },
+  ],
 };
 
 /**
@@ -133,23 +133,23 @@ connector.SAMPLE_DATA = {
         startTimeNanos: 1509207120000000000,
         endTimeNanos: 1509208320000000000,
         // WALKING
-        value: [{intVal: 7}]
+        value: [{intVal: 7}],
       },
       {
         // 2100 seconds
         startTimeNanos: 1509204420000000000,
         endTimeNanos: 1509206520000000000,
         // RUNNING
-        value: [{intVal: 8}]
+        value: [{intVal: 8}],
       },
       {
         // 64560 seconds
         startTimeNanos: 1509393360000000000,
         endTimeNanos: 1509457920000000000,
         // MOUNTAIN BIKING
-        value: [{intVal: 15}]
+        value: [{intVal: 15}],
       },
-    ]
+    ],
   },
   steps: {
     point: [
@@ -157,41 +157,41 @@ connector.SAMPLE_DATA = {
         // 1200 seconds
         startTimeNanos: 1509207120000000000,
         endTimeNanos: 1509208320000000000,
-        value: [{intVal: 150}]
+        value: [{intVal: 150}],
       },
       {
         // 2100 seconds
         startTimeNanos: 1509204420000000000,
         endTimeNanos: 1509206520000000000,
-        value: [{intVal: 99}]
+        value: [{intVal: 99}],
       },
       {
         // 64560 seconds
         startTimeNanos: 1509393360000000000,
         endTimeNanos: 1509457920000000000,
-        value: [{intVal: 230}]
+        value: [{intVal: 230}],
       },
-    ]
+    ],
   },
   weight: {
     point: [
       {
         startTimeNanos: 1509207120000000000,
         endTimeNanos: 1509207120000000000,
-        value: [{fpVal: 85.2}]
+        value: [{fpVal: 85.2}],
       },
       {
         startTimeNanos: 1509204420000000000,
         endTimeNanos: 1509204420000000000,
-        value: [{fpVal: 88.8}]
+        value: [{fpVal: 88.8}],
       },
       {
         startTimeNanos: 1509393360000000000,
         endTimeNanos: 1509393360000000000,
-        value: [{fpVal: 87.3}]
+        value: [{fpVal: 87.3}],
       },
-    ]
-  }
+    ],
+  },
 };
 
 /**
@@ -205,27 +205,27 @@ connector.getConfig = function(request) {
   var config = {
     configParams: [
       {
-        name: "googleFitDataType",
-        type: "SELECT_SINGLE",
-        displayName: "Google Fit Data",
-        helpText: "Enter the type of data you want to get from Google Fit.",
+        name: 'googleFitDataType',
+        type: 'SELECT_SINGLE',
+        displayName: 'Google Fit Data',
+        helpText: 'Enter the type of data you want to get from Google Fit.',
         options: [
           {
-            label: "Activity",
-            value: "activity"
+            label: 'Activity',
+            value: 'activity',
           },
           {
-            label: "Steps",
-            value: "steps"
+            label: 'Steps',
+            value: 'steps',
           },
           {
-            label: "Weight",
-            value: "weight"
-          }
-        ]
+            label: 'Weight',
+            value: 'weight',
+          },
+        ],
       },
     ],
-    dateRangeRequired: true
+    dateRangeRequired: true,
   };
   return config;
 };
@@ -237,7 +237,10 @@ connector.getConfig = function(request) {
  * @return {Object} A JavaScript object representing the schema for the given request.
  */
 connector.getSchema = function(request) {
-  return {schema: connector.SCHEMA[request.configParams.googleFitDataType||"activity"]};
+  return {
+    schema:
+      connector.SCHEMA[request.configParams.googleFitDataType || 'activity'],
+  };
 };
 
 /**
@@ -283,7 +286,7 @@ connector.getSchema = function(request) {
 connector.getData = function(request) {
   var fit = new GoogleFit();
 
-  var dataType = request.configParams.googleFitDataType||"activity";
+  var dataType = request.configParams.googleFitDataType || 'activity';
 
   var startDate = new Date(0);
   if (request.dateRange.startDate) {
@@ -302,7 +305,7 @@ connector.getData = function(request) {
 connector.dataFuncs = {};
 connector.dataFuncs.activity = function(request, fit, startDate, endDate) {
   // Prepare the schema for the fields requested.
-  var dataSchema = request.fields.map(function (field) {
+  var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < connector.SCHEMA.activity.length; i++) {
       if (connector.SCHEMA.activity[i].name == field.name) {
         return connector.SCHEMA.activity[i];
@@ -319,13 +322,13 @@ connector.dataFuncs.activity = function(request, fit, startDate, endDate) {
   }
 
   var data = [];
-  for (var i=0; i < activity.point.length; i++) {
+  for (var i = 0; i < activity.point.length; i++) {
     var values = [];
     var segment = activity.point[i];
 
     // Provide values in the order defined by the schema.
     dataSchema.forEach(function(field) {
-      switch(field.name) {
+      switch (field.name) {
         case 'ActivityCode':
           values.push(segment.value[0].intVal);
           break;
@@ -333,10 +336,10 @@ connector.dataFuncs.activity = function(request, fit, startDate, endDate) {
           values.push(fit.getActivityDescription(segment.value[0].intVal));
           break;
         case 'StartTime':
-          values.push(parseInt(segment.startTimeNanos, 10))
+          values.push(parseInt(segment.startTimeNanos, 10));
           break;
         case 'EndTime':
-          values.push(parseInt(segment.endTimeNanos, 10))
+          values.push(parseInt(segment.endTimeNanos, 10));
           break;
         case 'ActiveSeconds':
           var nanos = segment.endTimeNanos - segment.startTimeNanos;
@@ -347,19 +350,19 @@ connector.dataFuncs.activity = function(request, fit, startDate, endDate) {
       }
     });
     data.push({
-      values: values
+      values: values,
     });
   }
 
   return {
     schema: dataSchema,
-    rows: data
+    rows: data,
   };
 };
 
 connector.dataFuncs.steps = function(request, fit, startDate, endDate) {
   // Prepare the schema for the fields requested.
-  var dataSchema = request.fields.map(function (field) {
+  var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < connector.SCHEMA.steps.length; i++) {
       if (connector.SCHEMA.steps[i].name == field.name) {
         return connector.SCHEMA.steps[i];
@@ -376,18 +379,18 @@ connector.dataFuncs.steps = function(request, fit, startDate, endDate) {
   }
 
   var data = [];
-  for (var i=0; i < steps.point.length; i++) {
+  for (var i = 0; i < steps.point.length; i++) {
     var values = [];
     var segment = steps.point[i];
 
     // Provide values in the order defined by the schema.
     dataSchema.forEach(function(field) {
-      switch(field.name) {
+      switch (field.name) {
         case 'StartTime':
-          values.push(parseInt(segment.startTimeNanos, 10))
+          values.push(parseInt(segment.startTimeNanos, 10));
           break;
         case 'EndTime':
-          values.push(parseInt(segment.endTimeNanos, 10))
+          values.push(parseInt(segment.endTimeNanos, 10));
           break;
         case 'Steps':
           values.push(segment.value[0].intVal);
@@ -397,19 +400,19 @@ connector.dataFuncs.steps = function(request, fit, startDate, endDate) {
       }
     });
     data.push({
-      values: values
+      values: values,
     });
   }
 
   return {
     schema: dataSchema,
-    rows: data
+    rows: data,
   };
 };
 
 connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
   // Prepare the schema for the fields requested.
-  var dataSchema = request.fields.map(function (field) {
+  var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < connector.SCHEMA.weight.length; i++) {
       if (connector.SCHEMA.weight[i].name == field.name) {
         return connector.SCHEMA.weight[i];
@@ -426,18 +429,18 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
   }
 
   var data = [];
-  for (var i=0; i < weight.point.length; i++) {
+  for (var i = 0; i < weight.point.length; i++) {
     var values = [];
     var segment = weight.point[i];
 
     // Provide values in the order defined by the schema.
     dataSchema.forEach(function(field) {
-      switch(field.name) {
+      switch (field.name) {
         case 'StartTime':
-          values.push(parseInt(segment.startTimeNanos, 10))
+          values.push(parseInt(segment.startTimeNanos, 10));
           break;
         case 'EndTime':
-          values.push(parseInt(segment.endTimeNanos, 10))
+          values.push(parseInt(segment.endTimeNanos, 10));
           break;
         case 'Weight':
           values.push(segment.value[0].fpVal);
@@ -447,16 +450,15 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
       }
     });
     data.push({
-      values: values
+      values: values,
     });
   }
 
   return {
     schema: dataSchema,
-    rows: data
-  }
-
-}
+    rows: data,
+  };
+};
 
 /**
  * Used by DataStudio to get the authorization type used by this connector.
@@ -465,7 +467,7 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
  */
 connector.getAuthType = function() {
   var response = {
-    "type": "NONE"
+    type: 'NONE',
   };
   return response;
 };
