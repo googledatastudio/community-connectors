@@ -6,6 +6,15 @@
     "logoUrl": "https://sfoconnect.com/sites/default/files/legacy/images/sfo3d.jpeg",
     "addonUrl": "https://developers.google.com/datastudio/connector/getstarted",
     "supportUrl": "https://developers.google.com/datastudio/connector/faq",
-    "description": "This connector uses SFO flights data from the SF Open Data website."
-  }
+    "description": "This connector uses SFO flights data from the SF Open Data website.",
+		"shortDescription": "Data about flights coming through SFO, updated quarterly.",
+		"authType": ["NONE"],
+		"feeType": ["FREE"],
+		"sources": ["SFO_PASSENGER_DATA"],
+		"templates": {
+		}
+  },
+	"urlFetchWhitelist": [
+		"https://data.sfgov.org/resource/rptz-7xyh.json"
+	]
 }
