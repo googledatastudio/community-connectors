@@ -51,7 +51,11 @@ Connector.prototype.getData = function(request) {
   this.validateConfig(request);
   var dataSchema = this.getDataSchema(request);
 
-  var url = 'https://data.sfgov.org/resource/rptz-7xyh.json?$limit=50000';
+  // get the app token from script properties
+  var scriptProps = PropertiesService.getScriptProperties();
+  var APP_TOKEN = scriptProps.getProperty('APP_TOKEN');
+
+  var url = 'https://data.sfgov.org/resource/rptz-7xyh.json?$limit=50000&$$app_token='+APP_TOKEN;
 
   var response = JSON.parse(this.fetch(url));
   var data = [];

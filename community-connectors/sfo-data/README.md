@@ -11,4 +11,16 @@ statistics](https://data.sfgov.org/Transportation/Air-Traffic-Passenger-Statisti
 ## Deploy the Community Connector yourself
 
 Use the [deployment guide](../deploy.md) to deploy the Community Connector
-yourself.
+yourself. After completing the steps in the deployment guide, 
+
+1. Register for an account at [Data SF](https://datasf.org/)
+2. [Use this guide](https://dev.socrata.com/consumers/getting-started.html) to
+   register an application and get the application token.
+3. Visit [Apps Script](https://script.google.com), then click on **File** -> **Project
+   Properties** -> **Script Properties**.
+4. Add the following key-value pair.
+
+  | Key                   | Value                |
+  |-----------------------|----------------------|
+  | `APP_TOKEN`           | {YOUR_APP_TOKEN}     |
+
