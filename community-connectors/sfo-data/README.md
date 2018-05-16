@@ -8,6 +8,10 @@ uses an API provided by [DataSF](https://datasf.org/opendata/). To find out more
 about the data, visit the [Data SF page on SFO air traffic passenger
 statistics](https://data.sfgov.org/Transportation/Air-Traffic-Passenger-Statistics/rkru-6vcg).
 
+You can try out the managed deployment of the latest code: [SFO Passenger
+Statistics Community
+Connector](https://datastudio.google.com/datasources/create?connectorId=AKfycbxgoC3YfmE4LmkxDHcNXcxLDTLBsbelLey8KbGjGBDYn3uYzS5A-x-tVC9tWnfQrN1p9g).
+
 ## Deploy the Community Connector yourself
 
 Use the [deployment guide](../deploy.md) to deploy the Community Connector
