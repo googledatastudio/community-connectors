@@ -10,10 +10,7 @@
 		"shortDescription": "Data about flights coming through SFO, updated quarterly.",
 		"authType": ["NONE"],
 		"feeType": ["FREE"],
-		"sources": ["SFO_PASSENGER_DATA"],
-		"templates": {
-			"default": "1ul50rq3BVCrItMtb758Yz3coHa8I7zyC"
-		}
+		"sources": ["SFO_PASSENGER_DATA"]
   },
 	"urlFetchWhitelist": [
 		"https://data.sfgov.org/resource/rptz-7xyh.json"
