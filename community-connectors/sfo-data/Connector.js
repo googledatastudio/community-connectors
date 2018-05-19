@@ -1,6 +1,10 @@
 /** @const */
 var CUSTOM_CONFIG = [
-// blank because I don't need custom config
+  {
+    "type": "INFO",
+    "name": "instructions",
+    "text": "Click connect to continue"
+  }
 ];
 
 /** @const */
