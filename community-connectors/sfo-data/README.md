@@ -10,7 +10,7 @@ statistics](https://data.sfgov.org/Transportation/Air-Traffic-Passenger-Statisti
 
 You can try out the managed deployment of the latest code: [SFO Passenger
 Statistics Community
-Connector](https://datastudio.google.com/datasources/create?connectorId=AKfycbz8uubXtw0uWTZLffpXqyRsK8xx9di6eEOZmVv2xNTB-HX75NkwSMvz3y1-LoZfIE49cA).
+Connector](https://datastudio.google.com/datasources/create?connectorId=AKfycbyCVnZGGxaI0XcMmxZXTfIWSb9mzyjs2KgOk0vh6D77QwfJm4bMD8qhbTreS0y7ndrNLg).
 
 ## Deploy the Community Connector yourself
 
