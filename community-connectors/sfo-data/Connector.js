@@ -1,10 +1,6 @@
 /** @const */
 var CUSTOM_CONFIG = [
-  {
-    "type": "INFO",
-    "name": "instructions",
-    "text": "Click connect to continue"
-  }
+  //not needed
 ];
 
 /** @const */
@@ -54,8 +50,8 @@ Connector.prototype.isAdminUser = function() {
 Connector.prototype.getData = function(request) {
   this.validateConfig(request);
   var dataSchema = this.getDataSchema(request);
-
-  // get the app token from script properties
+  
+  // get the APP token from script properties
   var scriptProps = PropertiesService.getScriptProperties();
   var APP_TOKEN = scriptProps.getProperty('APP_TOKEN');
 
