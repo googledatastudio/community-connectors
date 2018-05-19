@@ -1,19 +1,19 @@
 {
-  "timeZone": "Pacific/Pago_Pago",
-  "dependencies": {
-  },
   "urlFetchWhitelist": ["https://data.sfgov.org/resource/rptz-7xyh.json"],
   "dataStudio": {
-    "name": "SFO Flights data",
+    "name": "SFO Passenger Statistics",
     "logoUrl": "https://sfoconnect.com/sites/default/files/legacy/images/sfo3d.jpeg",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://developers.google.com/datastudio/connector/getstarted",
-    "supportUrl": "https://developers.google.com/datastudio/connector/faq",
-    "description": "This connector uses SFO flights data from the SF Open Data website.",
+    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/sfo-data",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "This connector uses SFO passenger data from the SF Open Data website.",
     "sources": ["SFO_PASSENGER_DATA"],
-    "shortDescription": "Data about flights coming through SFO, updated quarterly.",
+    "shortDescription": "Passenger statistics by airline through SFO, updated quarterly.",
     "authType": ["NONE"],
-    "feeType": ["FREE"]
+    "feeType": ["FREE"],
+    "templates": {
+    "default": "1ul50rq3BVCrItMtb758Yz3coHa8I7zyC"
+    }
   }
 }
