@@ -10,15 +10,22 @@ function CustomCache(organization, repository) {
   var userProperties = CustomCache.getPropertiesServiceNS().getUserProperties();
   var scriptId = userProperties.getProperty(CustomCache.SCRIPT_ID_KEY);
   if (scriptId === null) {
-    spreadsheet = CustomCache.getSpreadsheetAppNS().create(CustomCache.SPREADSHEET_NAME);
+    spreadsheet = CustomCache.getSpreadsheetAppNS().create(
+      CustomCache.SPREADSHEET_NAME
+    );
     userProperties.setProperty(CustomCache.SCRIPT_ID_KEY, spreadsheet.getId());
   } else {
     try {
       spreadsheet = CustomCache.getSpreadsheetAppNS().openById(scriptId);
     } catch (e) {
       if (e.message.match(/is missing/)) {
-        spreadsheet = CustomCache.getSpreadsheetAppNS().create(CustomCache.SPREADSHEET_NAME);
-        userProperties.setProperty(CustomCache.SCRIPT_ID_KEY, spreadsheet.getId());
+        spreadsheet = CustomCache.getSpreadsheetAppNS().create(
+          CustomCache.SPREADSHEET_NAME
+        );
+        userProperties.setProperty(
+          CustomCache.SCRIPT_ID_KEY,
+          spreadsheet.getId()
+        );
       } else {
         console.log(e);
         throw Error('The sheet could not be created.');
@@ -58,8 +65,7 @@ CustomCache.getPropertiesServiceNS = function() {
 function clearScriptId() {
   var userProperties = CustomCache.getPropertiesServiceNS().getUserProperties();
   userProperties.deleteProperty(CustomCache.SCRIPT_ID_KEY);
-};
-
+}
 
 /**
  * Builds and returns a formatted string to be used for the sheet name.

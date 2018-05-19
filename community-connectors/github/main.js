@@ -57,7 +57,6 @@ connector.getUrlFetchApp = function() {
   return UrlFetchApp;
 };
 
-
 /**
  * Wrapper function for `connector.getAuthType()`.
  *
@@ -130,9 +129,11 @@ connector.throwError = function(message, userSafe) {
  *
  * @const
  */
-connector.sampleData = [{
-  "starred_at": "2017-05-31-T12:50:00Z",
-}];
+connector.sampleData = [
+  {
+    starred_at: '2017-05-31-T12:50:00Z',
+  },
+];
 
 /** @const */
 connector.customConfig = [
@@ -140,16 +141,16 @@ connector.customConfig = [
     name: 'Organization',
     displayName: 'Organization',
     helpText:
-    'Enter the name of the organization for which you would like to retrieve information.',
-    placeholder: connector.defaultOrganization
+      'Enter the name of the organization for which you would like to retrieve information.',
+    placeholder: connector.defaultOrganization,
   },
   {
     name: 'Repository',
     displayName: 'Repository',
     helpText:
-    'Enter the name of the repository for which you would like to retrieve information.',
-    placeholder: connector.defaultRepository
-  }
+      'Enter the name of the repository for which you would like to retrieve information.',
+    placeholder: connector.defaultRepository,
+  },
 ];
 
 /** @const */
@@ -158,14 +159,14 @@ connector.schema = [
     name: 'starred_at',
     label: 'Starred At',
     dataType: 'STRING',
-    semantics: {conceptType: 'DIMENSION'}
+    semantics: {conceptType: 'DIMENSION'},
   },
   {
     name: 'stars',
     label: 'Stars',
     dataType: 'NUMBER',
-    semantics: {conceptType: 'METRIC'}
-  }
+    semantics: {conceptType: 'METRIC'},
+  },
 ];
 
 /**
@@ -177,7 +178,7 @@ connector.schema = [
  * @returns {Object} `AuthType` used by the connector.
  */
 connector.getAuthType = function() {
-  var response = {'type': connector.OAUTH_CONST};
+  var response = {type: connector.OAUTH_CONST};
   return response;
 };
 
@@ -212,8 +213,10 @@ connector.getSchema = function(request) {
  */
 connector.validateConfig = function(configParams) {
   configParams = configParams || {};
-  configParams.Organization = configParams.Organization || connector.defaultOrganization;
-  configParams.Repository = configParams.Repository || connector.defaultRepository;
+  configParams.Organization =
+    configParams.Organization || connector.defaultOrganization;
+  configParams.Repository =
+    configParams.Repository || connector.defaultRepository;
 };
 
 /**
@@ -228,8 +231,11 @@ connector.buildURL = function(request) {
   var organization = configParams.Organization;
   var repository = configParams.Repository;
   var urlParts = [
-    'https://api.github.com/repos/', organization, '/', repository,
-    '/stargazers'
+    'https://api.github.com/repos/',
+    organization,
+    '/',
+    repository,
+    '/stargazers',
   ];
   var urlParams = ['?per_page=' + connector.resultsPerPage];
   var url = urlParts.join('') + urlParams.join('&');
@@ -296,15 +302,19 @@ connector.rowifyStarData = function(stars, dataSchema) {
  * @return {object|undefined} either the aggregated values from the cache or undefined, if the key was not found.
  */
 connector.getFromCachePaginated = function(cache, cacheKey) {
-  var cached = cache.getRestFrom(cacheKey, function(acc, row) {
-    const cachedValue = JSON.parse(row[1]);
-    const results = acc.json.concat(cachedValue.json);
-    const nextLink = cachedValue.nextLink;
-    return {
-      json: results,
-      nextLink: nextLink
-    };
-  }, {json: [], nextLink: undefined});
+  var cached = cache.getRestFrom(
+    cacheKey,
+    function(acc, row) {
+      const cachedValue = JSON.parse(row[1]);
+      const results = acc.json.concat(cachedValue.json);
+      const nextLink = cachedValue.nextLink;
+      return {
+        json: results,
+        nextLink: nextLink,
+      };
+    },
+    {json: [], nextLink: undefined}
+  );
   return cached;
 };
 
@@ -320,7 +330,9 @@ connector.getFromCachePaginated = function(cache, cacheKey) {
 connector.getCachedData = function(request, url, options) {
   if (connector.cache === null || connector.cache === undefined) {
     connector.cache = new (connector.getCustomCacheNS())(
-        request.configParams.url_name, request.configParams.api_type);
+      request.configParams.url_name,
+      request.configParams.api_type
+    );
   }
   var cache = connector.cache;
   var cacheKey = url;
@@ -351,7 +363,6 @@ connector.getCachedData = function(request, url, options) {
     }
   }
 };
-
 
 /**
  * Parses out the next link from the response headers. Returns undefined if no
@@ -390,9 +401,9 @@ connector.paginatedResult = function(request, url) {
   // make request
   var options = {
     headers: {
-      'Accept': 'application/vnd.github.v3.star+json',
-      'Authorization': 'token ' + getOAuthService().getAccessToken()
-    }
+      Accept: 'application/vnd.github.v3.star+json',
+      Authorization: 'token ' + getOAuthService().getAccessToken(),
+    },
   };
 
   var response = connector.getCachedData(request, url, options);
@@ -482,12 +493,12 @@ function getOAuthService() {
   var clientId = scriptProps.getProperty(connector.OAUTH_CLIENT_ID);
   var clientSecret = scriptProps.getProperty(connector.OAUTH_CLIENT_SECRET);
   return OAuth2.createService('github')
-      .setAuthorizationBaseUrl('https://github.com/login/oauth/authorize')
-      .setTokenUrl('https://github.com/login/oauth/access_token')
-      .setClientId(clientId)
-      .setClientSecret(clientSecret)
-      .setPropertyStore(PropertiesService.getUserProperties())
-      .setCallbackFunction('authCallback');
+    .setAuthorizationBaseUrl('https://github.com/login/oauth/authorize')
+    .setTokenUrl('https://github.com/login/oauth/access_token')
+    .setClientId(clientId)
+    .setClientSecret(clientSecret)
+    .setPropertyStore(PropertiesService.getUserProperties())
+    .setCallbackFunction('authCallback');
 }
 
 /**

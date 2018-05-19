@@ -68,16 +68,14 @@ Connector.prototype.getData = function(request) {
 
     dataSchema.forEach(function(field) {
       if (field.name in row) {
-	values.push(row[field.name]);
+        values.push(row[field.name]);
       } else {
-	values.push('');
+        values.push('');
       }
-    }) // end of dataSchema forEach
+    }); // end of dataSchema forEach
     data.push({
-	values: values
-      });
-
-
+      values: values,
+    });
   }); // end of response forEach
 
   var results = {schema: dataSchema, rows: data};

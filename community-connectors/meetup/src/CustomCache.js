@@ -11,8 +11,9 @@ function CustomCache(urlName, apiType) {
   var userProperties = CustomCache.getPropertiesServiceNS().getUserProperties();
   var scriptId = userProperties.getProperty(CustomCache.SCRIPT_ID_KEY);
   if (scriptId === null) {
-    spreadsheet =
-        CustomCache.getSpreadsheetAppNS().create(CustomCache.SPREADSHEET_NAME);
+    spreadsheet = CustomCache.getSpreadsheetAppNS().create(
+      CustomCache.SPREADSHEET_NAME
+    );
     userProperties.setProperty(CustomCache.SCRIPT_ID_KEY, spreadsheet.getId());
   } else {
     try {
@@ -20,9 +21,12 @@ function CustomCache(urlName, apiType) {
     } catch (e) {
       if (e.message.match(/is missing/)) {
         spreadsheet = CustomCache.getSpreadsheetAppNS().create(
-            CustomCache.SPREADSHEET_NAME);
+          CustomCache.SPREADSHEET_NAME
+        );
         userProperties.setProperty(
-            CustomCache.SCRIPT_ID_KEY, spreadsheet.getId());
+          CustomCache.SCRIPT_ID_KEY,
+          spreadsheet.getId()
+        );
       } else {
         console.log(e);
         throw Error('The sheet could not be created.');
@@ -68,10 +72,9 @@ CustomCache.getPropertiesServiceNS = function() {
  */
 function clearUserProperties() {
   CustomCache.getPropertiesServiceNS()
-      .getUserProperties()
-      .deleteAllProperties();
+    .getUserProperties()
+    .deleteAllProperties();
 }
-
 
 /**
  * Builds and returns a formatted string to be used for the sheet name.
