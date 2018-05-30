@@ -30,7 +30,7 @@ your script and create an OAUTH consumer through Meetup.com.
     Text Field              | Response
     ----------------------- | --------
     **Consumer Name**       | Meetup Community Connector
-    **Application Website** | https://github.com/google/datastudio
+    **Application Website** | https://github.com/googledatastudio/community-connectors
     **Redirect URI**        | https://script.google.com/macros/d/{YOUR_SCRIPT_ID}/usercallback
 
     **Note: While you can choose your own values for "Consumer Name" and

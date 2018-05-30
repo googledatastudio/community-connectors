@@ -14,8 +14,8 @@
     "logoUrl": "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/github",
-    "supportUrl": "https://github.com/google/datastudio/issues",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/github",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
     "description": "Get GitHub star data for specific repositories.",
     "sources": ["GitHub"],
     "templates": {

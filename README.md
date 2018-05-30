@@ -46,7 +46,7 @@ developers:
 
 ### Submit your own open source Community Connector
 
-Send us a [pull request](https://github.com/google/datastudio/compare) to
+Send us a [pull request](https://github.com/googledatastudio/community-connectors) to
 include your own Community Connector in this repository. Note that the `README`
 will be updated to follow the same format as the other connectors in this
 repository. The Data Studio Developer Relations team will also create and manage
@@ -54,13 +54,13 @@ a deployment for the connector.
 
 Alternatively you can link to your own repository and maintain your own
 deployments. In that case, send a [pull
-request](https://github.com/google/datastudio/compare) for the `README` file
+request](https://github.com/googledatastudio/community-connectors) for the `README` file
 only with a link to your repository.
 
 ## Report Issues
 
 - [Report issues related to the Community Connectors in this
-  repository](https://github.com/google/datastudio/issues)
+  repository](https://github.com/googledatastudio/community-connectors/issues)
 - [Report issues related to Community Connectors feature in Data Studio](https://issuetracker.google.com/issues?q=componentid:321382)
 - [Report issues related to Data Studio in
   general](https://issuetracker.google.com/savedsearches/578413)

@@ -4,8 +4,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/8/8e/Google_Fusion_Tables_logo.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/fusion-tables",
-    "supportUrl": "https://github.com/google/datastudio/issues",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/fusion-tables",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
     "description": "Import your Fusion Tables into Data Studio.",
     "sources": ["Fusion Tables"]
   },
