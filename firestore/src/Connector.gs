@@ -33,7 +33,10 @@ function Connector(enableLogging) {
   };
   
   /** @const */
-  this.firebase = new Firebase();
+  this.firestore = new Firestore();
+  
+  /** @const */
+  this.cloud = new GoogleCloud();
 }
 
 
@@ -65,7 +68,7 @@ Connector.prototype.logAndExecute = function(functionName, parameter) {
  * @return {Object} Connector configuration to be displayed to the user.
  */
 Connector.prototype.getConfig = function(request) {
-  var projects = this.firebase.listCloudProjects();
+  var projects = this.cloud.listCloudProjects();
   var options = [];
   projects.forEach(function(project) {
     options.push({
@@ -155,8 +158,8 @@ Connector.prototype.getData = function(request) {
   // Prepare the schema for the fields requested.
   var requestedSchema = this.getFilteredSchema(request);
   
-  // Fetch and filter the requested data from Firebase
-  var data = this.firebase.fetchDocuments(project, collection, requestedSchema)
+  // Fetch and filter the requested data from firestore
+  var data = this.firestore.fetchDocuments(project, collection, requestedSchema)
   
   return {schema: requestedSchema, rows: data};
 }
