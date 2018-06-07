@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** Handles fetching data from Firestore and GCP. */
-function Firebase() {
+/** Handles fetching data from Firestore. */
+function Firestore() {
   
   /** @const */
   this.PREDEFINED_FIELDS = [
@@ -23,23 +23,6 @@ function Firebase() {
     'createTime',
     'updateTime'
   ];
-}
-
-
-/**
- * Fetches the list of all Google Cloud projects managed by the user.
- *
- * @return {Array} List of Cloud projects.
- */
-Firebase.prototype.listCloudProjects = function() {
-  var url = 'https://cloudresourcemanager.googleapis.com/v1beta1/projects';
-  var response = UrlFetchApp.fetch(url, {
-    headers: {
-      Authorization: 'Bearer ' + ScriptApp.getOAuthToken()
-    }
-  });
-  var projects = JSON.parse(response.getContentText()).projects;
-  return projects;
 }
 
 
@@ -56,7 +39,7 @@ Firebase.prototype.listCloudProjects = function() {
  * @param {Object} schema The set of fields for which to retrieve data.
  * @return {Array} Tabular data for fields matching schema.
  */
-Firebase.prototype.fetchDocuments = function(project, collection, schema) {
+Firestore.prototype.fetchDocuments = function(project, collection, schema) {
   // Fetch all documents in collection
   var url = [
     'https://firestore.googleapis.com/v1beta1/projects/',
@@ -130,7 +113,7 @@ Firebase.prototype.fetchDocuments = function(project, collection, schema) {
  * @param {string} timestamp Timestamp in the Firestore format (YYYY-MM-DDTHH:MM:SSZ).
  * @return {string} Timestamp in Data Studio format (YYYYMMDDHH).
  */
-Firebase.prototype.parseTimestamp = function(timestamp) {
+Firestore.prototype.parseTimestamp = function(timestamp) {
   if (!timestamp) {
     return null;
   }
@@ -144,6 +127,6 @@ Firebase.prototype.parseTimestamp = function(timestamp) {
  * @param {string} path Absolute path to a Firestore document.
  * @return {string} The ID portion of the path.
  */
-Firebase.prototype.parseDocumentId = function(path) {
+Firestore.prototype.parseDocumentId = function(path) {
   return path.substring(path.lastIndexOf('/') + 1); 
 }
