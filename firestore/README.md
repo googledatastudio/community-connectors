@@ -15,6 +15,8 @@ the following:
 number, boolean, and timestamp. There is no support for nested collections.
 -   Add support for authentication. Currently, documents must be public to allow 
 access.
+-   Consider making number of results configurable. Currently fetches at most 1000
+documents.
 
 
 [_datastudio]: https://datastudio.google.com
