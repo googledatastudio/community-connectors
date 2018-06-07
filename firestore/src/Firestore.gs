@@ -23,12 +23,12 @@ function Firestore() {
     'createTime',
     'updateTime'
   ];
+  
+  /** @const */
+  this.PAGE_SIZE = 100;
 }
 
 
-// TODO: This method currently fetches a random sample of up to 1000 docuements.
-// Add support for filtering by date range, at least. Support pagination and allow
-// page size to be specified in config.
 // TODO: Add auth support. Currently only works with unprotected database.
 // TODO: Add support for other field types and nested collections.
 /**
@@ -37,18 +37,11 @@ function Firestore() {
  * @param {string} project The Google Cloud project ID containing Firestore instance.
  * @param {string} collection The Firestore collection to use.
  * @param {Object} schema The set of fields for which to retrieve data.
+ * @param {number} numResults Maximum documents to fetch.
  * @return {Array} Tabular data for fields matching schema.
  */
-Firestore.prototype.fetchDocuments = function(project, collection, schema) {
-  // Fetch all documents in collection
-  var url = [
-    'https://firestore.googleapis.com/v1beta1/projects/',
-    project,
-    '/databases/(default)/documents/',
-    collection,
-    '?pageSize=1000'];
-  var response = UrlFetchApp.fetch(url.join(''));
-  var documents = JSON.parse(response.getContentText()).documents;
+Firestore.prototype.getData = function(project, collection, schema, numResults) {
+  var documents = this.fetchDocuments(project, collection, numResults);
     
   var data = [];
   var instance = this;
@@ -104,6 +97,58 @@ Firestore.prototype.fetchDocuments = function(project, collection, schema) {
   });
   
   return data;
+}
+
+
+/**
+ * Fetches documents from Firestore.
+ *
+ * @param {string} project The Google Cloud project ID containing Firestore instance.
+ * @param {string} collection The Firestore collection to use.
+ * @param {number} numResults Maximum documents to fetch.
+ * @return {Array} Array of Firestore documents.
+ */
+Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
+  var urlComponents = [
+    'https://firestore.googleapis.com/v1beta1/projects/',
+    project,
+    '/databases/(default)/documents/',
+    collection,
+    '?pageSize=',
+    this.PAGE_SIZE];
+  var url = urlComponents.join('');
+  
+  var documents = [];
+  var token = null;
+  while (documents.length < numResults) {
+    var response = this.fetchPage(url, token);
+    if (response.documents && response.documents.length > 0) {
+      Array.prototype.push.apply(documents, response.documents);
+    }
+    if (response.nextPageToken) {
+      token = response.nextPageToken;
+    } else {
+      break; 
+    }
+  }
+  
+  return documents;
+}
+
+
+/**
+ * Fetch a single page of documents from Firestore and return the raw response as JSON.
+ *
+ * @param {string} baseUrl The URL excluding the page token.
+ * @param {?string} token Optional token for the page (absent on first request).
+ */
+Firestore.prototype.fetchPage = function(baseUrl, token) {
+  var url = baseUrl;
+  if (token) {
+    url = url + '&pageToken=' + token; 
+  }
+  var response = UrlFetchApp.fetch(url);
+  return JSON.parse(response.getContentText());
 }
 
 
