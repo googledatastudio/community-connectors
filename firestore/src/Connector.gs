@@ -71,10 +71,7 @@ Connector.prototype.getConfig = function(request) {
   var projects = this.cloud.listCloudProjects();
   var options = [];
   projects.forEach(function(project) {
-    options.push({
-      label: project.projectId,
-      value: project.projectId
-    });
+    options.push({label: project.projectId, value: project.projectId});
   });
   var optionsSorted = options.sort(function(x, y) {
     var xId = x.label;
@@ -110,9 +107,22 @@ Connector.prototype.getConfig = function(request) {
         type: 'TEXTAREA',
         displayName: 'Firestore "Schema"',
         placeholder: 'field1:STRING\nfield2:STRING\nfield3:NUMBER\nfield4:BOOLEAN'
+      },
+      {
+        name: 'numResults',
+        type: 'SELECT_SINGLE',
+        displayName: 'Max Documents',
+        helpText: 'Specifies the number of documents to read on each request. Note that each page \
+                   load will fetch *all* the documents, so setting this too high may be expensive \
+                   Consider pre-processing in Firestore if there are many documents.',
+        options: [
+          {label: '100', value: '100'},
+          {label: '1000', value: '1000'},
+          {label: '10000', value: '10000'},
+          {label: '100000', value: '100000'},
+        ]        
       }
-    ],
-    dateRangeRequired: true
+    ]
   };
   return config;
 }
@@ -155,11 +165,13 @@ Connector.prototype.getData = function(request) {
     throw 'Missing collection name'; 
   }
   
+  var numResults = parseInt(request.configParams.numResults);
+  
   // Prepare the schema for the fields requested.
   var requestedSchema = this.getFilteredSchema(request);
   
   // Fetch and filter the requested data from firestore
-  var data = this.firestore.fetchDocuments(project, collection, requestedSchema)
+  var data = this.firestore.getData(project, collection, requestedSchema, numResults);
   
   return {schema: requestedSchema, rows: data};
 }
