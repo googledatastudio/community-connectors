@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** Contains core functionality for Data Studio connector. */
+/** 
+ * Contains core functionality for Data Studio connector. 
+ *
+ * @constructor
+ */
 function Connector(enableLogging) {
 
   /** @const */
@@ -33,9 +37,6 @@ function Connector(enableLogging) {
   };
   
   /** @const */
-  this.firestore = new Firestore();
-  
-  /** @const */
   this.cloud = new GoogleCloud();
 }
 
@@ -49,12 +50,12 @@ function Connector(enableLogging) {
  * @returns {any} Returns the response of `functionName` function.
  */
 Connector.prototype.logAndExecute = function(functionName, parameter) {
-  var paramString = JSON.stringify(parameter, null, 2);
-  console.log([functionName, 'request', paramString]);
+  const paramString = JSON.stringify(parameter, null, 2);
+  console.log([functionName, 'request', paramString]); // TODO: sanitize
 
-  var returnObject = this[functionName](parameter);
+  const returnObject = this[functionName](parameter);
 
-  var returnString = JSON.stringify(returnObject, null, 2);
+  const returnString = JSON.stringify(returnObject, null, 2);
   console.log([functionName, 'response', returnString]);
 
   return returnObject;
@@ -68,21 +69,21 @@ Connector.prototype.logAndExecute = function(functionName, parameter) {
  * @return {Object} Connector configuration to be displayed to the user.
  */
 Connector.prototype.getConfig = function(request) {
-  var projects = this.cloud.listCloudProjects();
-  var options = [];
+  const projects = this.cloud.listCloudProjects();
+  const options = [];
   projects.forEach(function(project) {
     options.push({
       label: project.name + ' (' + project.projectId + ')',
       value: project.projectId
     });
   });
-  var optionsSorted = options.sort(function(x, y) {
-    var xId = x.label.toLowerCase();
-    var yId = y.label.toLowerCase();
+  const optionsSorted = options.sort(function(x, y) {
+    const xId = x.label.toLowerCase();
+    const yId = y.label.toLowerCase();
     return xId == yId ? 0 : (xId < yId ? -1 : 1);
   });
     
-  var config = {
+  return {
     configParams: [
       {
         name: 'project',
@@ -124,10 +125,21 @@ Connector.prototype.getConfig = function(request) {
           {label: '10000', value: '10000'},
           {label: '100000', value: '100000'},
         ]        
+      },
+      {
+        name: 'authEmail',
+        type: 'TEXTINPUT',
+        displayName: 'Auth Email (optional)',
+        helpText: 'TODO'
+      },
+      {
+        name: 'authKey',
+        type: 'TEXTINPUT',
+        displayName: 'Auth Private Key (optional)',
+        helpText: 'TODO'
       }
     ]
   };
-  return config;
 }
 
 
@@ -139,7 +151,7 @@ Connector.prototype.getConfig = function(request) {
  */
 Connector.prototype.getSchema = function(request) {
   // Convert the user input to a Data Studio schema
-  var configCsv = request.configParams.schema;
+  const configCsv = request.configParams.schema;
   var schema = this.parseSchemaCsv(configCsv);
   
   // Add predefined fields
@@ -158,12 +170,12 @@ Connector.prototype.getSchema = function(request) {
  * @return {Object} Contains the schema and data for the given request.
  */
 Connector.prototype.getData = function(request) {
-  var project = request.configParams.project;
+  const project = request.configParams.project;
   if (!project) {
     throw 'Missing project ID'; 
   }
   
-  var collection = request.configParams.collection;
+  const collection = request.configParams.collection;
   if (!collection) {
     throw 'Missing collection name'; 
   }
@@ -172,13 +184,22 @@ Connector.prototype.getData = function(request) {
   if (!numResultsValue) {
      numResultsValue = '1000';
   }
-  var numResults = parseInt(numResultsValue);
+  const numResults = parseInt(numResultsValue);
+  
+  const authEmail = request.configParams.authEmail;
+  
+  var authKey = request.configParams.authKey;
+  if (authKey) {
+    // Line breaks are escaped in user input
+    authKey = authKey.replace(/\\n/g, '\n');
+  }
   
   // Prepare the schema for the fields requested.
-  var requestedSchema = this.getFilteredSchema(request);
+  const requestedSchema = this.getFilteredSchema(request);
   
   // Fetch and filter the requested data from firestore
-  var data = this.firestore.getData(project, collection, requestedSchema, numResults);
+  const firestore = new Firestore(authEmail, authKey);
+  const data = firestore.getData(project, collection, requestedSchema, numResults);
   
   return {schema: requestedSchema, rows: data};
 }
@@ -191,7 +212,7 @@ Connector.prototype.getData = function(request) {
  * @return {Object} The schema filtered by the current request parameters.
  */
 Connector.prototype.getFilteredSchema = function(request) {
-  var schema = this.getSchema(request).schema;
+  const schema = this.getSchema(request).schema;
   var requestedSchema = [];
   request.fields.forEach(function(field) {
     for (var i=0; i < schema.length; i++) {
@@ -206,26 +227,26 @@ Connector.prototype.getFilteredSchema = function(request) {
 
 
 /**
- *
+ * Converts the user-specified schema into a Data Studio schema.
  *
  * @param {string} configCsv The user-specified database schema.
  * @return {Object} The user-specified portion of the connector schema.
  */
 Connector.prototype.parseSchemaCsv = function(configCsv) {
-  var parsed = Utilities.parseCsv(configCsv, ':')
+  const parsed = Utilities.parseCsv(configCsv, ':')
   
   if (parsed.length == 0) {
     throw 'Invalid schema: no schema supplied'; 
   }
 
   var schema = [];
-  var instance = this;
+  const instance = this;
   parsed.forEach(function(row) {
     if (row.length != 2) {
       throw 'Invalid schema: row should have format "<name>:<type>", instead got "' + row + '"';
     }
-    var name = row[0].trim();
-    var type = row[1].trim().toUpperCase();
+    const name = row[0].trim();
+    const type = row[1].trim().toUpperCase();
     
     if (name.length == 0) {
       throw 'Invalid schema: empty name in row "' + row + '"'; 
@@ -254,8 +275,7 @@ Connector.prototype.parseSchemaCsv = function(configCsv) {
 
 /** Predefined Data Studio function for defining auth. */
 Connector.prototype.getAuthType = function() {
-  var response = {
+  return {
     "type": "NONE"
   };
-  return response;
 }
