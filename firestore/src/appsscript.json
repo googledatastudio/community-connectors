@@ -12,7 +12,7 @@
     "logoUrl": "http://i66.tinypic.com/2mevmeq.png",
     "company": "Google",
     "companyUrl": "https://firebase.google.com/products/firestore/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/google-fit",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/firestore",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
     "description": "Get arbitrary data from a single Google Cloud Firestore collection.",
     "shortDescription": "Get arbitrary data from a single Google Cloud Firestore collection.",
@@ -21,7 +21,7 @@
   },
   "oauthScopes": [
     "https://www.googleapis.com/auth/script.external_request",
-    "https://www.googleapis.com/auth/cloud-platform"
+    "https://www.googleapis.com/auth/cloudplatformprojects.readonly"
   ],
   "urlFetchWhitelist": [
     "https://firestore.googleapis.com/v1beta1/projects/",
