@@ -25,6 +25,7 @@
   ],
   "urlFetchWhitelist": [
     "https://firestore.googleapis.com/v1beta1/projects/",
-    "https://cloudresourcemanager.googleapis.com/v1beta1/projects"
+    "https://cloudresourcemanager.googleapis.com/v1beta1/projects",
+    "https://www.googleapis.com/oauth2/v4/token/"
   ]
 }
