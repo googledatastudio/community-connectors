@@ -113,7 +113,7 @@ Connector.prototype.getConfig = function(request) {
         type: 'SELECT_SINGLE',
         displayName: 'Max Documents',
         helpText: 'Specifies the number of documents to read on each request. Note that each page \
-                   load will fetch *all* the documents, so setting this too high may be expensive \
+                   load will fetch *all* the documents, so setting this too high may be expensive. \
                    Consider pre-processing in Firestore if there are many documents.',
         options: [
           {label: '100', value: '100'},
