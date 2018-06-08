@@ -38,6 +38,9 @@ function Connector(enableLogging) {
   
   /** @const */
   this.cloud = new GoogleCloud();
+  
+  /** @const */
+  this.enableLogging = enableLogging;
 }
 
 
@@ -50,13 +53,17 @@ function Connector(enableLogging) {
  * @returns {any} Returns the response of `functionName` function.
  */
 Connector.prototype.logAndExecute = function(functionName, parameter) {
-  const paramString = JSON.stringify(parameter, null, 2);
-  console.log([functionName, 'request', paramString]); // TODO: sanitize
+  if (this.enableLogging) {
+    const paramString = JSON.stringify(parameter, null, 2);
+    console.log([functionName, 'request', paramString]);
+  }
 
   const returnObject = this[functionName](parameter);
 
-  const returnString = JSON.stringify(returnObject, null, 2);
-  console.log([functionName, 'response', returnString]);
+  if (this.enableLogging) {
+    const returnString = JSON.stringify(returnObject, null, 2);
+    console.log([functionName, 'response', returnString]);
+  }
 
   return returnObject;
 };
