@@ -14,8 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** Handles fetching data from Firestore. */
-function Firestore() {
+/** 
+ * Handles fetching data from Firestore. 
+ *
+ * @constructor
+ * @param {?string} email Optional service account email for auth.
+ * @param {?string} key Optional private key for auth.
+ */
+function Firestore(email, key) {
   
   /** @const */
   this.PREDEFINED_FIELDS = [
@@ -33,11 +39,18 @@ function Firestore() {
   /** @const */
   this.CACHE_TTL = 20; // seconds
   
+  /** @const */
+  this.AUTH_URL = 'https://www.googleapis.com/oauth2/v4/token/';
+  
   this.cache = CacheService.getScriptCache();
+  
+  this.authToken = null;
+  if (email && key) {
+    this.authToken = this.getAuthToken(email, key);
+  }
 }
 
 
-// TODO: Add auth support. Currently only works with unprotected database.
 // TODO: Add support for other field types and nested collections.
 /**
  * Fetches documents from Firestore and parses fields based on schema.
@@ -49,10 +62,10 @@ function Firestore() {
  * @return {Array} Tabular data for fields matching schema.
  */
 Firestore.prototype.getData = function(project, collection, schema, numResults) {
-  var documents = this.fetchDocuments(project, collection, numResults);
+  const documents = this.fetchDocuments(project, collection, numResults);
     
   var data = [];
-  var instance = this;
+  const instance = this;
   documents.forEach(function(document) {
     var values = [];
     // Provide values in the order defined by the schema.
@@ -71,7 +84,7 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
             values.push(value);
         }
       } else {
-        var valueWrapper = document.fields[field.name];
+        const valueWrapper = document.fields[field.name];
         if (valueWrapper) {
           switch(field.dataType) {
             case 'STRING':
@@ -117,16 +130,16 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
  * @return {Array} Array of Firestore documents.
  */
 Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
-  var urlComponents = [
+  const urlComponents = [
     'https://firestore.googleapis.com/v1beta1/projects/',
     project,
     '/databases/(default)/documents/',
     collection,
     '?pageSize=',
     this.PAGE_SIZE];
-  var url = urlComponents.join('');
+  const url = urlComponents.join('');
   
-  var cached = this.cache.get(url);
+  const cached = this.cache.get(url);
   if (cached) {
     return JSON.parse(cached); 
   }
@@ -134,7 +147,7 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
   var documents = [];
   var token = null;
   while (documents.length < numResults) {
-    var response = this.fetchPage(url, token);
+    const response = this.fetchPage(url, token);
     if (response.documents && response.documents.length > 0) {
       Array.prototype.push.apply(documents, response.documents);
     }
@@ -145,7 +158,12 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
     }
   }
   
-  this.cache.put(url, JSON.stringify(documents), this.CACHE_TTL); 
+  try {
+    this.cache.put(url, JSON.stringify(documents), this.CACHE_TTL); 
+  } catch (e) {
+    // Ignore. This usually means the data is too big to cache (which does make 
+    // the cache less useful...).
+  }
   return documents;
 }
 
@@ -161,10 +179,16 @@ Firestore.prototype.fetchPage = function(baseUrl, token) {
   if (token) {
     url = url + '&pageToken=' + token; 
   }
+  
+  var options = {}
+  if (this.authToken) {
+    options = {headers: {'Authorization': 'Bearer ' + this.authToken}};
+  }
+  
   var tries = this.RETRIES;
   while (tries > 0) {
     try {
-      var response = UrlFetchApp.fetch(url);
+      const response = UrlFetchApp.fetch(url, options);
       return JSON.parse(response.getContentText());
     } catch (e) {
       console.error('Request to Firestore failed.');
@@ -197,4 +221,52 @@ Firestore.prototype.parseTimestamp = function(timestamp) {
  */
 Firestore.prototype.parseDocumentId = function(path) {
   return path.substring(path.lastIndexOf('/') + 1); 
+}
+
+
+/**
+ * Request auth token for accessing Firestore, expiring in 1 hour.
+ *
+ * @param {string} email Service account email for auth.
+ * @param {string} key Private key for auth.
+ * @return {string} Auth token for use in request header.
+ */
+Firestore.prototype.getAuthToken = function(email, key) {
+  const jwtHeader = {alg: 'RS256', typ: 'JWT'};
+
+  const now = new Date();
+  const nowSeconds = now.getTime() / 1000;
+
+  now.setHours(now.getHours() + 1); // Expires in 1 hour
+  const oneHourFromNowSeconds = now.getTime() / 1000;
+
+  const jwtClaim = {
+    iss: email,
+    scope: 'https://www.googleapis.com/auth/datastore',
+    aud: this.AUTH_URL,
+    exp: oneHourFromNowSeconds,
+    iat: nowSeconds
+  };
+
+  const jwtHeaderBase64 = this.base64EncodeSafe(JSON.stringify(jwtHeader));
+  const jwtClaimBase64 = this.base64EncodeSafe(JSON.stringify(jwtClaim));
+  const signatureInput = jwtHeaderBase64 + '.' + jwtClaimBase64;
+  const signature = Utilities.computeRsaSha256Signature(signatureInput, key);
+  const encodedSignature = this.base64EncodeSafe(signature);
+  const jwt = signatureInput + '.' + encodedSignature;
+  
+  var options = {
+    payload: 'grant_type=' + decodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') + '&assertion=' + jwt
+  };
+  const response = UrlFetchApp.fetch(this.AUTH_URL, options);
+  return JSON.parse(response.getContentText()).access_token;
+}
+
+
+/**
+ * @param {string} unencoded 
+ * @return {string} Encoded to base 64.
+ */
+Firestore.prototype.base64EncodeSafe = function(unencoded) {
+  return Utilities.base64EncodeWebSafe(unencoded).replace(/=/g, '');
 }
