@@ -26,6 +26,14 @@ function Firestore() {
   
   /** @const */
   this.PAGE_SIZE = 100;
+  
+  /** @const */
+  this.RETRIES = 3;
+  
+  /** @const */
+  this.CACHE_TTL = 20; // seconds
+  
+  this.cache = CacheService.getScriptCache();
 }
 
 
@@ -101,7 +109,7 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
 
 
 /**
- * Fetches documents from Firestore.
+ * Fetches documents from Firestore or cache.
  *
  * @param {string} project The Google Cloud project ID containing Firestore instance.
  * @param {string} collection The Firestore collection to use.
@@ -118,6 +126,11 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
     this.PAGE_SIZE];
   var url = urlComponents.join('');
   
+  var cached = this.cache.get(url);
+  if (cached) {
+    return JSON.parse(cached); 
+  }
+  
   var documents = [];
   var token = null;
   while (documents.length < numResults) {
@@ -132,6 +145,7 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
     }
   }
   
+  this.cache.put(url, JSON.stringify(documents), this.CACHE_TTL); 
   return documents;
 }
 
@@ -147,8 +161,17 @@ Firestore.prototype.fetchPage = function(baseUrl, token) {
   if (token) {
     url = url + '&pageToken=' + token; 
   }
-  var response = UrlFetchApp.fetch(url);
-  return JSON.parse(response.getContentText());
+  var tries = this.RETRIES;
+  while (tries > 0) {
+    try {
+      var response = UrlFetchApp.fetch(url);
+      return JSON.parse(response.getContentText());
+    } catch (e) {
+      console.error('Request to Firestore failed.');
+      tries--;
+    }
+  }
+  throw 'Failed to complete fetch from Firestore after ' + this.RETRIES + ' attempts.';
 }
 
 
