@@ -2,7 +2,7 @@ var connector = null;
 
 function initConnector() {
   if (connector === null) {
-    connector = new Connector(); 
+    connector = new Connector(false /* disable logging */); 
   }
   return connector;
 }
