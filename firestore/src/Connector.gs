@@ -71,11 +71,14 @@ Connector.prototype.getConfig = function(request) {
   var projects = this.cloud.listCloudProjects();
   var options = [];
   projects.forEach(function(project) {
-    options.push({label: project.projectId, value: project.projectId});
+    options.push({
+      label: project.name + ' (' + project.projectId + ')',
+      value: project.projectId
+    });
   });
   var optionsSorted = options.sort(function(x, y) {
-    var xId = x.label;
-    var yId = y.label;
+    var xId = x.label.toLowerCase();
+    var yId = y.label.toLowerCase();
     return xId == yId ? 0 : (xId < yId ? -1 : 1);
   });
     
@@ -114,7 +117,7 @@ Connector.prototype.getConfig = function(request) {
         displayName: 'Max Documents',
         helpText: 'Specifies the number of documents to read on each request. Note that each page \
                    load will fetch *all* the documents, so setting this too high may be expensive. \
-                   Consider pre-processing in Firestore if there are many documents.',
+                   Consider pre-processing in Firestore if there are many documents. Defaults to 1000.',
         options: [
           {label: '100', value: '100'},
           {label: '1000', value: '1000'},
@@ -165,7 +168,11 @@ Connector.prototype.getData = function(request) {
     throw 'Missing collection name'; 
   }
   
-  var numResults = parseInt(request.configParams.numResults);
+  var numResultsValue = request.configParams.numResults;
+  if (!numResultsValue) {
+     numResultsValue = '1000';
+  }
+  var numResults = parseInt(numResultsValue);
   
   // Prepare the schema for the fields requested.
   var requestedSchema = this.getFilteredSchema(request);
