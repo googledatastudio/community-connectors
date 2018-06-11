@@ -1,10 +1,10 @@
 /** @const */
 var CUSTOM_CONFIG = [
-    {
-      "type": "INFO",
-      "name": "instructions",
-      "text": "Click connect to continue"
-    }
+  {
+    type: 'INFO',
+    name: 'instructions',
+    text: 'Click connect to continue',
+  },
 ];
 
 /** @const */
@@ -54,12 +54,14 @@ Connector.prototype.isAdminUser = function() {
 Connector.prototype.getData = function(request) {
   this.validateConfig(request);
   var dataSchema = this.getDataSchema(request);
-  
+
   // get the APP token from script properties
   var scriptProps = PropertiesService.getScriptProperties();
   var APP_TOKEN = scriptProps.getProperty('APP_TOKEN');
 
-  var url = 'https://data.sfgov.org/resource/rptz-7xyh.json?$limit=50000&$$app_token='+APP_TOKEN;
+  var url =
+    'https://data.sfgov.org/resource/rptz-7xyh.json?$limit=50000&$$app_token=' +
+    APP_TOKEN;
 
   var response = JSON.parse(this.fetch(url));
   var data = [];
