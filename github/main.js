@@ -25,62 +25,6 @@
 //TODO(nathanwest): Roll this stuff into a separate library
 
 /**
- * Similar to Array.map, but for an object. Maps the value of each property to
- * an array, in sorted order by property name.
- * @param  {!Object<string, T>} object The object to map over
- * @param  {!function(string, T, Object<string, T>): U} func The mapping
- *   function. Called once with (property value, property name, object) for
- *   each of the object properties, as returned by Object.keys
- * @return {!Array<U>} The mapped array with the return values of func.
- * @template T, U
- * @example
- * var obj = {c: 3, b: 2, a: 1}
- * var result = mapObjectSorted(obj, function(value) { return value + 1})
- * // result == [2,3,4]
- */
-function mapObjectSorted(object, func) {
-  return Object.keys(object)
-    .sort()
-    .map(function(key) {
-      return func(object[key], key, object);
-    });
-}
-
-/**
- * Turn a function into a singletpn function. A singleton function is
- * only called once; subsequent calls always return the same object as
- * the initial call. The underlying function is called with no arguments.
- * The returned wrapper has a .reset() property attached, which may be
- * called to reset the stored singleton value. This reset function returns
- * that value.
- *
- * @param  {Function} func The function to wrap
- * @return {Function}      The singleton wrapper
- */
-function singleton(func) {
-  var set = false;
-  var instance = undefined;
-
-  var wrapper = function wrapper() {
-    if (!set) {
-      set = true;
-      instance = func();
-    }
-
-    return instance;
-  };
-
-  wrapper.reset = function reset() {
-    var local = instance;
-    instance = undefined;
-    set = false;
-    return local;
-  };
-
-  return wrapper;
-}
-
-/**
  * Given an unkeyed schema, which is an array of schema fields, return an
  * object containing those same fields, mapped on field.name
  * @param  {!Array<Object>} unkeyedSchema The schema (as an array) to convert
@@ -382,10 +326,10 @@ function combineConnectors(options) {
     name: connectorOptionKey,
     displayName: 'Data Type',
     helpText: 'Select the type of data you want.',
-    options: mapObjectSorted(connectors, function(connector, connectorKey) {
+    options: Object.keys(connectors).map(function(connectorKey) {
       return {
         value: connectorKey,
-        label: connector.label,
+        label: connectors[connectorKey].label,
       };
     }),
   };
@@ -838,7 +782,7 @@ var githubConnector = combineConnectors({
 
     if (!configParams.repository)
       throw new UserError(
-        'You must provide a Repository, got ' + configParams.organization
+        'You must provide a Repository, got ' + configParams.repository
       );
   },
 
@@ -862,7 +806,7 @@ function getAuthType() {
   };
 }
 
-var getOAuthService = singleton(function getOAuthService() {
+function getOAuthService() {
   var scriptProps = PropertiesService.getScriptProperties();
   return OAuth2.createService('github')
     .setAuthorizationBaseUrl('https://github.com/login/oauth/authorize')
@@ -871,7 +815,7 @@ var getOAuthService = singleton(function getOAuthService() {
     .setClientSecret(scriptProps.getProperty('OAUTH_CLIENT_SECRET'))
     .setPropertyStore(PropertiesService.getUserProperties())
     .setCallbackFunction('authCallback');
-});
+}
 
 function authCallback(request) {
   return getOAuthService().handleCallback(request)
@@ -894,5 +838,5 @@ function get3PAuthorizationUrls() {
 }
 
 function isAdminUser() {
-  return true;
+  return false;
 }
