@@ -48,16 +48,16 @@ OAUTH app through GitHub.
 
 ## Examples and use cases covered in the connector
 
-- **OAUTH2 Authentication**<\br>
+- **OAUTH2 Authentication**</br>
   Example of how to authenticate with 3rd party OAUTH2, in this case, GitHub's
   OAUTH2 service.
-- **Using Project Properties**<\br>
+- **Using Project Properties**</br>
   Example of how to use Project Properties (Specifically Script Properties) to
   save data needed for script execution. Script Properties are useful in
   situations where values are needed for script execution, but shouldn't be put
   into source files. In this case, we put an OAUTH2 "client id" and "client
   secret" into the Script Properties.
-- **Using the sampleExtraction property**<\br>
+- **Using the sampleExtraction property**</br>
   Example of returning pre-defined sample data-set for more efficient
   `getData()` queries when sampleExtraction is `true`. Learn more about
   [sampleExtraction][sample extraction].
