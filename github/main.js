@@ -611,6 +611,9 @@ var githubIssuesConnector = applyGetSchema({
     closed_at: function closed_at(issueBlob) {
       return formatDate(issueBlob.closed_at);
     },
+    url: function url(issueBlob) {
+      return issueBlob.html_url;
+    },
   },
 
   getFieldFromBlob: function getFieldFromBlob(issueBlob, fieldName) {
