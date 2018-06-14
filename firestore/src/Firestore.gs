@@ -147,11 +147,11 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
   var documents = [];
   var token = null;
   while (documents.length < numResults) {
-    const response = this.fetchPage(url, token);
+    var response = this.fetchPage(url, token);
     if (response.documents && response.documents.length > 0) {
       Array.prototype.push.apply(documents, response.documents);
     }
-    if (response.nextPageToken) {
+    if (response.nextPageToken && token != response.nextPageToken) {
       token = response.nextPageToken;
     } else {
       break; 
@@ -188,7 +188,7 @@ Firestore.prototype.fetchPage = function(baseUrl, token) {
   var tries = this.RETRIES;
   while (tries > 0) {
     try {
-      const response = UrlFetchApp.fetch(url, options);
+      var response = UrlFetchApp.fetch(url, options);
       return JSON.parse(response.getContentText());
     } catch (e) {
       console.error('Request to Firestore failed.');
