@@ -137,13 +137,13 @@ Connector.prototype.getConfig = function(request) {
         name: 'authEmail',
         type: 'TEXTINPUT',
         displayName: 'Auth Email (optional)',
-        helpText: 'TODO'
+        helpText: 'Optional field for specifying authentication email for Firestore.'
       },
       {
         name: 'authKey',
         type: 'TEXTINPUT',
         displayName: 'Auth Private Key (optional)',
-        helpText: 'TODO'
+        helpText: 'Optional field for specifying authentication key for Firestore.'
       }
     ]
   };
