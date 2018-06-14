@@ -13,8 +13,6 @@ the following:
 
 -   Add support for additional field types. There is currently support for string, 
 number, boolean, and timestamp. There is no support for nested collections.
--   Add support for authentication. Currently, documents must be public to allow 
-access.
 -   Improve efficiency. We're generally fetching more data than we need.
 
 
