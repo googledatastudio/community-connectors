@@ -762,13 +762,13 @@ var githubConnector = combineConnectors({
       displayName: 'Organization',
       helpText:
         'The name of the organization (or user) that owns the repository',
-      placeholder: 'google',
+      placeholder: 'googledatastudio',
     },
     {
       name: 'repository',
       displayName: 'Repository',
       helpText: 'The name of the repository you want issues from',
-      placeholder: 'datastudio',
+      placeholder: 'community-connectors',
     },
   ]),
 
