@@ -11,15 +11,15 @@
   },
   "dataStudio": {
     "name": "GitHub",
-    "logoUrl": "https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png",
+    "logoUrl": "https://assets-cdn.github.com/images/modules/open_graph/github-mark.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/github",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/github#readme",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
-    "description": "Get GitHub star data for specific repositories.",
+    "description": "Get GitHub data for specific repositories.",
     "sources": ["GitHub"],
     "templates": {
-      "default": "1kxUk9GtGOdLL3NmPVIfScIKRIMV2h5gq"
+      "default": "1PikgkhyXNpPNmsL5khagMQJZq5zDOANz"
     }
   }
 }
