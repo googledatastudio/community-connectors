@@ -1,7 +1,11 @@
+// Currently set to 0 as the maximum amount of data that can be cached per key is 100KB. 
 var cacheDuration = 60 * 60 & 6;
-
 var connector = {};
 
+// Sample Kaggle dataset. 
+// Kaggle URL format: https://www.kaggle.com/{ownerSlug}/{datasetSlug}.
+// Sample Kaggle URL: https://www.kaggle.com/unsdsn/world-happiness
+// Filename refers to the dataset under the 'Data' tab.
 connector.ownerSlug = 'unsdsn';
 connector.datasetSlug = 'world-happiness';
 connector.fileName = '2016.csv';
@@ -11,14 +15,13 @@ function getAuthType() {
     "type": "USER_PASS"
   };
 }
-
 function getConfig(request) {
   var config = {
     configParams: [
         {
             'type': 'INFO',
             'name': 'generalInfo',
-            'text': 'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets gives the ownerSlug and datasetSlug. For eg: https://www.kaggle.com/{ownerSlug}/{datasetSlug} '
+            'text': 'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets gives the ownerSlug and datasetSlug. For eg: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found under the "Data" tab'
         },
         {
             'type': 'TEXTINPUT',
@@ -42,14 +45,12 @@ function getConfig(request) {
   };
   return config;
 }
-
 function getSchema(request) {
   request = validateConfig(request);
   var rawData = getFileData(request.configParams);
   var kaggleSchema = buildSchema(rawData);
   return { schema: kaggleSchema };
 }
-
 function validateConfig(request) {
   request.configParams = request.configParams || {}; 
   var config = request.configParams;
@@ -58,7 +59,6 @@ function validateConfig(request) {
   config.fileName = config.fileName || connector.fileName;
   return request;
 }
-
 function getData(request) {
   request = validateConfig(request);
   var rawData = getFileData(request.configParams);
@@ -71,19 +71,15 @@ function getData(request) {
       }
     }
   });
-  
   var requestedData = processData(rawData, requestedSchema);
-  
   return {
     schema: requestedSchema,
     rows: requestedData
   };
 }
-
 function buildSchema(data) {
   var columnNames = data[0];
   var content = data[1];
-  
   var schema = [];
   for (var i = 0; i < columnNames.length; i++) {
     var fieldSchema = mapColumn(i, columnNames[i], content[i]);
@@ -91,7 +87,6 @@ function buildSchema(data) {
   }
   return schema;
 }
-
 function mapColumn(index, columnName, content) {
   var field = {};
   field.name = 'c' + index;
@@ -108,13 +103,11 @@ function mapColumn(index, columnName, content) {
   };
   return field;
 };
-
 function processData(data, fields) {
   var header = data[0];
   var dataIndexes = fields.map( function(field){
-    return findIndex(field.label, header);
+    return header.indexOf(field.label)
   });
-  
   var result = [];
   for (var rowIndex = 1; rowIndex < data.length; rowIndex++) {
     var rowData = dataIndexes.map( function(columnIndex){
@@ -124,14 +117,8 @@ function processData(data, fields) {
       'values': rowData
     });
   }
-
   return result;
 }
-
-function findIndex(value, array) {
-  return array.indexOf(value);
-}
-
 function getFileData(config) {
   var userProperties = PropertiesService.getUserProperties();
   var user = userProperties.getProperty('USERNAME');
@@ -140,10 +127,8 @@ function getFileData(config) {
     userName: user,
     apiToken: key
   };
-
   var ownerSlug = config.ownerSlug;
   var datasetSlug = config.datasetSlug;
-
   var fileName = config.fileName;
   var url = [
     "datasets/download-raw",
@@ -151,25 +136,20 @@ function getFileData(config) {
     datasetSlug,
     fileName
   ].join("/");
-
   var key = [
     ownerSlug,
     datasetSlug,
     fileName
   ].join("--");
-
   var fileContent = unZipCachedContent(key);
-
   if ( fileContent === null) {
     var response = kaggleFetch(url, kaggleAuth);
     var fileContent = response.getContentText();
     zipAndCacheContent(key, fileContent, cacheDuration);
   }
-  
   var csvData = Utilities.parseCsv(fileContent);
   return csvData;
 }
-
 function kaggleFetch(url, kaggleAuth) {
   var fullUrl = "https://www.kaggle.com/api/v1/" + url;
   var authParamPlain = kaggleAuth.userName + ":" + kaggleAuth.apiToken;
@@ -182,27 +162,21 @@ function kaggleFetch(url, kaggleAuth) {
   var response = UrlFetchApp.fetch(fullUrl, options);
   return response;
 }
-
-
 function compress(content) {
   var textBlob = Utilities.newBlob(content);
   var gzipBlob = Utilities.gzip(textBlob);
   return gzipBlob;
 }
-
 function deCompress(blob) {
   var uncompressedBlob = Utilities.ungzip(blob);
   var content = uncompressedBlob.getDataAsString();
   return content;
 }
-
 function zipAndCacheContent(key, content, duration) {
   var gzipBlob = compress(content);
   var cache = CacheService.getScriptCache();
-  cache.put(key, gzipBlob, duration);
+  cache.put(key, gzipBlob, cacheDuration);
 }
-
-
 function unZipCachedContent(key) {
   var cache = CacheService.getScriptCache();
   var gzipBlob = cache.get(key);
@@ -211,24 +185,14 @@ function unZipCachedContent(key) {
   }
   return null;
 }
-
-function isAdminUser() {
-  return true;
-}
-
 function isAuthValid() {
   var userProperties = PropertiesService.getUserProperties();
   var userName = userProperties.getProperty('USERNAME');
   var key = userProperties.getProperty('KEY');
-
-  // This assumes you have a validateCredentials function that
-  // can validate if the userName and key are correct.
   return validateCredentials(userName, key);
 }
-
 function validateCredentials(username, key){
-  var isCredNull = checkNullForCredentials(username, key)
-  if(!isCredNull)
+  if(username === null || key === null)
     return false;
   
   // To check if the credentials entered are valid. 
@@ -252,7 +216,6 @@ function validateCredentials(username, key){
     return true;
   return false;
 }
-
 // Added for USER_PASS auth type.
 function setCredentials(request) {
   var creds = request.userPass;
@@ -261,8 +224,7 @@ function setCredentials(request) {
   
   // Optional
   // Check if the provided username and key are valid through a
-  // call to your service. You would have to have a `checkForValidCreds`
-  // function defined for this to work.
+  // call to your service. 
   var validCreds = validateCredentials(username, key);
   if (!validCreds) {
    return {
@@ -276,16 +238,11 @@ function setCredentials(request) {
     errorCode: "NONE"
   };  
 }
-
-function checkNullForCredentials(username, key){
-  if(username === null || key === null)
-    return false;
-  return true;
-}
-
 function resetAuth() {
   var userProperties = PropertiesService.getUserProperties();
   userProperties.deleteProperty('USERNAME');
   userProperties.deleteProperty('KEY');
 }
-
+function isAdminUser() {
+  return false;
+}

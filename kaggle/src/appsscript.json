@@ -11,11 +11,11 @@
   "dataStudio": {
     "name": "Kaggle",
     "logoUrl": "https://www.kaggle.com/content/v/43edd17f0e8c/kaggle/img/logos/kaggle-logo-transparent.png",
-    "company": "vlookup@google.com",
+    "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://developers.google.com/datastudio/",
     "supportUrl": "https://developers.google.com/datastudio/",
-    "description": "Kaggle datasets in Data Studio. Please use they API key as password.",
+    "description": "Obtain datasets from Kaggle. Please use the API key as password while using the community connector.",
     "sources": ["Kaggle"],
     "privacyPolicyUrl": "www.google.com"
   }

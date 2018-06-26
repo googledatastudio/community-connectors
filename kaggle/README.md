@@ -5,11 +5,7 @@
 This [Data Studio](https://datastudio.google.com) [Community
 Connector](https://developers.google.com/datastudio/connector) lets users import any dataset from
 [kaggle](https://www.kaggle.com). This Community
-Connector uses the [Kaggle API](https://github.com/Kaggle/kaggle-api).
-
-## Try the Community Connector in Data Studio
-
-You can try out the managed deployment of the latest code: [Kaggle Community Connector](https://datastudio.google.com/datasources/create?connectorId=AKfycbzRfJ2ofuhRGSEc)
+Connector uses the [Kaggle API](https://github.com/Kaggle/kaggle-api). Currently supports datasets in CSV format.
 
 ## Deploy the Community Connector yourself
 
