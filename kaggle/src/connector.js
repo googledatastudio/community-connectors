@@ -1,7 +1,4 @@
-// Currently set to 0 as the maximum amount of data that can be cached per key is 100KB. 
-var cacheDuration = 60 * 60 & 6;
 var connector = {};
-
 // Sample Kaggle dataset. 
 // Kaggle URL format: https://www.kaggle.com/{ownerSlug}/{datasetSlug}.
 // Sample Kaggle URL: https://www.kaggle.com/unsdsn/world-happiness
@@ -47,9 +44,16 @@ function getConfig(request) {
 }
 function getSchema(request) {
   request = validateConfig(request);
-  var rawData = getFileData(request.configParams);
-  var kaggleSchema = buildSchema(rawData);
-  return { schema: kaggleSchema };
+  var result = getFileData(request.configParams);
+  var rawData = result.csvData;
+  var cacheKey = result.cacheKey;
+  var cache = CacheService.getScriptCache();
+  var cachedSchema = JSON.parse(cache.get(cacheKey))
+  if(cachedSchema === null){
+    var kaggleSchema = buildSchema(rawData, cacheKey);
+    return { schema: kaggleSchema };
+  }
+  return { schema: cachedSchema };
 }
 function validateConfig(request) {
   request.configParams = request.configParams || {}; 
@@ -61,9 +65,15 @@ function validateConfig(request) {
 }
 function getData(request) {
   request = validateConfig(request);
-  var rawData = getFileData(request.configParams);
-  var kaggleSchema = buildSchema(rawData);
-  
+  var result = getFileData(request.configParams);
+  var rawData = result.csvData;
+  var cacheKey = result.cacheKey;
+  var cache = CacheService.getScriptCache();
+  var cachedSchema = JSON.parse(cache.get(cacheKey))
+  if(cachedSchema === null)
+    var kaggleSchema = buildSchema(rawData, cacheKey);
+  else
+    var kaggleSchema = cachedSchema;
   var requestedSchema = request.fields.map(function (field) {
     for (var i = 0; i < kaggleSchema.length; i++) {
       if (kaggleSchema[i].name == field.name) {
@@ -77,7 +87,7 @@ function getData(request) {
     rows: requestedData
   };
 }
-function buildSchema(data) {
+function buildSchema(data, cacheKey) {
   var columnNames = data[0];
   var content = data[1];
   var schema = [];
@@ -85,6 +95,8 @@ function buildSchema(data) {
     var fieldSchema = mapColumn(i, columnNames[i], content[i]);
     schema.push(fieldSchema);
   }
+  var cache = CacheService.getScriptCache();
+  cache.put(cacheKey, JSON.stringify(schema))
   return schema;
 }
 function mapColumn(index, columnName, content) {
@@ -141,14 +153,15 @@ function getFileData(config) {
     datasetSlug,
     fileName
   ].join("--");
-  var fileContent = unZipCachedContent(key);
-  if ( fileContent === null) {
-    var response = kaggleFetch(url, kaggleAuth);
-    var fileContent = response.getContentText();
-    zipAndCacheContent(key, fileContent, cacheDuration);
-  }
+ 
+  var response = kaggleFetch(url, kaggleAuth);
+  var fileContent = response.getContentText();
   var csvData = Utilities.parseCsv(fileContent);
-  return csvData;
+  var result = {
+    csvData: csvData,
+    cacheKey: key
+  }
+  return result;
 }
 function kaggleFetch(url, kaggleAuth) {
   var fullUrl = "https://www.kaggle.com/api/v1/" + url;
@@ -161,29 +174,6 @@ function kaggleFetch(url, kaggleAuth) {
   };
   var response = UrlFetchApp.fetch(fullUrl, options);
   return response;
-}
-function compress(content) {
-  var textBlob = Utilities.newBlob(content);
-  var gzipBlob = Utilities.gzip(textBlob);
-  return gzipBlob;
-}
-function deCompress(blob) {
-  var uncompressedBlob = Utilities.ungzip(blob);
-  var content = uncompressedBlob.getDataAsString();
-  return content;
-}
-function zipAndCacheContent(key, content, duration) {
-  var gzipBlob = compress(content);
-  var cache = CacheService.getScriptCache();
-  cache.put(key, gzipBlob, cacheDuration);
-}
-function unZipCachedContent(key) {
-  var cache = CacheService.getScriptCache();
-  var gzipBlob = cache.get(key);
-  if (gzipBlob !== null) {
-    return deCompress(gzipBlob);
-  }
-  return null;
 }
 function isAuthValid() {
   var userProperties = PropertiesService.getUserProperties();
