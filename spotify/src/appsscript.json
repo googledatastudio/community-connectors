@@ -5,15 +5,11 @@
       "userSymbol": "OAuth2",
       "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
       "version": "26"
-    }, {
-      "userSymbol": "FirebaseApp",
-      "libraryId": "1hguuh4Zx72XVC1Zldm_vTtcUUKUA6iBUOoGnJUWLfqDWx5WlOJHqYkrt",
-      "version": "28"
     }]
   },
   "exceptionLogging": "STACKDRIVER",
   "dataStudio": {
-    "name": "Spotify artist search - From Codelab",
+    "name": "Spotify popular track search for an artist ",
     "logoUrl": "https://raw.githubusercontent.com/npm/logos/master/%22npm%22%20lockup/npm-logo-simplifed-with-white-space.png",
     "company": "Google Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
