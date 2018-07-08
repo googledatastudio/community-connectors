@@ -18,10 +18,8 @@ limitations under the License.
  * Handles fetching data from Firestore. 
  *
  * @constructor
- * @param {?string} email Optional service account email for auth.
- * @param {?string} key Optional private key for auth.
  */
-function Firestore(email, key) {
+function Firestore() {
   
   /** @const */
   this.PREDEFINED_FIELDS = [
@@ -45,6 +43,9 @@ function Firestore(email, key) {
   this.cache = CacheService.getScriptCache();
   
   this.authToken = null;
+  const userProperties = PropertiesService.getUserProperties();
+  const email = userProperties.getProperty('dscc.email');
+  const key = userProperties.getProperty('dscc.key');
   if (email && key) {
     this.authToken = this.getAuthToken(email, key);
   }
@@ -88,7 +89,7 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
         if (valueWrapper) {
           switch(field.dataType) {
             case 'STRING':
-              if (field.semantics && field.semantics.semanticGroup == 'DATE_AND_TIME') {
+              if (field.semantics && field.semantics.semanticGroup === 'DATE_AND_TIME') {
                 values.push(instance.parseTimestamp(valueWrapper.timestampValue)); 
               } else {
                 values.push(valueWrapper.stringValue);
@@ -141,7 +142,7 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
   
   const cached = this.cache.get(url);
   if (cached) {
-    return JSON.parse(cached); 
+    return JSON.parse(Utilities.unzip(cached).getDataAsString());
   }
   
   var documents = [];
@@ -151,7 +152,7 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
     if (response.documents && response.documents.length > 0) {
       Array.prototype.push.apply(documents, response.documents);
     }
-    if (response.nextPageToken && token != response.nextPageToken) {
+    if (response.nextPageToken) {
       token = response.nextPageToken;
     } else {
       break; 
@@ -159,7 +160,8 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
   }
   
   try {
-    this.cache.put(url, JSON.stringify(documents), this.CACHE_TTL); 
+    const zip = Utilities.zip(Utilities.newBlob(JSON.stringify(documents)));
+    this.cache.put(url, zip, this.CACHE_TTL); 
   } catch (e) {
     // Ignore. This usually means the data is too big to cache (which does make 
     // the cache less useful...).
