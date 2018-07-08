@@ -77,17 +77,16 @@ Connector.prototype.logAndExecute = function(functionName, parameter) {
  */
 Connector.prototype.getConfig = function(request) {
   const projects = this.cloud.listCloudProjects();
-  const options = [];
-  projects.forEach(function(project) {
-    options.push({
+  const options = projects.map(function(project) {
+    return {
       label: project.name + ' (' + project.projectId + ')',
       value: project.projectId
-    });
+    };
   });
   const optionsSorted = options.sort(function(x, y) {
     const xId = x.label.toLowerCase();
     const yId = y.label.toLowerCase();
-    return xId == yId ? 0 : (xId < yId ? -1 : 1);
+    return xId === yId ? 0 : (xId < yId ? -1 : 1);
   });
     
   return {
@@ -111,7 +110,7 @@ Connector.prototype.getConfig = function(request) {
         text: 'Firestore is a schema-less database. In order to use Firestore with Data Studio, \
                you must supply a set of fields in the collection you want to use. \
                Use the following format: <field_name1>:<type1>, where type is one of STRING, \
-               NUMBER, BOOLEAN, or TIMESTAMP'
+               NUMBER, BOOLEAN, or TIMESTAMP. Note: "name" is a reserved field.'
       },
       {
         name: 'schema',
@@ -132,18 +131,6 @@ Connector.prototype.getConfig = function(request) {
           {label: '10000', value: '10000'},
           {label: '100000', value: '100000'},
         ]        
-      },
-      {
-        name: 'authEmail',
-        type: 'TEXTINPUT',
-        displayName: 'Auth Email (optional)',
-        helpText: 'Optional field for specifying authentication email for Firestore.'
-      },
-      {
-        name: 'authKey',
-        type: 'TEXTINPUT',
-        displayName: 'Auth Private Key (optional)',
-        helpText: 'Optional field for specifying authentication key for Firestore.'
       }
     ]
   };
@@ -191,21 +178,13 @@ Connector.prototype.getData = function(request) {
   if (!numResultsValue) {
      numResultsValue = '1000';
   }
-  const numResults = parseInt(numResultsValue);
-  
-  const authEmail = request.configParams.authEmail;
-  
-  var authKey = request.configParams.authKey;
-  if (authKey) {
-    // Line breaks are escaped in user input
-    authKey = authKey.replace(/\\n/g, '\n');
-  }
+  const numResults = parseInt(numResultsValue, 10);
   
   // Prepare the schema for the fields requested.
   const requestedSchema = this.getFilteredSchema(request);
   
   // Fetch and filter the requested data from firestore
-  const firestore = new Firestore(authEmail, authKey);
+  const firestore = new Firestore();
   const data = firestore.getData(project, collection, requestedSchema, numResults);
   
   return {schema: requestedSchema, rows: data};
@@ -223,7 +202,7 @@ Connector.prototype.getFilteredSchema = function(request) {
   var requestedSchema = [];
   request.fields.forEach(function(field) {
     for (var i=0; i < schema.length; i++) {
-      if (schema[i].name == field.name) {
+      if (schema[i].name === field.name) {
         requestedSchema.push(schema[i]);
         break;
       }
@@ -242,7 +221,7 @@ Connector.prototype.getFilteredSchema = function(request) {
 Connector.prototype.parseSchemaCsv = function(configCsv) {
   const parsed = Utilities.parseCsv(configCsv, ':')
   
-  if (parsed.length == 0) {
+  if (parsed.length === 0) {
     throw 'Invalid schema: no schema supplied'; 
   }
 
@@ -255,7 +234,7 @@ Connector.prototype.parseSchemaCsv = function(configCsv) {
     const name = row[0].trim();
     const type = row[1].trim().toUpperCase();
     
-    if (name.length == 0) {
+    if (name.length === 0) {
       throw 'Invalid schema: empty name in row "' + row + '"'; 
     }
     
@@ -268,7 +247,7 @@ Connector.prototype.parseSchemaCsv = function(configCsv) {
       label: name,
       dataType: type
     };
-    if (type == 'TIMESTAMP') {
+    if (type === 'TIMESTAMP') {
       field.dataType = 'STRING';
       field.semantics = instance.TIMESTAMP_SEMANTICS
     }
@@ -283,6 +262,35 @@ Connector.prototype.parseSchemaCsv = function(configCsv) {
 /** Predefined Data Studio function for defining auth. */
 Connector.prototype.getAuthType = function() {
   return {
-    "type": "NONE"
+    "type": "USER_PASS"
+  };
+}
+
+/** Predefined Data Studio function for resetting auth creds. */
+Connector.prototype.resetAuth = function() {
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.deleteProperty('dscc.email');
+  userProperties.deleteProperty('dscc.key');
+}
+
+/** Predefined Data Studio function for validating auth creds. */
+Connector.prototype.isAuthValid = function() {
+  var userProperties = PropertiesService.getUserProperties();
+  var userName = userProperties.getProperty('dscc.email');
+  var password = userProperties.getProperty('dscc.key');
+  return (userName !== null && userName !== '') && (password !== null && password !== '');
+}
+
+/** Predefined Data Studio function for setting auth creds. */
+Connector.prototype.setCredentials = function(request) {
+  var creds = request.userPass;
+  var username = creds.username;
+  var password = creds.password.replace(/\\n/g, '\n');
+
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.setProperty('dscc.email', username);
+  userProperties.setProperty('dscc.key', password);
+  return {
+    errorCode: "NONE"
   };
 }
