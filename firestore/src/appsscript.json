@@ -1,0 +1,31 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "OAuth2",
+      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+      "version": "26"
+    }]
+  },
+  "dataStudio": {
+    "name": "Google Cloud Firestore",
+    "logoUrl": "http://i66.tinypic.com/2mevmeq.png",
+    "company": "Google",
+    "companyUrl": "https://firebase.google.com/products/firestore/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/firestore",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "Get arbitrary data from a single Google Cloud Firestore collection.",
+    "shortDescription": "Get arbitrary data from a single Google Cloud Firestore collection.",
+    "authType": ["NONE"],
+    "feeType": ["FREE"]
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/cloudplatformprojects.readonly"
+  ],
+  "urlFetchWhitelist": [
+    "https://firestore.googleapis.com/v1beta1/projects/",
+    "https://cloudresourcemanager.googleapis.com/v1beta1/projects",
+    "https://www.googleapis.com/oauth2/v4/token/"
+  ]
+}
