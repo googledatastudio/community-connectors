@@ -15,7 +15,7 @@ yourself.
 ## Examples and use cases covered in the connector
 
 - **Kaggle authentication required**  
-  This community connector requires third-party authentication. To use the Kaggle API, sign up for a Kaggle account [kaggle](https://www.kaggle.com). Then go to the 'Account' tab of your user profile (https://www.kaggle.com/{username}/account) and select 'Create API Token'. This will trigger the download of kaggle.json, a file containing your API credentials. 
+  This community connector requires third-party authentication. To use the Kaggle API, sign up for a [Kaggle] (https://www.kaggle.com) account. Then go to the 'Account' tab of your user profile (https://www.kaggle.com/{username}/account) and select 'Create API Token'. This will trigger the download of kaggle.json, a file containing your API credentials. 
 Note: The API key obtained should be used as the password for authentication. 
 - **Error handling and messaging**  
   Example of using [error handling methods and providing useful error messages
