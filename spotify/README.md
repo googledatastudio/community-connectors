@@ -1,5 +1,5 @@
-![Screenshot](./Spotify.png?raw=true "Screenshot")
 # Spotify Community Connector for Data Studio
+![Screenshot](./Spotify.png?raw=true "Screenshot")
 
 *This is not an official Google product*
 
