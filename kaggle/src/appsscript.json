@@ -1,0 +1,22 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "FirebaseApp",
+      "libraryId": "1hguuh4Zx72XVC1Zldm_vTtcUUKUA6iBUOoGnJUWLfqDWx5WlOJHqYkrt",
+      "version": "28"
+    }]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "dataStudio": {
+    "name": "Kaggle",
+    "logoUrl": "https://www.kaggle.com/content/v/43edd17f0e8c/kaggle/img/logos/kaggle-logo-transparent.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://developers.google.com/datastudio/",
+    "supportUrl": "https://developers.google.com/datastudio/",
+    "description": "Obtain datasets from Kaggle. Please use the API key as password while using the community connector.",
+    "sources": ["Kaggle"],
+    "privacyPolicyUrl": "www.google.com"
+  }
+}
