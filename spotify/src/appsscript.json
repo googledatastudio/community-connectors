@@ -9,8 +9,8 @@
   },
   "exceptionLogging": "STACKDRIVER",
   "dataStudio": {
-    "name": "Spotify popular track search for an artist ",
-    "logoUrl": "https://raw.githubusercontent.com/npm/logos/master/%22npm%22%20lockup/npm-logo-simplifed-with-white-space.png",
+    "name": "Spotify track popularity",
+    "logoUrl": "https://developer.spotify.com/assets/branding-guidelines/logo@2x.png",
     "company": "Google Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/spotify-artist-search",
