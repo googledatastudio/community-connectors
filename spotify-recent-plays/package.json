@@ -1,0 +1,27 @@
+{
+  "name": "spotify-gds-connector",
+  "version": "0.0.1",
+  "description": "A custom Google Data Studio Connector for showing stats about last played Spotify tracks",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "push": "cd src;clasp push;cd -",
+    "lint": "eslint ."
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/*.js"
+    ]
+  },
+  "author": "Jan Bajena",
+  "devDependencies": {
+    "@google/clasp": "^1.3.2",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "4.19.1",
+    "eslint-plugin-jest": "^21.17.0",
+    "jest": "^23.4.0"
+  }
+}
