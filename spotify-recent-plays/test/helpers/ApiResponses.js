@@ -3989,7 +3989,7 @@ const playsPage1 = {
     "before": "1531487208351"
   },
   "limit": 20,
-  "href": "https://api.spotify.com/v1/me/player/recently-played?before=1531526400000"
+  "href": "https://api.spotify.com/v1/me/player/recently-played?before=1531612799999"
 };
 
 const playsPage2 = {
@@ -10100,7 +10100,7 @@ const playsPage4 = {
 };
 
 const responses = {
-  'https://api.spotify.com/v1/me/player/recently-played?before=1531526400000': playsPage1,
+  'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': playsPage1,
   'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': playsPage2,
   'https://api.spotify.com/v1/me/player/recently-played?before=1531482414230': playsPage3,
   'https://api.spotify.com/v1/me/player/recently-played?before=1531480604805': playsPage4

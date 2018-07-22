@@ -13,11 +13,11 @@ beforeEach(() => {
 
 test('getRecentPlays', () => {
   const startDate = new Date('2018-07-13T00:00:00Z');
-  const endDate = new Date('2018-07-14T00:00:00Z');
+  const endDate = new Date('2018-07-14T23:59:59.999Z');
   let result = service.getRecentPlays(startDate, endDate);
   expect(result.length).toBe(50, 'it gets paginated data');
   const expectedApiCalls = {
-    'https://api.spotify.com/v1/me/player/recently-played?before=1531526400000': 1,
+    'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1,
     'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': 1,
     'https://api.spotify.com/v1/me/player/recently-played?before=1531482414230': 1
   };
@@ -33,11 +33,11 @@ test('getRecentPlays', () => {
 
 test('limiting the data', () => {
   const startDate = new Date('2018-07-13T12:22:37.186Z');
-  const endDate = new Date('2018-07-14T00:00:00Z');
+  const endDate = new Date('2018-07-14T23:59:59.999Z');
   let result = service.getRecentPlays(startDate, endDate);
   const expectedApiCalls = {
     'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': 1,
-    'https://api.spotify.com/v1/me/player/recently-played?before=1531526400000': 1
+    'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1
   };
   expect(urlFetchAppMock.calls).toEqual(expectedApiCalls, 'it calls proper endpoints');
   expect(result.length).toBe(31, 'it returns only data that fit into the time constraint');
@@ -49,7 +49,7 @@ test('handling cache.set errors', () => {
   };
 
   const startDate = new Date('2018-07-13T00:00:00Z');
-  const endDate = new Date('2018-07-14T00:00:00Z');
+  const endDate = new Date('2018-07-14T23:59:59.999Z');
   let result = service.getRecentPlays(startDate, endDate);
 
   expect(result.length).toBe(50, 'it works even when setting data to cache fails');

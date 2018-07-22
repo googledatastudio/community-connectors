@@ -31,7 +31,7 @@ function getSchema() {
 /* istanbul ignore next */
 // eslint-disable-next-line no-unused-vars
 function getData(request) {
-  console.log('REQUST:', request);
+  console.log('REQUEST:', request);
   return getConnector().getData(request);
 }
 

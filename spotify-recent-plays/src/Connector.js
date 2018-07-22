@@ -126,6 +126,7 @@ Connector.prototype.getData = function(request) {
 
   var startDate = new Date(request.dateRange.startDate);
   var endDate = new Date(request.dateRange.endDate);
+  endDate.setUTCHours(23, 59, 59, 999);
   var apiKey = this.getOAuthService().getAccessToken();
   var spotifyClient = new SpotifyClient(this.services.CacheService, this.services.UrlFetchApp, apiKey);
 
