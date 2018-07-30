@@ -25,7 +25,7 @@ var getOAuthService = function() {
   var scriptProps = PropertiesService.getScriptProperties();
   return OAuth2.createService("Spotify")
     .setAuthorizationBaseUrl(
-      "https://accounts.spotify.com/authorize?response_type=code"
+      "https://accounts.spotify.com/authorize"
     )
     .setTokenUrl("https://accounts.spotify.com/api/token")
     .setClientId(scriptProps.getProperty("OAUTH_CLIENT_ID"))
