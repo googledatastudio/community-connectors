@@ -48,4 +48,4 @@ You can deploy the connector yourself in your own project.
 [_cc logging]: https://developers.google.com/datastudio/connector/debug#apps_script_logging
 [_js namespace]: https://stackoverflow.com/questions/881515/how-do-i-declare-a-namespace-in-javascript
 [_sample extraction]: https://developers.google.com/datastudio/connector/reference#getdata
-[_latest deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbyNIbNwRwLwSAPttlVuXPogT4p-1zM_aNEPdliRfZ8H4NpPtr8D6VSg4m2hghLaKuMezw
+[_latest deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbwFrL1OLXR3wqfnxowGFF3w3D4eq-54vAwjxDWcWRjiZMxX7jhII_1Ddx6y76GDHrxIew
