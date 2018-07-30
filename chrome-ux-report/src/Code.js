@@ -7,17 +7,20 @@ crux.defaultUrl = "www.google.com";
 crux.lastDataUpdateFlag = "lastDataUpdate";
 
 // Apps Script cache duration in seconds
-crux.cacheDuration = 60 * 60;
+crux.secondsInMinute = 60;
+crux.minutesInHour = 60;
+crux.cacheDurationInHour = 1;
+crux.cacheDuration = crux.secondsInMinute * crux.minutesInHour * crux.cacheDurationInHour;
 
 // Exceptions for script properties that will not get flushed
-crux.exceptions = [
+crux.cacheFlushWhitelist = [
   "oauth2.bigQuery",
   "oauth2.firebase",
   "admins",
   "bigQuery.client",
-  "firebase.client"
+  "firebase.client",
+  crux.lastDataUpdateFlag
 ];
-crux.exceptions.push(crux.lastDataUpdateFlag);
 
 // Query used to pull data from BigQuery
 crux.queryString =
@@ -36,7 +39,7 @@ function getConfig(request) {
     },
     {
       type: "INFO",
-      name: "information2",
+      name: "information",
       text:
         "'https://' is added by default. If needed, add 'http://' at the URL beginning (e.g. http://example.com)"
     }
@@ -49,7 +52,7 @@ function getConfig(request) {
     customConfig.push({
       type: "TEXTINPUT",
       name: crux.lastDataUpdateFlag,
-      displayName: "ADMIN ONLY: Last data Update (YYYYMMDD)",
+      displayName: "ADMIN ONLY: Date when BigQuery dataset was updated last (YYYYMMDD)",
       placeholder: lastUpdate
     });
   }
@@ -229,11 +232,15 @@ function getSchema(request) {
  */
 function getDatasetUpdate(request) {
   var lastDataUpdate = propStore.get("script", crux.lastDataUpdateFlag);
-  var datasetUpdated =
-    request.configParams &&
-    request.configParams.lastDataUpdate &&
-    request.configParams.lastDataUpdate > lastDataUpdate;
-  if (datasetUpdated) {
+  var configLastDataUpdate = request.configParams &&
+    request.configParams.lastDataUpdate;
+  
+  var shouldUpdate = false;
+  if (configLastDataUpdate !== undefined) {
+    shouldUpdate = configLastDataUpdate > lastDataUpdate;
+  }
+
+  if (shouldUpdate) {
     lastDataUpdate = request.configParams.lastDataUpdate;
     updateDataUpdateFlag(lastDataUpdate);
   }
@@ -247,13 +254,13 @@ function getDatasetUpdate(request) {
 function flushCache() {
   var tempStorage = {};
 
-  crux.exceptions.forEach(function(property) {
+  crux.cacheFlushWhitelist.forEach(function(property) {
     tempStorage[property] = propStore.get("script", property);
   });
 
   propStore.flush("script");
 
-  crux.exceptions.forEach(function(property) {
+  crux.cacheFlushWhitelist.forEach(function(property) {
     tempStorage[property] = tempStorage[property] || "";
     propStore.set("script", property, tempStorage[property]);
   });
@@ -283,9 +290,12 @@ function updateDataUpdateFlag(newDataUpdate) {
  * @returns {string} The url for the endpoint.
  */
 function validateUrl(configParams) {
-  var url = configParams
-    ? configParams.url || crux.defaultUrl
-    : crux.defaultUrl;
+
+  var url = crux.defaultUrl;
+
+  if (configParams !== undefined && configParams.url !== undefined) {
+    url = configParams.url;
+  }
 
   // Remove '/' at the end
   var lastChar = url.substring(url.length - 1);
@@ -294,14 +304,12 @@ function validateUrl(configParams) {
   }
 
   // Add 'https://' at the beginning if needed
-  var notHttps = url.toLowerCase().substring(0, 8) !== "https://";
-  var notHttp = url.toLowerCase().substring(0, 7) !== "http://";
-  if (notHttps && notHttp) {
+  var urlHttps = url.toLowerCase().substring(0, 8) === "https://";
+  var urlHttp = url.toLowerCase().substring(0, 7) === "http://";
+  if (!urlHttps && !urlHttp) {
     url = "https://" + url;
   }
 
-  // TODO(mkazi): Additional checks to see if this is a valid URL.
-  //       This will prevent unnecessary BQ calls.
   return url;
 }
 

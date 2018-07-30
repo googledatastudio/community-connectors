@@ -50,7 +50,10 @@ function processFirebase(origin) {
 }
 
 /**
- * Generic method for handling the Firebase REST API.
+ * Generic method for handling the Firebase REST API. 
+ * For `get`: It returns the data at the given url.
+ * For `post`: It posts the data in in Firebase db at the given url and returns `undefined`.
+ * For `delete`: It deletes the data at the given url and returns `undefined`.
  *
  * @param {string} method Method for the REST API: `get`, `post`, or `delete`
  * @param {string} oAuthToken Token for the OAuth client
@@ -68,10 +71,14 @@ function fbCache(method, oAuthToken, url, originData) {
     contentType: "application/json"
   };
 
+  // Add payload for post method
   if (method === "post") {
     responseOptions["payload"] = JSON.stringify(originData);
   }
+
   var response = UrlFetchApp.fetch(url, responseOptions);
+
+  // Return value only for `get`.
   if (method === "get") {
     var responseObject = JSON.parse(response);
     // Firebase realtime db automatically adds a unique key.

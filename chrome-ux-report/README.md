@@ -20,7 +20,7 @@ Here's a quick diagram of this flow:
 
 1. To use this connector, you will need to create two service accounts in a Google Cloud Platfrom project. View the GCP guide on [Creating and Managing Service Accounts]. One service account should have [BigQuery] read and job creation role while the other one needs to have access to create and edit [Firebase Realtime Database].
 
-1. Use the [deployment guide] to deploy the Community Connector yourself.
+1. Follow the [deployment guide].
 
 1. Update the `init()` function in `utils.js` file to include the following values:
     - List of admin users
