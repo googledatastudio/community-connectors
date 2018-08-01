@@ -46,7 +46,11 @@ function getConfig(request) {
   ];
 
   // For admin users, show the additional option for changing the
-  // lastDataUpdate flag
+  // lastDataUpdate flag. This date indicates when the original dataset
+  // in BigQuery was last updated and is saved in script properties on update.
+  // While caching to Apps Script or Firebase, each Url's cache is tagged with
+  // this date. Later when cache is retrived, the tagged date is compared against
+  // the date in script properties to determine if cache should be reset.
   if (isAdminUser()) {
     var lastUpdate = propStore.get("script", crux.lastDataUpdateFlag);
     customConfig.push({
