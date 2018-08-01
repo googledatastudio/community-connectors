@@ -1,0 +1,24 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "OAuth2",
+      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+      "version": "26"
+    }]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "dataStudio": {
+    "name": "Chrome UX Report",
+    "logoUrl": "https://lh5.googleusercontent.com/GazzEcToApL8PV0IQqoSONB7U_fkJz29-OhtgebrhidQv8HKbNax8AMstela4zUahATC5O8YlKx1k3qiYHGjIKt2uuUrzonrd6NdS1Z02EiKutCYwvreBm8HetpmSG3dTQ\u003ds800",
+    "company": "The Chrome UX Report Team",
+    "companyUrl": "https://developers.google.com/web/tools/chrome-user-experience-report/",
+    "addonUrl": "https://developers.google.com/web/tools/chrome-user-experience-report/",
+    "supportUrl": "https://groups.google.com/a/chromium.org/forum/#!forum/chrome-ux-report",
+    "description": "Explore user experience stats about an origin in the Chrome UX Report",
+    "sources": ["CHROME_UX_REPORT"],
+    "templates": {
+      "default": "1NgXfqgA1a3kyG1qXCtRPV1zjU7MoPAJ7"
+    }
+  }
+}
