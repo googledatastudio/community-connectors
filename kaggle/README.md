@@ -12,14 +12,14 @@ the [Kaggle API][kaggle-api].
 
 Click [here][managed-deployment] to try the managed deployment.
 
-### Kaggle API token
+### Kaggle USER_PASS auth type
 1. Sign up for a [Kaggle][kaggle] account.
 1. Go to the 'Account' tab of your user profile
   (https://www.kaggle.com/{username}/account) and select 'Create API Token'. This will trigger the download of kaggle.json, a file containing your API credentials.
+1. The USER_PASS auth type requires username and password for authentication. The username and password for authentication can be found in the downloaded kaggle.json file. The username should be used as it is whereas the "key" should be used as password for authentication. 
 
 ## Examples and use cases covered in the connector
 
-- **Kaggle USER_PASS auth type** The USER_PASS auth type requires username and password for authentication. One can find the information regarding username and password in the downloaded kaggle.json file. The username should be used as it is whereas the "key" should be used as password for authentication. 
 - **Error handling and messaging** Example of using [error handling methods and
   providing useful error messages to users][error-handling].
 - **Using the USER_PASS auth type** Learn more about
