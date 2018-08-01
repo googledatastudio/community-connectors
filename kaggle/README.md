@@ -17,7 +17,7 @@ Click [here][managed-deployment] to try the managed deployment.
 1. Go to the 'Account' tab of your user profile
   (https://www.kaggle.com/{username}/account) and select 'Create API Token'. This will trigger the download of kaggle.json, a file containing your API credentials.
 
-   ** Note: Kaggle requires username and password for authentication which can be found in the downloaded kaggle.json file. The username should be used as it is whereas the "key" should be used as password for authentication.** 
+   **Note: Kaggle requires username and password for authentication which can be found in the downloaded kaggle.json file. The username should be used as it is whereas the "key" should be used as password for authentication.** 
 
 ## Examples and use cases covered in the connector
 
