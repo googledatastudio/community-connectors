@@ -113,7 +113,7 @@ Connector.prototype.getAuthType = function() {
  * @return {boolean}
  */
 Connector.prototype.isAdminUser = function() {
-  return true;
+  return false;
 };
 
 /**
