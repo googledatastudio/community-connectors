@@ -1,0 +1,10 @@
+{
+  "dataStudio": {
+    "name": "HeyzapConnector",
+    "company": "Tom Bogin",
+    "logoUrl": "http://www.heyzap.com/images/about/heyzap-logo-138x50.png",
+    "addonUrl": "https://developers.google.com/datastudio/connector/getstarted",
+    "supportUrl": "https://developers.google.com/datastudio/connector/faq",
+    "description": "This connector uses the heyzap api"
+  }
+}
