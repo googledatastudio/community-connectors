@@ -15,7 +15,7 @@
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/kaggle",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
     "description": "Obtain datasets from Kaggle. Please use the API key as password while using the community connector.",
-    "sources": ["Kaggle"],
+    "sources": ["KAGGLE"],
     "privacyPolicyUrl": "www.google.com"
   }
 }
