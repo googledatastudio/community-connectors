@@ -1,7 +1,6 @@
 # Chrome UX Report Community Connector for Data Studio
 
-<iframe width="600" height="398" src="https://datastudio.google.com/embed/reporting/1HbRIfTaEYwM6M-q9gHt-UNQRzrUh9fKA/page/cJUR" frameborder="0" style="border:0" allowfullscreen></iframe>
-
+![Screenshot of a dashboard using Chrome UX Report Community Connector][screenshot]
 *This is not an official Google product*
 
 This [Data Studio] [Community Connector] lets users query the [Chrome UX Dataset]

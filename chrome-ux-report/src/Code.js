@@ -344,6 +344,7 @@ function getOriginDataset(request) {
   var origin = {};
   origin.lastUpdate = getDatasetUpdate(request);
   origin.url = validateUrl(request.configParams);
+  origin.url = origin.url.toLowerCase();
   origin.key = digest(origin.url);
 
   // If an origin has not been previously cached, a dashboard might trigger
