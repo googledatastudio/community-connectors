@@ -1,4 +1,4 @@
-//NOTE: You can obtain a Google PAge Speed Insights API Key from here: https://developers.google.com/speed/docs/insights/v4/first-app
+//NOTE: You can obtain a Google Page Speed Insights API Key from here: https://developers.google.com/speed/docs/insights/v4/first-app
 function getAuthType() {
     return {
         "type": "KEY"
@@ -15,13 +15,6 @@ function isAuthValid() {
 function getConfig(request) {
     var config = {
         configParams: [
-            //TODO: Keep this in in case this is a simpler way to show apikey and give users ability to generate one
-            //      {
-            //        name: 'apiKey',
-            //        displayName: 'Api Key',
-            //        helpText: 'Enter the Api Key to use to access Page Speed. Get one from: https://developers.google.com/speed/docs/insights/v4/first-app',
-            //        placeholder: '1231232132131232'
-            //      },
             {
                 name: 'urlTotest',
                 displayName: 'Url to generate a Page Speed Insights Score',
@@ -84,7 +77,6 @@ function getData(request) {
         '&fields=ruleGroups'
     ];
     var url = urlparts.join('');
-    var response = UrlFetchApp.fetch(url);
     var response = UrlFetchApp.fetch(url);
     var parsedResponse = JSON.parse(response);
 
