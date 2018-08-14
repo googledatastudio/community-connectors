@@ -1,6 +1,6 @@
 // vim: ft=javascript:ts=2:sw=2
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -202,6 +202,11 @@ GoogleFit.prototype.getWeight = function(startTime, endTime) {
   );
 };
 
+/**
+ * Gets a dataset via the Google Fit API. If successful it returns a
+ * Users.dataSources.datasets resource.
+ * @see {@link https://developers.google.com/fit/rest/v1/reference/users/dataSources/datasets Users.dataSources.datasets Resource}
+ */
 GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   // TODO: Implement paging using pageToken
   //       See: https://developers.google.com/fit/rest/v1/reference/users/dataSources/datasets/get
@@ -209,6 +214,8 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   // The Google Fit API takes timestamps in nanoseconds so we must convert milliseconds
   // returned by Date.getTime() to nanoseconds.
   var nanoSecondsPerMillisecond = 1000000;
+
+  // The URL for the Google Fit REST API
   var uri =
     'https://www.googleapis.com/fitness/v1/users/me/dataSources/' +
     dataSource +
@@ -216,6 +223,7 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
     startTime.getTime() * nanoSecondsPerMillisecond +
     '-' +
     endTime.getTime() * nanoSecondsPerMillisecond;
+
   return JSON.parse(
     UrlFetchApp.fetch(uri, {
       headers: {

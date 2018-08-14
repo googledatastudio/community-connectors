@@ -18,8 +18,6 @@ limitations under the License.
 var connector = connector || {};
 connector.config = connector.config || {};
 
-var scriptProps = PropertiesService.getScriptProperties();
-
 /** @const */
 connector.logEnabled = true;
 
@@ -253,9 +251,9 @@ connector.getSchema = function(request) {
  * @property {string} semantics.conceptType - Indicates whether the field is a dimension or metric.
  * @property {boolean} semantics.isReaggregatable - true indicates that Aggregation can be applied to this field; In Data Studio Aggregation will be set to SUM by default and the user will be allowed to change the Aggregation.  false indicates Aggregation should not be applied to this field; In Data Studio Aggregation will be set to Auto by default and the user will not be able to change the Aggregation. Default value is true. Note: This property only affects metric fields.
  * @see {@link https://developers.google.com/datastudio/connector/reference#field|Field reference}
- *
+ */
 
- /**
+/**
  * A DataStudio data request object
  * @typedef {Object} Request
  * @property {Object} configParams - A JavaScript object containing the user provided values for the config parameters defined by the connector.
@@ -461,6 +459,13 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
 };
 
 /**
+ * An authentication type object.
+ * @typedef {Object} AuthType
+ * @property {string} type - One of "NONE" or "OAUTH2"
+ * @see {@link https://developers.google.com/datastudio/connector/reference#authtype|AuthType reference}
+ */
+
+/**
  * Used by DataStudio to get the authorization type used by this connector.
  *
  * @return {AuthType} an object representing the auth type.
@@ -471,6 +476,7 @@ connector.getAuthType = function() {
   };
   return response;
 };
+
 /**
  * Stringifies parameters and responses for a given function and logs them to
  * Stackdriver.
