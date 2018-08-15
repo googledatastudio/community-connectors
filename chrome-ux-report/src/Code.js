@@ -9,7 +9,7 @@ crux.lastDataUpdateFlag = "lastDataUpdate";
 // Apps Script cache duration in seconds
 crux.secondsInMinute = 60;
 crux.minutesInHour = 60;
-crux.cacheDurationInHour = 1;
+crux.cacheDurationInHour = 3;
 crux.cacheDuration = crux.secondsInMinute * crux.minutesInHour * crux.cacheDurationInHour;
 
 // Exceptions for script properties that will not get flushed
@@ -298,7 +298,7 @@ function flushCache() {
 function updateDataUpdateFlag(newDataUpdate) {
   if (isAdminUser()) {
     propStore.set("script", crux.lastDataUpdateFlag, newDataUpdate);
-    console.log("It seems entire BigQuery dataset has been updated");
+    console.log("BigQuery dataset was updated");
     flushCache();
   }
 }
