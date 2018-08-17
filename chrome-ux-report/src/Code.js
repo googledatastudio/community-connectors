@@ -9,7 +9,7 @@ crux.lastDataUpdateFlag = "lastDataUpdate";
 // Apps Script cache duration in seconds
 crux.secondsInMinute = 60;
 crux.minutesInHour = 60;
-crux.cacheDurationInHour = 1;
+crux.cacheDurationInHour = 3;
 crux.cacheDuration = crux.secondsInMinute * crux.minutesInHour * crux.cacheDurationInHour;
 
 // Exceptions for script properties that will not get flushed
@@ -46,7 +46,11 @@ function getConfig(request) {
   ];
 
   // For admin users, show the additional option for changing the
-  // lastDataUpdate flag
+  // lastDataUpdate flag. This date indicates when the original dataset
+  // in BigQuery was last updated and is saved in script properties on update.
+  // While caching to Apps Script or Firebase, each Url's cache is tagged with
+  // this date. Later when cache is retrived, the tagged date is compared against
+  // the date in script properties to determine if cache should be reset.
   if (isAdminUser()) {
     var lastUpdate = propStore.get("script", crux.lastDataUpdateFlag);
     customConfig.push({
@@ -65,6 +69,7 @@ crux.Schema = [
   {
     name: "yyyymm",
     label: "Release",
+    description: "Year and month of the release. Corresponds to the table names on BigQuery.",
     dataType: "STRING",
     semantics: {
       conceptType: "DIMENSION",
@@ -74,6 +79,7 @@ crux.Schema = [
   {
     name: "yyyymmdd",
     label: "yyyymmdd",
+    description: "Year, month, and day of the release where the day is always the first of the month. This is needed for the month-over-month comparisons.",
     dataType: "STRING",
     semantics: {
       conceptType: "DIMENSION",
@@ -83,6 +89,7 @@ crux.Schema = [
   {
     name: "origin",
     label: "origin",
+    description: "The URL of the website including protocol and optional subdomain, for example 'https://www.example.com'.",
     dataType: "STRING",
     semantics: {
       conceptType: "DIMENSION",
@@ -92,6 +99,7 @@ crux.Schema = [
   {
     name: "fast_fcp",
     label: "Fast",
+    description: "The percent of First Contentful Paint experiences < 1 second.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -103,6 +111,7 @@ crux.Schema = [
   {
     name: "avg_fcp",
     label: "Average",
+    description: "The percent of First Contentful Paint experiences >= 1 second and < 3 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -114,6 +123,7 @@ crux.Schema = [
   {
     name: "slow_fcp",
     label: "Slow",
+    description: "The percent of First Contentful Paint experiences >= 3 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -125,6 +135,7 @@ crux.Schema = [
   {
     name: "desktopDensity",
     label: "Desktop",
+    description: "The proportion of experiences on desktop devices.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -136,6 +147,7 @@ crux.Schema = [
   {
     name: "phoneDensity",
     label: "Phone",
+    description: "The proportion of experiences on phone devices.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -147,6 +159,7 @@ crux.Schema = [
   {
     name: "tabletDensity",
     label: "Tablet",
+    description: "The proportion of experiences on tablet devices.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -158,6 +171,7 @@ crux.Schema = [
   {
     name: "_4GDensity",
     label: "4G",
+    description: "The proportion of experiences on 4G-like connections.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -169,6 +183,7 @@ crux.Schema = [
   {
     name: "_3GDensity",
     label: "3G",
+    description: "The proportion of experiences on 3G-like connections.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -180,6 +195,7 @@ crux.Schema = [
   {
     name: "_2GDensity",
     label: "2G",
+    description: "The proportion of experiences on 2G-like connections.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -191,6 +207,7 @@ crux.Schema = [
   {
     name: "slow2GDensity",
     label: "Slow 2G",
+    description: "The proportion of experiences on Slow2G-like connections.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -202,6 +219,7 @@ crux.Schema = [
   {
     name: "offlineDensity",
     label: "Offline",
+    description: "The proportion of experiences on offline connections.",
     dataType: "NUMBER",
     defaultAggregationType: "MAX",
     semantics: {
@@ -278,9 +296,11 @@ function flushCache() {
  * @param {number} newDataUpdate The timestamp for last data update in YYYYMMDD format.
  */
 function updateDataUpdateFlag(newDataUpdate) {
-  propStore.set("script", crux.lastDataUpdateFlag, newDataUpdate);
-  console.log("It seems entire BigQuery dataset has been updated");
-  flushCache();
+  if (isAdminUser()) {
+    propStore.set("script", crux.lastDataUpdateFlag, newDataUpdate);
+    console.log("BigQuery dataset was updated");
+    flushCache();
+  }
 }
 
 /**
@@ -324,6 +344,7 @@ function getOriginDataset(request) {
   var origin = {};
   origin.lastUpdate = getDatasetUpdate(request);
   origin.url = validateUrl(request.configParams);
+  origin.url = origin.url.toLowerCase();
   origin.key = digest(origin.url);
 
   // If an origin has not been previously cached, a dashboard might trigger
