@@ -14,7 +14,7 @@
     "company": "Google Data Studio Developer Relations",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/kaggle",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
-    "description": "Obtain datasets from Kaggle. Please use the API key as password while using the community connector.",
+    "description": "Obtain datasets from Kaggle. Steps to get API key can be found in the kaggle documentation on API authentication (https://www.kaggle.com/docs/api#getting-started-installation-&-authentication). Please use the API key as password while using the community connector. As a limitation, we currently support only a single CSV dataset.",
     "sources": ["KAGGLE"],
     "privacyPolicyUrl": "www.google.com"
   }
