@@ -13,7 +13,7 @@
     "logoUrl": "https://developer.spotify.com/assets/branding-guidelines/logo@2x.png",
     "company": "Google Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/spotify-artist-search",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/spotify-recent-plays",
     "supportUrl": "https://github.com/google/datastudio/issues",
     "description": "This connector queries the most popular tracks for an artist through the Spotify API.",
     "shortDescription": "Query track popularity statistics by artist through Spotify.",
