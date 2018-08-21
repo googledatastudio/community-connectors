@@ -1,0 +1,16 @@
+{
+  "dataStudio": {
+    "name": "Webtrends",
+    "company": "appsscript.it",
+    "companyUrl": "http://www.appsscript.it",
+    "logoUrl": "http://www.appsscript.it/images/varie/icon-appsscript-it-40x40-001.png",
+    "addonUrl": "http://www.appsscript.it/articoli/data-studio-connector-webtrends-connettore-personalizzato/",
+    "supportUrl": "http://www.appsscript.it/articoli/data-studio-connector-webtrends-connettore-personalizzato/",
+    "description": "Webtrends connector for Google Data Studio. Enter the ID of your Webtrends Account and the ID of the Report you want to query and access your Webtrends data in Google Data Studio",
+    "shortDescription": "Access all of your Webtrends data in Google Data Studio.",
+    "authType": ["USER_PASS"]
+  },
+  "urlFetchWhitelist": [
+    "https://api.webtrends.io/"
+  ]
+}
