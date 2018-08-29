@@ -366,7 +366,7 @@ function getOriginDataset(request) {
       origin.data = getBqData(origin.url);
     } catch (e) {
       userLock.releaseLock();
-      throw new Error("Invalid origin: " + origin.url);
+      throw new Error("DS_USER: There are over 4 million origins in this dataset, but " + origin.url +  " is not one of them! Have you tried adding 'www' or 'http' to your origin? \n\n\n");
     }
   } else {
     var cachedData = scriptCache.get(origin.key);
