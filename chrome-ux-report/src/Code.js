@@ -24,7 +24,7 @@ crux.cacheFlushWhitelist = [
 
 // Query used to pull data from BigQuery
 crux.queryString =
-  "SELECT * FROM `chrome-ux-report.materialized.summary` WHERE origin = @url";
+  "SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url";
 
 function getConfig(request) {
   var customConfig = [
@@ -97,11 +97,47 @@ crux.Schema = [
     }
   },
   {
+    name: "fast_fp",
+    label: "Fast FP",
+    description: "The percent of First Paint experiences < 1 second.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "avg_fp",
+    label: "Average FP",
+    description: "The percent of First Paint experiences >= 1 second and < 3 seconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "slow_fp",
+    label: "Slow FP",
+    description: "The percent of First Paint experiences >= 3 seconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
     name: "fast_fcp",
-    label: "Fast",
+    label: "Fast FCP",
     description: "The percent of First Contentful Paint experiences < 1 second.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -110,10 +146,10 @@ crux.Schema = [
   },
   {
     name: "avg_fcp",
-    label: "Average",
+    label: "Average FCP",
     description: "The percent of First Contentful Paint experiences >= 1 second and < 3 seconds.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -122,10 +158,118 @@ crux.Schema = [
   },
   {
     name: "slow_fcp",
-    label: "Slow",
+    label: "Slow FCP",
     description: "The percent of First Contentful Paint experiences >= 3 seconds.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "fast_dcl",
+    label: "Fast DCL",
+    description: "The percent of DOM Content Loaded experiences < 1 second.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "avg_dcl",
+    label: "Average DCL",
+    description: "The percent of DOM Content Loaded experiences >= 1 second and < 3 seconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "slow_dcl",
+    label: "Slow DCL",
+    description: "The percent of DOM Content Loaded experiences >= 3 seconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "fast_ol",
+    label: "Fast OL",
+    description: "The percent of Onload experiences < 1 second.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "avg_ol",
+    label: "Average OL",
+    description: "The percent of Onload experiences >= 1 second and < 3 seconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "slow_ol",
+    label: "Slow OL",
+    description: "The percent of Onload experiences >= 3 seconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "fast_fid",
+    label: "Fast FID",
+    description: "The percent of First Input Delay experiences < 100 milliseconds.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "avg_fid",
+    label: "Average FID",
+    description: "The percent of First Input Delay experiences >= 100 milliseconds and < 1 second.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
+    semantics: {
+      conceptType: "METRIC",
+      semanticType: "PERCENT",
+      isReaggregatable: true
+    }
+  },
+  {
+    name: "slow_fid",
+    label: "Slow FID",
+    description: "The percent of First Input Delay experiences >= 1 second.",
+    dataType: "NUMBER",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -137,7 +281,7 @@ crux.Schema = [
     label: "Desktop",
     description: "The proportion of experiences on desktop devices.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -149,7 +293,7 @@ crux.Schema = [
     label: "Phone",
     description: "The proportion of experiences on phone devices.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -161,7 +305,7 @@ crux.Schema = [
     label: "Tablet",
     description: "The proportion of experiences on tablet devices.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -173,7 +317,7 @@ crux.Schema = [
     label: "4G",
     description: "The proportion of experiences on 4G-like connections.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -185,7 +329,7 @@ crux.Schema = [
     label: "3G",
     description: "The proportion of experiences on 3G-like connections.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -197,7 +341,7 @@ crux.Schema = [
     label: "2G",
     description: "The proportion of experiences on 2G-like connections.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -209,7 +353,7 @@ crux.Schema = [
     label: "Slow 2G",
     description: "The proportion of experiences on Slow2G-like connections.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
@@ -221,7 +365,7 @@ crux.Schema = [
     label: "Offline",
     description: "The proportion of experiences on offline connections.",
     dataType: "NUMBER",
-    defaultAggregationType: "MAX",
+    defaultAggregationType: "SUM",
     semantics: {
       conceptType: "METRIC",
       semanticType: "PERCENT",
