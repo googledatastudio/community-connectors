@@ -850,3 +850,16 @@ function get3PAuthorizationUrls() {
 function isAdminUser() {
   return false;
 }
+
+function test_stars() {
+  Logger.log(
+    getData({
+      fields: [{name: 'stars'}, {name: 'starred_at'}],
+      configParams: {
+        organization: 'googledatastudio',
+        repository: 'community-connectors',
+        combineConnectors__connectorSelection: 'stars',
+      },
+    })
+  );
+}
