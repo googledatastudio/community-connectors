@@ -683,6 +683,7 @@ var githubStarsConnector = applyGetSchema({
    * @return {array} Array of objects formatted for data studio use.
    */
   rowifyStarData: function rowifyStarData(stars, dataSchema) {
+    var that = this;
     return stars.map(function(starData) {
       var values = [];
       // Build a row that includes each schema field
@@ -691,7 +692,7 @@ var githubStarsConnector = applyGetSchema({
           case 'stars':
             return values.push(1);
           case 'starred_at':
-            return values.push(starData[this.STARRED_AT]);
+            return values.push(starData[that.STARRED_AT]);
           default:
             return values.push('');
         }
@@ -848,4 +849,17 @@ function get3PAuthorizationUrls() {
 
 function isAdminUser() {
   return false;
+}
+
+function test_stars() {
+  Logger.log(
+    getData({
+      fields: [{name: 'stars'}, {name: 'starred_at'}],
+      configParams: {
+        organization: 'googledatastudio',
+        repository: 'community-connectors',
+        combineConnectors__connectorSelection: 'stars',
+      },
+    })
+  );
 }
