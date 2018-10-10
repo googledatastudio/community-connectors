@@ -24,36 +24,6 @@ var connector = connector || {};
 /** @const */
 connector.defaultPackage = 'googleapis';
 
-
-/** @const */
-connector.schema = [
-  {
-    name: 'packageName',
-    label: 'Package',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION',
-    },
-  },
-  {
-    name: 'day',
-    label: 'Date',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION',
-    },
-  },
-  {
-    name: 'downloads',
-    label: 'Downloads',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: true,
-    },
-  },
-];
-
 /**
  * Returns the authentication method required by the connector to authorize the
  * third-party service.
@@ -75,20 +45,59 @@ function getConfig() {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
 
-  config.newInfo()
-      .setId('instructions')
-      .setText('Enter npm package names to fetch their download count. An invalid or blank entry will revert to the default value.');
+  config
+    .newInfo()
+    .setId('instructions')
+    .setText(
+      'Enter npm package names to fetch their download count. An invalid or blank entry will revert to the default value.'
+    );
 
-  config.newTextInput()
-      .setId('package')
-      .setName('Enter a single package name or multiple names separated by commas (no spaces!)')
-      .setHelpText('e.g. "googleapis" or "package,somepackage,anotherpackage"')
-      .setPlaceholder(connector.defaultPackage)
-      .setAllowOverride(true);
+  config
+    .newTextInput()
+    .setId('package')
+    .setName(
+      'Enter a single package name or multiple names separated by commas (no spaces!)'
+    )
+    .setHelpText('e.g. "googleapis" or "package,somepackage,anotherpackage"')
+    .setPlaceholder(connector.defaultPackage)
+    .setAllowOverride(true);
 
   config.setDateRangeRequired(true);
 
   return config.build();
+}
+
+/**
+ * Returns the fields for the connector.
+ *
+ * @returns {Object} The fields for the connector.
+ */
+function getFields() {
+  var cc = DataStudioApp.createCommunityConnector();
+  var fields = cc.getFields();
+  var types = cc.FieldType;
+  var aggregations = cc.AggregationType;
+
+  fields
+    .newDimension()
+    .setId('packageName')
+    .setName('Package')
+    .setType(types.TEXT);
+
+  fields
+    .newDimension()
+    .setId('day')
+    .setName('Date')
+    .setType(types.YEAR_MONTH_DAY);
+
+  fields
+    .newMetric()
+    .setId('downloads')
+    .setName('Downloads')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.SUM);
+
+  return fields;
 }
 
 /**
@@ -98,7 +107,8 @@ function getConfig() {
  * @returns {Object} Schema for the given request.
  */
 function getSchema(request) {
-  return {schema: connector.schema};
+  var fields = getFields().build();
+  return {schema: fields};
 }
 
 /**
@@ -110,13 +120,10 @@ function getSchema(request) {
 function getData(request) {
   request.configParams = connector.validateConfig(request.configParams);
 
-  var dataSchema = request.fields.map(function(field) {
-    for (var i = 0; i < connector.schema.length; i++) {
-      if (connector.schema[i].name == field.name) {
-        return connector.schema[i];
-      }
-    }
+  var requestedFieldIds = request.fields.map(function(field) {
+    return field.name;
   });
+  var requestedFields = getFields().forIds(requestedFieldIds);
 
   try {
     var apiResponse = connector.fetchDataFromApi(request);
@@ -131,13 +138,13 @@ function getData(request) {
   }
 
   try {
-    var data = connector.getFormattedData(parsedResponse, dataSchema);
+    var data = connector.getFormattedData(parsedResponse, requestedFields);
   } catch (e) {
     connector.throwError('Unable to process data in required format.', true);
   }
 
   return {
-    schema: dataSchema,
+    schema: requestedFields.build(),
     rows: data,
   };
 }
@@ -166,7 +173,7 @@ function isAdminUser() {
  * @returns {Array} Array containing rows of data in key-value pairs for each
  *     field.
  */
-connector.getFormattedData = function(parsedResponse, dataSchema) {
+connector.getFormattedData = function(parsedResponse, requestedFields) {
   var data = [];
   for (var packageName in parsedResponse) {
     if (
@@ -175,7 +182,11 @@ connector.getFormattedData = function(parsedResponse, dataSchema) {
     ) {
       var downloadData = parsedResponse[packageName].downloads;
       var formatted_data = downloadData.map(function(dailyDownload) {
-        return connector.formatData(dataSchema, packageName, dailyDownload);
+        return connector.formatData(
+          requestedFields,
+          packageName,
+          dailyDownload
+        );
       });
       data = data.concat(formatted_data);
     }
@@ -254,10 +265,10 @@ connector.parseData = function(request, responseString) {
  * @param {Object} dailyDownload Contains the download data for a certain day.
  * @returns {Object} Contains values for requested fields in predefined format.
  */
-connector.formatData = function(dataSchema, packageName, dailyDownload) {
+connector.formatData = function(requestedFields, packageName, dailyDownload) {
   var values = [];
-  dataSchema.forEach(function(field) {
-    switch (field.name) {
+  requestedFields.asArray().forEach(function(field) {
+    switch (field.getId()) {
       case 'day':
         values.push(dailyDownload.day.replace(/-/g, ''));
         break;
