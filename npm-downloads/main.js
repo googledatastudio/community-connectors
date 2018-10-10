@@ -24,23 +24,6 @@ var connector = connector || {};
 /** @const */
 connector.defaultPackage = 'googleapis';
 
-/** @const */
-connector.Config = [
-  {
-    type: 'INFO',
-    name: 'Unique1',
-    text:
-      'Enter npm package names to fetch their download count. An invalid or blank entry will revert to the default value.',
-  },
-  {
-    type: 'TEXTINPUT',
-    name: 'package',
-    displayName:
-      'Enter a single package name or multiple names separated by commas (no spaces!)',
-    helpText: 'e.g. "googleapis" or "package,somepackage,anotherpackage"',
-    placeholder: connector.defaultPackage,
-  },
-];
 
 /** @const */
 connector.schema = [
@@ -88,12 +71,24 @@ function getAuthType() {
  * @param {Object} request Config request parameters.
  * @returns {Object} Connector configuration to be displayed to the user.
  */
-function getConfig(request) {
-  var config = {
-    configParams: connector.Config,
-    dateRangeRequired: true,
-  };
-  return config;
+function getConfig() {
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+
+  config.newInfo()
+      .setId('instructions')
+      .setText('Enter npm package names to fetch their download count. An invalid or blank entry will revert to the default value.');
+
+  config.newTextInput()
+      .setId('package')
+      .setName('Enter a single package name or multiple names separated by commas (no spaces!)')
+      .setHelpText('e.g. "googleapis" or "package,somepackage,anotherpackage"')
+      .setPlaceholder(connector.defaultPackage)
+      .setAllowOverride(true);
+
+  config.setDateRangeRequired(true);
+
+  return config.build();
 }
 
 /**
