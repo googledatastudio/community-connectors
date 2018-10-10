@@ -163,13 +163,11 @@ function isAdminUser() {
 
 /**
  * Formats the parsed response from external data source into correct tabular
- * format and returns only the fields included in the original getData request
- * (that are defined dataSchema)
+ * format and returns only the requestedFields
  *
  * @param {Object} parsedResponse The response string from external data source
  *     parsed into an object in a standard format.
- * @param {Array} dataSchema List of schema for each field present in the getData
- *     request.
+ * @param {Array} requestedFields The fields requested in the getData request.
  * @returns {Array} Array containing rows of data in key-value pairs for each
  *     field.
  */
@@ -259,7 +257,7 @@ connector.parseData = function(request, responseString) {
 /**
  * Formats a single row of data into the required format.
  *
- * @param {Object} dataSchema Filtered schema containing fields in the request.
+ * @param {Object} requestedFields Fields requested in the getData request.
  * @param {string} packageName Name of the package who's download data is being
  *    processed.
  * @param {Object} dailyDownload Contains the download data for a certain day.
