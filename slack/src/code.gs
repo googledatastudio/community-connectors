@@ -154,13 +154,18 @@ function getData(request) {
   });
   var requestedFields = getFields().forIds(requestedFieldIds);
   
+  if (!request.configParams.count) {
+    request.configParams.count = 100; // assigning the default value
+  }
+  
+  
   var url = [
     'https://slack.com/api/channels.history?token=',
     request.configParams.token,
     '&channel=',
     request.configParams.channel,
     '&count=',
-    100,
+    request.configParams.count,
     '&inclusive=',
     request.configParams.inclusive,
     '&latest=',
