@@ -118,6 +118,12 @@ function getAllData(request, requestedFields) {
   var page = 1;
   var results = [];
   var moreResults = true;
+  var cacheKeyBase = requestedFields
+    .asArray()
+    .map(function(field) {
+      field.getId();
+    })
+    .join('--');
   while (moreResults) {
     queryParams['page'] = page;
     var formattedParams = formatQueryParams(queryParams);
@@ -126,17 +132,18 @@ function getAllData(request, requestedFields) {
       '/athlete/activities',
       formattedParams,
     ].join('');
+    var cacheKey = formattedParams + cacheKeyBase;
     page++;
 
     var rows;
-    var response = cache.get(formattedParams);
+    var response = cache.get(cacheKey);
     // cache.get returns null on cache miss.
     if (response === null) {
       response = JSON.parse(UrlFetchApp.fetch(url, options));
       rows = responseToRows(requestedFields, response);
-      cache.put(formattedParams, JSON.stringify(rows));
+      cache.put(cacheKey, JSON.stringify({value: rows}));
     } else {
-      rows = JSON.parse(response);
+      rows = JSON.parse(response).value;
     }
     if (rows.length === 0) {
       moreResults = false;
