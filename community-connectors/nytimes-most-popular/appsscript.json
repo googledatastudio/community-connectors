@@ -1,0 +1,10 @@
+{
+  "dataStudio": {
+    "name": "New York Times Most Popular Stories",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "The most viewed articles on NYTimes.com from the New York Times API."
+  }
+}
