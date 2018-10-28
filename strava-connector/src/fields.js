@@ -83,5 +83,28 @@ function getFields() {
     .setAggregation(aggregations.NO_AGGREGATION)
     .setDescription("The activity's max speed, in meters per second");
 
+  // formulas
+  fields
+    .newDimension()
+    .setId('mile_pace')
+    .setName('Mile Pace')
+    .setType(types.DURATION)
+    // There are 1609.34 meters in a mile.
+    .setFormula('$moving_time / $distance * 1609.34');
+
+  fields
+    .newDimension()
+    .setId('5k_pace')
+    .setName('5k Pace')
+    .setType(types.DURATION)
+    .setFormula('$moving_time / $distance * 5000');
+
+  fields
+    .newDimension()
+    .setId('10k_pace')
+    .setName('10k Pace')
+    .setType(types.DURATION)
+    .setFormula('$moving_time / $distance * 10000');
+
   return fields;
 }

@@ -63,7 +63,10 @@ function responseToRows(requestedFields, response) {
       switch (field.getId()) {
         case 'start_date_local':
           return row.push(parseTimestamp(activity[field.getId()]));
+        // force these fields to be a string.
         case 'id':
+        case 'elapsed_time':
+        case 'moving_time':
           return row.push('' + activity[field.getId()]);
         default:
           return row.push(activity[field.getId()]);
@@ -121,9 +124,9 @@ function getAllData(request, requestedFields) {
   var cacheKeyBase = requestedFields
     .asArray()
     .map(function(field) {
-      field.getId();
+      return field.getId();
     })
-    .join('--');
+    .join('|');
   while (moreResults) {
     queryParams['page'] = page;
     var formattedParams = formatQueryParams(queryParams);
