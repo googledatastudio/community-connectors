@@ -1,0 +1,11 @@
+{
+  "dataStudio": {
+    "name": "OpenWeatherMap 5-Day Forecast",
+    "logoUrl": "https://pbs.twimg.com/profile_images/464164067360247808/Co7ITB9q_400x400.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "Retrieves a 5-day weather forecast using the OpenWeatherMap API."
+  }
+}
