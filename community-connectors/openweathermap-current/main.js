@@ -1,180 +1,134 @@
 function getConfig(request) {
-  var config = {
-    configParams: [
-      {
-        type: 'TEXTINPUT',
-        name: 'apiKey',
-        displayName: 'API Key',
-        helpText: 'Enter your API key. You can signup for an OpenWeatherMap API key at https://openweathermap.org/appid',
-        placeholder: 'Enter API Key'
-      },
-      {
-        name: 'cityName',
-        displayName: 'City',
-        helpText: 'Enter the name of the city for which you would like to retrieve the current weather.',
-        placeholder: 'e.g. Toronto'
-      },
-      {
-        name: 'countryCode',
-        displayName: 'Country Code',
-        helpText: 'Enter the ISO 3166 two-letter country code for the city entered above (e.g. enter "US" for United States or "CA" for Canada).',
-        placeholder: 'e.g. CA'
-      },
-      {
-        name: 'utcOffset',
-        displayName: 'UTC Offset',
-        helpText: 'Enter the timezone offset (relative to UTC) for the city entered above',
-        placeholder: 'e.g. -5'
-      }
-    ]
-  };
-  return config;
+
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+
+  config
+    .newTextInput()
+    .setId('apiKey')
+    .setName('API Key')
+    .setHelpText('Enter your API key. You can signup for an OpenWeatherMap API key at https://openweathermap.org/appid')
+    .setPlaceholder('Enter API Key')
+
+  config
+    .newTextInput()
+    .setId('cityName')
+    .setName('City')
+    .setHelpText('Enter the name of the city for which you would like to retrieve the current weather.')
+    .setPlaceholder('e.g. Toronto')
+
+  config
+    .newTextInput()
+    .setId('countryCode')
+    .setName('Country Code')
+    .setHelpText('Enter the ISO 3166 two-letter country code for the city entered above (e.g. enter "US" for United States or "CA" for Canada).')
+    .setPlaceholder('e.g. CA')
+
+  config
+    .newTextInput()
+    .setId('utcOffset')
+    .setName('UTC Offset')
+    .setHelpText('Enter the timezone offset (relative to UTC) for the city entered above')
+    .setPlaceholder('e.g. -5')
+
+  return config.build();
+
 };
 
-var fixedSchema = [
+function getFields() {
+  var cc = DataStudioApp.createCommunityConnector();
+  var fields = cc.getFields();
+  var types = cc.FieldType;
+  var aggregations = cc.AggregationType;
 
-  {
-    name: 'coord.lon',
-    label: 'Longitude',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'coord.lat',
-    label: 'Latitude',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'dt',
-    label: 'Time updated',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'id',
-    label: 'City ID',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'name',
-    label: 'City Name',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'weather.main',
-    label: 'Weather Main',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'weather.description',
-    label: 'Weather Description',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'weather.icon',
-    label: 'Weather Icon',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'main.temp',
-    label: 'Temperature',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: false
-    }
-  },
-  {
-    name: 'main.pressure',
-    label: 'Pressure',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: false
-    }
-  },
-  {
-    name: 'main.humidity',
-    label: 'Humidity',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: false
-    }
-  },
-  {
-    name: 'wind.speed',
-    label: 'Wind Speed',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: false
-    }
-  },
-  {
-    name: 'wind.deg',
-    label: 'Wind Direction (degrees)',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: false
-    }
-  },
-  {
-    name: 'clouds.all',
-    label: 'Cloudiness',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: false
-    }
-  },
-  {
-    name: 'sys.country',
-    label: 'Country Code',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  }
-];
+  fields.newDimension()
+      .setId("coord.lon")
+      .setName("Longitude")
+      .setType(types.NUMBER);
+
+  fields.newDimension()
+      .setId("coord.lat")
+      .setName("Latitude")
+      .setType(types.NUMBER);
+
+  fields.newDimension()
+      .setId("dt")
+      .setName("Time updated")
+      .setType(types.TEXT);
+
+  fields.newDimension()
+      .setId("id")
+      .setName("City ID")
+      .setType(types.NUMBER);
+
+  fields.newDimension()
+      .setId("name")
+      .setName("City Name")
+      .setType(types.TEXT);
+
+  fields.newDimension()
+      .setId("weather.main")
+      .setName("Weather Main")
+      .setType(types.TEXT);
+
+  fields.newDimension()
+      .setId("weather.description")
+      .setName("Weather Description")
+      .setType(types.TEXT);
+
+  fields.newDimension()
+      .setId("weather.icon")
+      .setName("Weather Icon")
+      .setType(types.TEXT);
+
+  fields.newMetric()
+      .setId("main.temp")
+      .setName("Temperature")
+      .setType(types.NUMBER);
+
+  fields.newMetric()
+      .setId("main.pressure")
+      .setName("Pressure")
+      .setType(types.NUMBER);
+
+  fields.newMetric()
+      .setId("main.humidity")
+      .setName("Humidity")
+      .setType(types.NUMBER);
+
+  fields.newMetric()
+      .setId("wind.speed")
+      .setName("Wind Speed")
+      .setType(types.NUMBER);
+
+  fields.newMetric()
+      .setId("wind.deg")
+      .setName("Wind Direction (degrees)")
+      .setType(types.NUMBER);
+
+  fields.newMetric()
+      .setId("clouds.all")
+      .setName("Cloudiness")
+      .setType(types.NUMBER);
+
+  fields.newDimension()
+      .setId("sys.country")
+      .setName("Country Code")
+      .setType(types.TEXT);
+
+  return fields;
+};
 
 function getSchema(request) {
-  return {schema: fixedSchema};
-};
+  return {'schema': getFields().build()};
+}
 
 function getData(request) {
-  var dataSchema = [];
-  request.fields.forEach(function(field) {
-    for (var i = 0; i < fixedSchema.length; i++) {
-      if (fixedSchema[i].name === field.name) {
-        dataSchema.push(fixedSchema[i]);
-        break;
-      }
-    }
+
+  var requestedFieldIds = request.fields.map(function(field) {
+    return field.name;
   });
+  var requestedFields = getFields().forIds(requestedFieldIds);
 
   var url = [
     'http://api.openweathermap.org/data/2.5/weather?units=metric&appid=',
@@ -189,8 +143,8 @@ function getData(request) {
   var data = [];
 
   var values = [];
-  dataSchema.forEach(function(field) {
-    switch(field.name) {
+  requestedFields.asArray().forEach(function(field) {
+    switch(field.getId()) {
       case 'coord.lon':
         values.push(item.coord.lon);
         break;
@@ -250,7 +204,7 @@ function getData(request) {
 
 
   return {
-    schema: dataSchema,
+    schema: requestedFields.build(),
     rows: data
   };
 };
