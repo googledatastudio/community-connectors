@@ -5,13 +5,6 @@ function getConfig(request) {
 
   config
     .newTextInput()
-    .setId('apiKey')
-    .setName('API Key')
-    .setHelpText('Enter your API key. You can signup for an OpenWeatherMap API key at https://openweathermap.org/appid')
-    .setPlaceholder('Enter API Key')
-
-  config
-    .newTextInput()
     .setId('cityName')
     .setName('City')
     .setHelpText('Enter the name of the city for which you would like to retrieve the current weather.')
@@ -124,6 +117,8 @@ function getSchema(request) {
 }
 
 function getData(request) {
+  var userProperties = PropertiesService.getUserProperties();
+  var key = userProperties.getProperty('dscc.key');
 
   var requestedFieldIds = request.fields.map(function(field) {
     return field.name;
@@ -132,7 +127,7 @@ function getData(request) {
 
   var url = [
     'http://api.openweathermap.org/data/2.5/weather?units=metric&appid=',
-    request.configParams.apiKey,
+    key,
     '&q=',
     request.configParams.cityName,
     ',',
@@ -210,11 +205,39 @@ function getData(request) {
 };
 
 function getAuthType() {
-  var response = {
-    "type": "NONE"
+  return {
+    "type": "KEY"
   };
-  return response;
-};
+}
+
+function validateKey(key) {
+  var url = 'http://api.openweathermap.org/data/2.5/weather?units=metric&appid=' + key;
+  var response = JSON.parse(UrlFetchApp.fetch(url, {'muteHttpExceptions':true}));
+
+  return response.cod == '401' ? false : true;
+}
+
+function isAuthValid() {
+  var userProperties = PropertiesService.getUserProperties();
+  var key = userProperties.getProperty('dscc.key');
+
+  return validateKey(key);
+}
+
+function resetAuth() {
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.deleteProperty('dscc.key');
+}
+
+function setCredentials(request) {
+  var key = request.key;
+
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.setProperty('dscc.key', key);
+  return {
+    errorCode: "NONE"
+  };
+}
 
 function isAdminUser() {
   return false;
