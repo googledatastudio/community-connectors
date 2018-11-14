@@ -1,12 +1,15 @@
 {
   "dataStudio": {
     "name": "npm Downloads",
-    "logoUrl": "https://raw.githubusercontent.com/npm/logos/master/%22npm%22%20lockup/npm-logo-simplifed-with-white-space.png",
+    "logoUrl": "https://raw.githubusercontent.com/npm/logos/master/npm%20square/n-64.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/npm-downloads",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/npm-downloads#readme",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
     "description": "Get npm package download counts.",
-    "sources": ["npm"]
+    "sources": ["npm"],
+    "templates": {
+      "default": "1twu0sHjqR5dELAPyGJcw4GS3-D0_NTrQ"
+    }
   }
 }
