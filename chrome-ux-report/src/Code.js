@@ -580,3 +580,11 @@ function isAdminUser() {
   var response = admins.indexOf(userEmail) >= 0;
   return response;
 }
+
+// Return the deployment envirnment for the script. Use "staging" for admin users
+// and "prod" for others. This will be used to change the Firebase db path.
+crux.getEnvironment = function() {
+  var environment = isAdminUser() ? "staging": "prod";
+  return environment;
+}
+

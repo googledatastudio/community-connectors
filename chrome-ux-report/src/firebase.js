@@ -13,7 +13,8 @@ function buildFbUrl(projectId, fileName) {
     "https://",
     projectId,
     ".firebaseio.com/",
-    "origins",
+    crux.getEnvironment(),
+    "/origins",
     fileName,
     ".json"
   ];
