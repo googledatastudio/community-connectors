@@ -23,7 +23,7 @@ crux.cacheFlushWhitelist = [
 ];
 
 // Query used to pull data from BigQuery
-crux.queryString =
+crux.dataQueryString =
   "SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url";
 
 function getConfig(request) {

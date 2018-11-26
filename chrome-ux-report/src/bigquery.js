@@ -82,7 +82,7 @@ bqlocal.Jobs.getQueryResults = function(projectId, jobId) {
  */
 function getBqData(url) {
   var bqRequest = {
-    query: crux.queryString,
+    query: crux.dataQueryString,
     queryParameters: [
       {
         parameterType: {
