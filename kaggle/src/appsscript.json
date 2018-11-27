@@ -1,21 +1,13 @@
 {
   "timeZone": "America/Los_Angeles",
-  "dependencies": {
-    "libraries": [{
-      "userSymbol": "FirebaseApp",
-      "libraryId": "1hguuh4Zx72XVC1Zldm_vTtcUUKUA6iBUOoGnJUWLfqDWx5WlOJHqYkrt",
-      "version": "28"
-    }]
-  },
   "exceptionLogging": "STACKDRIVER",
   "dataStudio": {
     "name": "Kaggle",
-    "logoUrl": "https://www.kaggle.com/content/v/43edd17f0e8c/kaggle/img/logos/kaggle-logo-transparent.png",
+    "logoUrl": "https://www.kaggle.com/static/images/logos/kaggle-logo-transparent.png",
     "company": "Google Data Studio Developer Relations",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/kaggle",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
-    "description": "Obtain datasets from Kaggle. Steps to get API key can be found in the kaggle documentation on API authentication (https://www.kaggle.com/docs/api#getting-started-installation-&-authentication). Please use the API key as password while using the community connector. As a limitation, we currently support only a single CSV dataset.",
-    "sources": ["KAGGLE"],
-    "privacyPolicyUrl": "www.google.com"
+    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file of upto 20MB size for each data source. Add connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-&-authentication",
+    "sources": ["KAGGLE"]
   }
 }
