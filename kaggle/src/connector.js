@@ -12,7 +12,7 @@ connector.kaggleUrl = "https://www.kaggle.com";
 connector.apiBaseUrl = connector.kaggleUrl + "/api/v1/";
 connector.apiDownloadSlug = "datasets/download-raw/";
 connector.pingUrl = connector.apiBaseUrl + "competitions/list";
-connector.fileSizeLimitinBytes = 20971520;
+connector.fileSizeLimitInBytes = 20971520;
 
 function getAuthType() {
   return {
@@ -297,11 +297,8 @@ function isFileTypeSupported(filename) {
   var extension = filename.substring(length - extensionLength, length);
   extension = extension.toLowerCase();
 
-  if (extension === supportedExtension) {
-    var fileTypeIsSupported = true;
-  } else {
-    var fileTypeIsSupported = false;
-  }
+  var fileypeIsSupported = (extension === supportedExtension);
+
   return fileTypeIsSupported;
 }
 
@@ -335,7 +332,7 @@ function isFileSmall(config) {
     var file = fileList[fileIndex];
     var fileName = file.name;
     if (fileName === config.fileName) {
-      return (file.totalBytes < connector.fileSizeLimitinBytes);
+      return (file.totalBytes < connector.fileSizeLimitInBytes);
     }
   }
 }
