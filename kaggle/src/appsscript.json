@@ -7,7 +7,7 @@
     "company": "Google Data Studio Developer Relations",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/kaggle",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
-    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file of upto 20MB size for each data source. Add connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-&-authentication",
+    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file upto 20MB size for each data source. Add the connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-&-authentication",
     "sources": ["KAGGLE"]
   }
 }

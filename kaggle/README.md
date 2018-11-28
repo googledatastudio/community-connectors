@@ -26,7 +26,7 @@ Click [here][managed-deployment] to try the managed deployment.
 
 ## Limitations
 
-- Currently, only CSV files of upto 20MB size are supported.
+- Currently, only CSV files upto 20MB size are supported.
 
 [datastudio]: https://datastudio.google.com
 [community-connector]: https://developers.google.com/datastudio/connector
