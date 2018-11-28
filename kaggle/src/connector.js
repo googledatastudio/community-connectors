@@ -297,7 +297,7 @@ function isFileTypeSupported(filename) {
   var extension = filename.substring(length - extensionLength, length);
   extension = extension.toLowerCase();
 
-  var fileypeIsSupported = (extension === supportedExtension);
+  var fileTypeIsSupported = (extension === supportedExtension);
 
   return fileTypeIsSupported;
 }
