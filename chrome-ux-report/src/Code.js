@@ -1,5 +1,8 @@
 var crux = crux || {};
 
+// Whether this is the produciton script or staging script
+crux.isProdScript = true;
+
 // Default URL used for the connector
 crux.defaultUrl = "www.google.com";
 
@@ -615,7 +618,6 @@ function isAdminUser() {
 // Return the deployment envirnment for the script. Use "staging" for admin users
 // and "prod" for others. This will be used to change the Firebase db path.
 crux.getEnvironment = function() {
-  var environment = isAdminUser() ? "staging": "prod";
+  var environment = crux.isProdScript ? "prod": "staging";
   return environment;
 }
-
