@@ -26,6 +26,10 @@ crux.cacheFlushWhitelist = [
 crux.dataQueryString =
   "SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url";
 
+// Query used to validated URL from BigQuery
+crux.valudateQueryString =
+  "SELECT origin FROM `chrome-ux-report.materialized.origin_summary` WHERE origin = @url LIMIT 1";
+
 function getConfig(request) {
   var customConfig = [
     {
@@ -504,13 +508,18 @@ function getOriginDataset(request) {
 
   var scriptCache = CacheService.getScriptCache();
 
+  if (urlExistsInDb(origin.url) === false) {
+    userLock.releaseLock();
+    throw new Error("DS_USER: There are over 4 million origins in this dataset, but " + origin.url +  " is not one of them! Have you tried adding 'www' or 'http' to your origin? \n\n\n");
+  }
+
   if (bqIsFresh) {
     try {
       console.log("hitting BigQuery for " + origin.url);
       origin.data = getBqData(origin.url);
     } catch (e) {
       userLock.releaseLock();
-      throw new Error("DS_USER: There are over 4 million origins in this dataset, but " + origin.url +  " is not one of them! Have you tried adding 'www' or 'http' to your origin? \n\n\n");
+      throw new Error("DS_USER: Error retriving data from BigQuery for " + origin.url +  " \n\n\n");
     }
   } else {
     var cachedData = scriptCache.get(origin.key);
@@ -527,6 +536,28 @@ function getOriginDataset(request) {
   scriptCache.put(origin.key, JSON.stringify(origin.data), crux.cacheDuration);
   userLock.releaseLock();
   return origin.data;
+}
+
+function urlExistsInDb(url) {
+  var bqRequest = {
+    query: crux.valudateQueryString,
+    queryParameters: [
+      {
+        parameterType: {
+          type: "STRING"
+        },
+        parameterValue: {
+          value: url
+        },
+        name: "url"
+      }
+    ],
+    useLegacySql: false
+  };
+
+  var queryResults = getBigQueryResults(bqRequest);
+  var queryStatus =  (queryResults.data === []);
+  return queryStatus;
 }
 
 function getData(request) {
