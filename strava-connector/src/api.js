@@ -1,5 +1,8 @@
 var RESULTS_PER_PAGE = 200;
 
+
+var STRAVA_BASE_URL = 'https://www.strava.com/api/v3';
+
 function getAuthType() {
   return {
     type: 'OAUTH2',
@@ -131,7 +134,7 @@ function getAllData(request, requestedFields) {
     queryParams['page'] = page;
     var formattedParams = formatQueryParams(queryParams);
     var url = [
-      'https://www.strava.com/api/v3',
+      STRAVA_BASE_URL,
       '/athlete/activities',
       formattedParams,
     ].join('');
