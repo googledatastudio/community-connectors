@@ -11,18 +11,10 @@ This connector uses the [Strava API].
 
 To deploy this community connector:
 
-1. Add the OAUTH2 library to your script.
 1. Configure a Strava OAUTH2 Application.
 1. Follow common deployment steps for all connectors.
 
-### Add the OAUTH2 library to your Script
-
-1.  Follow setup as described in the [AppsScript OAUTH2 README]
-
-    **Note: Only complete the steps under the "Setup" heading. The rest will be
-    covered below.**
-
-### Configure Meetup OAUTH App
+### Configure the Strava OAUTH App
 
 1.  Create a [Strava API Application] 
 1.  Set the `Authorization Callback Domain` to `script.google.com`
