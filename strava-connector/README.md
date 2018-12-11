@@ -48,7 +48,6 @@ Use the [deployment guide] to deploy the Community Connector yourself.
 -   **Testing Your Connector** Example of how you can use simple Apps Script
     functions for testing behavior.
 
-[Data Studio]: 
 [Data Studio]: https://datastudio.google.com
 [Community Connector]: https://developers.google.com/datastudio/connector
 [Strava API]: https://developers.strava.com/docs/reference/#api-Activities-getLoggedInAthleteActivities
