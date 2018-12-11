@@ -108,7 +108,7 @@ function urlFetchOptions() {
  * Gets all activities from the api. Makes use of the CacheService to speed up
  * the average request.
  */
-function getAllData(request, requestedFields) {
+function getAllDataFromAPI(request, requestedFields) {
   var cache = CacheService.getUserCache();
   var queryParams = {};
 
@@ -167,6 +167,6 @@ function getData(request) {
   );
   return {
     schema: requestedFields.build(),
-    rows: getAllData(request, requestedFields),
+    rows: getAllDataFromAPI(request, requestedFields),
   };
 }
