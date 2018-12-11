@@ -1,6 +1,4 @@
 var RESULTS_PER_PAGE = 200;
-
-
 var STRAVA_BASE_URL = 'https://www.strava.com/api/v3';
 
 function getAuthType() {
