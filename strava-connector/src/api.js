@@ -12,10 +12,10 @@ function isAdminUser() {
 }
 
 function getConfig(request) {
-  var config = {
-    dateRangeRequired: true,
-  };
-  return config;
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+  config.setDateRangeRequired(true);
+  return config.build();
 }
 
 function getSchema(request) {
