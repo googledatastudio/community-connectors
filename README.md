@@ -43,6 +43,9 @@ developers:
       conclusions as you work.*
     - [try the data.world connector in Data
       Studio](https://datastudio.google.com/datasources/create?connectorId=AKfycbwGs5GlUrTE6y9x1cD80uTg005lDFj3BAYy0IFpmIGit2QnlcDrnreeLg)
+ - [SPARQL Connector](https://github.com/DataFabricRus/datastudio-sparql-connector)
+    - *The SPARQL connector for Google Data Studio allows users to pull data for their reports from sources implementing [SPARQL Protocol](https://www.w3.org/TR/sparql11-protocol/) using SPARQL SELECT queries. Example sources: [DBpedia](http://dbpedia.org/sparql), [Wikidata](https://query.wikidata.org/sparql) and [British Museum](https://collection.britishmuseum.org/sparql).*
+    - [try the SPARQL connector in Data Studio](https://datastudio.google.com/datasources/create?connectorId=AKfycbzDHEBN9qHXPni4xO4P2cIZtyQ3rnYmzkCnVsnh9oEJrnhGe4MntBF-t1zAu2Lm-Vjc)
 
 ### Submit your own open source Community Connector
 
