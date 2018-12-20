@@ -11,9 +11,9 @@
   "dataStudio": {
     "name": "Strava Activities",
     "logoUrl": "https://1n4rcn88bk4ziht713dla5ub-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/press-thumbnail-asset-logo-02.jpg",
-    "company": "Strava",
-    "companyUrl": "https://www.strava.com/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/strava-connector",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/strava-activities",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
     "description": "Get strava activity data.",
     "sources": ["strava"]
