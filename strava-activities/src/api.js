@@ -17,49 +17,6 @@ function getConfig(request) {
 
   config.setDateRangeRequired(true);
 
-  config
-    .newSelectMultiple()
-    .setId('paceFields')
-    .setName('Pace Fields')
-    .setHelpText('Pace fields you want available. Can leave blank for all')
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('All')
-        .setValue('all')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Mile')
-        .setValue('mile')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('5 Kilometer')
-        .setValue('5k')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('10 Kilometer')
-        .setValue('10k')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Half Marathon')
-        .setValue('half_marathon')
-    )
-
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Full Marathon')
-        .setValue('full_marathon')
-    );
-
   return config.build();
 }
 

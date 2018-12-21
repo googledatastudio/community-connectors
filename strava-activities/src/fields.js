@@ -36,6 +36,76 @@ function getFields(configParams) {
     .setDescription("The activity's distance, in meters.");
 
   fields
+    .newMetric()
+    .setId('distance_miles')
+    .setName('Distance (mi)')
+    .setType(types.NUMBER)
+    .setDescription("The activity's distance, in miles.")
+    .setFormula('$distance / 1609.34');
+
+  fields
+    .newMetric()
+    .setId('total_elevation_gain')
+    .setName('Total Elevation Gain (m)')
+    .setType(types.NUMBER)
+    .setDescription("The activity's total elevation gain, in meters.");
+
+  fields
+    .newMetric()
+    .setId('max_speed')
+    .setName('Max Speed (m/s)')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.NO_AGGREGATION)
+    .setDescription("The activity's max speed, in meters per second");
+
+  fields
+    .newMetric()
+    .setId('average_speed')
+    .setName('Average Speed (m/s)')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG)
+    .setFormula('$distance / CAST($moving_time AS NUMBER)')
+    .setDescription(
+      'The average speed across selected activities, in meters per second'
+    );
+
+  fields
+    .newMetric()
+    .setId('distance_feet')
+    .setName('Distance (feet)')
+    .setType(types.NUMBER)
+    .setDescription("The activity's distance, in feet.")
+    .setFormula('$distance * 3.28084');
+
+  fields
+    .newMetric()
+    .setId('total_elevation_gain_feet')
+    .setName('Total Elevation Gain (feet)')
+    .setType(types.NUMBER)
+    .setDescription("The activity's total elevation gain, in feet.")
+    .setFormula('$total_elevation_gain * 3.28084');
+
+  fields
+    .newMetric()
+    .setId('max_speed_mph')
+    .setName('Max Speed (mph)')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.NO_AGGREGATION)
+    .setDescription("The activity's max speed, in miles per hour")
+    .setFormula('$max_speed * 2.23694');
+
+  fields
+    .newMetric()
+    .setId('average_speed_mph')
+    .setName('Average Speed (mph)')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG)
+    .setFormula('$distance / CAST($moving_time AS NUMBER) * 2.23694')
+    .setDescription(
+      'The average speed across selected activities, in miles per hour'
+    );
+
+  fields
     .newDimension()
     .setId('moving_time')
     .setName('Moving Time')
@@ -48,13 +118,6 @@ function getFields(configParams) {
     .setName('Elapsed Time')
     .setType(types.DURATION)
     .setDescription("The activity's elapsed time, in seconds");
-
-  fields
-    .newMetric()
-    .setId('total_elevation_gain')
-    .setName('Total Elevation Gain')
-    .setType(types.NUMBER)
-    .setDescription("The activity's total elevation gain.");
 
   fields
     .newDimension()
@@ -71,81 +134,45 @@ function getFields(configParams) {
     .setDescription('Whether this activity is a commute');
 
   fields
-    .newMetric()
-    .setId('max_speed')
-    .setName('Max Speed (m/s)')
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.NO_AGGREGATION)
-    .setDescription("The activity's max speed, in meters per second");
+    .newDimension()
+    .setId('mile_pace')
+    .setName('Mile Pace')
+    .setType(types.DURATION)
+    // There are 1609.34 meters in a mile.
+    .setFormula('CAST($moving_time AS NUMBER) / $distance * 1609.34')
+    .setDescription('1 mile pace.');
 
-  // formulas
   fields
-    .newMetric()
-    .setId('average_speed_meters_second')
-    .setName('Average Speed (m/s)')
-    .setType(types.NUMBER)
-    .setAggregation(aggregations.AVG)
-    .setFormula('$distance / CAST($moving_time AS NUMBER)')
-    .setDescription(
-      'The average speed across selected activities, in meters per second'
-    );
+    .newDimension()
+    .setId('5k_pace')
+    .setName('5k Pace')
+    .setType(types.DURATION)
+    .setFormula('CAST($moving_time AS NUMBER) / $distance * 5000')
+    .setDescription('5 kilometer pace.');
 
-  if (!configParams.paceFields || configParams.paceFields.match(/all|mile/)) {
-    fields
-      .newDimension()
-      .setId('mile_pace')
-      .setName('Mile Pace')
-      .setType(types.DURATION)
-      // There are 1609.34 meters in a mile.
-      .setFormula('CAST($moving_time AS NUMBER) / $distance * 1609.34')
-      .setDescription('1 mile pace.');
-  }
+  fields
+    .newDimension()
+    .setId('10k_pace')
+    .setName('10k Pace')
+    .setType(types.DURATION)
+    .setFormula('CAST($moving_time AS NUMBER) / $distance * 10000')
+    .setDescription('10 kilometer pace.');
 
-  if (!configParams.paceFields || configParams.paceFields.match(/all|5k/)) {
-    fields
-      .newDimension()
-      .setId('5k_pace')
-      .setName('5k Pace')
-      .setType(types.DURATION)
-      .setFormula('CAST($moving_time AS NUMBER) / $distance * 5000')
-      .setDescription('5 kilometer pace.');
-  }
+  fields
+    .newDimension()
+    .setId('half_marathon_pace')
+    .setName('Half Marathon Pace')
+    .setType(types.DURATION)
+    .setFormula('CAST($moving_time AS NUMBER) / $distance * 21097.5')
+    .setDescription('half marathon pace.');
 
-  if (!configParams.paceFields || configParams.paceFields.match(/all|10k/)) {
-    fields
-      .newDimension()
-      .setId('10k_pace')
-      .setName('10k Pace')
-      .setType(types.DURATION)
-      .setFormula('CAST($moving_time AS NUMBER) / $distance * 10000')
-      .setDescription('10 kilometer pace.');
-  }
-
-  if (
-    !configParams.paceFields ||
-    configParams.paceFields.match(/all|half_marathon/)
-  ) {
-    fields
-      .newDimension()
-      .setId('half_marathon_pace')
-      .setName('Half Marathon Pace')
-      .setType(types.DURATION)
-      .setFormula('CAST($moving_time AS NUMBER) / $distance * 21097.5')
-      .setDescription('half marathon pace.');
-  }
-
-  if (
-    !configParams.paceFields ||
-    configParams.paceFields.match(/all|full_marathon/)
-  ) {
-    fields
-      .newDimension()
-      .setId('marathon_pace')
-      .setName('Marathon Pace')
-      .setType(types.DURATION)
-      .setFormula('CAST($moving_time AS NUMBER) / $distance * 42195')
-      .setDescription('marathon pace');
-  }
+  fields
+    .newDimension()
+    .setId('marathon_pace')
+    .setName('Marathon Pace')
+    .setType(types.DURATION)
+    .setFormula('CAST($moving_time AS NUMBER) / $distance * 42195')
+    .setDescription('marathon pace');
 
   fields
     .newDimension()
