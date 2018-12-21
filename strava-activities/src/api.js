@@ -8,18 +8,63 @@ function getAuthType() {
 }
 
 function isAdminUser() {
-  return false;
+  return true;
 }
 
 function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
+
   config.setDateRangeRequired(true);
+
+  config
+    .newSelectMultiple()
+    .setId('paceFields')
+    .setName('Pace Fields')
+    .setHelpText('Pace fields you want available. Can leave blank for all')
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('All')
+        .setValue('all')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Mile')
+        .setValue('mile')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('5 Kilometer')
+        .setValue('5k')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('10 Kilometer')
+        .setValue('10k')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Half Marathon')
+        .setValue('half_marathon')
+    )
+
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Full Marathon')
+        .setValue('full_marathon')
+    );
+
   return config.build();
 }
 
 function getSchema(request) {
-  var fields = getFields().build();
+  var fields = getFields(request.configParams).build();
   return {schema: fields};
 }
 
@@ -131,11 +176,9 @@ function getAllDataFromAPI(request, requestedFields) {
   while (moreResults) {
     queryParams['page'] = page;
     var formattedParams = formatQueryParams(queryParams);
-    var url = [
-      STRAVA_BASE_URL,
-      '/athlete/activities',
-      formattedParams,
-    ].join('');
+    var url = [STRAVA_BASE_URL, '/athlete/activities', formattedParams].join(
+      ''
+    );
     var cacheKey = formattedParams + cacheKeyBase;
     page++;
 
