@@ -201,7 +201,18 @@ function getAllDataFromAPI(request, requestedFields) {
       cacheValue = JSON.stringify({value: filteredResponse});
       cache.put(cacheKey, cacheValue);
     }
-    var rows = responseToRows(requestedFields, JSON.parse(cacheValue).value);
+    var rows = responseToRows(
+      requestedFields,
+      JSON.parse(cacheValue).value.filter(function(activity) {
+        if (request.configParams.activityType) {
+          return activity['type'].match(
+            new RegExp(request.configParams.activityType)
+          );
+        } else {
+          return true;
+        }
+      })
+    );
     if (rows.length === 0) {
       moreResults = false;
     }
