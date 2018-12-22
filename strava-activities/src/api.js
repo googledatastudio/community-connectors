@@ -55,6 +55,10 @@ function parseTimestamp(timestamp) {
   return ymdh;
 }
 
+function parseLatLong(latLng) {
+  return latLng ? latLng.join(',') : null;
+}
+
 /**
  * Takes the requested fields and the API response, and return rows formatted
  * for Data Studio.
@@ -64,6 +68,8 @@ function responseToRows(requestedFields, response) {
     var row = [];
     requestedFields.asArray().forEach(function(field) {
       switch (field.getId()) {
+        case 'start_latlng':
+          return row.push(parseLatLong(activity[field.getId()]));
         case 'start_date_local':
           return row.push(parseTimestamp(activity[field.getId()]));
         // force these fields to be a string.
@@ -104,6 +110,19 @@ function urlFetchOptions() {
   };
 }
 
+function hashString(str) {
+  var hash = 0,
+    i,
+    chr;
+  if (str === 0) return hash;
+  for (i = 0; i < str.length; i++) {
+    chr = str.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
 /**
  * Gets all activities from the api. Makes use of the CacheService to speed up
  * the average request.
@@ -137,6 +156,7 @@ function getAllDataFromAPI(request, requestedFields) {
       ''
     );
     var cacheKey = formattedParams + cacheKeyBase;
+    cacheKey = hashString(cacheKey);
     page++;
 
     var rows;

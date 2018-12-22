@@ -9,6 +9,13 @@ function getFields(configParams) {
 
   fields
     .newDimension()
+    .setId('start_latlng')
+    .setName('Start Location')
+    .setType(types.LATITUDE_LONGITUDE)
+    .setDescription('The starting latitude and longitude');
+
+  fields
+    .newDimension()
     .setId('id')
     .setName('Activity ID')
     .setType(types.TEXT)
@@ -176,36 +183,34 @@ function getFields(configParams) {
 
   fields
     .newDimension()
-    .setId('closest_race_type')
-    .setName('Closest Race Type')
+    .setId('race_type')
+    .setName('Race Type')
     .setType(types.TEXT)
-    .setDescription('Closest race type for distance.')
+    .setDescription('Type of race. Determined by distance.')
     .setFormula(
       "CASE\
-  WHEN $distance > 1550  AND $distance < 1650 THEN '1 Mile'\
-  WHEN $distance > 4950  AND $distance < 5050 THEN '5k'\
-  WHEN $distance > 9950  AND $distance < 1050 THEN '10k'\
-  WHEN $distance > 21000 AND $distance < 21200 THEN 'Half Marathon'\
-  WHEN $distance > 42000 AND $distance < 42400 THEN 'Full Marathon'\
-  ELSE 'No close race type'\
+  WHEN $distance >=  1609 AND $distance <  1700 THEN '1 Mile'\
+  WHEN $distance >=  5000 AND $distance <  5100 THEN '5k'\
+  WHEN $distance >= 10000 AND $distance < 11000 THEN '10k'\
+  WHEN $distance >= 21097 AND $distance < 21200 THEN 'Half Marathon'\
+  WHEN $distance >= 42195 AND $distance < 42300 THEN 'Full Marathon'\
+  ELSE 'Other'\
 END\
 "
     );
 
   fields
     .newDimension()
-    .setId('distance_group')
-    .setName('Distance Group')
+    .setId('distance_bucket')
+    .setName('Distance Bucket')
     .setType(types.TEXT)
     .setDescription('Distance grouped in 2 kilometer buckets.')
     .setFormula(
       "CASE\
-  WHEN $distance < 2000 THEN '0-2k'\
-  WHEN $distance >= 2000 AND $distance < 4000 then '2-4k'\
-  WHEN $distance >= 4000 AND $distance < 6000 THEN '4-6k'\
-  when $distance >= 6000 and $distance < 8000 then '6-8k'\
-  WHEN $distance >= 8000 and $distance < 10000 then '8-10k'\
-  when $distance >= 10000 THEN '10k+'\
+  WHEN $distance <  2000                       THEN '<2k'\
+  WHEN $distance >= 2000 AND $distance <  7000 THEN '2-7k'\
+  WHEN $distance >= 7000 AND $distance < 12000 THEN '7-12k'\
+  WHEN $distance >= 12000                      THEN '12k+'\
 END\
 "
     );
