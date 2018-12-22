@@ -15,6 +15,27 @@ function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
 
+  config
+    .newSelectSingle()
+    .setId('activityType')
+    .setName('Activity Type')
+    .setHelpText(
+      'The type of activity to include. Leave blank for all activities'
+    )
+    .setAllowOverride(true)
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Ride')
+        .setValue('Ride')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Run')
+        .setValue('Run')
+    );
+
   config.setDateRangeRequired(true);
 
   return config.build();
@@ -63,12 +84,13 @@ function parseLatLong(latLng) {
  * Takes the requested fields and the API response, and return rows formatted
  * for Data Studio.
  */
-function responseToRows(requestedFields, response) {
+function responseToRows(requestedFields, response, configParams) {
   return response.map(function(activity) {
     var row = [];
     requestedFields.asArray().forEach(function(field) {
       switch (field.getId()) {
         case 'start_latlng':
+        case 'end_latlng':
           return row.push(parseLatLong(activity[field.getId()]));
         case 'start_date_local':
           return row.push(parseTimestamp(activity[field.getId()]));
@@ -160,11 +182,16 @@ function getAllDataFromAPI(request, requestedFields) {
     page++;
 
     var rows;
+    Logger.log(cacheKey);
     var response = cache.get(cacheKey);
     // cache.get returns null on cache miss.
     if (response === null) {
       response = JSON.parse(UrlFetchApp.fetch(url, options));
-      rows = responseToRows(requestedFields, response);
+      rows = responseToRows(
+        requestedFields,
+        response,
+        request.configParams || {}
+      );
       cache.put(cacheKey, JSON.stringify({value: rows}));
     } else {
       rows = JSON.parse(response).value;

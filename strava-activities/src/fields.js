@@ -10,9 +10,37 @@ function getFields(configParams) {
   fields
     .newDimension()
     .setId('start_latlng')
-    .setName('Start Location')
+    .setName('Starting Location')
     .setType(types.LATITUDE_LONGITUDE)
     .setDescription('The starting latitude and longitude');
+
+  fields
+    .newDimension()
+    .setId('end_latlng')
+    .setName('Ending Location')
+    .setType(types.LATITUDE_LONGITUDE)
+    .setDescription('The ending latitude and longitude');
+
+  fields
+    .newDimension()
+    .setId('location_country')
+    .setName('Country')
+    .setType(types.COUNTRY)
+    .setDescription('The country the activity took place in.');
+
+  fields
+    .newMetric()
+    .setId('average_cadence')
+    .setName('Average Cadence')
+    .setType(types.NUMBER)
+    .setDescription('The average cadence during the activity.');
+
+  fields
+    .newMetric()
+    .setId('average_temp')
+    .setName('Average Temperature')
+    .setType(types.NUMBER)
+    .setDescription('The average temperature during the activity.');
 
   fields
     .newDimension()
