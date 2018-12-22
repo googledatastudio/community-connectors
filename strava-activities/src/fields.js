@@ -1,11 +1,10 @@
-function getFields(configParams) {
+function getFields() {
   // TODO(mjhamrick) - use config params to ask if the user wants meters, miles, or both for their schema fields.
 
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
-  configParams = configParams || {};
 
   fields
     .newDimension()

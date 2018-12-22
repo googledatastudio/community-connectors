@@ -42,7 +42,7 @@ function getConfig(request) {
 }
 
 function getSchema(request) {
-  var fields = getFields(request.configParams).build();
+  var fields = getFields().build();
   return {schema: fields};
 }
 
@@ -84,7 +84,7 @@ function parseLatLong(latLng) {
  * Takes the requested fields and the API response, and return rows formatted
  * for Data Studio.
  */
-function responseToRows(requestedFields, response, configParams) {
+function responseToRows(requestedFields, response) {
   return response.map(function(activity) {
     var row = [];
     requestedFields.asArray().forEach(function(field) {
@@ -153,6 +153,12 @@ function getAllDataFromAPI(request, requestedFields) {
   var cache = CacheService.getUserCache();
   var queryParams = {};
 
+  var keysToKeep = getFields()
+    .asArray()
+    .map(function(field) {
+      return field.getId();
+    });
+
   queryParams['per_page'] = RESULTS_PER_PAGE;
   if (request.dateRange) {
     queryParams['before'] =
@@ -181,21 +187,21 @@ function getAllDataFromAPI(request, requestedFields) {
     cacheKey = hashString(cacheKey);
     page++;
 
-    var rows;
-    Logger.log(cacheKey);
-    var response = cache.get(cacheKey);
+    var cacheValue = cache.get(cacheKey);
     // cache.get returns null on cache miss.
-    if (response === null) {
-      response = JSON.parse(UrlFetchApp.fetch(url, options));
-      rows = responseToRows(
-        requestedFields,
-        response,
-        request.configParams || {}
-      );
-      cache.put(cacheKey, JSON.stringify({value: rows}));
-    } else {
-      rows = JSON.parse(response).value;
+    if (cacheValue == null) {
+      var apiResponse = JSON.parse(UrlFetchApp.fetch(url, options));
+      var filteredResponse = apiResponse.map(function(activity) {
+        var filteredActivity = keysToKeep.reduce(function(obj, key) {
+          obj[key] = activity[key];
+          return obj;
+        }, {});
+        return filteredActivity;
+      });
+      cacheValue = JSON.stringify({value: filteredResponse});
+      cache.put(cacheKey, cacheValue);
     }
+    var rows = responseToRows(requestedFields, JSON.parse(cacheValue).value);
     if (rows.length === 0) {
       moreResults = false;
     }
