@@ -24,6 +24,11 @@ function getConfig(request) {
     )
     .setAllowOverride(true)
     .addOption(
+      config.newOptionBuilder()
+        .setLabel('All')
+        .setValue('All')
+    )
+    .addOption(
       config
         .newOptionBuilder()
         .setLabel('Ride')
@@ -150,6 +155,7 @@ function hashString(str) {
  * the average request.
  */
 function getAllDataFromAPI(request, requestedFields) {
+  var configParams = request.configParams || {};
   var cache = CacheService.getUserCache();
   var queryParams = {};
 
@@ -204,7 +210,7 @@ function getAllDataFromAPI(request, requestedFields) {
     var rows = responseToRows(
       requestedFields,
       JSON.parse(cacheValue).value.filter(function(activity) {
-        if (request.configParams.activityType) {
+        if (configParams.activityType && configParams.activityType != 'All') {
           return activity['type'].match(
             new RegExp(request.configParams.activityType)
           );
