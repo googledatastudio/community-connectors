@@ -9,14 +9,14 @@ function getFields() {
   fields
     .newDimension()
     .setId('start_latlng')
-    .setName('Starting Location')
+    .setName('Start Location')
     .setType(types.LATITUDE_LONGITUDE)
     .setDescription('The starting latitude and longitude');
 
   fields
     .newDimension()
     .setId('end_latlng')
-    .setName('Ending Location')
+    .setName('End Location')
     .setType(types.LATITUDE_LONGITUDE)
     .setDescription('The ending latitude and longitude');
 
@@ -30,21 +30,28 @@ function getFields() {
   fields
     .newMetric()
     .setId('average_cadence')
-    .setName('Average Cadence')
+    .setName('Cadence')
     .setType(types.NUMBER)
     .setDescription('The average cadence during the activity.');
 
   fields
     .newMetric()
+    .setId('average_heartrate')
+    .setName('Heartrate')
+    .setType(types.NUMBER)
+    .setDescription('Average heart rate for the activity.');
+
+  fields
+    .newMetric()
     .setId('average_temp')
-    .setName('Average Temperature (C)')
+    .setName('Temperature (C)')
     .setType(types.NUMBER)
     .setDescription('The average temperature during the activity, in Celsius.');
 
   fields
     .newMetric()
     .setId('average_temp_fahrenheit')
-    .setName('Average Temperature (F)')
+    .setName('Temperature (F)')
     .setType(types.NUMBER)
     .setDescription(
       'The average temperature during the activity, in Fahrenheit.'
@@ -54,21 +61,21 @@ function getFields() {
   fields
     .newDimension()
     .setId('id')
-    .setName('Activity ID')
+    .setName('ID')
     .setType(types.TEXT)
     .setDescription('The unique identifier of the activity');
 
   fields
     .newDimension()
     .setId('name')
-    .setName('Activity Name')
+    .setName('Name')
     .setType(types.TEXT)
     .setDescription('The name of the activity.');
 
   fields
     .newDimension()
     .setId('type')
-    .setName('Activity Type')
+    .setName('Type')
     .setType(types.TEXT)
     .setDescription('The type of the activity.');
 
@@ -90,7 +97,7 @@ function getFields() {
   fields
     .newMetric()
     .setId('total_elevation_gain')
-    .setName('Total Elevation Gain (m)')
+    .setName('Elevation Gain (m)')
     .setType(types.NUMBER)
     .setDescription("The activity's total elevation gain, in meters.");
 
@@ -124,7 +131,7 @@ function getFields() {
   fields
     .newMetric()
     .setId('total_elevation_gain_feet')
-    .setName('Total Elevation Gain (feet)')
+    .setName('Elevation Gain (feet)')
     .setType(types.NUMBER)
     .setDescription("The activity's total elevation gain, in feet.")
     .setFormula('$total_elevation_gain * 3.28084');
@@ -158,15 +165,8 @@ function getFields() {
 
   fields
     .newDimension()
-    .setId('elapsed_time')
-    .setName('Elapsed Time')
-    .setType(types.DURATION)
-    .setDescription("The activity's elapsed time, in seconds");
-
-  fields
-    .newDimension()
     .setId('start_date_local')
-    .setName('Start Date Local')
+    .setName('Start Time')
     .setType(types.YEAR_MONTH_DAY_HOUR)
     .setDescription('The local time at which the activity was started.');
 
