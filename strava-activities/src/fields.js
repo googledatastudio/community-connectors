@@ -37,9 +37,19 @@ function getFields() {
   fields
     .newMetric()
     .setId('average_temp')
-    .setName('Average Temperature')
+    .setName('Average Temperature (C)')
     .setType(types.NUMBER)
-    .setDescription('The average temperature during the activity.');
+    .setDescription('The average temperature during the activity, in Celsius.');
+
+  fields
+    .newMetric()
+    .setId('average_temp_fahrenheit')
+    .setName('Average Temperature (F)')
+    .setType(types.NUMBER)
+    .setDescription(
+      'The average temperature during the activity, in Fahrenheit.'
+    )
+    .setFormula('$average_temp * 9 / 5 + 32');
 
   fields
     .newDimension()

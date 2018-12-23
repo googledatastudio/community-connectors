@@ -24,7 +24,8 @@ function getConfig(request) {
     )
     .setAllowOverride(true)
     .addOption(
-      config.newOptionBuilder()
+      config
+        .newOptionBuilder()
         .setLabel('All')
         .setValue('All')
     )
