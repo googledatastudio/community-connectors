@@ -1,112 +1,88 @@
 function getConfig(request) {
-  var config = {
-    configParams: [
-      {
-        "type": 'TEXTINPUT',
-        "name": 'apiKey',
-        "displayName": 'API Key',
-        "helpText": 'Enter your API key. You can register for an API key at https://developer.nytimes.com/',
-        "placeholder": 'Enter API Key'
-      }
-    ]
-  };
-  return config;
+
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+
+  config.newInfo()
+  .setId("connect")
+  .setText("This connector does not require any configuration. Click CONNECT at the top right to get started.")
+
+  return config.build();
 };
 
-var fixedSchema = [
-  {
-    name: 'section',
-    label: 'Section',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'title',
-    label: 'Title',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'abstract',
-    label: 'Abstract',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'url',
-    label: 'URL',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'byline',
-    label: 'Byline',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'source',
-    label: 'Source',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'published_date',
-    label: 'Published Date',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'count',
-    label: 'Count of Articles',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: true
-    }
-  }
-];
+function getFields() {
+  var cc = DataStudioApp.createCommunityConnector();
+  var fields = cc.getFields();
+  var types = cc.FieldType;
+  var aggregations = cc.AggregationType;
+
+  fields.newDimension()
+  .setId("section")
+  .setName("Section")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("title")
+  .setName("Title")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("abstract")
+  .setName("Abstract")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("url")
+  .setName("URL")
+  .setType(types.URL);
+
+  fields.newDimension()
+  .setId("byline")
+  .setName("Byline")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("source")
+  .setName("Source")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("published_date")
+  .setName("Published Date")
+  .setType(types.TEXT);
+
+  fields.newMetric()
+  .setId("count")
+  .setName("Count of Articles")
+  .setType(types.NUMBER);
+
+  return fields;
+};
 
 function getSchema(request) {
-  return {schema: fixedSchema};
-};
+  return {'schema': getFields().build()};
+}
 
 function getData(request) {
-  var dataSchema = [];
-  request.fields.forEach(function(field) {
-    for (var i = 0; i < fixedSchema.length; i++) {
-      if (fixedSchema[i].name === field.name) {
-        dataSchema.push(fixedSchema[i]);
-        break;
-      }
-    }
+  var userProperties = PropertiesService.getUserProperties();
+  var key = userProperties.getProperty('dscc.key');
+
+  var requestedFieldIds = request.fields.map(function(field) {
+    return field.name;
   });
+  var requestedFields = getFields().forIds(requestedFieldIds);
 
   var url = [
     'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?api-key=',
-    request.configParams.apiKey
+    key
   ];
   var response = JSON.parse(UrlFetchApp.fetch(url.join(''))).results;
 
   var data = [];
   response.forEach(function(item) {
     var values = [];
-    dataSchema.forEach(function(field) {
-      switch(field.name) {
+    requestedFields.asArray().forEach(function(field) {
+      switch(field.getId()) {
         case 'section':
           values.push(item.section);
           break;
@@ -142,18 +118,49 @@ function getData(request) {
 
 
   return {
-    schema: dataSchema,
+    schema: requestedFields.build(),
     rows: data
   };
 
 };
 
 function getAuthType() {
-  var response = {
-    "type": "NONE"
+  return {
+    "type": "KEY"
   };
-  return response;
-};
+}
+
+function validateKey(key) {
+  var url = [
+    'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?api-key=',
+    key
+  ];
+  var response = JSON.parse(UrlFetchApp.fetch(url.join(''), {'muteHttpExceptions':true}));
+
+  return response.status == 'OK';
+}
+
+function isAuthValid() {
+  var userProperties = PropertiesService.getUserProperties();
+  var key = userProperties.getProperty('dscc.key');
+
+  return validateKey(key);
+}
+
+function resetAuth() {
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.deleteProperty('dscc.key');
+}
+
+function setCredentials(request) {
+  var key = request.key;
+
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.setProperty('dscc.key', key);
+  return {
+    errorCode: "NONE"
+  };
+}
 
 function isAdminUser() {
   return false;
