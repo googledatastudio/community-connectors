@@ -1,153 +1,107 @@
-var API_KEY = "MW9S-E7SL-26DU-VV8V";
-
 function getConfig(request) {
-  var config = {
-    configParams: [
-      {
-        type: "INFO",
-        name: "connect",
-        text: "This connector does not require any configuration. Click CONNECT at the top right to get started."
-      }
-    ]
-  };
-  return config;
+
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+
+  config.newInfo()
+  .setId("connect")
+  .setText("This connector does not require any configuration. Click CONNECT at the top right to get started.")
+
+  return config.build();
 };
 
-var fixedSchema = [
-  {
-    name: 'name',
-    label: 'Station Name',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'abbr',
-    label: 'Station Abbreviation',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'destination',
-    label: 'Destination',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'abbreviation',
-    label: 'Destination Abbreviation',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'limited',
-    label: 'Limited',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'minutes',
-    label: 'Minutes',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'platform',
-    label: 'Platform',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'direction',
-    label: 'Direction',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'length',
-    label: 'Length',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'color',
-    label: 'Color',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'hexcolor',
-    label: 'Hex Color',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'bikeflag',
-    label: 'Bike Flag',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'delay',
-    label: 'Delay',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: true
-    }
-  },
-  {
-    name: 'count',
-    label: 'Count',
-    dataType: 'NUMBER',
-    semantics: {
-      conceptType: 'METRIC',
-      isReaggregatable: true
-    }
-  }
-];
+function getFields() {
+  var cc = DataStudioApp.createCommunityConnector();
+  var fields = cc.getFields();
+  var types = cc.FieldType;
+  var aggregations = cc.AggregationType;
+
+  fields.newDimension()
+  .setId("name")
+  .setName("Station Name")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("abbr")
+  .setName("Station Abbreviation")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("destination")
+  .setName("Destination")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("abbreviation")
+  .setName("Destination Abbreviation")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("limited")
+  .setName("Limited")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("minutes")
+  .setName("Minutes")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("platform")
+  .setName("Platform")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("direction")
+  .setName("Direction")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("length")
+  .setName("Length")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("color")
+  .setName("Color")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("hexcolor")
+  .setName("Hex Color")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("bikeflag")
+  .setName("Bike Flag")
+  .setType(types.TEXT);
+
+  fields.newMetric()
+  .setId("delay")
+  .setName("Delay")
+  .setType(types.NUMBER);
+
+  fields.newMetric()
+  .setId("count")
+  .setName("Count")
+  .setType(types.NUMBER);
+
+  return fields;
+};
 
 function getSchema(request) {
-  return {schema: fixedSchema};
-};
+  return {'schema': getFields().build()};
+}
 
 function getData(request) {
-  var dataSchema = [];
-  request.fields.forEach(function(field) {
-    for (var i = 0; i < fixedSchema.length; i++) {
-      if (fixedSchema[i].name === field.name) {
-        dataSchema.push(fixedSchema[i]);
-        break;
-      }
-    }
+
+  var requestedFieldIds = request.fields.map(function(field) {
+    return field.name;
   });
+  var requestedFields = getFields().forIds(requestedFieldIds);
 
   var url = [
-    'http://api.bart.gov/api/etd.aspx?cmd=etd&orig=ALL&json=y&key=',
-    API_KEY
+    'http://api.bart.gov/api/etd.aspx?cmd=etd&orig=ALL&json=y&key=MW9S-E7SL-26DU-VV8V'
   ];
   var response = JSON.parse(UrlFetchApp.fetch(url.join(''))).root.station;
 
@@ -157,9 +111,9 @@ function getData(request) {
       dest.estimate.forEach(function(train){
 
         var values = [];
-        dataSchema.forEach(function(field) {
+        requestedFields.asArray().forEach(function(field) {
 
-          switch(field.name) {
+          switch(field.getId()) {
             case 'name':
               values.push(station.name);
               break;
@@ -215,7 +169,7 @@ function getData(request) {
   });
 
   return {
-    schema: dataSchema,
+    schema: requestedFields.build(),
     rows: data
   };
 
