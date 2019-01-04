@@ -1,97 +1,74 @@
-var API_KEY = "DEMO_KEY";
-
 function getConfig(request) {
-  var config = {
-    configParams: [
-      {
-        type: "INFO",
-        name: "connect",
-        text: "This connector does not require any configuration. Click CONNECT at the top right to get started."
-      }
-    ],
-    'dateRangeRequired': true
-  };
-  return config;
+
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+
+  config.newInfo()
+  .setId("connect")
+  .setText("This connector does not require any configuration. Click CONNECT at the top right to get started.")
+
+  config.setDateRangeRequired(true);
+
+  return config.build();
 };
 
-var fixedSchema = [
+function getFields() {
+  var cc = DataStudioApp.createCommunityConnector();
+  var fields = cc.getFields();
+  var types = cc.FieldType;
+  var aggregations = cc.AggregationType;
 
-  {
-    name: 'date',
-    label: 'Date',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'explanation',
-    label: 'Explanation',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'media_type',
-    label: 'Media Type',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'title',
-    label: 'Title',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'url',
-    label: 'URL',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'hdurl',
-    label: 'High Definition URL',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  },
-  {
-    name: 'copyright',
-    label: 'Copyright',
-    dataType: 'STRING',
-    semantics: {
-      conceptType: 'DIMENSION'
-    }
-  }
-];
+  fields.newDimension()
+  .setId("date")
+  .setName("Date")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("explanation")
+  .setName("Explanation")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("media_type")
+  .setName("Media Type")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("title")
+  .setName("Title")
+  .setType(types.TEXT);
+
+  fields.newDimension()
+  .setId("url")
+  .setName("URL")
+  .setType(types.URL);
+
+  fields.newDimension()
+  .setId("hdurl")
+  .setName("High Definition URL")
+  .setType(types.URL);
+
+  fields.newDimension()
+  .setId("copyright")
+  .setName("Copyright")
+  .setType(types.TEXT);
+
+  return fields;
+};
 
 function getSchema(request) {
-  return {schema: fixedSchema};
-};
+  return {'schema': getFields().build()};
+}
 
 function getData(request) {
-  var dataSchema = [];
-  request.fields.forEach(function(field) {
-    for (var i = 0; i < fixedSchema.length; i++) {
-      if (fixedSchema[i].name === field.name) {
-        dataSchema.push(fixedSchema[i]);
-        break;
-      }
-    }
+
+  var requestedFieldIds = request.fields.map(function(field) {
+    return field.name;
   });
+  var requestedFields = getFields().forIds(requestedFieldIds);
 
   var url = [
-    'https://api.nasa.gov/planetary/apod?api_key=',
-    API_KEY,
+    'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
     '&date=',
     request.dateRange.endDate,
     '&hd=true'
@@ -101,8 +78,8 @@ function getData(request) {
 
   var data = [];
   var values = [];
-  dataSchema.forEach(function(field) {
-    switch(field.name) {
+  requestedFields.asArray().forEach(function(field) {
+    switch(field.getId()) {
       case 'date':
         values.push(item.date);
         break;
@@ -133,7 +110,7 @@ function getData(request) {
   });
 
   return {
-    schema: dataSchema,
+    schema: requestedFields.build(),
     rows: data
   };
 };
