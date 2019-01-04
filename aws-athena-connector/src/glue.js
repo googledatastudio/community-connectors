@@ -20,6 +20,7 @@ function glueTableToFields(table) {
     switch (column.Type.toLowerCase()) {
       case 'boolean':
         field = fields.newDimension()
+          .setId(column.Name)
           .setType(types.BOOLEAN);
         break;
       case 'tinyint':
@@ -30,24 +31,31 @@ function glueTableToFields(table) {
       case 'float':
       case 'decimal':
         field = fields.newMetric()
+          .setId(column.Name)
           .setType(types.NUMBER);
         break;
       case 'char':
       case 'varchar':
       case 'string':
-      case 'timestamp':
         field = fields.newDimension()
+          .setId(column.Name)
           .setType(types.TEXT);
         break;
       case 'date':
         field = fields.newDimension()
+          .setId(column.Name)
           .setType(types.YEAR_MONTH_DAY);
+        break;
+      case 'timestamp':
+        field = fields.newDimension()
+          .setId(column.Name)
+          .setType(types.YEAR_MONTH_DAY_HOUR);
+        break;
       default:
         return;
     }
 
     // Set field name and description (if any)
-    field.setId(column.Name);
     if (typeof(column.Comment) === 'string') {
       field.setDescription(column.Comment);
     }

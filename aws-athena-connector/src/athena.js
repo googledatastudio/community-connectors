@@ -8,9 +8,10 @@
  * 3. If `rowLimit` is specified, it will be added in the LIMIT clause.
  *
  * @param {Object} request Data request parameters.
+ * @param {Array} fields Array of objects defining the table fields. For mapping data types.
  * @return {string} The generated query string.
  */
-function generateAthenaQuery(request) {
+function generateAthenaQuery(request, fields) {
   var defaultRowLimit = 1000;
   var params = request.configParams || {};
 
@@ -24,7 +25,31 @@ function generateAthenaQuery(request) {
   if (params.dateRangeColumn) {
     var startDate = request.dateRange.startDate;
     var endDate = request.dateRange.endDate;
-    query += ' WHERE "' + params.dateRangeColumn + '" BETWEEN \'' + startDate + '\' AND \'' + endDate + '\'' ;
+
+    // startDate and endDate are always STRING
+    // But in Athena query we need a correct data type
+    var dateRangeField = fields.getFieldById(params.dateRangeColumn);
+    var cc = DataStudioApp.createCommunityConnector();
+    var types = cc.FieldType;
+    var dateRangeDataType;
+    switch (dateRangeField.getType()) {
+      case types.YEAR_MONTH_DAY:
+        dateRangeDataType = 'DATE';
+        break;
+      case types.YEAR_MONTH_DAY_HOUR:
+        dateRangeDataType = 'TIMESTAMP';
+        break;
+      default:
+        dateRangeDataType = 'VARCHAR';
+        break;
+    }
+
+    // WHERE "${params.dateRangeColumn}"
+    // BETWEEN ${dateRangeDataType} '${startDate}'
+    // AND ${dateRangeDataType} '${endDate}'
+    query += ' WHERE "' + params.dateRangeColumn + '"' +
+      ' BETWEEN ' + dateRangeDataType + ' \'' + startDate + '\'' +
+      ' AND ' + dateRangeDataType + ' \'' + endDate + '\'' ;
   }
   if (rowLimit !== -1) {
     query += ' LIMIT ' + rowLimit;
@@ -184,14 +209,15 @@ function getDataFromAthena(request) {
   var requestedFieldIds = request.fields.map(function(field) {
     return field.name;
   });
-  var requestedFields = getFieldsFromGlue(request).forIds(requestedFieldIds);
+  var fields = getFieldsFromGlue(request);
+  var requestedFields = fields.forIds(requestedFieldIds);
   var schema = requestedFields.build();
 
   var params = request.configParams;
   AWS.init(params.awsAccessKeyId, params.awsSecretAccessKey);
 
   // Generate and submit query
-  var query = generateAthenaQuery(request);
+  var query = generateAthenaQuery(request, fields);
   var runResult = runAthenaQuery(params.awsRegion, params.databaseName, query, params.outputLocation);
   var queryExecutionId = runResult.QueryExecutionId;
   waitAthenaQuery(params.awsRegion, queryExecutionId);

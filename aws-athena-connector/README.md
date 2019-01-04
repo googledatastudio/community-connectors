@@ -29,7 +29,7 @@ Visit the [Athena Console](https://us-west-2.console.aws.amazon.com/athena/home)
 
 ```
 CREATE EXTERNAL TABLE IF NOT EXISTS cloudfront_logs (
-  LogDate STRING,
+  LogDate DATE,
   Time STRING,
   Location STRING,
   Bytes INT,
@@ -71,7 +71,5 @@ If not, you could create a S3 bucket that starts with the name `aws-athena-query
 ### Create Report
 
 Data Studio will automatically crawls the table schema.
-
-Update the data type of `LogDate` from `TEXT` to `DATE(YYYYMMDD)`, then continue.
 
 You could then try to explore the data. Note that the sample data is ranged from `2014-07-05` to `2014-08-05`.
