@@ -1,0 +1,11 @@
+{
+  "dataStudio": {
+    "name": "NASA Astronomy Photo of the Day",
+    "logoUrl": "https://www.clickinsight.ca/wp-content/uploads/2019/01/cc-logo-orange-bg-400px.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "Daily astronomy phots from the NASA APOD API."
+  }
+}
