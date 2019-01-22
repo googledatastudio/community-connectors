@@ -203,6 +203,21 @@ GoogleFit.prototype.getWeight = function(startTime, endTime) {
 };
 
 /**
+ * Gets heart rate for the signed in user during the given time period.
+ *
+ * @param{Date} startTime the start time for the period to get weight
+ * @param{Date} endTime the end time for the period to get weight
+ * @return {Object} a Google Fit heart rate API JSON response.
+ */
+GoogleFit.prototype.getHeartRate = function(startTime, endTime) {
+  return this._getDatasets(
+    'derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm',
+    startTime,
+    endTime
+  );
+};
+
+/**
  * Gets a dataset via the Google Fit API. If successful it returns a
  * Users.dataSources.datasets resource.
  * @see {@link https://developers.google.com/fit/rest/v1/reference/users/dataSources/datasets Users.dataSources.datasets Resource}
