@@ -117,6 +117,32 @@ connector.SCHEMA = {
       },
     },
   ],
+  heart_rate: [
+    {
+      name: 'StartTime',
+      label: 'Start Time',
+      dataType: 'NUMBER',
+      semantics: {
+        conceptType: 'DIMENSION',
+      },
+    },
+    {
+      name: 'EndTime',
+      label: 'End Time',
+      dataType: 'NUMBER',
+      semantics: {
+        conceptType: 'DIMENSION',
+      },
+    },
+    {
+      name: 'HeartRate',
+      label: 'Heart Rate',
+      dataType: 'NUMBER',
+      semantics: {
+        conceptType: 'METRIC',
+      },
+    },
+  ],
 };
 
 /**
@@ -190,6 +216,25 @@ connector.SAMPLE_DATA = {
       },
     ],
   },
+  heart_rate: {
+    point: [
+      {
+        startTimeNanos: 1509207120000000000,
+        endTimeNanos: 1509207120000000000,
+        value: [{fpVal: 120.2}],
+      },
+      {
+        startTimeNanos: 1509204420000000000,
+        endTimeNanos: 1509204420000000000,
+        value: [{fpVal: 123.8}],
+      },
+      {
+        startTimeNanos: 1509393360000000000,
+        endTimeNanos: 1509393360000000000,
+        value: [{fpVal: 125.3}],
+      },
+    ],
+  },
 };
 
 /**
@@ -219,6 +264,10 @@ connector.getConfig = function(request) {
           {
             label: 'Weight',
             value: 'weight',
+          },
+          {
+            label: 'Heart Rate',
+            value: 'heart_rate',
           },
         ],
       },
@@ -441,6 +490,56 @@ connector.dataFuncs.weight = function(request, fit, startDate, endDate) {
           values.push(parseInt(segment.endTimeNanos, 10));
           break;
         case 'Weight':
+          values.push(segment.value[0].fpVal);
+          break;
+        default:
+          values.push('');
+      }
+    });
+    data.push({
+      values: values,
+    });
+  }
+
+  return {
+    schema: dataSchema,
+    rows: data,
+  };
+};
+
+connector.dataFuncs.heart_rate = function(request, fit, startDate, endDate) {
+  // Prepare the schema for the fields requested.
+  var dataSchema = request.fields.map(function(field) {
+    for (var i = 0; i < connector.SCHEMA.heart_rate.length; i++) {
+      if (connector.SCHEMA.heart_rate[i].name == field.name) {
+        return connector.SCHEMA.heart_rate[i];
+      }
+    }
+  });
+
+  if (request.scriptParams && request.scriptParams.sampleExtraction) {
+    var heart_rate = connector.SAMPLE_DATA.heart_rate;
+  } else {
+    // TODO: Get the data from the Apps Script Cache service if it exists otherwise get the data from the Google Fit API.
+    // See: https://developers.google.com/datastudio/connector/build#fetch_and_return_data_with_getdata
+    var heart_rate = fit.getHeartRate(startDate, endDate);
+  }
+
+  var data = [];
+  for (var i = 0; i < heart_rate.point.length; i++) {
+    var values = [];
+    var segment = heart_rate.point[i];
+
+    // Provide values in the order defined by the schema.
+    dataSchema.forEach(function(field) {
+      switch (field.name) {
+        case 'StartTime':
+          values.push(parseInt(segment.startTimeNanos, 10));
+          break;
+        case 'EndTime':
+          values.push(parseInt(segment.endTimeNanos, 10));
+          break;
+        case 'HeartRate':
           values.push(segment.value[0].fpVal);
           break;
         default:
