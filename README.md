@@ -48,7 +48,7 @@ developers:
     - [try the SPARQL connector in Data Studio](https://datastudio.google.com/datasources/create?connectorId=AKfycbzDHEBN9qHXPni4xO4P2cIZtyQ3rnYmzkCnVsnh9oEJrnhGe4MntBF-t1zAu2Lm-Vjc)
 - [Bitmovin Analytics Data Studio Connector](https://github.com/bitmovin/analytics-google-datastudio-connector)
     - *The Bitmovin Analytics Data Studio connector allows users to create reports
-    with data pulled from the [Bitmovin Analytics API](https://bitmovin.com/video-analytics/).
+    with data pulled from the [Bitmovin Analytics API](https://bitmovin.com/video-analytics/).*
     - [try the Bitmovin Analytics connector in Data Studio](https://datastudio.google.com/datasources/create?connectorId=AKfycbzbu3CKMj7bQSuIcwBtpF_xJffWAyJyR9Js2xxAXLK6)
 
 ### Submit your own open source Community Connector
