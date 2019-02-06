@@ -148,31 +148,40 @@ connector.SCHEMA = {
       name: 'StartTime',
       label: 'Start Time',
       dataType: 'NUMBER',
-      semantics: {conceptType: 'DIMENSION'},
+      semantics: {
+        conceptType: 'DIMENSION',
+        semanticGroup: 'DATETIME',
+      },
     },
     {
       name: 'EndTime',
       label: 'End Time',
       dataType: 'NUMBER',
-      semantics: {conceptType: 'DIMENSION'},
+      semantics: {
+        conceptType: 'DIMENSION',
+        semanticGroup: 'DATETIME',
+      },
     },
     {
       name: 'HeartRateAvg',
       label: 'Heart Rate Average',
       dataType: 'NUMBER',
-      semantics: {conceptType: 'METRIC'},
+      defaultAggregationType: 'AVG',
+      semantics: { conceptType: 'METRIC' },
     },
     {
       name: 'HeartRateMax',
       label: 'Heart Rate Max',
       dataType: 'NUMBER',
-      semantics: {conceptType: 'METRIC'},
+      defaultAggregationType: 'MAX',
+      semantics: { conceptType: 'METRIC' },
     },
     {
       name: 'HeartRateMin',
       label: 'Heart Rate Min',
       dataType: 'NUMBER',
-      semantics: {conceptType: 'METRIC'},
+      defaultAggregationType: 'MIN',
+      semantics: { conceptType: 'METRIC' },
     },
   ],
 };
@@ -359,6 +368,10 @@ connector.getConfig = function(request) {
           {
             label: 'Heart Rate',
             value: 'heart_rate',
+          },
+          {
+            label: 'Heart Rate Daily',
+            value: 'heart_rate_daily',
           },
         ],
       },
@@ -651,19 +664,19 @@ connector.dataFuncs.heart_rate = function(request, fit, startDate, endDate) {
 connector.dataFuncs.heart_rate_daily = function(request, fit, startDate, endDate) {
   // Prepare the schema for the fields requested.
   var dataSchema = request.fields.map(function(field) {
-    for (var i = 0; i < connector.SCHEMA.heart_rate.length; i++) {
-      if (connector.SCHEMA.heart_rate[i].name == field.name) {
-        return connector.SCHEMA.heart_rate[i];
+    for (var i = 0; i < connector.SCHEMA.heart_rate_daily.length; i++) {
+      if (connector.SCHEMA.heart_rate_daily[i].name == field.name) {
+        return connector.SCHEMA.heart_rate_daily[i];
       }
     }
   });
 
   if (request.scriptParams && request.scriptParams.sampleExtraction) {
-    var buckets = connector.SAMPLE_DATA.heart_rate;
+    var buckets = connector.SAMPLE_DATA.heart_rate_daily;
   } else {
     // TODO: Get the data from the Apps Script Cache service if it exists otherwise get the data from the Google Fit API.
     // See: https://developers.google.com/datastudio/connector/build#fetch_and_return_data_with_getdata
-    var buckets = fit.getHeartRate(startDate, endDate);
+    var buckets = fit.getHeartRateDaily(startDate, endDate);
   }
 
   var data = [];
