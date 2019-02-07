@@ -143,6 +143,47 @@ connector.SCHEMA = {
       },
     },
   ],
+  heart_rate_daily: [
+    {
+      name: 'StartTime',
+      label: 'Start Time',
+      dataType: 'NUMBER',
+      semantics: {
+        conceptType: 'DIMENSION',
+        semanticGroup: 'DATETIME',
+      },
+    },
+    {
+      name: 'EndTime',
+      label: 'End Time',
+      dataType: 'NUMBER',
+      semantics: {
+        conceptType: 'DIMENSION',
+        semanticGroup: 'DATETIME',
+      },
+    },
+    {
+      name: 'HeartRateAvg',
+      label: 'Heart Rate Average',
+      dataType: 'NUMBER',
+      defaultAggregationType: 'AVG',
+      semantics: { conceptType: 'METRIC' },
+    },
+    {
+      name: 'HeartRateMax',
+      label: 'Heart Rate Max',
+      dataType: 'NUMBER',
+      defaultAggregationType: 'MAX',
+      semantics: { conceptType: 'METRIC' },
+    },
+    {
+      name: 'HeartRateMin',
+      label: 'Heart Rate Min',
+      dataType: 'NUMBER',
+      defaultAggregationType: 'MIN',
+      semantics: { conceptType: 'METRIC' },
+    },
+  ],
 };
 
 /**
@@ -235,6 +276,65 @@ connector.SAMPLE_DATA = {
       },
     ],
   },
+  heart_rate_daily: [ // Aggregated bucket data format.
+    {
+      startTimeMillis: 1522540800000,
+      endTimeMillis: 1522627200000,
+      dataset: [
+        {
+          point: [
+            {
+              startTimeNanos: 1522540800000000000,
+              endTimeNanos: 1522627080000000000,
+              value: [
+                {fpVal: 73.97566063977747},
+                {fpVal: 161.0},
+                {fpVal: 46.0}
+              ],
+            }
+          ]
+        }
+      ]
+    },
+    {
+      startTimeMillis: 1522627200000,
+      endTimeMillis: 1522713600000,
+      dataset: [
+        {
+          point: [
+            {
+              startTimeNanos: 1522627200000000000,
+              endTimeNanos: 1522713480000000000,
+              value: [
+                {fpVal: 72.2865090403338},
+                {fpVal: 168.0},
+                {fpVal: 58.0}
+              ],
+            }
+          ]
+        }
+      ]
+    },
+    {
+      startTimeMillis: 1522713600000,
+      endTimeMillis: 1522800000000,
+      dataset: [
+        {
+          point: [
+            {
+              startTimeNanos: 1522713600000000000,
+              endTimeNanos: 1522799880000000000,
+              value: [
+                {fpVal: 79.14394993045897},
+                {fpVal: 164.0},
+                {fpVal: 56.0}
+              ],
+            }
+          ]
+        }
+      ]
+    },
+  ],
 };
 
 /**
@@ -268,6 +368,10 @@ connector.getConfig = function(request) {
           {
             label: 'Heart Rate',
             value: 'heart_rate',
+          },
+          {
+            label: 'Heart Rate Daily',
+            value: 'heart_rate_daily',
           },
         ],
       },
@@ -549,6 +653,65 @@ connector.dataFuncs.heart_rate = function(request, fit, startDate, endDate) {
     data.push({
       values: values,
     });
+  }
+
+  return {
+    schema: dataSchema,
+    rows: data,
+  };
+};
+
+connector.dataFuncs.heart_rate_daily = function(request, fit, startDate, endDate) {
+  // Prepare the schema for the fields requested.
+  var dataSchema = request.fields.map(function(field) {
+    for (var i = 0; i < connector.SCHEMA.heart_rate_daily.length; i++) {
+      if (connector.SCHEMA.heart_rate_daily[i].name == field.name) {
+        return connector.SCHEMA.heart_rate_daily[i];
+      }
+    }
+  });
+
+  if (request.scriptParams && request.scriptParams.sampleExtraction) {
+    var buckets = connector.SAMPLE_DATA.heart_rate_daily;
+  } else {
+    // TODO: Get the data from the Apps Script Cache service if it exists otherwise get the data from the Google Fit API.
+    // See: https://developers.google.com/datastudio/connector/build#fetch_and_return_data_with_getdata
+    var buckets = fit.getHeartRateDaily(startDate, endDate);
+  }
+
+  var data = [];
+  if (!buckets) return { schema: dataSchema, rows: data };
+  for (var i = 0; i < buckets.length; i++) {
+    var values = [];
+    var segment = buckets[i].dataset[0].point[0];
+
+    if (segment) {
+      // Provide values in the order defined by the schema.
+      dataSchema.forEach(function(field) {
+        switch (field.name) {
+          case 'StartTime':
+            values.push(parseInt(segment.startTimeNanos, 10));
+            break;
+          case 'EndTime':
+            values.push(parseInt(segment.endTimeNanos, 10));
+            break;
+          case 'HeartRateAvg':
+            values.push(segment.value[0].fpVal);
+            break;
+          case 'HeartRateMax':
+            values.push(segment.value[1].fpVal);
+            break;
+          case 'HeartRateMin':
+            values.push(segment.value[2].fpVal);
+            break;
+          default:
+            values.push('');
+        }
+      });
+      data.push({
+        values: values,
+      });
+    }
   }
 
   return {
