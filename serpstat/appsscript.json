@@ -1,0 +1,24 @@
+{
+  "dataStudio": {
+    "name": "Serpstat",
+    "company": "Serpstat",
+    "companyUrl": "https://serpstat.com/",
+    "logoUrl": "https://serpstat.com/img/logo-40x40.png?react",
+    "addonUrl": "https://serpstat.com/api/2-getting-started/",
+    "supportUrl": "https://serpstat.com/support/",
+    "description": "Serpstat connector lets you connect to search engine data about domains in Data Studio using Serpstat API. You will need an account on serpstat.com to use this connector. Create your account at https://serpstat.com/",
+
+    "shortDescription": "Connect to Serpstat using API to get search engine data about domains",
+    "authType": ["KEY"],
+    "feeType": ["FREE"],
+    "sources": ["SERPSTAT"],
+    "templates": {
+      "default": "1YldV3tTdY6ur_GttnMzsEmwWOKQtZcyD"
+    }
+  },
+  "urlFetchWhitelist": [
+    "https://api.serpstat.com/v3/",
+    "https://plugin.serpstat.com/",
+    "https://api.serpstat.com/v1/plugin/"
+  ]
+}
