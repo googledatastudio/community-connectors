@@ -10,7 +10,7 @@ connector.usernameKey = "USERNAME";
 connector.tokenKey = "KEY";
 connector.kaggleUrl = "https://www.kaggle.com";
 connector.apiBaseUrl = connector.kaggleUrl + "/api/v1/";
-connector.apiDownloadSlug = "datasets/download-raw/";
+connector.apiDownloadSlug = "datasets/download-raw";
 connector.pingUrl = connector.apiBaseUrl + "competitions/list";
 connector.fileSizeLimitInBytes = 20971520;
 
