@@ -1,0 +1,22 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "OAuth2",
+      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+      "version": "32"
+    }]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "dataStudio": {
+    "name": "World Bank Health, Nutrition, and Population",
+    "logoUrl": "https://www.gstatic.com/images/icons/material/system/1x/language_black_48dp.png",
+    "company": "Data Studio DevRel",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "Access the latest data on population and demographic estimates and projections from the World Bank Health, Nutrition, and Population BigQuery dataset. Big query table can be found here: https://bigquery.cloud.google.com/dataset/bigquery-public-data:world_bank_health_population",
+    "sources": ["WORLD_BANK_HEALTH_NUTRITION_AND_POPULATION"],
+    "useQueryConfig": true
+  }
+}
