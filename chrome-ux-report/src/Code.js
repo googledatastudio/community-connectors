@@ -111,7 +111,7 @@ crux.Schema = [
   {
     name: "avg_fp",
     label: "Average FP",
-    description: "The percent of First Paint experiences >= 1 second and < 3 seconds.",
+    description: "The percent of First Paint experiences >= 1 second and < 2.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -123,7 +123,7 @@ crux.Schema = [
   {
     name: "slow_fp",
     label: "Slow FP",
-    description: "The percent of First Paint experiences >= 3 seconds.",
+    description: "The percent of First Paint experiences >= 2.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -147,7 +147,7 @@ crux.Schema = [
   {
     name: "avg_fcp",
     label: "Average FCP",
-    description: "The percent of First Contentful Paint experiences >= 1 second and < 3 seconds.",
+    description: "The percent of First Contentful Paint experiences >= 1 second and < 2.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -159,7 +159,7 @@ crux.Schema = [
   {
     name: "slow_fcp",
     label: "Slow FCP",
-    description: "The percent of First Contentful Paint experiences >= 3 seconds.",
+    description: "The percent of First Contentful Paint experiences >= 2.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -171,7 +171,7 @@ crux.Schema = [
   {
     name: "fast_dcl",
     label: "Fast DCL",
-    description: "The percent of DOM Content Loaded experiences < 1 second.",
+    description: "The percent of DOM Content Loaded experiences < 1.5 second.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -183,7 +183,7 @@ crux.Schema = [
   {
     name: "avg_dcl",
     label: "Average DCL",
-    description: "The percent of DOM Content Loaded experiences >= 1 second and < 3 seconds.",
+    description: "The percent of DOM Content Loaded experiences >= 1.5 second and < 3.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -195,7 +195,7 @@ crux.Schema = [
   {
     name: "slow_dcl",
     label: "Slow DCL",
-    description: "The percent of DOM Content Loaded experiences >= 3 seconds.",
+    description: "The percent of DOM Content Loaded experiences >= 3.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -207,7 +207,7 @@ crux.Schema = [
   {
     name: "fast_ol",
     label: "Fast OL",
-    description: "The percent of Onload experiences < 1 second.",
+    description: "The percent of Onload experiences < 2.5 second.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -219,7 +219,7 @@ crux.Schema = [
   {
     name: "avg_ol",
     label: "Average OL",
-    description: "The percent of Onload experiences >= 1 second and < 3 seconds.",
+    description: "The percent of Onload experiences >= 2.5 second and < 6.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -231,7 +231,7 @@ crux.Schema = [
   {
     name: "slow_ol",
     label: "Slow OL",
-    description: "The percent of Onload experiences >= 3 seconds.",
+    description: "The percent of Onload experiences >= 6.5 seconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -243,7 +243,7 @@ crux.Schema = [
   {
     name: "fast_fid",
     label: "Fast FID",
-    description: "The percent of First Input Delay experiences < 100 milliseconds.",
+    description: "The percent of First Input Delay experiences < 50 milliseconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -255,7 +255,7 @@ crux.Schema = [
   {
     name: "avg_fid",
     label: "Average FID",
-    description: "The percent of First Input Delay experiences >= 100 milliseconds and < 1 second.",
+    description: "The percent of First Input Delay experiences >= 50 milliseconds and < 250 milliseconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
@@ -267,7 +267,7 @@ crux.Schema = [
   {
     name: "slow_fid",
     label: "Slow FID",
-    description: "The percent of First Input Delay experiences >= 1 second.",
+    description: "The percent of First Input Delay experiences >= 250 milliseconds.",
     dataType: "NUMBER",
     defaultAggregationType: "SUM",
     semantics: {
