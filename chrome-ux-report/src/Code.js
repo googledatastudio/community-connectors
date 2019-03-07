@@ -511,7 +511,9 @@ function getOriginDataset(request) {
 
   var scriptCache = CacheService.getScriptCache();
 
-  if (urlExistsInDb(origin.url) === false) {
+  try { 
+    urlExistsInDb(origin.url);
+  } catch(e) {
     userLock.releaseLock();
     throw new Error("DS_USER: There are over 4 million origins in this dataset, but " + origin.url +  " is not one of them! Have you tried adding 'www' or 'http' to your origin? \n\n\n");
   }
