@@ -437,7 +437,7 @@ function flushCache() {
   try {
     fbFlushCache();
   } catch (e) {
-    throw new Error("Failed to flush cache");
+    throwError(false, undefined, 'Failed to flush cache.');
   }
 }
 
@@ -524,7 +524,12 @@ function getOriginDataset(request) {
       origin.data = getBqData(origin.url);
     } catch (e) {
       userLock.releaseLock();
-      throw new Error("DS_USER: Error retriving data from BigQuery for " + origin.url +  " \n\n\n");
+      throwError(
+        true,
+        'There are over 4 million origins in this dataset, but ' +
+          origin.url +
+          " is not one of them! Have you tried adding 'www' or 'http' to your origin?"
+      );
     }
   } else {
     var cachedData = scriptCache.get(origin.key);
@@ -622,4 +627,23 @@ function isAdminUser() {
 crux.getEnvironment = function() {
   var environment = crux.isProdScript ? "prod": "staging";
   return environment;
+}
+
+function throwError(userSafe, userMessage, adminMessage) {
+  var cc = DataStudioApp.createCommunityConnector();
+  if (userSafe) {
+    var error = cc.newUserError();
+    if (userMessage) {
+      error.setText(userMessage);
+    }
+    if (adminMessage) {
+      error.setDebugText(adminMessage);
+    }
+    error.throwException();
+  } else {
+    cc
+      .newDebugError()
+      .setText(adminMessage)
+      .throwException();
+  }
 }

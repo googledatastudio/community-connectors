@@ -1,0 +1,11 @@
+{
+  "dataStudio": {
+    "name": "New York Times Top Stories",
+    "logoUrl": "https://www.clickinsight.ca/wp-content/uploads/2019/01/cc-logo-orange-bg-400px.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "This connector uses the New York Times Top Stories API to retrieve the top stories published on NYTimes.com. Signup for an API key at developer.nytimes.com."
+  }
+}
