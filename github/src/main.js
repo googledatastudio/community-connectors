@@ -12,8 +12,8 @@ function getAuthType() {
   var AuthTypes = cc.AuthType;
   return cc
     .newAuthTypeResponse()
-      .setAuthType(AuthTypes.OAUTH2)
-      .build();
+    .setAuthType(AuthTypes.OAUTH2)
+    .build();
 }
 
 // https://devsite.googleplex.com/datastudio/connector/reference#getconfig
@@ -21,24 +21,25 @@ function getConfig(request) {
   var config = cc.getConfig();
 
   config
-      .newTextInput()
-      .setId('organization')
-      .setName('Organization')
-      .setHelpText('The name of the organization (or user) that owns the repository.')
-      .setPlaceholder('googledatastudio')
-      .setAllowOverride(true);
+    .newTextInput()
+    .setId('organization')
+    .setName('Organization')
+    .setHelpText(
+      'The name of the organization (or user) that owns the repository.'
+    )
+    .setPlaceholder('googledatastudio')
+    .setAllowOverride(true);
 
   config
-      .newTextInput()
-      .setId('repository')
-      .setName('Repository')
-      .setHelpText('The name of the repository.')
-      .setPlaceholder('community-connectors')
-      .setAllowOverride(true);
+    .newTextInput()
+    .setId('repository')
+    .setName('Repository')
+    .setHelpText('The name of the repository.')
+    .setPlaceholder('community-connectors')
+    .setAllowOverride(true);
 
   return config.build();
 }
-
 
 function getFields() {
   var fields = cc.getFields();
@@ -47,99 +48,101 @@ function getFields() {
 
   // Issues
   var defaultDimension = fields
-      .newDimension()
-      .setId('number')
-      .setName('Number')
-      .setDescription('The issue number.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('number')
+    .setName('Number')
+    .setDescription('The issue number.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('title')
-      .setName('Title')
-      .setDescription('The title of the issue.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('title')
+    .setName('Title')
+    .setDescription('The title of the issue.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('open')
-      .setName('Is Open')
-      .setDescription('True if the issue is open, false otherwise.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.BOOLEAN);
+    .newDimension()
+    .setId('open')
+    .setName('Is Open')
+    .setDescription('True if the issue is open, false otherwise.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.BOOLEAN);
 
   fields
-      .newDimension()
-      .setId('url')
-      .setName('Issue URL')
-      .setDescription('The URL of the issue.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.URL);
+    .newDimension()
+    .setId('url')
+    .setName('Issue URL')
+    .setDescription('The URL of the issue.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.URL);
 
   fields
-      .newDimension()
-      .setId('reporter')
-      .setName('Reporter')
-      .setDescription('Issue reporter username.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('reporter')
+    .setName('Reporter')
+    .setDescription('Issue reporter username.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('locked')
-      .setName('Is Locked')
-      .setDescription('True if the issue is locked, false otherwise.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.BOOLEAN);
+    .newDimension()
+    .setId('locked')
+    .setName('Is Locked')
+    .setDescription('True if the issue is locked, false otherwise.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.BOOLEAN);
 
   var defaultMetric = fields
-      .newMetric()
-      .setId('num_comments')
-      .setName('Number of Comments')
-      .setDescription('Number of commments on the issue.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.NUMBER);
+    .newMetric()
+    .setId('num_comments')
+    .setName('Number of Comments')
+    .setDescription('Number of commments on the issue.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.NUMBER);
 
   fields
-      .newDimension()
-      .setId('is_pull_request')
-      .setName('Is Pull Request')
-      .setDescription('True if this issue is a Pull Request, false otherwise.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.BOOLEAN);
+    .newDimension()
+    .setId('is_pull_request')
+    .setName('Is Pull Request')
+    .setDescription('True if this issue is a Pull Request, false otherwise.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.BOOLEAN);
 
   fields
-      .newDimension()
-      .setId('created_at')
-      .setName('Creation Time')
-      .setDescription('The time this issue was created.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.YEAR_MONTH_DAY_HOUR);
+    .newDimension()
+    .setId('created_at')
+    .setName('Creation Time')
+    .setDescription('The time this issue was created.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.YEAR_MONTH_DAY_HOUR);
 
   fields
-      .newDimension()
-      .setId('closed_at')
-      .setName('Close Time')
-      .setDescription('The time this issue was closed.')
-      .setGroup(ISSUES_ENDPOINT)
-      .setType(types.YEAR_MONTH_DAY_HOUR);
+    .newDimension()
+    .setId('closed_at')
+    .setName('Close Time')
+    .setDescription('The time this issue was closed.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.YEAR_MONTH_DAY_HOUR);
 
   // Stars
-  fields.newDimension()
-      .setId('starred_at')
-      .setName('Starred Date')
-      .setDescription('The date the star was given.')
-      .setGroup(STARS_ENDPOINT)
-      .setType(types.YEAR_MONTH_DAY_HOUR);
+  fields
+    .newDimension()
+    .setId('starred_at')
+    .setName('Starred Date')
+    .setDescription('The date the star was given.')
+    .setGroup(STARS_ENDPOINT)
+    .setType(types.YEAR_MONTH_DAY_HOUR);
 
-  fields.newMetric()
-      .setId('stars')
-      .setName('Stars')
-      .setDescription('The number of stars')
-      .setGroup(STARS_ENDPOINT)
-      .setType(types.NUMBER);
+  fields
+    .newMetric()
+    .setId('stars')
+    .setName('Stars')
+    .setDescription('The number of stars')
+    .setGroup(STARS_ENDPOINT)
+    .setType(types.NUMBER);
 
   fields.setDefaultDimension(defaultDimension.getId());
   fields.setDefaultMetric(defaultMetric.getId());
@@ -159,17 +162,25 @@ function getData(request) {
   validateConfig(config);
 
   var requestedFields = getFields().forIds(
-      request.fields.map(function(field) {
-        return field.name;
-      })
+    request.fields.map(function(field) {
+      return field.name;
+    })
   );
 
   var endpoint = requestedFields.asArray().reduce(function(endpoint, field) {
-    if(!endpoint) {
+    if (!endpoint) {
       return field.getGroup();
     }
     if (endpoint !== field.getGroup()) {
-      cc.newUserError().setText('You can only choose fields in the same group. You chose fields from "' + endpoint + '" and "' + field.getGroup() + '"').throwException();
+      cc.newUserError()
+        .setText(
+          'You can only choose fields in the same group. You chose fields from "' +
+            endpoint +
+            '" and "' +
+            field.getGroup() +
+            '"'
+        )
+        .throwException();
     }
     return endpoint;
   }, undefined);
@@ -178,11 +189,14 @@ function getData(request) {
 
   switch (endpoint) {
     case ISSUES_ENDPOINT:
-    return getDataIssue(request, config, requestedFields);
+      return getDataIssue(request, config, requestedFields);
     case STARS_ENDPOINT:
-    return getDataStars(request, config, requestedFields);
+      return getDataStars(request, config, requestedFields);
     default:
-    return cc.newUserError().setText('Fields from group: "' + endpoint + '" are not supported.').throwException();
+      return cc
+        .newUserError()
+        .setText('Fields from group: "' + endpoint + '" are not supported.')
+        .throwException();
   }
 }
 
@@ -190,15 +204,17 @@ function parseStarRow(requestedFields, star) {
   var row = [];
   requestedFields.asArray().forEach(function(requestedField) {
     switch (requestedField.getId()) {
-      case 'stars': return row.push(1);
-      case 'starred_at': return row.push(formatDate(star.starred_at));
+      case 'stars':
+        return row.push(1);
+      case 'starred_at':
+        return row.push(formatDate(star.starred_at));
       default:
-      return cc
+        return cc
           .newUserError()
           .setDebugText(
-              'Field "' +
-                requestedField.getId() +
-                '" has not been accounted for in code yet.'
+            'Field "' +
+              requestedField.getId() +
+              '" has not been accounted for in code yet.'
           )
           .setText('You cannot use ' + requestedField.getId() + ' yet.')
           .throwException();
@@ -241,32 +257,32 @@ function parseIssueRow(requestedFields, issue) {
   requestedFields.asArray().forEach(function(requestedField) {
     switch (requestedField.getId()) {
       case 'open':
-      return row.push(issue.state === 'open');
+        return row.push(issue.state === 'open');
       case 'reporter':
-      return row.push(issue.user.login);
+        return row.push(issue.user.login);
       case 'num_comments':
-      return row.push(issue.comments);
+        return row.push(issue.comments);
       case 'is_pull_request':
-      return row.push(issue.pull_request !== undefined);
+        return row.push(issue.pull_request !== undefined);
       case 'created_at':
-      return row.push(formatDate(issue.created_at));
+        return row.push(formatDate(issue.created_at));
       case 'closed_at':
-      return row.push(formatDate(issue.closed_at));
+        return row.push(formatDate(issue.closed_at));
       case 'url':
-      return row.push(issue.html_url);
+        return row.push(issue.html_url);
       case 'number':
-      return row.push('' + issue.number);
+        return row.push('' + issue.number);
       case 'locked':
-      return row.push(issue.locked);
+        return row.push(issue.locked);
       case 'title':
-      return row.push(issue.title);
+        return row.push(issue.title);
       default:
-      return cc
+        return cc
           .newUserError()
           .setDebugText(
-              'Field "' +
-                requestedField.getId() +
-                '" has not been accounted for in code yet.'
+            'Field "' +
+              requestedField.getId() +
+              '" has not been accounted for in code yet.'
           )
           .setText('You cannot use ' + requestedField.getId() + ' yet.')
           .throwException();
@@ -309,8 +325,8 @@ function getUrl(config) {
   var query = config.query;
 
   var path = [organization, repository, endpoint]
-      .map(encodeURIComponent)
-      .join('/');
+    .map(encodeURIComponent)
+    .join('/');
 
   return 'https://api.github.com/repos/' + path + encodeQuery(query);
 }
@@ -318,10 +334,14 @@ function getUrl(config) {
 function validateConfig(config) {
   var config = config || {};
   if (!config.organization) {
-    cc.newUserError().setText('Organization cannot be left blank.').throwException();
+    cc.newUserError()
+      .setText('Organization cannot be left blank.')
+      .throwException();
   }
   if (!config.repository) {
-    cc.newUserError().setText('Repository cannot be left blank.').throwException();
+    cc.newUserError()
+      .setText('Repository cannot be left blank.')
+      .throwException();
   }
   return true;
 }
@@ -346,12 +366,12 @@ function encodeQuery(queryParams) {
   if (!queryParams) return '';
 
   var query = Object.keys(queryParams)
-      .map(function(key) {
-        return (
-            encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key])
-        );
-      })
-      .join('&');
+    .map(function(key) {
+      return (
+        encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key])
+      );
+    })
+    .join('&');
 
   return query === '' ? '' : '?' + query;
 }

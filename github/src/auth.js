@@ -9,12 +9,12 @@ function getOAuthService() {
   var clientSecret = scriptProps.getProperty('OAUTH_CLIENT_SECRET');
 
   return OAuth2.createService(SERVICE_NAME)
-      .setAuthorizationBaseUrl(AUTHORIZATION_BASE_URL)
-      .setTokenUrl(TOKEN_URL)
-      .setClientId(clientId)
-      .setClientSecret(clientSecret)
-      .setPropertyStore(PropertiesService.getUserProperties())
-      .setCallbackFunction('authCallback');
+    .setAuthorizationBaseUrl(AUTHORIZATION_BASE_URL)
+    .setTokenUrl(TOKEN_URL)
+    .setClientId(clientId)
+    .setClientSecret(clientSecret)
+    .setPropertyStore(PropertiesService.getUserProperties())
+    .setCallbackFunction('authCallback');
 }
 
 /** The callback that is invoked after an authentication attempt. */
