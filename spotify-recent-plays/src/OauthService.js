@@ -22,7 +22,9 @@ function OauthService(oauth2Builder, htmlService) {
  */
 OauthService.prototype.authCallback = function(request) {
   var authorized = this.getInternalService().handleCallback(request);
-  var htmlContent = authorized ? 'Success! You can close this tab.' : 'Denied. You can close this tab';
+  var htmlContent = authorized
+    ? 'Success! You can close this tab.'
+    : 'Denied. You can close this tab';
 
   return this.htmlService.createHtmlOutput(htmlContent);
 };
@@ -77,7 +79,7 @@ OauthService.prototype.getInternalService = function() {
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['default'] = OauthService;
 }

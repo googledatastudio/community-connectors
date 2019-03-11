@@ -3,50 +3,52 @@ var connector = {};
 // Kaggle URL format: https://www.kaggle.com/{ownerSlug}/{datasetSlug}.
 // Sample Kaggle URL: https://www.kaggle.com/unsdsn/world-happiness
 // Filename refers to the dataset under the 'Data' tab.
-connector.ownerSlug = "unsdsn";
-connector.datasetSlug = "world-happiness";
-connector.fileName = "2016.csv";
-connector.usernameKey = "USERNAME";
-connector.tokenKey = "KEY";
-connector.kaggleUrl = "https://www.kaggle.com";
-connector.apiBaseUrl = connector.kaggleUrl + "/api/v1/";
-connector.apiDownloadSlug = "datasets/download-raw";
-connector.pingUrl = connector.apiBaseUrl + "competitions/list";
+connector.ownerSlug = 'unsdsn';
+connector.datasetSlug = 'world-happiness';
+connector.fileName = '2016.csv';
+connector.usernameKey = 'USERNAME';
+connector.tokenKey = 'KEY';
+connector.kaggleUrl = 'https://www.kaggle.com';
+connector.apiBaseUrl = connector.kaggleUrl + '/api/v1/';
+connector.apiDownloadSlug = 'datasets/download-raw';
+connector.pingUrl = connector.apiBaseUrl + 'competitions/list';
 connector.fileSizeLimitInBytes = 20971520;
 
 function getAuthType() {
   return {
-    helpUrl: "https://www.kaggle.com/docs/api#authentication",
-    type: "USER_TOKEN"
+    helpUrl: 'https://www.kaggle.com/docs/api#authentication',
+    type: 'USER_TOKEN',
   };
 }
 
 function getConfig(request) {
   var config = {
-    configParams: [{
-        type: "INFO",
-        name: "generalInfo",
-        text: 'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found under the "Data" tab in Kaggle UI.'
+    configParams: [
+      {
+        type: 'INFO',
+        name: 'generalInfo',
+        text:
+          'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found under the "Data" tab in Kaggle UI.',
       },
       {
-        type: "TEXTINPUT",
-        name: "ownerSlug",
-        displayName: "Owner slug",
-        placeholder: connector.ownerSlug
+        type: 'TEXTINPUT',
+        name: 'ownerSlug',
+        displayName: 'Owner slug',
+        placeholder: connector.ownerSlug,
       },
       {
-        type: "TEXTINPUT",
-        name: "datasetSlug",
-        displayName: "Dataset slug",
-        placeholder: connector.datasetSlug
+        type: 'TEXTINPUT',
+        name: 'datasetSlug',
+        displayName: 'Dataset slug',
+        placeholder: connector.datasetSlug,
       },
       {
-        type: "TEXTINPUT",
-        name: "fileName",
-        displayName: "Filename (CSV files only. Include .csv at end.)",
-        placeholder: connector.fileName
-      }
-    ]
+        type: 'TEXTINPUT',
+        name: 'fileName',
+        displayName: 'Filename (CSV files only. Include .csv at end.)',
+        placeholder: connector.fileName,
+      },
+    ],
   };
   return config;
 }
@@ -57,7 +59,11 @@ function getSchema(request) {
     var result = getFileData(request.configParams);
   } catch (e) {
     var fileUrl = buildBrowsableFileUrl(request.configParams);
-    throwConnectorError("Please ensure Owner slug, Dataset slug, and Filename are correct. Unable to find file: " + fileUrl, true);
+    throwConnectorError(
+      'Please ensure Owner slug, Dataset slug, and Filename are correct. Unable to find file: ' +
+        fileUrl,
+      true
+    );
   }
   var rawData = result.csvData;
   var cacheKey = result.cacheKey;
@@ -69,7 +75,7 @@ function getSchema(request) {
     var kaggleSchema = cachedSchema;
   }
   return {
-    schema: kaggleSchema
+    schema: kaggleSchema,
   };
 }
 
@@ -82,12 +88,12 @@ function validateConfig(request) {
 
   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
-    throwConnectorError("Only .csv filetypes are supported.", true);
+    throwConnectorError('Only .csv filetypes are supported.', true);
   }
 
   var fileIsSmall = isFileSmall(config);
   if (fileIsSmall === false) {
-    throwConnectorError("Please use smaller than 20MB csv files.", true);
+    throwConnectorError('Please use smaller than 20MB csv files.', true);
   }
 
   return request;
@@ -99,7 +105,7 @@ function getData(request) {
     var result = getFileData(request.configParams);
   } catch (e) {
     var fileUrl = buildBrowsableFileUrl(request.configParams);
-    throwConnectorError("Unable to fetch data from file: " + fileUrl, true);
+    throwConnectorError('Unable to fetch data from file: ' + fileUrl, true);
   }
   var rawData = result.csvData;
   var cacheKey = result.cacheKey;
@@ -110,7 +116,7 @@ function getData(request) {
   } else {
     var kaggleSchema = cachedSchema;
   }
-  var requestedSchema = request.fields.map(function (field) {
+  var requestedSchema = request.fields.map(function(field) {
     for (var i = 0; i < kaggleSchema.length; i++) {
       if (kaggleSchema[i].name == field.name) {
         return kaggleSchema[i];
@@ -120,7 +126,7 @@ function getData(request) {
   var requestedData = processData(rawData, requestedSchema);
   return {
     schema: requestedSchema,
-    rows: requestedData
+    rows: requestedData,
   };
 }
 
@@ -139,16 +145,16 @@ function buildSchema(data, cacheKey) {
 
 function mapColumn(index, columnName, content) {
   var field = {};
-  field.name = "c" + index;
+  field.name = 'c' + index;
   field.label = columnName;
   if (isNaN(content)) {
-    field.dataType = "STRING";
+    field.dataType = 'STRING';
     field.semantics = {};
-    field.semantics.conceptType = "DIMENSION";
+    field.semantics.conceptType = 'DIMENSION';
   } else {
-    field.dataType = "NUMBER";
+    field.dataType = 'NUMBER';
     field.semantics = {};
-    field.semantics.conceptType = "METRIC";
+    field.semantics.conceptType = 'METRIC';
     field.semantics.isReaggregatable = true;
   }
   return field;
@@ -156,16 +162,16 @@ function mapColumn(index, columnName, content) {
 
 function processData(data, fields) {
   var header = data[0];
-  var dataIndexes = fields.map(function (field) {
+  var dataIndexes = fields.map(function(field) {
     return header.indexOf(field.label);
   });
   var result = [];
   for (var rowIndex = 1; rowIndex < data.length; rowIndex++) {
-    var rowData = dataIndexes.map(function (columnIndex) {
+    var rowData = dataIndexes.map(function(columnIndex) {
       return data[rowIndex][columnIndex];
     });
     result.push({
-      values: rowData
+      values: rowData,
     });
   }
   return result;
@@ -178,31 +184,31 @@ function getFileData(config) {
     connector.apiDownloadSlug,
     config.ownerSlug,
     config.datasetSlug,
-    config.fileName
+    config.fileName,
   ];
-  var path = pathElements.join("/");
+  var path = pathElements.join('/');
 
   var response = kaggleFetch(path, kaggleAuth);
   var fileContent = response.getContentText();
   var csvData = Utilities.parseCsv(fileContent);
 
   pathElements.shift();
-  var cacheKey = pathElements.join("--");
+  var cacheKey = pathElements.join('--');
   var result = {
     csvData: csvData,
-    cacheKey: cacheKey
+    cacheKey: cacheKey,
   };
   return result;
 }
 
 function kaggleFetch(path, kaggleAuth) {
   var fullUrl = connector.apiBaseUrl + path;
-  var authParamPlain = kaggleAuth.userName + ":" + kaggleAuth.apiToken;
+  var authParamPlain = kaggleAuth.userName + ':' + kaggleAuth.apiToken;
   var authParamBase64 = Utilities.base64Encode(authParamPlain);
   var options = {
     headers: {
-      Authorization: "Basic " + authParamBase64
-    }
+      Authorization: 'Basic ' + authParamBase64,
+    },
   };
   var response = UrlFetchApp.fetch(fullUrl, options);
   return response;
@@ -219,12 +225,12 @@ function validateCredentials(username, token) {
   }
 
   // To check if the credentials entered are valid.
-  var authParamPlain = username + ":" + token;
+  var authParamPlain = username + ':' + token;
   var authParamBase64 = Utilities.base64Encode(authParamPlain);
   var options = {
     headers: {
-      Authorization: "Basic " + authParamBase64
-    }
+      Authorization: 'Basic ' + authParamBase64,
+    },
   };
   try {
     var response = UrlFetchApp.fetch(connector.pingUrl, options);
@@ -251,14 +257,14 @@ function setCredentials(request) {
   var validCreds = validateCredentials(username, token);
   if (validCreds === false) {
     return {
-      errorCode: "INVALID_CREDENTIALS"
+      errorCode: 'INVALID_CREDENTIALS',
     };
   }
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty(connector.usernameKey, username);
   userProperties.setProperty(connector.tokenKey, token);
   return {
-    errorCode: "NONE"
+    errorCode: 'NONE',
   };
 }
 
@@ -273,31 +279,37 @@ function isAdminUser() {
 }
 
 function throwConnectorError(message, userSafe) {
-  userSafe = (typeof userSafe !== "undefined" &&
-    typeof userSafe === "boolean") ? userSafe : false;
+  userSafe =
+    typeof userSafe !== 'undefined' && typeof userSafe === 'boolean'
+      ? userSafe
+      : false;
   if (userSafe) {
-    message = "DS_USER:" + message;
+    message = 'DS_USER:' + message;
   }
   throw new Error(message);
 }
 
 function buildBrowsableFileUrl(config) {
-  var datasetUrlElements = [connector.kaggleUrl, config.ownerSlug, config.datasetSlug];
-  var datasetUrl = datasetUrlElements.join("/");
+  var datasetUrlElements = [
+    connector.kaggleUrl,
+    config.ownerSlug,
+    config.datasetSlug,
+  ];
+  var datasetUrl = datasetUrlElements.join('/');
   var fileUrlElements = [datasetUrl, config.fileName];
-  var fileUrl = fileUrlElements.join("#");
+  var fileUrl = fileUrlElements.join('#');
   return fileUrl;
 }
 
 function isFileTypeSupported(filename) {
-  var supportedExtension = ".csv";
+  var supportedExtension = '.csv';
   var extensionLength = supportedExtension.length;
 
   var length = filename.length;
   var extension = filename.substring(length - extensionLength, length);
   extension = extension.toLowerCase();
 
-  var fileTypeIsSupported = (extension === supportedExtension);
+  var fileTypeIsSupported = extension === supportedExtension;
 
   return fileTypeIsSupported;
 }
@@ -308,19 +320,15 @@ function getStoredCredentials() {
   var token = userProperties.getProperty(connector.tokenKey);
   var kaggleAuth = {
     userName: user,
-    apiToken: token
+    apiToken: token,
   };
   return kaggleAuth;
 }
 
 function isFileSmall(config) {
-  var apiPath = "datasets/view";
-  var pathElements = [
-    apiPath,
-    config.ownerSlug,
-    config.datasetSlug
-  ];
-  var fullPath = pathElements.join("/");
+  var apiPath = 'datasets/view';
+  var pathElements = [apiPath, config.ownerSlug, config.datasetSlug];
+  var fullPath = pathElements.join('/');
 
   var kaggleAuth = getStoredCredentials();
   var response = kaggleFetch(fullPath, kaggleAuth);
@@ -332,7 +340,7 @@ function isFileSmall(config) {
     var file = fileList[fileIndex];
     var fileName = file.name;
     if (fileName === config.fileName) {
-      return (file.totalBytes < connector.fileSizeLimitInBytes);
+      return file.totalBytes < connector.fileSizeLimitInBytes;
     }
   }
 }

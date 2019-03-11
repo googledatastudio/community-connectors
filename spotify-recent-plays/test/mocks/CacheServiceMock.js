@@ -36,7 +36,7 @@ CacheMock.prototype.get = function(key) {
 };
 
 CacheMock.prototype.put = function(key, value, cacheTime) {
-  this.data[key] = { value: value, cachedFor: cacheTime };
+  this.data[key] = {value: value, cachedFor: cacheTime};
 };
 
 export default CacheServiceMock;

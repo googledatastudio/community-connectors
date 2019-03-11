@@ -1,4 +1,3 @@
-
 /**
  * Generate Athena query string from the getData() request.
  *
@@ -16,7 +15,7 @@ function generateAthenaQuery(request, fields) {
   var params = request.configParams || {};
 
   var rowLimit = parseInt(params.rowLimit || defaultRowLimit);
-  var columns = request.fields.map(function (field) {
+  var columns = request.fields.map(function(field) {
     return '"' + field.name + '"';
   });
   var table = params.tableName;
@@ -47,9 +46,20 @@ function generateAthenaQuery(request, fields) {
     // WHERE "${params.dateRangeColumn}"
     // BETWEEN ${dateRangeDataType} '${startDate}'
     // AND ${dateRangeDataType} '${endDate}'
-    query += ' WHERE "' + params.dateRangeColumn + '"' +
-      ' BETWEEN ' + dateRangeDataType + ' \'' + startDate + '\'' +
-      ' AND ' + dateRangeDataType + ' \'' + endDate + '\'' ;
+    query +=
+      ' WHERE "' +
+      params.dateRangeColumn +
+      '"' +
+      ' BETWEEN ' +
+      dateRangeDataType +
+      " '" +
+      startDate +
+      "'" +
+      ' AND ' +
+      dateRangeDataType +
+      " '" +
+      endDate +
+      "'";
   }
   if (rowLimit !== -1) {
     query += ' LIMIT ' + rowLimit;
@@ -69,16 +79,21 @@ function generateAthenaQuery(request, fields) {
  */
 function runAthenaQuery(region, database, query, outputLocation) {
   var payload = {
-    'ClientRequestToken': uuidv4(),
-    'QueryExecutionContext': {
-      'Database': database
+    ClientRequestToken: uuidv4(),
+    QueryExecutionContext: {
+      Database: database,
     },
-    'QueryString': query,
-    'ResultConfiguration': {
-      'OutputLocation': outputLocation
-    }
+    QueryString: query,
+    ResultConfiguration: {
+      OutputLocation: outputLocation,
+    },
   };
-  return AWS.post('athena', region, 'AmazonAthena.StartQueryExecution', payload);
+  return AWS.post(
+    'athena',
+    region,
+    'AmazonAthena.StartQueryExecution',
+    payload
+  );
 }
 
 /**
@@ -92,18 +107,26 @@ function runAthenaQuery(region, database, query, outputLocation) {
  */
 function waitAthenaQuery(region, queryExecutionId) {
   var payload = {
-    'QueryExecutionId': queryExecutionId
+    QueryExecutionId: queryExecutionId,
   };
 
   // Ping for status until the query reached a terminal state
   while (1) {
-    var result = AWS.post('athena', region, 'AmazonAthena.GetQueryExecution', payload);
+    var result = AWS.post(
+      'athena',
+      region,
+      'AmazonAthena.GetQueryExecution',
+      payload
+    );
     var state = result.QueryExecution.Status.State.toLowerCase();
     switch (state) {
       case 'succeeded':
         return true;
       case 'failed':
-        throw new Error(result.QueryExecution.Status.StateChangeReason || 'Unknown query error');
+        throw new Error(
+          result.QueryExecution.Status.StateChangeReason ||
+            'Unknown query error'
+        );
       case 'cancelled':
         throw new Error('Query cancelled');
     }
@@ -124,21 +147,28 @@ function getAthenaQueryResults(region, queryExecutionId) {
   var nextToken = null;
   while (1) {
     var payload = {
-      'QueryExecutionId': queryExecutionId
+      QueryExecutionId: queryExecutionId,
     };
     if (nextToken) {
       payload.NextToken = nextToken;
     }
 
     // Parse and append data
-    var result = AWS.post('athena', region, 'AmazonAthena.GetQueryResults', payload);
-    var columns = result.ResultSet.ResultSetMetadata.ColumnInfo.map(function (info) {
+    var result = AWS.post(
+      'athena',
+      region,
+      'AmazonAthena.GetQueryResults',
+      payload
+    );
+    var columns = result.ResultSet.ResultSetMetadata.ColumnInfo.map(function(
+      info
+    ) {
       return info.Name;
     });
-    result.ResultSet.Rows.forEach(function (row) {
+    result.ResultSet.Rows.forEach(function(row) {
       // Combine [val0, val1, ...] and [col0, col1, ...] into { col0: val0, col1: val1, ... }
       var newRow = {};
-      row.Data.forEach(function (data, index) {
+      row.Data.forEach(function(data, index) {
         var column = columns[index];
         newRow[column] = data.VarCharValue;
       });
@@ -164,9 +194,9 @@ function getAthenaQueryResults(region, queryExecutionId) {
  * @returns {Array} Array of rows with the data type transformed.
  */
 function queryResultsToRows(schema, queryResults) {
-  return queryResults.map(function (data) {
+  return queryResults.map(function(data) {
     var values = [];
-    schema.forEach(function (field) {
+    schema.forEach(function(field) {
       var value = data[field.name];
       // Athena returned all values as strings, need to convert data type
       switch (field.dataType.toLowerCase()) {
@@ -181,12 +211,11 @@ function queryResultsToRows(schema, queryResults) {
           break;
       }
     });
-    return { values: values };
+    return {values: values};
   });
 
-
-  return rows.map(function (row) {
-    return row.map(function (field, index) {
+  return rows.map(function(row) {
+    return row.map(function(field, index) {
       switch (schema[index].dataType.toLowerCase()) {
         case 'number':
           return parseFloat(field);
@@ -218,7 +247,12 @@ function getDataFromAthena(request) {
 
   // Generate and submit query
   var query = generateAthenaQuery(request, fields);
-  var runResult = runAthenaQuery(params.awsRegion, params.databaseName, query, params.outputLocation);
+  var runResult = runAthenaQuery(
+    params.awsRegion,
+    params.databaseName,
+    query,
+    params.outputLocation
+  );
   var queryExecutionId = runResult.QueryExecutionId;
   waitAthenaQuery(params.awsRegion, queryExecutionId);
 
@@ -228,6 +262,6 @@ function getDataFromAthena(request) {
 
   return {
     schema: schema,
-    rows: rows
+    rows: rows,
   };
 }

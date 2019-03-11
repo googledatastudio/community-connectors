@@ -19,15 +19,24 @@ test('getRecentPlays', () => {
   const expectedApiCalls = {
     'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1,
     'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': 1,
-    'https://api.spotify.com/v1/me/player/recently-played?before=1531482414230': 1
+    'https://api.spotify.com/v1/me/player/recently-played?before=1531482414230': 1,
   };
-  expect(urlFetchAppMock.calls).toEqual(expectedApiCalls, 'it calls proper endpoints');
+  expect(urlFetchAppMock.calls).toEqual(
+    expectedApiCalls,
+    'it calls proper endpoints'
+  );
   expect(urlFetchAppMock.passedHeaders['Authorization']).toBe('Bearer api_key');
-  expect(cacheServiceMock.userCache.hits).toBe(1, 'it checks if data is cached');
+  expect(cacheServiceMock.userCache.hits).toBe(
+    1,
+    'it checks if data is cached'
+  );
 
   result = service.getRecentPlays(startDate, endDate);
   expect(result.length).toBe(50, 'it gets paginated data');
-  expect(urlFetchAppMock.calls).toEqual(expectedApiCalls, 'it does not call api if result is cached');
+  expect(urlFetchAppMock.calls).toEqual(
+    expectedApiCalls,
+    'it does not call api if result is cached'
+  );
   expect(cacheServiceMock.userCache.hits).toBe(3, 'it gets data from cache');
 });
 
@@ -37,10 +46,16 @@ test('limiting the data', () => {
   let result = service.getRecentPlays(startDate, endDate);
   const expectedApiCalls = {
     'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': 1,
-    'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1
+    'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1,
   };
-  expect(urlFetchAppMock.calls).toEqual(expectedApiCalls, 'it calls proper endpoints');
-  expect(result.length).toBe(31, 'it returns only data that fit into the time constraint');
+  expect(urlFetchAppMock.calls).toEqual(
+    expectedApiCalls,
+    'it calls proper endpoints'
+  );
+  expect(result.length).toBe(
+    31,
+    'it returns only data that fit into the time constraint'
+  );
 });
 
 test('handling cache.set errors', () => {
@@ -52,5 +67,8 @@ test('handling cache.set errors', () => {
   const endDate = new Date('2018-07-14T23:59:59.999Z');
   let result = service.getRecentPlays(startDate, endDate);
 
-  expect(result.length).toBe(50, 'it works even when setting data to cache fails');
+  expect(result.length).toBe(
+    50,
+    'it works even when setting data to cache fails'
+  );
 });

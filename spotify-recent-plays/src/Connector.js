@@ -1,5 +1,5 @@
 /* istanbul ignore next */
-if (typeof(require) !== 'undefined') {
+if (typeof require !== 'undefined') {
   var DataBuilder = require('./DataBuilder.js')['default'];
   var Oauth2Builder = require('./Oauth2Builder.js')['default'];
   var OauthService = require('./OauthService.js')['default'];
@@ -30,16 +30,16 @@ Connector.prototype.getSchema = function() {
         label: 'Track Name',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION'
-        }
+          conceptType: 'DIMENSION',
+        },
       },
       {
         name: 'artist',
         label: 'Artist',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION'
-        }
+          conceptType: 'DIMENSION',
+        },
       },
       {
         name: 'played_at_hour',
@@ -48,8 +48,8 @@ Connector.prototype.getSchema = function() {
         semantics: {
           conceptType: 'DIMENSION',
           semanticGroup: 'DATETIME',
-          semanticType: 'YEAR_MONTH_DAY_HOUR'
-        }
+          semanticType: 'YEAR_MONTH_DAY_HOUR',
+        },
       },
       {
         name: 'played_at_date',
@@ -58,8 +58,8 @@ Connector.prototype.getSchema = function() {
         semantics: {
           conceptType: 'DIMENSION',
           semanticGroup: 'DATETIME',
-          semanticType: 'YEAR_MONTH_DAY'
-        }
+          semanticType: 'YEAR_MONTH_DAY',
+        },
       },
       {
         name: 'plays',
@@ -68,8 +68,8 @@ Connector.prototype.getSchema = function() {
         formula: 'COUNT(track_name)',
         semantics: {
           conceptType: 'METRIC',
-          isReaggregatable: false
-        }
+          isReaggregatable: false,
+        },
       },
       {
         name: 'tracks_count',
@@ -78,18 +78,18 @@ Connector.prototype.getSchema = function() {
         formula: 'COUNT(track_name)',
         semantics: {
           conceptType: 'METRIC',
-          isReaggregatable: false
-        }
+          isReaggregatable: false,
+        },
       },
       {
         name: 'popularity',
         label: 'Popularity',
         dataType: 'NUMBER',
         semantics: {
-          conceptType: 'METRIC'
-        }
-      }
-    ]
+          conceptType: 'METRIC',
+        },
+      },
+    ],
   };
 };
 
@@ -98,7 +98,7 @@ Connector.prototype.getSchema = function() {
  */
 Connector.prototype.getConfig = function() {
   return {
-    dateRangeRequired: true
+    dateRangeRequired: true,
   };
 };
 
@@ -106,7 +106,7 @@ Connector.prototype.getConfig = function() {
  * @return {object} Object containing auth config
  */
 Connector.prototype.getAuthType = function() {
-  return { type: 'OAUTH2' };
+  return {type: 'OAUTH2'};
 };
 
 /**
@@ -128,7 +128,11 @@ Connector.prototype.getData = function(request) {
   var endDate = new Date(request.dateRange.endDate);
   endDate.setUTCHours(23, 59, 59, 999);
   var apiKey = this.getOAuthService().getAccessToken();
-  var spotifyClient = new SpotifyClient(this.services.CacheService, this.services.UrlFetchApp, apiKey);
+  var spotifyClient = new SpotifyClient(
+    this.services.CacheService,
+    this.services.UrlFetchApp,
+    apiKey
+  );
 
   var plays = spotifyClient.getRecentPlays(startDate, endDate);
 
@@ -195,24 +199,27 @@ Connector.prototype.buildTabularData = function(plays, dataSchema) {
 
   plays.forEach(function(play) {
     data.push({
-      values: dataBuilder.build(play)
+      values: dataBuilder.build(play),
     });
   });
 
   return {
     schema: dataSchema,
-    rows: data
+    rows: data,
   };
 };
 
 Connector.prototype.getOAuthService = function() {
-  var builder = new Oauth2Builder(this.services.PropertiesService, this.services.OAuth2);
+  var builder = new Oauth2Builder(
+    this.services.PropertiesService,
+    this.services.OAuth2
+  );
   return new OauthService(builder, this.services.HtmlService);
 };
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['default'] = Connector;
 }
