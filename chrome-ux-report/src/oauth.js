@@ -11,7 +11,7 @@
 function getOauthService(client) {
   return OAuth2.createService(client.name)
     .setAuthorizationBaseUrl('https://accounts.google.com/o/oauth2/auth')
-    .setTokenUrl("https://accounts.google.com/o/oauth2/token")
+    .setTokenUrl('https://accounts.google.com/o/oauth2/token')
     .setPrivateKey(client.key)
     .setIssuer(client.email)
     .setPropertyStore(PropertiesService.getScriptProperties())
@@ -30,11 +30,11 @@ function getOauthService(client) {
  *          service account.
  */
 function processOauth(clientKey) {
-  var client = JSON.parse(propStore.get("script", clientKey));
+  var client = JSON.parse(propStore.get('script', clientKey));
   var oauthService = getOauthService(client);
   var token = oauthService.getAccessToken();
   return {
     token: token,
-    projectId: client.projectId
+    projectId: client.projectId,
   };
 }

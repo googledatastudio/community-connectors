@@ -4,11 +4,8 @@
  * @return {object} The request that would be passed from DataStudio.
  */
 const buildFakeRequest = (params) => {
-  var {
-    startDate = '2018-03-19',
-    endDate = '2018-04-15',
-    fields = []
-  } = params || {};
+  var {startDate = '2018-03-19', endDate = '2018-04-15', fields = []} =
+    params || {};
   const request = {};
 
   request.configParams = {};
@@ -17,7 +14,7 @@ const buildFakeRequest = (params) => {
 
   request.dateRange = {
     startDate: startDate,
-    endDate: endDate
+    endDate: endDate,
   };
 
   return request;
@@ -28,9 +25,7 @@ const buildFakeRequest = (params) => {
  * @return {array} The fields being request by data studio.
  */
 const buildFields = (...fieldNames) => {
-  return fieldNames.map((name) => ({ name }));
+  return fieldNames.map((name) => ({name}));
 };
 
-export {
-  buildFakeRequest
-};
+export {buildFakeRequest};

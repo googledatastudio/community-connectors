@@ -17,7 +17,7 @@ function isAdminUser() {
  * @returns {Object} `AuthType` used by the connector.
  */
 function getAuthType() {
-  var response = { type: 'NONE' };
+  var response = {type: 'NONE'};
   return response;
 }
 
@@ -31,43 +31,55 @@ function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('awsAccessKeyId')
     .setName('AWS_ACCESS_KEY_ID');
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('awsSecretAccessKey')
     .setName('AWS_SECRET_ACCESS_KEY');
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('awsRegion')
     .setName('AWS Region')
     .setPlaceholder('us-east-1');
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('databaseName')
     .setName('Glue Database Name')
     .setPlaceholder('e.g. default');
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('tableName')
     .setName('Glue Table Name');
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('outputLocation')
     .setName('Query Output Location')
     .setHelpText('S3 path to store the Athena query results')
     .setPlaceholder('s3://<bucket>/<directory>');
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('dateRangeColumn')
     .setName('Date Range Column Name')
-    .setHelpText('(Optional) If date range is applied in the report, the corresponding column to apply the filtering conditions.');
+    .setHelpText(
+      '(Optional) If date range is applied in the report, the corresponding column to apply the filtering conditions.'
+    );
 
-  config.newTextInput()
+  config
+    .newTextInput()
     .setId('rowLimit')
     .setName('Row Limit')
-    .setHelpText('Maximum number of rows to fetch in each query. Default is 1000. If set to -1, all rows will be fetched.')
+    .setHelpText(
+      'Maximum number of rows to fetch in each query. Default is 1000. If set to -1, all rows will be fetched.'
+    )
     .setPlaceholder('1000')
     .setAllowOverride(true);
 
@@ -111,7 +123,9 @@ function validateConfig(configParams) {
     throwUserError('Table Name is empty.');
   }
   if (configParams.outputLocation.indexOf('s3://') !== 0) {
-    throwUserError('Query Output Location must in the format of s3://<bucket>/<directory>');
+    throwUserError(
+      'Query Output Location must in the format of s3://<bucket>/<directory>'
+    );
   }
   if (configParams.rowLimit) {
     var rowLimit = parseInt(configParams.rowLimit);
@@ -131,7 +145,7 @@ function getSchema(request) {
   validateConfig(request.configParams);
   try {
     var fields = getFieldsFromGlue(request).build();
-    return { schema: fields };
+    return {schema: fields};
   } catch (err) {
     throwUserError(err.message);
   }

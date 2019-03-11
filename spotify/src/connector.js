@@ -1,44 +1,42 @@
 var spotifySchema = [
   {
-    name: "text",
-    dataType: "STRING",
+    name: 'text',
+    dataType: 'STRING',
     semantics: {
-      conceptType: "DIMENSION"
-    }
+      conceptType: 'DIMENSION',
+    },
   },
   {
-    name: "popularity",
-    dataType: "NUMBER",
+    name: 'popularity',
+    dataType: 'NUMBER',
     semantics: {
-      conceptType: "METRIC"
-    }
-  }
+      conceptType: 'METRIC',
+    },
+  },
 ];
 
 function getAuthType() {
   var response = {
-    type: "OAUTH2"
+    type: 'OAUTH2',
   };
   return response;
 }
 var getOAuthService = function() {
   var scriptProps = PropertiesService.getScriptProperties();
-  return OAuth2.createService("Spotify")
-    .setAuthorizationBaseUrl(
-      "https://accounts.spotify.com/authorize"
-    )
-    .setTokenUrl("https://accounts.spotify.com/api/token")
-    .setClientId(scriptProps.getProperty("OAUTH_CLIENT_ID"))
-    .setClientSecret(scriptProps.getProperty("OAUTH_CLIENT_SECRET"))
+  return OAuth2.createService('Spotify')
+    .setAuthorizationBaseUrl('https://accounts.spotify.com/authorize')
+    .setTokenUrl('https://accounts.spotify.com/api/token')
+    .setClientId(scriptProps.getProperty('OAUTH_CLIENT_ID'))
+    .setClientSecret(scriptProps.getProperty('OAUTH_CLIENT_SECRET'))
     .setPropertyStore(PropertiesService.getUserProperties())
-    .setCallbackFunction("authCallback");
+    .setCallbackFunction('authCallback');
 };
 function authCallback(request) {
   var authorized = getOAuthService().handleCallback(request);
   if (authorized) {
-    return HtmlService.createHtmlOutput("Success! You can close this tab.");
+    return HtmlService.createHtmlOutput('Success! You can close this tab.');
   } else {
-    return HtmlService.createHtmlOutput("Denied. You can close this tab");
+    return HtmlService.createHtmlOutput('Denied. You can close this tab');
   }
 }
 function isAuthValid() {
@@ -51,7 +49,7 @@ function isAuthValid() {
 function get3PAuthorizationUrls() {
   var service = getOAuthService();
   if (service == null) {
-    return "";
+    return '';
   }
   return service.getAuthorizationUrl();
 }
@@ -63,24 +61,24 @@ function getConfig(request) {
   var config = {
     configParams: [
       {
-        type: "INFO",
-        name: "Spotify search",
-        text: "Enter the artist for all their Spotify rated popularity tracks"
+        type: 'INFO',
+        name: 'Spotify search',
+        text: 'Enter the artist for all their Spotify rated popularity tracks',
       },
       {
-        type: "TEXTINPUT",
-        name: "artistName",
-        displayName: "Search",
-        helpText: "e.g. Coldplay",
-        placeholder: "Search for an artist for all songs"
-      }
-    ]
+        type: 'TEXTINPUT',
+        name: 'artistName',
+        displayName: 'Search',
+        helpText: 'e.g. Coldplay',
+        placeholder: 'Search for an artist for all songs',
+      },
+    ],
   };
   return config;
 }
 function getSchema(request) {
   var reqSchema = {
-    schema: spotifySchema
+    schema: spotifySchema,
   };
   return reqSchema;
 }
@@ -96,17 +94,17 @@ function getData(request) {
 
   // Fetch and parse data from API
   var url = [
-    "https://api.spotify.com/v1/search?q=",
+    'https://api.spotify.com/v1/search?q=',
     request.configParams.artistName,
-    "&type=track"
+    '&type=track',
   ];
 
   var options = {
     headers: {
-      Authorization: "Bearer " + getOAuthService().getAccessToken()
-    }
+      Authorization: 'Bearer ' + getOAuthService().getAccessToken(),
+    },
   };
-  var response = UrlFetchApp.fetch(url.join(""), options);
+  var response = UrlFetchApp.fetch(url.join(''), options);
   var parsedResponse = JSON.parse(response).tracks.items;
   console.log(parsedResponse);
 
@@ -115,24 +113,24 @@ function getData(request) {
     var values = [];
     requestedSchema.forEach(function(field) {
       switch (field.name) {
-        case "text":
+        case 'text':
           values.push(trackSearch.name);
           break;
-        case "popularity":
+        case 'popularity':
           values.push(trackSearch.popularity);
           break;
         default:
-          values.push("");
+          values.push('');
           break;
       }
     });
     return {
-      values: values
+      values: values,
     };
   });
 
   return {
     schema: requestedSchema,
-    rows: requestedData
+    rows: requestedData,
   };
 }

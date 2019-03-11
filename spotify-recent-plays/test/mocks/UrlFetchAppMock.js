@@ -2,7 +2,7 @@
  * Mock for Google HTTPResponse object
  *
  * @param responseText {String} stringified JSON
-*/
+ */
 function HTTPResponseMock(responseText) {
   this.responseText = responseText;
 
@@ -17,7 +17,7 @@ HTTPResponseMock.prototype.getContentText = function() {
  * Mock for Google UrlFetchApp service
  *
  * @param stubbedResponses {Object} Hash in which key -> url string, value -> Response object
-*/
+ */
 function UrlFetchAppMock(stubbedResponses) {
   this.stubbedResponses = stubbedResponses;
   this.calls = {};
@@ -28,7 +28,9 @@ function UrlFetchAppMock(stubbedResponses) {
 UrlFetchAppMock.prototype.fetch = function(url, options = {}) {
   var json = this.stubbedResponses[url];
   if (!json) {
-    throw `Response for url ${url} not found! Available urls: ${Object.keys(this.stubbedResponses)}`;
+    throw `Response for url ${url} not found! Available urls: ${Object.keys(
+      this.stubbedResponses
+    )}`;
   }
 
   this.passedHeaders = options['headers'];

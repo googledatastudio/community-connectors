@@ -7,17 +7,17 @@
  */
 function buildFbUrl(projectId, fileName) {
   if (fileName) {
-    fileName = "/" + fileName;
+    fileName = '/' + fileName;
   }
   var urlElements = [
-    "https://",
+    'https://',
     projectId,
-    ".firebaseio.com/",
-    "origins",
+    '.firebaseio.com/',
+    'origins',
     fileName,
-    ".json"
+    '.json',
   ];
-  var url = urlElements.join("");
+  var url = urlElements.join('');
   return url;
 }
 
@@ -31,26 +31,26 @@ function buildFbUrl(projectId, fileName) {
  * @param {string} origin.key Hashed key generated from the Origin URL
  */
 function processFirebase(origin) {
-  var fbClient = JSON.parse(propStore.get("script", "firebase.client"));
+  var fbClient = JSON.parse(propStore.get('script', 'firebase.client'));
   var fbOauthService = getOauthService(fbClient);
   var fbOAuthToken = fbOauthService.getAccessToken();
   var fbUrl = buildFbUrl(fbClient.projectId, origin.key);
   // If we fetched data from BigQuery delete and rewrite firebase cache
   // else write data to firebase cache
   if (origin.data) {
-    console.log("deleting firebase cache for " + origin.url);
-    fbCache("delete", fbOAuthToken, fbUrl);
-    console.log("saving firebase cache for " + origin.url);
-    fbCache("post", fbOAuthToken, fbUrl, origin.data);
-    propStore.set("script", origin.key, origin.lastUpdate);
+    console.log('deleting firebase cache for ' + origin.url);
+    fbCache('delete', fbOAuthToken, fbUrl);
+    console.log('saving firebase cache for ' + origin.url);
+    fbCache('post', fbOAuthToken, fbUrl, origin.data);
+    propStore.set('script', origin.key, origin.lastUpdate);
   } else {
-    console.log("hitting firebase cache for " + origin.url);
-    origin.data = fbCache("get", fbOAuthToken, fbUrl);
+    console.log('hitting firebase cache for ' + origin.url);
+    origin.data = fbCache('get', fbOAuthToken, fbUrl);
   }
 }
 
 /**
- * Generic method for handling the Firebase REST API. 
+ * Generic method for handling the Firebase REST API.
  * For `get`: It returns the data at the given url.
  * For `post`: It posts the data in in Firebase db at the given url and returns `undefined`.
  * For `delete`: It deletes the data at the given url and returns `undefined`.
@@ -65,21 +65,21 @@ function processFirebase(origin) {
 function fbCache(method, oAuthToken, url, originData) {
   var responseOptions = {
     headers: {
-      Authorization: "Bearer " + oAuthToken
+      Authorization: 'Bearer ' + oAuthToken,
     },
     method: method,
-    contentType: "application/json"
+    contentType: 'application/json',
   };
 
   // Add payload for post method
-  if (method === "post") {
-    responseOptions["payload"] = JSON.stringify(originData);
+  if (method === 'post') {
+    responseOptions['payload'] = JSON.stringify(originData);
   }
 
   var response = UrlFetchApp.fetch(url, responseOptions);
 
   // Return value only for `get`.
-  if (method === "get") {
+  if (method === 'get') {
     var responseObject = JSON.parse(response);
     // Firebase realtime db automatically adds a unique key.
     // Due to our lock service, that will be the only key.
@@ -94,8 +94,8 @@ function fbCache(method, oAuthToken, url, originData) {
  *
  */
 function fbFlushCache() {
-  var fb = processOauth("firebase.client");
+  var fb = processOauth('firebase.client');
   var fbUrl = buildFbUrl(fb.projectId);
-  console.log("flushing firebase cache");
-  fbCache("delete", fb.token, fbUrl);
+  console.log('flushing firebase cache');
+  fbCache('delete', fb.token, fbUrl);
 }

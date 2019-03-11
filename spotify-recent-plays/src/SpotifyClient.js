@@ -1,5 +1,5 @@
 /* istanbul ignore next */
-if (typeof(require) !== 'undefined') {
+if (typeof require !== 'undefined') {
   var DataCache = require('./DataCache.js')['default'];
 }
 
@@ -62,12 +62,13 @@ SpotifyClient.prototype.storeInCache = function(plays, cache) {
 
 SpotifyClient.prototype.fetchFromApi = function(startDate, endDate) {
   var headers = {
-    Authorization: 'Bearer ' + this.apiKey
+    Authorization: 'Bearer ' + this.apiKey,
   };
   var start = startDate.getTime();
   var end = endDate.getTime();
 
-  var url = 'https://api.spotify.com/v1/me/player/recently-played?before=' + end;
+  var url =
+    'https://api.spotify.com/v1/me/player/recently-played?before=' + end;
 
   var data = [];
   var fetchNext = true;
@@ -75,7 +76,7 @@ SpotifyClient.prototype.fetchFromApi = function(startDate, endDate) {
 
   do {
     console.log('Fetching', url, headers);
-    var result = this.urlFetchApp.fetch(url, { headers: headers });
+    var result = this.urlFetchApp.fetch(url, {headers: headers});
     console.log('Response', result);
     var parsedResult = JSON.parse(result.getContentText());
 
@@ -101,7 +102,7 @@ SpotifyClient.prototype.fetchFromApi = function(startDate, endDate) {
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['default'] = SpotifyClient;
 }
