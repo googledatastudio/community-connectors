@@ -13,7 +13,7 @@
     "arrowParens": "always"
   },
   "devDependencies": {
-    "@google/clasp": "^1.4.1",
-    "prettier": "^1.12.1"
+    "@google/clasp": "^2.0.1",
+    "prettier": "^1.16.4"
   }
 }
