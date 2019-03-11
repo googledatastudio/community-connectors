@@ -2,7 +2,7 @@ var propStore = propStore || {};
 
 propStore.services = {
   user: PropertiesService.getUserProperties(),
-  script: PropertiesService.getScriptProperties()
+  script: PropertiesService.getScriptProperties(),
 };
 
 /**
@@ -48,19 +48,19 @@ propStore.set = function(service, key, value) {
  */
 function digest(aStr) {
   var algorithm = Utilities.DigestAlgorithm.MD5;
-  aStr = aStr || "";
+  aStr = aStr || '';
   var signature = Utilities.computeDigest(
     algorithm,
     aStr,
     Utilities.Charset.US_ASCII
   );
-  var signatureStr = "";
+  var signatureStr = '';
   for (i = 0; i < signature.length; i++) {
     var byte = signature[i];
     if (byte < 0) byte += 256;
     var byteStr = byte.toString(16);
     // Ensure we have 2 chars in our byte, pad with 0
-    if (byteStr.length == 1) byteStr = "0" + byteStr;
+    if (byteStr.length == 1) byteStr = '0' + byteStr;
     signatureStr += byteStr;
   }
   return signatureStr;
@@ -70,45 +70,45 @@ function digest(aStr) {
  * Initialize the connector by setting default set of script properties.
  * Add values as indicated by inline comments and run this function once before
  * using the connector.
- * 
+ *
  */
 function init() {
   var properties = [
     {
-      property: "admins",
-      value: [""]   // enter list of admin emails
+      property: 'admins',
+      value: [''], // enter list of admin emails
     },
     {
-      property: "lastDataUpdate",
-      value: 20180607   // enter last update date for the dataset
+      property: 'lastDataUpdate',
+      value: 20180607, // enter last update date for the dataset
     },
     {
-      property: "bigQuery.client",
+      property: 'bigQuery.client',
       value: {
-        name: "bigQuery",
-        scopes: "https://www.googleapis.com/auth/bigquery",
-        key: "",   // enter service account key
-        email: "",   // enter service account email
-        projectId: ""   // enter GCP project Id for the service account
-      }
+        name: 'bigQuery',
+        scopes: 'https://www.googleapis.com/auth/bigquery',
+        key: '', // enter service account key
+        email: '', // enter service account email
+        projectId: '', // enter GCP project Id for the service account
+      },
     },
     {
-      property: "firebase.client",
+      property: 'firebase.client',
       value: {
-        name: "firebase",
+        name: 'firebase',
         scopes: [
-          "https://www.googleapis.com/auth/userinfo.email",
-          "https://www.googleapis.com/auth/firebase.database"
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/firebase.database',
         ],
-        key: "",   // enter service account key
-        email: "",   // enter service account email
-        projectId: ""   // enter GCP project Id for the service account
-      }
-    }
+        key: '', // enter service account key
+        email: '', // enter service account email
+        projectId: '', // enter GCP project Id for the service account
+      },
+    },
   ];
 
   properties.forEach(function(item) {
     var value = JSON.stringify(item.value);
-    propStore.set("script", item.property, value);
+    propStore.set('script', item.property, value);
   });
 }

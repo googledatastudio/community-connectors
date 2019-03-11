@@ -1,5 +1,5 @@
 /* istanbul ignore next */
-if (typeof(require) !== 'undefined') {
+if (typeof require !== 'undefined') {
   var DateUtils = require('./DateUtils.js')['default'];
 }
 
@@ -33,7 +33,7 @@ DataCache.prototype.get = function() {
   do {
     var chunkKey = this.getChunkKey(chunkIndex);
     chunk = this.service.get(chunkKey);
-    value += (chunk || '');
+    value += chunk || '';
     chunkIndex++;
   } while (chunk && chunk.length == DataCache.MAX_CACHE_SIZE);
 
@@ -64,7 +64,9 @@ DataCache.MAX_CACHE_SIZE = 100 * 1024;
  * @return {String} cache key
  */
 DataCache.prototype.buildCacheKey = function(startDate, endDate) {
-  return DateUtils.getDatePart(startDate) + '_' + DateUtils.getDatePart(endDate);
+  return (
+    DateUtils.getDatePart(startDate) + '_' + DateUtils.getDatePart(endDate)
+  );
 };
 
 DataCache.prototype.storeChunks = function(value) {
@@ -94,7 +96,7 @@ DataCache.prototype.splitInChunks = function(str) {
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['default'] = DataCache;
 }

@@ -167,21 +167,21 @@ connector.SCHEMA = {
       label: 'Heart Rate Average',
       dataType: 'NUMBER',
       defaultAggregationType: 'AVG',
-      semantics: { conceptType: 'METRIC' },
+      semantics: {conceptType: 'METRIC'},
     },
     {
       name: 'HeartRateMax',
       label: 'Heart Rate Max',
       dataType: 'NUMBER',
       defaultAggregationType: 'MAX',
-      semantics: { conceptType: 'METRIC' },
+      semantics: {conceptType: 'METRIC'},
     },
     {
       name: 'HeartRateMin',
       label: 'Heart Rate Min',
       dataType: 'NUMBER',
       defaultAggregationType: 'MIN',
-      semantics: { conceptType: 'METRIC' },
+      semantics: {conceptType: 'METRIC'},
     },
   ],
 };
@@ -276,7 +276,8 @@ connector.SAMPLE_DATA = {
       },
     ],
   },
-  heart_rate_daily: [ // Aggregated bucket data format.
+  heart_rate_daily: [
+    // Aggregated bucket data format.
     {
       startTimeMillis: 1522540800000,
       endTimeMillis: 1522627200000,
@@ -289,12 +290,12 @@ connector.SAMPLE_DATA = {
               value: [
                 {fpVal: 73.97566063977747},
                 {fpVal: 161.0},
-                {fpVal: 46.0}
+                {fpVal: 46.0},
               ],
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
     {
       startTimeMillis: 1522627200000,
@@ -305,15 +306,11 @@ connector.SAMPLE_DATA = {
             {
               startTimeNanos: 1522627200000000000,
               endTimeNanos: 1522713480000000000,
-              value: [
-                {fpVal: 72.2865090403338},
-                {fpVal: 168.0},
-                {fpVal: 58.0}
-              ],
-            }
-          ]
-        }
-      ]
+              value: [{fpVal: 72.2865090403338}, {fpVal: 168.0}, {fpVal: 58.0}],
+            },
+          ],
+        },
+      ],
     },
     {
       startTimeMillis: 1522713600000,
@@ -327,12 +324,12 @@ connector.SAMPLE_DATA = {
               value: [
                 {fpVal: 79.14394993045897},
                 {fpVal: 164.0},
-                {fpVal: 56.0}
+                {fpVal: 56.0},
               ],
-            }
-          ]
-        }
-      ]
+            },
+          ],
+        },
+      ],
     },
   ],
 };
@@ -661,7 +658,12 @@ connector.dataFuncs.heart_rate = function(request, fit, startDate, endDate) {
   };
 };
 
-connector.dataFuncs.heart_rate_daily = function(request, fit, startDate, endDate) {
+connector.dataFuncs.heart_rate_daily = function(
+  request,
+  fit,
+  startDate,
+  endDate
+) {
   // Prepare the schema for the fields requested.
   var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < connector.SCHEMA.heart_rate_daily.length; i++) {
@@ -680,7 +682,7 @@ connector.dataFuncs.heart_rate_daily = function(request, fit, startDate, endDate
   }
 
   var data = [];
-  if (!buckets) return { schema: dataSchema, rows: data };
+  if (!buckets) return {schema: dataSchema, rows: data};
   for (var i = 0; i < buckets.length; i++) {
     var values = [];
     var segment = buckets[i].dataset[0].point[0];

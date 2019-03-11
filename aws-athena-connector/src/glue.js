@@ -14,12 +14,13 @@ function glueTableToFields(table) {
   var types = cc.FieldType;
   var columns = table.PartitionKeys.concat(table.StorageDescriptor.Columns);
 
-  columns.forEach(function (column) {
+  columns.forEach(function(column) {
     // Set fields based on data type
     var field;
     switch (column.Type.toLowerCase()) {
       case 'boolean':
-        field = fields.newDimension()
+        field = fields
+          .newDimension()
           .setId(column.Name)
           .setType(types.BOOLEAN);
         break;
@@ -30,24 +31,28 @@ function glueTableToFields(table) {
       case 'double':
       case 'float':
       case 'decimal':
-        field = fields.newMetric()
+        field = fields
+          .newMetric()
           .setId(column.Name)
           .setType(types.NUMBER);
         break;
       case 'char':
       case 'varchar':
       case 'string':
-        field = fields.newDimension()
+        field = fields
+          .newDimension()
           .setId(column.Name)
           .setType(types.TEXT);
         break;
       case 'date':
-        field = fields.newDimension()
+        field = fields
+          .newDimension()
           .setId(column.Name)
           .setType(types.YEAR_MONTH_DAY);
         break;
       case 'timestamp':
-        field = fields.newDimension()
+        field = fields
+          .newDimension()
           .setId(column.Name)
           .setType(types.YEAR_MONTH_DAY_HOUR);
         break;
@@ -56,7 +61,7 @@ function glueTableToFields(table) {
     }
 
     // Set field name and description (if any)
-    if (typeof(column.Comment) === 'string') {
+    if (typeof column.Comment === 'string') {
       field.setDescription(column.Comment);
     }
   });
@@ -75,8 +80,8 @@ function getFieldsFromGlue(request) {
   AWS.init(params.awsAccessKeyId, params.awsSecretAccessKey);
 
   var payload = {
-    'DatabaseName': params.databaseName,
-    'Name': params.tableName
+    DatabaseName: params.databaseName,
+    Name: params.tableName,
   };
   var result = AWS.post('glue', params.awsRegion, 'AWSGlue.GetTable', payload);
   return glueTableToFields(result.Table);
