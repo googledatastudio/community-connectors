@@ -17,7 +17,6 @@
     "@google/clasp": "^1.4.1",
     "eslint": "^5.15.1",
     "eslint-config-google": "^0.12.0",
-    "eslint-plugin-async-await": "^0.0.0",
     "prettier": "^1.12.1"
   }
 }
