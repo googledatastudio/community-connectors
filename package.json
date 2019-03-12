@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prettier": "prettier --write \"**/*.js\"",
-    "lint": "./node_modules/.bin/eslint **/*.gs --quiet"
+    "lint": "eslint **/*.js --quiet"
   },
   "prettier": {
     "singleQuote": true,
