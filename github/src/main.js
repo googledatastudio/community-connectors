@@ -254,29 +254,28 @@ function getDataStars(request, config, requestedFields) {
 }
 
 function parseIssueRow(requestedFields, issue) {
-  var row = [];
-  requestedFields.asArray().forEach(function(requestedField) {
+  var row = requestedFields.asArray().map(function(requestedField) {
     switch (requestedField.getId()) {
       case 'open':
-        return row.push(issue.state === 'open');
+        return issue.state === 'open';
       case 'reporter':
-        return row.push(issue.user.login);
+        return issue.user.login;
       case 'num_comments':
-        return row.push(issue.comments);
+        return issue.comments;
       case 'is_pull_request':
-        return row.push(issue.pull_request !== undefined);
+        return issue.pull_request !== undefined;
       case 'created_at':
-        return row.push(formatDate(issue.created_at));
+        return formatDate(issue.created_at);
       case 'closed_at':
-        return row.push(formatDate(issue.closed_at));
+        return formatDate(issue.closed_at);
       case 'url':
-        return row.push(issue.html_url);
+        return issue.html_url;
       case 'number':
-        return row.push('' + issue.number);
+        return '' + issue.number;
       case 'locked':
-        return row.push(issue.locked);
+        return issue.locked;
       case 'title':
-        return row.push(issue.title);
+        return issue.title;
       default:
         return cc
           .newUserError()
