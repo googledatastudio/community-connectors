@@ -2,7 +2,7 @@
  * bqlocal object mimics the BigQuery service provided in Apps Script.
  * This help to switch out the service account or reuse BigQuery related
  * code from other projects.
- * 
+ *
  * For full reference on BigQuery service and API See
  * https://developers.google.com/apps-script/advanced/bigquery and
  * https://cloud.google.com/bigquery/docs/reference/rest/v2/
@@ -24,22 +24,22 @@ bqlocal.setOAuthToken = function(oAuthToken) {
  */
 bqlocal.bdQuery = function(bqRequest, projectId, jobId) {
   var urlElements = [
-    "https://www.googleapis.com/bigquery/v2/projects/",
+    'https://www.googleapis.com/bigquery/v2/projects/',
     projectId,
-    "/queries"
+    '/queries',
   ];
   if (jobId) {
-    urlElements.push("/" + jobId);
+    urlElements.push('/' + jobId);
   }
-  var url = urlElements.join("");
+  var url = urlElements.join('');
 
   var responseOptions = {
     headers: {
-      Authorization: "Bearer " + bqlocal.oAuthToken
+      Authorization: 'Bearer ' + bqlocal.oAuthToken,
     },
-    method: "post",
-    contentType: "application/json",
-    muteHttpExceptions: true
+    method: 'post',
+    contentType: 'application/json',
+    muteHttpExceptions: true,
   };
 
   if (bqRequest) {
@@ -54,7 +54,6 @@ bqlocal.bdQuery = function(bqRequest, projectId, jobId) {
 
 bqlocal.Jobs = {};
 
-
 /**
  * See https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/query
  */
@@ -63,7 +62,6 @@ bqlocal.Jobs.query = function(bqRequest, projectId) {
   return queryResults;
 };
 
-
 /**
  * See https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs/getQueryResults
  */
@@ -71,7 +69,6 @@ bqlocal.Jobs.getQueryResults = function(projectId, jobId) {
   var queryResults = bqlocal.bdQuery(null, projectId, jobId);
   return queryResults;
 };
-
 
 /**
  * Gets data from the Chrome UX dataset for the given url.
@@ -86,15 +83,15 @@ function getBqData(url) {
     queryParameters: [
       {
         parameterType: {
-          type: "STRING"
+          type: 'STRING',
         },
         parameterValue: {
-          value: url
+          value: url,
         },
-        name: "url"
-      }
+        name: 'url',
+      },
     ],
-    useLegacySql: false
+    useLegacySql: false,
   };
 
   return getBigQueryResults(bqRequest);
@@ -122,7 +119,7 @@ function getBigQueryResults(request) {
   var rows = queryResults.rows;
   while (queryResults.pageToken) {
     queryResults = bqlocal.Jobs.getQueryResults(projectId, jobId, {
-      pageToken: queryResults.pageToken
+      pageToken: queryResults.pageToken,
     });
     rows = rows.concat(queryResults.rows);
   }
@@ -142,7 +139,7 @@ function getBigQueryResults(request) {
 
   return {
     headers: headers,
-    data: data
+    data: data,
   };
 
 }

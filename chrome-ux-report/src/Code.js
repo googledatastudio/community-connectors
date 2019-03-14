@@ -4,30 +4,31 @@ var crux = crux || {};
 crux.isProdScript = true;
 
 // Default URL used for the connector
-crux.defaultUrl = "www.google.com";
+crux.defaultUrl = 'www.google.com';
 
 // Key used for the lastDataUpdate flag
-crux.lastDataUpdateFlag = "lastDataUpdate";
+crux.lastDataUpdateFlag = 'lastDataUpdate';
 
 // Apps Script cache duration in seconds
 crux.secondsInMinute = 60;
 crux.minutesInHour = 60;
 crux.cacheDurationInHour = 3;
-crux.cacheDuration = crux.secondsInMinute * crux.minutesInHour * crux.cacheDurationInHour;
+crux.cacheDuration =
+  crux.secondsInMinute * crux.minutesInHour * crux.cacheDurationInHour;
 
 // Exceptions for script properties that will not get flushed
 crux.cacheFlushWhitelist = [
-  "oauth2.bigQuery",
-  "oauth2.firebase",
-  "admins",
-  "bigQuery.client",
-  "firebase.client",
-  crux.lastDataUpdateFlag
+  'oauth2.bigQuery',
+  'oauth2.firebase',
+  'admins',
+  'bigQuery.client',
+  'firebase.client',
+  crux.lastDataUpdateFlag,
 ];
 
 // Query used to pull data from BigQuery
 crux.dataQueryString =
-  "SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url";
+    "SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url";
 
 // Query used to validated URL from BigQuery
 crux.valudateQueryString =
@@ -36,20 +37,20 @@ crux.valudateQueryString =
 function getConfig(request) {
   var customConfig = [
     {
-      type: "TEXTINPUT",
-      name: "url",
-      displayName: "Enter origin URL:",
-      placeholder: "e.g. " + crux.defaultUrl,
+      type: 'TEXTINPUT',
+      name: 'url',
+      displayName: 'Enter origin URL:',
+      placeholder: 'e.g. ' + crux.defaultUrl,
       parameterControl: {
-        allowOverride: true
-      }
+        allowOverride: true,
+      },
     },
     {
-      type: "INFO",
-      name: "information",
+      type: 'INFO',
+      name: 'information',
       text:
-        "'https://' is added by default. If needed, add 'http://' at the URL beginning (e.g. http://example.com)"
-    }
+        "'https://' is added by default. If needed, add 'http://' at the URL beginning (e.g. http://example.com)",
+    },
   ];
 
   // For admin users, show the additional option for changing the
@@ -59,326 +60,340 @@ function getConfig(request) {
   // this date. Later when cache is retrived, the tagged date is compared against
   // the date in script properties to determine if cache should be reset.
   if (isAdminUser()) {
-    var lastUpdate = propStore.get("script", crux.lastDataUpdateFlag);
+    var lastUpdate = propStore.get('script', crux.lastDataUpdateFlag);
     customConfig.push({
-      type: "TEXTINPUT",
+      type: 'TEXTINPUT',
       name: crux.lastDataUpdateFlag,
-      displayName: "ADMIN ONLY: Date when BigQuery dataset was updated last (YYYYMMDD)",
-      placeholder: lastUpdate
+      displayName:
+        'ADMIN ONLY: Date when BigQuery dataset was updated last (YYYYMMDD)',
+      placeholder: lastUpdate,
     });
   }
   return {
-    configParams: customConfig
+    configParams: customConfig,
   };
 }
 
 crux.Schema = [
   {
-    name: "yyyymm",
-    label: "Release",
-    description: "Year and month of the release. Corresponds to the table names on BigQuery.",
-    dataType: "STRING",
+    name: 'yyyymm',
+    label: 'Release',
+    description:
+      'Year and month of the release. Corresponds to the table names on BigQuery.',
+    dataType: 'STRING',
     semantics: {
-      conceptType: "DIMENSION",
-      semanticType: "YEAR_MONTH"
-    }
+      conceptType: 'DIMENSION',
+      semanticType: 'YEAR_MONTH',
+    },
   },
   {
-    name: "yyyymmdd",
-    label: "yyyymmdd",
-    description: "Year, month, and day of the release where the day is always the first of the month. This is needed for the month-over-month comparisons.",
-    dataType: "STRING",
+    name: 'yyyymmdd',
+    label: 'yyyymmdd',
+    description:
+      'Year, month, and day of the release where the day is always the first of the month. This is needed for the month-over-month comparisons.',
+    dataType: 'STRING',
     semantics: {
-      conceptType: "DIMENSION",
-      semanticType: "YEAR_MONTH_DAY"
-    }
+      conceptType: 'DIMENSION',
+      semanticType: 'YEAR_MONTH_DAY',
+    },
   },
   {
-    name: "origin",
-    label: "origin",
-    description: "The URL of the website including protocol and optional subdomain, for example 'https://www.example.com'.",
-    dataType: "STRING",
+    name: 'origin',
+    label: 'origin',
+    description:
+      "The URL of the website including protocol and optional subdomain, for example 'https://www.example.com'.",
+    dataType: 'STRING',
     semantics: {
-      conceptType: "DIMENSION",
-      semanticType: "TEXT"
-    }
+      conceptType: 'DIMENSION',
+      semanticType: 'TEXT',
+    },
   },
   {
-    name: "fast_fp",
-    label: "Fast FP",
-    description: "The percent of First Paint experiences < 1 second.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'fast_fp',
+    label: 'Fast FP',
+    description: 'The percent of First Paint experiences < 1 second.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "avg_fp",
-    label: "Average FP",
-    description: "The percent of First Paint experiences >= 1 second and < 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'avg_fp',
+    label: 'Average FP',
+    description:
+      'The percent of First Paint experiences >= 1 second and < 2.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "slow_fp",
-    label: "Slow FP",
-    description: "The percent of First Paint experiences >= 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'slow_fp',
+    label: 'Slow FP',
+    description: 'The percent of First Paint experiences >= 2.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "fast_fcp",
-    label: "Fast FCP",
-    description: "The percent of First Contentful Paint experiences < 1 second.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'fast_fcp',
+    label: 'Fast FCP',
+    description:
+      'The percent of First Contentful Paint experiences < 1 second.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "avg_fcp",
-    label: "Average FCP",
-    description: "The percent of First Contentful Paint experiences >= 1 second and < 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'avg_fcp',
+    label: 'Average FCP',
+    description:
+      'The percent of First Contentful Paint experiences >= 1 second and < 2.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "slow_fcp",
-    label: "Slow FCP",
-    description: "The percent of First Contentful Paint experiences >= 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'slow_fcp',
+    label: 'Slow FCP',
+    description:
+      'The percent of First Contentful Paint experiences >= 2.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "fast_dcl",
-    label: "Fast DCL",
-    description: "The percent of DOM Content Loaded experiences < 1 second.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'fast_dcl',
+    label: 'Fast DCL',
+    description: 'The percent of DOM Content Loaded experiences < 1.5 second.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "avg_dcl",
-    label: "Average DCL",
-    description: "The percent of DOM Content Loaded experiences >= 1 second and < 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'avg_dcl',
+    label: 'Average DCL',
+    description:
+      'The percent of DOM Content Loaded experiences >= 1.5 second and < 3.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "slow_dcl",
-    label: "Slow DCL",
-    description: "The percent of DOM Content Loaded experiences >= 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'slow_dcl',
+    label: 'Slow DCL',
+    description:
+      'The percent of DOM Content Loaded experiences >= 3.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "fast_ol",
-    label: "Fast OL",
-    description: "The percent of Onload experiences < 1 second.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'fast_ol',
+    label: 'Fast OL',
+    description: 'The percent of Onload experiences < 2.5 second.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "avg_ol",
-    label: "Average OL",
-    description: "The percent of Onload experiences >= 1 second and < 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'avg_ol',
+    label: 'Average OL',
+    description:
+      'The percent of Onload experiences >= 2.5 second and < 6.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "slow_ol",
-    label: "Slow OL",
-    description: "The percent of Onload experiences >= 3 seconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'slow_ol',
+    label: 'Slow OL',
+    description: 'The percent of Onload experiences >= 6.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "fast_fid",
-    label: "Fast FID",
-    description: "The percent of First Input Delay experiences < 100 milliseconds.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'fast_fid',
+    label: 'Fast FID',
+    description:
+      'The percent of First Input Delay experiences < 50 milliseconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "avg_fid",
-    label: "Average FID",
-    description: "The percent of First Input Delay experiences >= 100 milliseconds and < 1 second.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'avg_fid',
+    label: 'Average FID',
+    description:
+      'The percent of First Input Delay experiences >= 50 milliseconds and < 250 milliseconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "slow_fid",
-    label: "Slow FID",
-    description: "The percent of First Input Delay experiences >= 1 second.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'slow_fid',
+    label: 'Slow FID',
+    description:
+      'The percent of First Input Delay experiences >= 250 milliseconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "desktopDensity",
-    label: "Desktop",
-    description: "The proportion of experiences on desktop devices.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'desktopDensity',
+    label: 'Desktop',
+    description: 'The proportion of experiences on desktop devices.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "phoneDensity",
-    label: "Phone",
-    description: "The proportion of experiences on phone devices.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'phoneDensity',
+    label: 'Phone',
+    description: 'The proportion of experiences on phone devices.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "tabletDensity",
-    label: "Tablet",
-    description: "The proportion of experiences on tablet devices.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'tabletDensity',
+    label: 'Tablet',
+    description: 'The proportion of experiences on tablet devices.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "_4GDensity",
-    label: "4G",
-    description: "The proportion of experiences on 4G-like connections.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: '_4GDensity',
+    label: '4G',
+    description: 'The proportion of experiences on 4G-like connections.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "_3GDensity",
-    label: "3G",
-    description: "The proportion of experiences on 3G-like connections.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: '_3GDensity',
+    label: '3G',
+    description: 'The proportion of experiences on 3G-like connections.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "_2GDensity",
-    label: "2G",
-    description: "The proportion of experiences on 2G-like connections.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: '_2GDensity',
+    label: '2G',
+    description: 'The proportion of experiences on 2G-like connections.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "slow2GDensity",
-    label: "Slow 2G",
-    description: "The proportion of experiences on Slow2G-like connections.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'slow2GDensity',
+    label: 'Slow 2G',
+    description: 'The proportion of experiences on Slow2G-like connections.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
   },
   {
-    name: "offlineDensity",
-    label: "Offline",
-    description: "The proportion of experiences on offline connections.",
-    dataType: "NUMBER",
-    defaultAggregationType: "SUM",
+    name: 'offlineDensity',
+    label: 'Offline',
+    description: 'The proportion of experiences on offline connections.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
     semantics: {
-      conceptType: "METRIC",
-      semanticType: "PERCENT",
-      isReaggregatable: true
-    }
-  }
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true,
+    },
+  },
 ];
 
 function getSchema(request) {
@@ -386,9 +401,9 @@ function getSchema(request) {
   // config url is invalid or does not exist in the database. The error
   // stops the users from proceeding from the config screen.
   getOriginDataset(request);
-  
+
   return {
-    schema: crux.Schema
+    schema: crux.Schema,
   };
 }
 
@@ -400,10 +415,10 @@ function getSchema(request) {
  * @returns {string} Last dataset update in YYYYMMDD format.
  */
 function getDatasetUpdate(request) {
-  var lastDataUpdate = propStore.get("script", crux.lastDataUpdateFlag);
-  var configLastDataUpdate = request.configParams &&
-    request.configParams.lastDataUpdate;
-  
+  var lastDataUpdate = propStore.get('script', crux.lastDataUpdateFlag);
+  var configLastDataUpdate =
+    request.configParams && request.configParams.lastDataUpdate;
+
   var shouldUpdate = false;
   if (configLastDataUpdate !== undefined) {
     shouldUpdate = configLastDataUpdate > lastDataUpdate;
@@ -424,14 +439,14 @@ function flushCache() {
   var tempStorage = {};
 
   crux.cacheFlushWhitelist.forEach(function(property) {
-    tempStorage[property] = propStore.get("script", property);
+    tempStorage[property] = propStore.get('script', property);
   });
 
-  propStore.flush("script");
+  propStore.flush('script');
 
   crux.cacheFlushWhitelist.forEach(function(property) {
-    tempStorage[property] = tempStorage[property] || "";
-    propStore.set("script", property, tempStorage[property]);
+    tempStorage[property] = tempStorage[property] || '';
+    propStore.set('script', property, tempStorage[property]);
   });
 
   try {
@@ -448,8 +463,8 @@ function flushCache() {
  */
 function updateDataUpdateFlag(newDataUpdate) {
   if (isAdminUser()) {
-    propStore.set("script", crux.lastDataUpdateFlag, newDataUpdate);
-    console.log("BigQuery dataset was updated");
+    propStore.set('script', crux.lastDataUpdateFlag, newDataUpdate);
+    console.log('BigQuery dataset was updated');
     flushCache();
   }
 }
@@ -461,7 +476,6 @@ function updateDataUpdateFlag(newDataUpdate) {
  * @returns {string} The url for the endpoint.
  */
 function validateUrl(configParams) {
-
   var url = crux.defaultUrl;
 
   if (configParams !== undefined && configParams.url !== undefined) {
@@ -470,15 +484,15 @@ function validateUrl(configParams) {
 
   // Remove '/' at the end
   var lastChar = url.substring(url.length - 1);
-  if (lastChar === "/") {
+  if (lastChar === '/') {
     url = url.substring(0, url.length - 2);
   }
 
   // Add 'https://' at the beginning if needed
-  var urlHttps = url.toLowerCase().substring(0, 8) === "https://";
-  var urlHttp = url.toLowerCase().substring(0, 7) === "http://";
+  var urlHttps = url.toLowerCase().substring(0, 8) === 'https://';
+  var urlHttp = url.toLowerCase().substring(0, 7) === 'http://';
   if (!urlHttps && !urlHttp) {
-    url = "https://" + url;
+    url = 'https://' + url;
   }
 
   return url;
@@ -506,7 +520,7 @@ function getOriginDataset(request) {
   var userLock = LockService.getUserLock();
   userLock.waitLock(15000);
 
-  var lastFirebaseUpdate = propStore.get("script", origin.key);
+  var lastFirebaseUpdate = propStore.get('script', origin.key);
   var bqIsFresh = !lastFirebaseUpdate || origin.lastUpdate > lastFirebaseUpdate;
 
   var scriptCache = CacheService.getScriptCache();
@@ -520,7 +534,7 @@ function getOriginDataset(request) {
 
   if (bqIsFresh) {
     try {
-      console.log("hitting BigQuery for " + origin.url);
+      console.log('hitting BigQuery for ' + origin.url);
       origin.data = getBqData(origin.url);
     } catch (e) {
       userLock.releaseLock();
@@ -533,16 +547,16 @@ function getOriginDataset(request) {
     }
   } else {
     var cachedData = scriptCache.get(origin.key);
-    if (cachedData && cachedData !== "undefined") {
+    if (cachedData && cachedData !== 'undefined') {
       userLock.releaseLock();
-      console.log("hitting Apps Script cache for " + origin.url);
+      console.log('hitting Apps Script cache for ' + origin.url);
       return JSON.parse(cachedData);
     }
   }
 
   processFirebase(origin);
 
-  console.log("saving apps script cache for " + origin.url);
+  console.log('saving apps script cache for ' + origin.url);
   scriptCache.put(origin.key, JSON.stringify(origin.data), crux.cacheDuration);
   userLock.releaseLock();
   return origin.data;
@@ -597,26 +611,26 @@ function getData(request) {
       values.push(fieldValue);
     });
     return {
-      values: values
+      values: values,
     };
   });
 
   return {
     schema: requestedSchema,
-    rows: requestedData
+    rows: requestedData,
   };
 }
 
 function getAuthType() {
   return {
-    type: "NONE"
+    type: 'NONE',
   };
 }
 
 function isAdminUser() {
   var userEmail = Session.getEffectiveUser().getEmail();
   // List of admin users are kept in script property
-  var admins = propStore.get("script", "admins");
+  var admins = propStore.get('script', 'admins');
   admins = JSON.parse(admins);
   var response = admins.indexOf(userEmail) >= 0;
   return response;
@@ -641,8 +655,7 @@ function throwError(userSafe, userMessage, adminMessage) {
     }
     error.throwException();
   } else {
-    cc
-      .newDebugError()
+    cc.newDebugError()
       .setText(adminMessage)
       .throwException();
   }

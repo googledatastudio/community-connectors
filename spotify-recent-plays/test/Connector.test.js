@@ -4,10 +4,15 @@ import PropertiesServiceMock from './mocks/PropertiesServiceMock';
 import OAuth2Mock from './mocks/OAuth2Mock';
 import UrlFetchAppMock from './mocks/UrlFetchAppMock';
 import HtmlServiceMock from './mocks/HtmlServiceMock';
-import { buildFakeRequest } from './helpers/FakeRequest';
+import {buildFakeRequest} from './helpers/FakeRequest';
 import apiResponses from './helpers/ApiResponses';
 
-let service, cacheServiceMock, propertiesServiceMock, oAuth2Mock, urlFetchAppMock, htmlServiceMock;
+let service,
+  cacheServiceMock,
+  propertiesServiceMock,
+  oAuth2Mock,
+  urlFetchAppMock,
+  htmlServiceMock;
 
 beforeEach(() => {
   cacheServiceMock = new CacheServiceMock();
@@ -20,7 +25,7 @@ beforeEach(() => {
     UrlFetchApp: urlFetchAppMock,
     HtmlService: htmlServiceMock,
     PropertiesService: propertiesServiceMock,
-    OAuth2: oAuth2Mock
+    OAuth2: oAuth2Mock,
   });
 });
 
@@ -33,7 +38,7 @@ test('getSchema', () => {
     'played_at_date',
     'plays',
     'tracks_count',
-    'popularity'
+    'popularity',
   ];
   expect(fields).toEqual(expected, 'it returns the schema content');
 });
@@ -57,20 +62,17 @@ test('getData', () => {
   let request = buildFakeRequest({
     startDate,
     endDate,
-    fields
+    fields,
   });
 
   const data = service.getData(request);
   const rows = data.rows;
   const schema = data.schema;
 
-  const expectedRowValues = [
-    'Make It Wit Chu',
-    'Queens of the Stone Age'
-  ];
+  const expectedRowValues = ['Make It Wit Chu', 'Queens of the Stone Age'];
   expect(rows.length).toEqual(50);
   expect(rows[0].values).toEqual(expectedRowValues);
-  expect(schema.map(s => s.name)).toEqual(['track_name', 'artist']);
+  expect(schema.map((s) => s.name)).toEqual(['track_name', 'artist']);
 });
 
 test('authCallback', () => {
