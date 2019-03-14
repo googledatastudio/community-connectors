@@ -22,7 +22,7 @@
  * OF THE COMMUNITY CONNECTORS
  */
 
-//TODO(nathanwest): Roll this stuff into a separate library
+// TODO(nathanwest): Roll this stuff into a separate library
 
 /**
  * Given an unkeyed schema, which is an array of schema fields, return an
@@ -221,19 +221,23 @@ function UserError(message) {
 function validateSubconnector(subconnector) {
   if (!subconnector) throw new Error('You provided a falsey connector');
 
-  if (!(subconnector.getData instanceof Function))
-    throw new Error('subconnector requires .getData()');
+  if (!(subconnector.getData instanceof Function)) {
+throw new Error('subconnector requires .getData()');
+}
 
-  if (!(subconnector.getSchema instanceof Function))
-    throw new Error('subconnector requires .getSchema()');
+  if (!(subconnector.getSchema instanceof Function)) {
+throw new Error('subconnector requires .getSchema()');
+}
 
-  if (typeof subconnector.label !== 'string')
-    throw new Error('subconnector requires a .label');
+  if (typeof subconnector.label !== 'string') {
+throw new Error('subconnector requires a .label');
+}
 
-  if (subconnector.getConfig instanceof Function)
-    throw new Error(
+  if (subconnector.getConfig instanceof Function) {
+throw new Error(
       'subconnector should NOT have .getConfig(); this is handled by combineConnectors'
     );
+}
 }
 
 /**
@@ -785,15 +789,17 @@ var githubConnector = combineConnectors({
   validateConfig: function validateConfig(configParams) {
     configParams = configParams || {};
 
-    if (!configParams.organization)
-      throw new UserError(
+    if (!configParams.organization) {
+throw new UserError(
         'You must provide an Organization; got ' + configParams.organization
       );
+}
 
-    if (!configParams.repository)
-      throw new UserError(
+    if (!configParams.repository) {
+throw new UserError(
         'You must provide a Repository, got ' + configParams.repository
       );
+}
   },
 
   connectors: {
