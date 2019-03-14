@@ -303,12 +303,12 @@ var AWS = (function() {
             },
             bytesToWords: function(b) {
               for (var a = [], c = 0, e = 0; c < b.length; c++, e += 8)
-                a[e >>> 5] |= (b[c] & 255) << (24 - e % 32);
+                a[e >>> 5] |= (b[c] & 255) << (24 - (e % 32));
               return a;
             },
             wordsToBytes: function(b) {
               for (var a = [], c = 0; c < b.length * 32; c += 8)
-                a.push((b[c >>> 5] >>> (24 - c % 32)) & 255);
+                a.push((b[c >>> 5] >>> (24 - (c % 32))) & 255);
               return a;
             },
             bytesToHex: function(b) {
@@ -461,8 +461,8 @@ var AWS = (function() {
           return c && c.asBytes
             ? f
             : c && c.asString
-              ? a.bytesToString(f)
-              : k.bytesToHex(f);
+            ? a.bytesToString(f)
+            : k.bytesToHex(f);
         });
       e._sha256 = function(a) {
         a.constructor == String && (a = b.stringToBytes(a));
@@ -490,7 +490,7 @@ var AWS = (function() {
           h,
           l,
           j;
-        e[f >> 5] |= 128 << (24 - f % 32);
+        e[f >> 5] |= 128 << (24 - (f % 32));
         e[(((f + 64) >> 9) << 4) + 15] = f;
         for (t = 0; t < e.length; t += 16) {
           f = a[0];
@@ -572,8 +572,8 @@ var AWS = (function() {
         return g && g.asBytes
           ? c
           : g && g.asString
-            ? a.bytesToString(c)
-            : k.bytesToHex(c);
+          ? a.bytesToString(c)
+          : k.bytesToHex(c);
       };
     })();
     // end sha256/CryptoJS

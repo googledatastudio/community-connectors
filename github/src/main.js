@@ -172,8 +172,7 @@ function getData(request) {
       return field.getGroup();
     }
     if (endpoint !== field.getGroup()) {
-      cc
-        .newUserError()
+      cc.newUserError()
         .setText(
           'You can only choose fields in the same group. You chose fields from "' +
             endpoint +
@@ -202,13 +201,12 @@ function getData(request) {
 }
 
 function parseStarRow(requestedFields, star) {
-  var row = [];
-  requestedFields.asArray().forEach(function(requestedField) {
+  var row = requestedFields.asArray().map(function(requestedField) {
     switch (requestedField.getId()) {
       case 'stars':
-        return row.push(1);
+        return 1;
       case 'starred_at':
-        return row.push(formatDate(star.starred_at));
+        return formatDate(star.starred_at);
       default:
         return cc
           .newUserError()
@@ -334,14 +332,12 @@ function getUrl(config) {
 function validateConfig(config) {
   var config = config || {};
   if (!config.organization) {
-    cc
-      .newUserError()
+    cc.newUserError()
       .setText('Organization cannot be left blank.')
       .throwException();
   }
   if (!config.repository) {
-    cc
-      .newUserError()
+    cc.newUserError()
       .setText('Repository cannot be left blank.')
       .throwException();
   }
@@ -382,9 +378,9 @@ function formatDate(date) {
   return !date
     ? null
     : date instanceof Date
-      ? formatDate(date.toISOString())
-      : date.slice(0, 4) +
-        date.slice(5, 7) +
-        date.slice(8, 10) +
-        date.slice(11, 13);
+    ? formatDate(date.toISOString())
+    : date.slice(0, 4) +
+      date.slice(5, 7) +
+      date.slice(8, 10) +
+      date.slice(11, 13);
 }

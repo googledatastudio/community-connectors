@@ -612,8 +612,7 @@ function throwError(userSafe, userMessage, adminMessage) {
     }
     error.throwException();
   } else {
-    cc
-      .newDebugError()
+    cc.newDebugError()
       .setText(adminMessage)
       .throwException();
   }
