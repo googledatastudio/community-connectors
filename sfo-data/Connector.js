@@ -3,8 +3,8 @@ var CUSTOM_CONFIG = [
   {
     type: 'INFO',
     name: 'instructions',
-    text: 'Click connect to continue',
-  },
+    text: 'Click connect to continue'
+  }
 ];
 
 /** @const */
@@ -76,7 +76,7 @@ Connector.prototype.getData = function(request) {
       }
     }); // end of dataSchema forEach
     data.push({
-      values: values,
+      values: values
     });
   }); // end of response forEach
 

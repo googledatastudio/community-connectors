@@ -219,7 +219,7 @@ function getData(request) {
     'https://api.nytimes.com/svc/topstories/v2/',
     request.configParams.select_section,
     '.json?api-key=',
-    key,
+    key
   ];
   var response = JSON.parse(UrlFetchApp.fetch(url.join(''))).results;
 
@@ -282,26 +282,26 @@ function getData(request) {
       }
     });
     data.push({
-      values: values,
+      values: values
     });
   });
 
   return {
     schema: requestedFields.build(),
-    rows: data,
+    rows: data
   };
 }
 
 function getAuthType() {
   return {
-    type: 'KEY',
+    type: 'KEY'
   };
 }
 
 function validateKey(key) {
   var url = [
     'https://api.nytimes.com/svc/topstories/v2/home.json?api-key=',
-    key,
+    key
   ];
   var response = JSON.parse(
     UrlFetchApp.fetch(url.join(''), {muteHttpExceptions: true})
@@ -328,7 +328,7 @@ function setCredentials(request) {
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty('dscc.key', key);
   return {
-    errorCode: 'NONE',
+    errorCode: 'NONE'
   };
 }
 

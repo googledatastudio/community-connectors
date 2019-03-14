@@ -26,7 +26,7 @@ var DateUtils = {
     var hours = dateObject.getUTCHours();
     var hourPart = (hours < 10 ? '0' : '') + hours;
     return DateUtils.getDashlessDatePart(dateObject) + hourPart;
-  },
+  }
 };
 
 /* global exports */

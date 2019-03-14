@@ -26,7 +26,7 @@ bqlocal.bdQuery = function(bqRequest, projectId, jobId) {
   var urlElements = [
     'https://www.googleapis.com/bigquery/v2/projects/',
     projectId,
-    '/queries',
+    '/queries'
   ];
   if (jobId) {
     urlElements.push('/' + jobId);
@@ -35,11 +35,11 @@ bqlocal.bdQuery = function(bqRequest, projectId, jobId) {
 
   var responseOptions = {
     headers: {
-      Authorization: 'Bearer ' + bqlocal.oAuthToken,
+      Authorization: 'Bearer ' + bqlocal.oAuthToken
     },
     method: 'post',
     contentType: 'application/json',
-    muteHttpExceptions: true,
+    muteHttpExceptions: true
   };
 
   if (bqRequest) {
@@ -83,15 +83,15 @@ function getBqData(url) {
     queryParameters: [
       {
         parameterType: {
-          type: 'STRING',
+          type: 'STRING'
         },
         parameterValue: {
-          value: url,
+          value: url
         },
-        name: 'url',
-      },
+        name: 'url'
+      }
     ],
-    useLegacySql: false,
+    useLegacySql: false
   };
 
   var bqClient = JSON.parse(propStore.get('script', 'bigQuery.client'));
@@ -116,7 +116,7 @@ function getBqData(url) {
   var rows = queryResults.rows;
   while (queryResults.pageToken) {
     queryResults = bqlocal.Jobs.getQueryResults(projectId, jobId, {
-      pageToken: queryResults.pageToken,
+      pageToken: queryResults.pageToken
     });
     rows = rows.concat(queryResults.rows);
   }
@@ -136,6 +136,6 @@ function getBqData(url) {
 
   return {
     headers: headers,
-    data: data,
+    data: data
   };
 }

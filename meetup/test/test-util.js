@@ -36,7 +36,7 @@ const buildFields = (...fieldNames) => {
 const initCache = (param) => {
   let {cacheData = []} = param || {};
   CustomCache.getPropertiesServiceNS = () => ({
-    getUserProperties: () => ({getProperty: () => 3, setProperty: jest.fn()}),
+    getUserProperties: () => ({getProperty: () => 3, setProperty: jest.fn()})
   });
 
   const mySheet = {
@@ -46,13 +46,13 @@ const initCache = (param) => {
     getRange: () => ({
       getValues: () => cacheData,
       getLastRow: () => cacheData.length,
-      getCell: (row, col) => ({getValue: () => cacheData[row - 1][col - 1]}),
-    }),
+      getCell: (row, col) => ({getValue: () => cacheData[row - 1][col - 1]})
+    })
   };
   const getSheetByNameMock = jest.fn(() => mySheet);
 
   CustomCache.getSpreadsheetAppNS = () => ({
-    openById: () => ({getSheetByName: getSheetByNameMock}),
+    openById: () => ({getSheetByName: getSheetByNameMock})
   });
   const cache = new CustomCache('urlName', 'apiType');
   return cache;
@@ -61,5 +61,5 @@ const initCache = (param) => {
 module.exports = {
   buildFakeRequest,
   buildFields,
-  initCache,
+  initCache
 };

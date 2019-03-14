@@ -81,12 +81,12 @@ function runAthenaQuery(region, database, query, outputLocation) {
   var payload = {
     ClientRequestToken: uuidv4(),
     QueryExecutionContext: {
-      Database: database,
+      Database: database
     },
     QueryString: query,
     ResultConfiguration: {
-      OutputLocation: outputLocation,
-    },
+      OutputLocation: outputLocation
+    }
   };
   return AWS.post(
     'athena',
@@ -107,7 +107,7 @@ function runAthenaQuery(region, database, query, outputLocation) {
  */
 function waitAthenaQuery(region, queryExecutionId) {
   var payload = {
-    QueryExecutionId: queryExecutionId,
+    QueryExecutionId: queryExecutionId
   };
 
   // Ping for status until the query reached a terminal state
@@ -147,7 +147,7 @@ function getAthenaQueryResults(region, queryExecutionId) {
   var nextToken = null;
   while (1) {
     var payload = {
-      QueryExecutionId: queryExecutionId,
+      QueryExecutionId: queryExecutionId
     };
     if (nextToken) {
       payload.NextToken = nextToken;
@@ -262,6 +262,6 @@ function getDataFromAthena(request) {
 
   return {
     schema: schema,
-    rows: rows,
+    rows: rows
   };
 }

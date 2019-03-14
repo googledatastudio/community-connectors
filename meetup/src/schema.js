@@ -35,8 +35,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'name',
@@ -46,8 +46,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'latlong',
@@ -57,8 +57,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'LATITUDE_LONGITUDE',
-        semanticGroup: 'GEO',
-      },
+        semanticGroup: 'GEO'
+      }
     },
     {
       name: 'city',
@@ -68,8 +68,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'CITY',
-        semanticGroup: 'GEO',
-      },
+        semanticGroup: 'GEO'
+      }
     },
     {
       name: 'country',
@@ -79,8 +79,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'COUNTRY',
-        semanticGroup: 'GEO',
-      },
+        semanticGroup: 'GEO'
+      }
     },
     {
       name: 'member_count',
@@ -90,8 +90,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'average_age',
@@ -102,8 +102,8 @@ Schema.prototype.getSchema = function(apiType) {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
         semanticGroup: 'NUMBER',
-        isReaggregatable: false,
-      },
+        isReaggregatable: false
+      }
     },
     {
       name: 'founded_date',
@@ -113,8 +113,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'YEAR_MONTH_DAY',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'past_events',
@@ -124,8 +124,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'upcoming_events',
@@ -135,8 +135,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'past_rsvps',
@@ -146,8 +146,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'rsvps_per_event',
@@ -158,8 +158,8 @@ Schema.prototype.getSchema = function(apiType) {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
         semanticGroup: 'NUMBER',
-        isReaggregatable: false,
-      },
+        isReaggregatable: false
+      }
     },
     {
       name: 'repeat_rsvpers',
@@ -169,8 +169,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'gender_unknown',
@@ -180,8 +180,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'gender_female',
@@ -191,8 +191,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'gender_male',
@@ -202,8 +202,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
+        semanticGroup: 'NUMBER'
+      }
     },
     {
       name: 'gender_other',
@@ -213,9 +213,9 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMBER',
-      },
-    },
+        semanticGroup: 'NUMBER'
+      }
+    }
   ];
 
   this.schema[Connector.API_TYPE_GENERAL_INFO] = [
@@ -227,8 +227,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'category_photo_url',
@@ -238,8 +238,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'URL',
-        semanticGroup: 'URL',
-      },
+        semanticGroup: 'URL'
+      }
     },
     {
       name: 'category_photo',
@@ -250,8 +250,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'IMAGE',
-        semanticGroup: 'IMAGE',
-      },
+        semanticGroup: 'IMAGE'
+      }
     },
     {
       name: 'group_photo_url',
@@ -261,8 +261,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'URL',
-        semanticGroup: 'URL',
-      },
+        semanticGroup: 'URL'
+      }
     },
     {
       name: 'group_photo',
@@ -273,8 +273,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'IMAGE',
-        semanticGroup: 'IMAGE',
-      },
+        semanticGroup: 'IMAGE'
+      }
     },
     {
       name: 'members_count',
@@ -284,8 +284,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'group_link',
@@ -295,8 +295,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'group_name',
@@ -306,9 +306,9 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
-    },
+        semanticGroup: 'TEXT'
+      }
+    }
   ];
 
   this.schema[Connector.API_TYPE_EVENTS] = [
@@ -320,8 +320,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'event_date',
@@ -331,8 +331,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'YEAR_MONTH_DAY',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'local_date',
@@ -342,8 +342,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'YEAR_MONTH_DAY',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'event_time',
@@ -353,8 +353,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'local_time',
@@ -364,8 +364,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'waitlist_count',
@@ -375,8 +375,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'yes_rsvp_count',
@@ -386,8 +386,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'manual_attendance_count',
@@ -397,8 +397,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'link',
@@ -408,8 +408,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'URL',
-        semanticGroup: 'URL',
-      },
+        semanticGroup: 'URL'
+      }
     },
     {
       name: 'fee',
@@ -419,9 +419,9 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'CURRENCY_USD',
-        semanticGroup: 'CURRENCY',
-      },
-    },
+        semanticGroup: 'CURRENCY'
+      }
+    }
   ];
 
   this.schema[Connector.API_TYPE_MEMBERS] = [
@@ -433,8 +433,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'YEAR_MONTH_DAY',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'year_month',
@@ -444,8 +444,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'YEAR_MONTH',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'quarter',
@@ -455,8 +455,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'QUARTER',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'year',
@@ -466,8 +466,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'YEAR',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'month_day',
@@ -477,8 +477,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'MONTH_DAY',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'id',
@@ -488,8 +488,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'status',
@@ -499,8 +499,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'TEXT',
-        semanticGroup: 'TEXT',
-      },
+        semanticGroup: 'TEXT'
+      }
     },
     {
       name: 'latlong',
@@ -510,8 +510,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'LATITUDE_LONGITUDE',
-        semanticGroup: 'GEO',
-      },
+        semanticGroup: 'GEO'
+      }
     },
     {
       name: 'city',
@@ -521,8 +521,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'CITY',
-        semanticGroup: 'GEO',
-      },
+        semanticGroup: 'GEO'
+      }
     },
     {
       name: 'state',
@@ -532,8 +532,8 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'REGION',
-        semanticGroup: 'GEO',
-      },
+        semanticGroup: 'GEO'
+      }
     },
     {
       name: 'member_count',
@@ -544,9 +544,9 @@ Schema.prototype.getSchema = function(apiType) {
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
-    },
+        semanticGroup: 'NUMERIC'
+      }
+    }
   ];
   return this.getSchema(apiType);
 };

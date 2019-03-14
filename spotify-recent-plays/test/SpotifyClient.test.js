@@ -19,7 +19,7 @@ test('getRecentPlays', () => {
   const expectedApiCalls = {
     'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1,
     'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': 1,
-    'https://api.spotify.com/v1/me/player/recently-played?before=1531482414230': 1,
+    'https://api.spotify.com/v1/me/player/recently-played?before=1531482414230': 1
   };
   expect(urlFetchAppMock.calls).toEqual(
     expectedApiCalls,
@@ -46,7 +46,7 @@ test('limiting the data', () => {
   let result = service.getRecentPlays(startDate, endDate);
   const expectedApiCalls = {
     'https://api.spotify.com/v1/me/player/recently-played?before=1531487208351': 1,
-    'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1,
+    'https://api.spotify.com/v1/me/player/recently-played?before=1531612799999': 1
   };
   expect(urlFetchAppMock.calls).toEqual(
     expectedApiCalls,

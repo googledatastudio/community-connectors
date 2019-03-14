@@ -7,7 +7,7 @@ function PropertiesServiceMock() {
   this.userProperties = new InternalPropertiesService({});
   this.scriptProperties = new InternalPropertiesService({
     OAUTH_CLIENT_ID: 'cid',
-    OAUTH_CLIENT_SECRET: 'cs',
+    OAUTH_CLIENT_SECRET: 'cs'
   });
 
   return this;

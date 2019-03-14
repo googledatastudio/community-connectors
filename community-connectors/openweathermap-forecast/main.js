@@ -150,7 +150,7 @@ function getData(request) {
     '&q=',
     request.configParams.cityName,
     ',',
-    request.configParams.countryCode,
+    request.configParams.countryCode
   ];
   var response = UrlFetchApp.fetch(url.join(''));
   var forecast = JSON.parse(response.getContentText());
@@ -220,19 +220,19 @@ function getData(request) {
       }
     });
     data.push({
-      values: values,
+      values: values
     });
   });
 
   return {
     schema: requestedFields.build(),
-    rows: data,
+    rows: data
   };
 }
 
 function getAuthType() {
   return {
-    type: 'KEY',
+    type: 'KEY'
   };
 }
 
@@ -262,7 +262,7 @@ function setCredentials(request) {
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty('dscc.key', key);
   return {
-    errorCode: 'NONE',
+    errorCode: 'NONE'
   };
 }
 

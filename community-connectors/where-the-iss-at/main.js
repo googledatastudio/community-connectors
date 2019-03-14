@@ -137,7 +137,7 @@ function getData(request) {
 
   var url = [
     'https://api.wheretheiss.at/v1/satellites/25544/positions?timestamps=',
-    timestamps.join(),
+    timestamps.join()
   ];
   var response = JSON.parse(UrlFetchApp.fetch(url.join('')));
 
@@ -161,18 +161,18 @@ function getData(request) {
       }
     });
     data.push({
-      values: values,
+      values: values
     });
   });
   return {
     schema: requestedFields.build(),
-    rows: data,
+    rows: data
   };
 }
 
 function getAuthType() {
   var response = {
-    type: 'NONE',
+    type: 'NONE'
   };
   return response;
 }

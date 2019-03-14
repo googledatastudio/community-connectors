@@ -135,7 +135,7 @@ function GoogleFit() {
     YOGA: 100,
     ZUMBA: 101,
 
-    'OTHER (UNCLASSIFIED FITNESS ACTIVITY)': 108,
+    'OTHER (UNCLASSIFIED FITNESS ACTIVITY)': 108
   };
 
   // Create a reverse map of activity codes to name.
@@ -240,8 +240,8 @@ function fetchAggregateData(dataSourceId, startTimeMs, endTimeMs) {
           aggregateBy: [{dataSourceId: dataSourceId}],
           bucketByTime: {durationMillis: oneDayMs},
           startTimeMillis: startTimeMs,
-          endTimeMillis: endTimeMs,
-        }),
+          endTimeMillis: endTimeMs
+        })
       }
     )
   );
@@ -288,8 +288,8 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
   return JSON.parse(
     UrlFetchApp.fetch(uri, {
       headers: {
-        Authorization: 'Bearer ' + ScriptApp.getOAuthToken(),
-      },
+        Authorization: 'Bearer ' + ScriptApp.getOAuthToken()
+      }
     })
   );
 };

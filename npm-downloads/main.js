@@ -145,7 +145,7 @@ function getData(request) {
 
   return {
     schema: requestedFields.build(),
-    rows: data,
+    rows: data
   };
 }
 
@@ -225,7 +225,7 @@ connector.fetchDataFromApi = function(request) {
     ':',
     request.dateRange.endDate,
     '/',
-    request.configParams.package,
+    request.configParams.package
   ];
   var response = UrlFetchApp.fetch(url.join(''));
   return response;

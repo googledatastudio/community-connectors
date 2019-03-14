@@ -81,7 +81,7 @@ function getFieldsFromGlue(request) {
 
   var payload = {
     DatabaseName: params.databaseName,
-    Name: params.tableName,
+    Name: params.tableName
   };
   var result = AWS.post('glue', params.awsRegion, 'AWSGlue.GetTable', payload);
   return glueTableToFields(result.Table);

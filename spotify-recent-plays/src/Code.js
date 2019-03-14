@@ -12,7 +12,7 @@ function getConnector() {
     UrlFetchApp: UrlFetchApp,
     HtmlService: HtmlService,
     PropertiesService: PropertiesService,
-    OAuth2: OAuth2,
+    OAuth2: OAuth2
   });
 }
 

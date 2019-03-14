@@ -17,7 +17,7 @@ connector.fileSizeLimitInBytes = 20971520;
 function getAuthType() {
   return {
     helpUrl: 'https://www.kaggle.com/docs/api#authentication',
-    type: 'USER_TOKEN',
+    type: 'USER_TOKEN'
   };
 }
 
@@ -28,27 +28,27 @@ function getConfig(request) {
         type: 'INFO',
         name: 'generalInfo',
         text:
-          'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found under the "Data" tab in Kaggle UI.',
+          'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found under the "Data" tab in Kaggle UI.'
       },
       {
         type: 'TEXTINPUT',
         name: 'ownerSlug',
         displayName: 'Owner slug',
-        placeholder: connector.ownerSlug,
+        placeholder: connector.ownerSlug
       },
       {
         type: 'TEXTINPUT',
         name: 'datasetSlug',
         displayName: 'Dataset slug',
-        placeholder: connector.datasetSlug,
+        placeholder: connector.datasetSlug
       },
       {
         type: 'TEXTINPUT',
         name: 'fileName',
         displayName: 'Filename (CSV files only. Include .csv at end.)',
-        placeholder: connector.fileName,
-      },
-    ],
+        placeholder: connector.fileName
+      }
+    ]
   };
   return config;
 }
@@ -75,7 +75,7 @@ function getSchema(request) {
     var kaggleSchema = cachedSchema;
   }
   return {
-    schema: kaggleSchema,
+    schema: kaggleSchema
   };
 }
 
@@ -126,7 +126,7 @@ function getData(request) {
   var requestedData = processData(rawData, requestedSchema);
   return {
     schema: requestedSchema,
-    rows: requestedData,
+    rows: requestedData
   };
 }
 
@@ -171,7 +171,7 @@ function processData(data, fields) {
       return data[rowIndex][columnIndex];
     });
     result.push({
-      values: rowData,
+      values: rowData
     });
   }
   return result;
@@ -184,7 +184,7 @@ function getFileData(config) {
     connector.apiDownloadSlug,
     config.ownerSlug,
     config.datasetSlug,
-    config.fileName,
+    config.fileName
   ];
   var path = pathElements.join('/');
 
@@ -196,7 +196,7 @@ function getFileData(config) {
   var cacheKey = pathElements.join('--');
   var result = {
     csvData: csvData,
-    cacheKey: cacheKey,
+    cacheKey: cacheKey
   };
   return result;
 }
@@ -207,8 +207,8 @@ function kaggleFetch(path, kaggleAuth) {
   var authParamBase64 = Utilities.base64Encode(authParamPlain);
   var options = {
     headers: {
-      Authorization: 'Basic ' + authParamBase64,
-    },
+      Authorization: 'Basic ' + authParamBase64
+    }
   };
   var response = UrlFetchApp.fetch(fullUrl, options);
   return response;
@@ -229,8 +229,8 @@ function validateCredentials(username, token) {
   var authParamBase64 = Utilities.base64Encode(authParamPlain);
   var options = {
     headers: {
-      Authorization: 'Basic ' + authParamBase64,
-    },
+      Authorization: 'Basic ' + authParamBase64
+    }
   };
   try {
     var response = UrlFetchApp.fetch(connector.pingUrl, options);
@@ -257,14 +257,14 @@ function setCredentials(request) {
   var validCreds = validateCredentials(username, token);
   if (validCreds === false) {
     return {
-      errorCode: 'INVALID_CREDENTIALS',
+      errorCode: 'INVALID_CREDENTIALS'
     };
   }
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty(connector.usernameKey, username);
   userProperties.setProperty(connector.tokenKey, token);
   return {
-    errorCode: 'NONE',
+    errorCode: 'NONE'
   };
 }
 
@@ -293,7 +293,7 @@ function buildBrowsableFileUrl(config) {
   var datasetUrlElements = [
     connector.kaggleUrl,
     config.ownerSlug,
-    config.datasetSlug,
+    config.datasetSlug
   ];
   var datasetUrl = datasetUrlElements.join('/');
   var fileUrlElements = [datasetUrl, config.fileName];
@@ -320,7 +320,7 @@ function getStoredCredentials() {
   var token = userProperties.getProperty(connector.tokenKey);
   var kaggleAuth = {
     userName: user,
-    apiToken: token,
+    apiToken: token
   };
   return kaggleAuth;
 }

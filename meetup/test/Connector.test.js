@@ -22,14 +22,14 @@ beforeEach(() => {
   global.UrlFetchApp = {fetch: urlFetchMock};
 
   global.getOAuthService = () => ({
-    getAccessToken: () => 'accesstoken',
+    getAccessToken: () => 'accesstoken'
   });
 
   global.LockService = {
     getUserLock: () => ({
       waitLock: () => true,
-      releaseLock: () => true,
-    }),
+      releaseLock: () => true
+    })
   };
 });
 
@@ -115,7 +115,7 @@ test('Build url with bad api_type', () => {
   c.validateConfig(request);
   c.buildURL(request);
   expect(errorMock.mock.calls).toEqual([
-    ['An invalid value was passed to api type: bad api type', false],
+    ['An invalid value was passed to api type: bad api type', false]
   ]);
 });
 
@@ -180,7 +180,7 @@ test('getCachedData with miss & do add to cache', () => {
   const url = 'my url';
   c.getCachedData(undefined, url, undefined);
   expect(c.cache.sheet.getAllValues()).toEqual([
-    [url, JSON.stringify({json: response, nextLink: nextLink})],
+    [url, JSON.stringify({json: response, nextLink: nextLink})]
   ]);
 });
 
@@ -196,8 +196,8 @@ test('getNextLink with rel=next', () => {
 
   const fakeResponse = {
     getAllHeaders: () => ({
-      Link: ['<link>; rel="notNext"', `<${linkValue}>; rel="next"`],
-    }),
+      Link: ['<link>; rel="notNext"', `<${linkValue}>; rel="next"`]
+    })
   };
 
   const actual = c.getNextLink(fakeResponse);
@@ -209,7 +209,7 @@ test('getNextLink with rel=next and one entry', () => {
   const linkValue = 'mylink.com';
 
   const fakeResponse = {
-    getAllHeaders: () => ({Link: `<${linkValue}>; rel="next"`}),
+    getAllHeaders: () => ({Link: `<${linkValue}>; rel="next"`})
   };
 
   const actual = c.getNextLink(fakeResponse);
@@ -222,7 +222,7 @@ test('rowifyProGroupData with nonexisting field', () => {
 
   expect(errorMock.mock.calls[0]).toEqual([
     'A field was requested that is not in the schema: nah',
-    true,
+    true
   ]);
 });
 
@@ -230,7 +230,7 @@ test('rowifyMemberData with nonexisting field', () => {
   c.rowifyMemberData(['result 1'], [{name: 'nah'}]);
   expect(errorMock.mock.calls[0]).toEqual([
     'A field was requested that is not in the schema: nah',
-    true,
+    true
   ]);
 });
 
@@ -238,7 +238,7 @@ test('rowifyGeneralInfo with nonexisting field', () => {
   c.rowifyGeneralInfo(['result 1'], [{name: 'nah'}]);
   expect(errorMock.mock.calls[0]).toEqual([
     'A field was requested that is not in the schema: nah',
-    true,
+    true
   ]);
 });
 
@@ -246,7 +246,7 @@ test('rowifyEventData with nonexisting field', () => {
   c.rowifyEventData(['result 1'], [{name: 'nah'}]);
   expect(errorMock.mock.calls[0]).toEqual([
     'A field was requested that is not in the schema: nah',
-    true,
+    true
   ]);
 });
 
@@ -260,7 +260,7 @@ test('rowifyMemberData', () => {
       country: 'us',
       joined: 1513774300000,
       status: 'active',
-      id: 244280134,
+      id: 244280134
     },
     {
       lon: -122.04,
@@ -270,7 +270,7 @@ test('rowifyMemberData', () => {
       country: 'us',
       joined: 1425871866000,
       status: 'active',
-      id: 185082582,
+      id: 185082582
     },
     {
       lon: -121.92,
@@ -280,8 +280,8 @@ test('rowifyMemberData', () => {
       country: 'us',
       joined: 1374464531000,
       status: 'active',
-      id: 103282372,
-    },
+      id: 103282372
+    }
   ];
   var request = buildFakeRequest({
     fields: [
@@ -290,8 +290,8 @@ test('rowifyMemberData', () => {
       {name: 'status'},
       {name: 'latlong'},
       {name: 'city'},
-      {name: 'state'},
-    ],
+      {name: 'state'}
+    ]
   });
 
   var dataSchema = c.getDataSchema(request);
@@ -304,8 +304,8 @@ test('rowifyMemberData', () => {
         'active',
         '37.41, -122.08',
         'Mountain View',
-        'CA',
-      ],
+        'CA'
+      ]
     },
     {
       values: [
@@ -314,8 +314,8 @@ test('rowifyMemberData', () => {
         'active',
         '37.31, -122.04',
         'Cupertino',
-        'CA',
-      ],
+        'CA'
+      ]
     },
     {
       values: [
@@ -324,9 +324,9 @@ test('rowifyMemberData', () => {
         'active',
         '37.26, -121.92',
         'San Jose',
-        'CA',
-      ],
-    },
+        'CA'
+      ]
+    }
   ];
 
   expect(actual).toEqual(expected);
@@ -338,7 +338,7 @@ test('rowify general_info', () => {
     group_photo: {photo_link: 'group_photo_link'},
     members: 1956,
     link: 'group link',
-    name: 'Group Name',
+    name: 'Group Name'
   };
   const request = buildFakeRequest({
     fields: [
@@ -347,9 +347,9 @@ test('rowify general_info', () => {
       {name: 'group_photo_url'},
       {name: 'members_count'},
       {name: 'group_link'},
-      {name: 'group_name'},
+      {name: 'group_name'}
     ],
-    apiType: Connector.API_TYPE_GENERAL_INFO,
+    apiType: Connector.API_TYPE_GENERAL_INFO
   });
 
   const dataSchema = c.getDataSchema(request);
@@ -362,9 +362,9 @@ test('rowify general_info', () => {
         'group_photo_link',
         1956,
         'group link',
-        'Group Name',
-      ],
-    },
+        'Group Name'
+      ]
+    }
   ];
   expect(actual).toEqual(expected);
 });
@@ -390,8 +390,8 @@ test('rowifyProGroupData', () => {
       gender_female: 0.2,
       gender_male: 0.3,
       gender_other: 0.4,
-      status: 'Active',
-    },
+      status: 'Active'
+    }
   ];
   const request = buildFakeRequest({
     fields: [
@@ -411,9 +411,9 @@ test('rowifyProGroupData', () => {
       {name: 'gender_unknown'},
       {name: 'gender_female'},
       {name: 'gender_male'},
-      {name: 'gender_other'},
+      {name: 'gender_other'}
     ],
-    apiType: Connector.API_TYPE_PRO_GROUPS,
+    apiType: Connector.API_TYPE_PRO_GROUPS
   });
 
   const dataSchema = c.getDataSchema(request);
@@ -437,9 +437,9 @@ test('rowifyProGroupData', () => {
         1,
         2,
         3,
-        4,
-      ],
-    },
+        4
+      ]
+    }
   ];
   expect(actual).toEqual(expected);
 });
@@ -468,7 +468,7 @@ test('getDataSchema throwsError when field not in the schema requested.', () => 
   c.validateConfig(request);
   c.getDataSchema(request);
   expect(errorMock.mock.calls).toEqual([
-    ['A field was requested that was not in the schema: not here', false],
+    ['A field was requested that was not in the schema: not here', false]
   ]);
 });
 
@@ -500,7 +500,7 @@ test('getDataCalls calls correct functions when passed general_info api type', (
   const actual = c.getData(request);
   const expected = {
     schema: 'get data schema',
-    rows: 'rowified events data',
+    rows: 'rowified events data'
   };
   expect(actual).toEqual(expected);
 });
@@ -516,7 +516,7 @@ test('getDataCalls calls correct functions when passed bad api type', () => {
     expect(e.message).toEqual('for test');
   }
   expect(errorMock.mock.calls).toEqual([
-    ['An invalid value was passed to apiType: bad api type', false],
+    ['An invalid value was passed to apiType: bad api type', false]
   ]);
 });
 
@@ -568,7 +568,7 @@ test('rowify event data works as expected', () => {
       time: 1519354800000,
       manual_attendance_count: 6,
       local_date: '2017-08-02',
-      local_time: '18:30',
+      local_time: '18:30'
     },
     {
       link: 'fakeLink',
@@ -578,7 +578,7 @@ test('rowify event data works as expected', () => {
       time: 1519354800000,
       manual_attendance_count: 6,
       local_date: '2017-06-06',
-      local_time: '19:00',
+      local_time: '19:00'
     },
     {
       fee: {amount: 25},
@@ -589,8 +589,8 @@ test('rowify event data works as expected', () => {
       time: 1529632800000,
       manual_attendance_count: 5,
       local_date: '2017-02-28',
-      local_time: '12:00',
-    },
+      local_time: '12:00'
+    }
   ];
   var request = buildFakeRequest({
     apiType: Connector.API_TYPE_EVENTS,
@@ -601,15 +601,15 @@ test('rowify event data works as expected', () => {
       {name: 'yes_rsvp_count'},
       {name: 'link'},
       {name: 'fee'},
-      {name: 'event_time'},
-    ],
+      {name: 'event_time'}
+    ]
   });
   const dataSchema = c.getDataSchema(request);
   const actual = c.rowifyEventData(apiResults, dataSchema);
   const expected = [
     {values: ['event 1 name', '20180223', 1, 12, 'fakeLink', 10, '03:00']},
     {values: ['event 1 name', '20180223', 1, 12, 'fakeLink', 0, '03:00']},
-    {values: ['event 2 name', '20180622', 0, 10, 'fakeLink2', 25, '02:00']},
+    {values: ['event 2 name', '20180622', 0, 10, 'fakeLink2', 25, '02:00']}
   ];
 
   expect(actual).toEqual(expected);
@@ -624,12 +624,12 @@ test('requestEventsData does the right things.', () => {
         currency: 'USD',
         description: 'per person',
         label: 'price',
-        required: true,
+        required: true
       },
       link: 'https://www.meetup.com/Igniter/events/244824517/',
       yes_rsvp_count: 12,
       waitlist_count: 0,
-      time: 1519354800000,
+      time: 1519354800000
     },
     {
       fee: {
@@ -638,13 +638,13 @@ test('requestEventsData does the right things.', () => {
         currency: 'USD',
         description: 'per person',
         label: 'price',
-        required: true,
+        required: true
       },
       link: 'https://www.meetup.com/Igniter/events/244743694/',
       yes_rsvp_count: 10,
       waitlist_count: 0,
-      time: 1529632800000,
-    },
+      time: 1529632800000
+    }
   ];
 
   const request = buildFakeRequest({
@@ -655,8 +655,8 @@ test('requestEventsData does the right things.', () => {
       {name: 'yes_rsvp_count'},
       {name: 'link'},
       {name: 'fee'},
-      {name: 'event_time'},
-    ],
+      {name: 'event_time'}
+    ]
   });
   urlFetchMock.mockImplementation(() => JSON.stringify(response));
   c.getFetchOptions = () => ({});
@@ -671,7 +671,7 @@ test('errors are handled in getCachedData', () => {
   c.getCachedData();
   expect(errorMock.mock.calls[0]).toEqual([
     'Unable to get data from meetup.com',
-    true,
+    true
   ]);
 });
 
@@ -727,7 +727,7 @@ test('logAndExecute defined function name, isAdminUser true, and log enabled tru
   expect(actual).toBe(5);
   expect(consoleLogMock.mock.calls).toEqual([
     [[functionName, 'request', JSON.stringify(parameter)]],
-    [[functionName, 'response', JSON.stringify(parameter)]],
+    [[functionName, 'response', JSON.stringify(parameter)]]
   ]);
 });
 
@@ -759,7 +759,7 @@ test('logAndExecute undefined function name', () => {
   c.logAndExecute(functionName, parameter);
   expect(errorMock.mock.calls[0]).toEqual([
     'The function you are trying to log is not defined: myFunctionName',
-    false,
+    false
   ]);
 });
 
