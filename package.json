@@ -14,9 +14,9 @@
     "arrowParens": "always"
   },
   "devDependencies": {
-    "@google/clasp": "^1.4.1",
+    "@google/clasp": "^2.0.1",
     "eslint": "^5.15.1",
     "eslint-config-google": "^0.12.0",
-    "prettier": "^1.12.1"
+    "prettier": "^1.16.4"
   }
 }
