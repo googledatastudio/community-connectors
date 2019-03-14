@@ -98,7 +98,7 @@ function getBqData(url) {
 }
 
 function getBigQueryResults(request) {
-  var bqClient = JSON.parse(propStore.get("script", "bigQuery.client"));
+  var bqClient = JSON.parse(propStore.get('script', 'bigQuery.client'));
   var bqOauthService = getOauthService(bqClient);
   var bqOAuthToken = bqOauthService.getAccessToken();
   bqlocal.setOAuthToken(bqOAuthToken);
@@ -141,5 +141,4 @@ function getBigQueryResults(request) {
     headers: headers,
     data: data,
   };
-
 }

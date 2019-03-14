@@ -28,11 +28,11 @@ crux.cacheFlushWhitelist = [
 
 // Query used to pull data from BigQuery
 crux.dataQueryString =
-    "SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url";
+  'SELECT * FROM `chrome-ux-report.materialized.metrics_summary` WHERE origin = @url';
 
 // Query used to validated URL from BigQuery
 crux.valudateQueryString =
-  "SELECT origin FROM `chrome-ux-report.materialized.origin_summary` WHERE origin = @url LIMIT 1";
+  'SELECT origin FROM `chrome-ux-report.materialized.origin_summary` WHERE origin = @url LIMIT 1';
 
 function getConfig(request) {
   var customConfig = [
@@ -525,11 +525,15 @@ function getOriginDataset(request) {
 
   var scriptCache = CacheService.getScriptCache();
 
-  try { 
+  try {
     urlExistsInDb(origin.url);
-  } catch(e) {
+  } catch (e) {
     userLock.releaseLock();
-    throw new Error("DS_USER: There are over 4 million origins in this dataset, but " + origin.url +  " is not one of them! Have you tried adding 'www' or 'http' to your origin? \n\n\n");
+    throw new Error(
+      'DS_USER: There are over 4 million origins in this dataset, but ' +
+        origin.url +
+        " is not one of them! Have you tried adding 'www' or 'http' to your origin? \n\n\n"
+    );
   }
 
   if (bqIsFresh) {
@@ -568,19 +572,19 @@ function urlExistsInDb(url) {
     queryParameters: [
       {
         parameterType: {
-          type: "STRING"
+          type: 'STRING',
         },
         parameterValue: {
-          value: url
+          value: url,
         },
-        name: "url"
-      }
+        name: 'url',
+      },
     ],
-    useLegacySql: false
+    useLegacySql: false,
   };
 
   var queryResults = getBigQueryResults(bqRequest);
-  var queryStatus =  (queryResults.data === []);
+  var queryStatus = queryResults.data === [];
   return queryStatus;
 }
 
@@ -639,9 +643,9 @@ function isAdminUser() {
 // Return the deployment envirnment for the script. Use "staging" for admin users
 // and "prod" for others. This will be used to change the Firebase db path.
 crux.getEnvironment = function() {
-  var environment = crux.isProdScript ? "prod": "staging";
+  var environment = crux.isProdScript ? 'prod' : 'staging';
   return environment;
-}
+};
 
 function throwError(userSafe, userMessage, adminMessage) {
   var cc = DataStudioApp.createCommunityConnector();

@@ -12,9 +12,9 @@ function buildFbUrl(projectId, fileName) {
   var urlElements = [
     'https://',
     projectId,
-    ".firebaseio.com/",
+    '.firebaseio.com/',
     crux.getEnvironment(),
-    "/origins",
+    '/origins',
     fileName,
     '.json',
   ];
