@@ -1,7 +1,7 @@
 /* global CacheService, UrlFetchApp, HtmlService, PropertiesService, OAuth2 */
 
 /* istanbul ignore next */
-if (typeof(require) !== 'undefined') {
+if (typeof require !== 'undefined') {
   var Connector = require('./Connector.js')['default'];
 }
 
@@ -12,7 +12,7 @@ function getConnector() {
     UrlFetchApp: UrlFetchApp,
     HtmlService: HtmlService,
     PropertiesService: PropertiesService,
-    OAuth2: OAuth2
+    OAuth2: OAuth2,
   });
 }
 
@@ -73,7 +73,7 @@ function get3PAuthorizationUrls() {
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['getConfig'] = getConfig;
 }

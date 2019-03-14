@@ -1,14 +1,16 @@
 function getConfig(request) {
-
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
 
-  config.newInfo()
-  .setId("connect")
-  .setText("This connector does not require any configuration. Click CONNECT at the top right to get started.")
+  config
+    .newInfo()
+    .setId('connect')
+    .setText(
+      'This connector does not require any configuration. Click CONNECT at the top right to get started.'
+    );
 
   return config.build();
-};
+}
 
 function getFields() {
   var cc = DataStudioApp.createCommunityConnector();
@@ -16,51 +18,59 @@ function getFields() {
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
 
-  fields.newDimension()
-  .setId("section")
-  .setName("Section")
-  .setType(types.TEXT);
+  fields
+    .newDimension()
+    .setId('section')
+    .setName('Section')
+    .setType(types.TEXT);
 
-  fields.newDimension()
-  .setId("title")
-  .setName("Title")
-  .setType(types.TEXT);
+  fields
+    .newDimension()
+    .setId('title')
+    .setName('Title')
+    .setType(types.TEXT);
 
-  fields.newDimension()
-  .setId("abstract")
-  .setName("Abstract")
-  .setType(types.TEXT);
+  fields
+    .newDimension()
+    .setId('abstract')
+    .setName('Abstract')
+    .setType(types.TEXT);
 
-  fields.newDimension()
-  .setId("url")
-  .setName("URL")
-  .setType(types.URL);
+  fields
+    .newDimension()
+    .setId('url')
+    .setName('URL')
+    .setType(types.URL);
 
-  fields.newDimension()
-  .setId("byline")
-  .setName("Byline")
-  .setType(types.TEXT);
+  fields
+    .newDimension()
+    .setId('byline')
+    .setName('Byline')
+    .setType(types.TEXT);
 
-  fields.newDimension()
-  .setId("source")
-  .setName("Source")
-  .setType(types.TEXT);
+  fields
+    .newDimension()
+    .setId('source')
+    .setName('Source')
+    .setType(types.TEXT);
 
-  fields.newDimension()
-  .setId("published_date")
-  .setName("Published Date")
-  .setType(types.TEXT);
+  fields
+    .newDimension()
+    .setId('published_date')
+    .setName('Published Date')
+    .setType(types.TEXT);
 
-  fields.newMetric()
-  .setId("count")
-  .setName("Count of Articles")
-  .setType(types.NUMBER);
+  fields
+    .newMetric()
+    .setId('count')
+    .setName('Count of Articles')
+    .setType(types.NUMBER);
 
   return fields;
-};
+}
 
 function getSchema(request) {
-  return {'schema': getFields().build()};
+  return {schema: getFields().build()};
 }
 
 function getData(request) {
@@ -74,7 +84,7 @@ function getData(request) {
 
   var url = [
     'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?api-key=',
-    key
+    key,
   ];
   var response = JSON.parse(UrlFetchApp.fetch(url.join(''))).results;
 
@@ -82,7 +92,7 @@ function getData(request) {
   response.forEach(function(item) {
     var values = [];
     requestedFields.asArray().forEach(function(field) {
-      switch(field.getId()) {
+      switch (field.getId()) {
         case 'section':
           values.push(item.section);
           break;
@@ -112,30 +122,30 @@ function getData(request) {
       }
     });
     data.push({
-      values: values
+      values: values,
     });
   });
 
-
   return {
     schema: requestedFields.build(),
-    rows: data
+    rows: data,
   };
-
-};
+}
 
 function getAuthType() {
   return {
-    "type": "KEY"
+    type: 'KEY',
   };
 }
 
 function validateKey(key) {
   var url = [
     'https://api.nytimes.com/svc/mostpopular/v2/mostviewed/all-sections/1.json?api-key=',
-    key
+    key,
   ];
-  var response = JSON.parse(UrlFetchApp.fetch(url.join(''), {'muteHttpExceptions':true}));
+  var response = JSON.parse(
+    UrlFetchApp.fetch(url.join(''), {muteHttpExceptions: true})
+  );
 
   return response.status == 'OK';
 }
@@ -158,10 +168,10 @@ function setCredentials(request) {
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty('dscc.key', key);
   return {
-    errorCode: "NONE"
+    errorCode: 'NONE',
   };
 }
 
 function isAdminUser() {
   return false;
-};
+}

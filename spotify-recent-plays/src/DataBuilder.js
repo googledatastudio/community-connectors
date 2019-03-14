@@ -1,5 +1,5 @@
 /* istanbul ignore next line */
-if (typeof(require) !== 'undefined') {
+if (typeof require !== 'undefined') {
   var DateUtils = require('./DateUtils.js')['default'];
 }
 
@@ -27,24 +27,24 @@ DataBuilder.prototype.build = function(play) {
 
   this.dataSchema.forEach(function(field) {
     switch (field.name) {
-    case 'track_name':
-      values.push(play.track.name);
-      break;
-    case 'artist':
-      values.push(play.track.artists[0].name);
-      break;
-    case 'played_at_hour':
-      values.push(DateUtils.getDashlessDateWithHour(playTime));
-      break;
-    case 'played_at_date':
-      values.push(DateUtils.getDashlessDatePart(playTime));
-      break;
-    case 'popularity':
-      values.push(play.track.popularity);
-      break;
-    default:
-      console.log('Unknown field:', field.name);
-      values.push('');
+      case 'track_name':
+        values.push(play.track.name);
+        break;
+      case 'artist':
+        values.push(play.track.artists[0].name);
+        break;
+      case 'played_at_hour':
+        values.push(DateUtils.getDashlessDateWithHour(playTime));
+        break;
+      case 'played_at_date':
+        values.push(DateUtils.getDashlessDatePart(playTime));
+        break;
+      case 'popularity':
+        values.push(play.track.popularity);
+        break;
+      default:
+        console.log('Unknown field:', field.name);
+        values.push('');
     }
   });
 
@@ -53,7 +53,7 @@ DataBuilder.prototype.build = function(play) {
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['default'] = DataBuilder;
 }

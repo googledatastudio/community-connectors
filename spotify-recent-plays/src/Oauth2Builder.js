@@ -27,7 +27,8 @@ Oauth2Builder.prototype.build = function() {
   var clientId = this.getClientId();
   var clientSecret = this.getClientSecret();
 
-  return this.oauth2Service.createService('spotify')
+  return this.oauth2Service
+    .createService('spotify')
     .setAuthorizationBaseUrl('https://accounts.spotify.com/authorize')
     .setTokenUrl('https://accounts.spotify.com/api/token')
     .setClientId(clientId)
@@ -51,7 +52,7 @@ Oauth2Builder.prototype.getClientId = function() {
 
 /* global exports */
 /* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
+if (typeof exports !== 'undefined') {
   exports['__esModule'] = true;
   exports['default'] = Oauth2Builder;
 }
