@@ -9,7 +9,7 @@
   },
   "prettier": {
     "singleQuote": true,
-    "trailingComma": "es5",
+    "trailingComma": "none",
     "bracketSpacing": false,
     "arrowParens": "always"
   },
