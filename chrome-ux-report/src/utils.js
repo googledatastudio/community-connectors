@@ -2,7 +2,7 @@ var propStore = propStore || {};
 
 propStore.services = {
   user: PropertiesService.getUserProperties(),
-  script: PropertiesService.getScriptProperties(),
+  script: PropertiesService.getScriptProperties()
 };
 
 /**
@@ -76,11 +76,11 @@ function init() {
   var properties = [
     {
       property: 'admins',
-      value: [''], // enter list of admin emails
+      value: [''] // enter list of admin emails
     },
     {
       property: 'lastDataUpdate',
-      value: 20180607, // enter last update date for the dataset
+      value: 20180607 // enter last update date for the dataset
     },
     {
       property: 'bigQuery.client',
@@ -89,8 +89,8 @@ function init() {
         scopes: 'https://www.googleapis.com/auth/bigquery',
         key: '', // enter service account key
         email: '', // enter service account email
-        projectId: '', // enter GCP project Id for the service account
-      },
+        projectId: '' // enter GCP project Id for the service account
+      }
     },
     {
       property: 'firebase.client',
@@ -98,13 +98,13 @@ function init() {
         name: 'firebase',
         scopes: [
           'https://www.googleapis.com/auth/userinfo.email',
-          'https://www.googleapis.com/auth/firebase.database',
+          'https://www.googleapis.com/auth/firebase.database'
         ],
         key: '', // enter service account key
         email: '', // enter service account email
-        projectId: '', // enter GCP project Id for the service account
-      },
-    },
+        projectId: '' // enter GCP project Id for the service account
+      }
+    }
   ];
 
   properties.forEach(function(item) {

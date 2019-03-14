@@ -3,21 +3,21 @@ var spotifySchema = [
     name: 'text',
     dataType: 'STRING',
     semantics: {
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'popularity',
     dataType: 'NUMBER',
     semantics: {
-      conceptType: 'METRIC',
-    },
-  },
+      conceptType: 'METRIC'
+    }
+  }
 ];
 
 function getAuthType() {
   var response = {
-    type: 'OAUTH2',
+    type: 'OAUTH2'
   };
   return response;
 }
@@ -63,22 +63,22 @@ function getConfig(request) {
       {
         type: 'INFO',
         name: 'Spotify search',
-        text: 'Enter the artist for all their Spotify rated popularity tracks',
+        text: 'Enter the artist for all their Spotify rated popularity tracks'
       },
       {
         type: 'TEXTINPUT',
         name: 'artistName',
         displayName: 'Search',
         helpText: 'e.g. Coldplay',
-        placeholder: 'Search for an artist for all songs',
-      },
-    ],
+        placeholder: 'Search for an artist for all songs'
+      }
+    ]
   };
   return config;
 }
 function getSchema(request) {
   var reqSchema = {
-    schema: spotifySchema,
+    schema: spotifySchema
   };
   return reqSchema;
 }
@@ -96,13 +96,13 @@ function getData(request) {
   var url = [
     'https://api.spotify.com/v1/search?q=',
     request.configParams.artistName,
-    '&type=track',
+    '&type=track'
   ];
 
   var options = {
     headers: {
-      Authorization: 'Bearer ' + getOAuthService().getAccessToken(),
-    },
+      Authorization: 'Bearer ' + getOAuthService().getAccessToken()
+    }
   };
   var response = UrlFetchApp.fetch(url.join(''), options);
   var parsedResponse = JSON.parse(response).tracks.items;
@@ -125,12 +125,12 @@ function getData(request) {
       }
     });
     return {
-      values: values,
+      values: values
     };
   });
 
   return {
     schema: requestedSchema,
-    rows: requestedData,
+    rows: requestedData
   };
 }

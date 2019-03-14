@@ -25,7 +25,7 @@ beforeEach(() => {
     UrlFetchApp: urlFetchAppMock,
     HtmlService: htmlServiceMock,
     PropertiesService: propertiesServiceMock,
-    OAuth2: oAuth2Mock,
+    OAuth2: oAuth2Mock
   });
 });
 
@@ -38,7 +38,7 @@ test('getSchema', () => {
     'played_at_date',
     'plays',
     'tracks_count',
-    'popularity',
+    'popularity'
   ];
   expect(fields).toEqual(expected, 'it returns the schema content');
 });
@@ -62,7 +62,7 @@ test('getData', () => {
   let request = buildFakeRequest({
     startDate,
     endDate,
-    fields,
+    fields
   });
 
   const data = service.getData(request);

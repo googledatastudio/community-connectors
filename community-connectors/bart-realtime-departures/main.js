@@ -116,7 +116,7 @@ function getData(request) {
   var requestedFields = getFields().forIds(requestedFieldIds);
 
   var url = [
-    'http://api.bart.gov/api/etd.aspx?cmd=etd&orig=ALL&json=y&key=MW9S-E7SL-26DU-VV8V',
+    'http://api.bart.gov/api/etd.aspx?cmd=etd&orig=ALL&json=y&key=MW9S-E7SL-26DU-VV8V'
   ];
   var response = JSON.parse(UrlFetchApp.fetch(url.join(''))).root.station;
 
@@ -174,7 +174,7 @@ function getData(request) {
           }
 
           data.push({
-            values: values,
+            values: values
           });
         });
       });
@@ -183,13 +183,13 @@ function getData(request) {
 
   return {
     schema: requestedFields.build(),
-    rows: data,
+    rows: data
   };
 }
 
 function getAuthType() {
   var response = {
-    type: 'NONE',
+    type: 'NONE'
   };
   return response;
 }

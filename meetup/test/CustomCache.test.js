@@ -11,8 +11,8 @@ test('initialization test no existing spreadsheet', () => {
   CustomCache.getPropertiesServiceNS = () => ({
     getUserProperties: () => ({
       getProperty: getPropertyMock,
-      setProperty: setPropertyMock,
-    }),
+      setProperty: setPropertyMock
+    })
   });
 
   const mySheet = {};
@@ -25,17 +25,17 @@ test('initialization test no existing spreadsheet', () => {
     create: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock,
-    }),
+      insertSheet: insertSheetMock
+    })
   });
 
   const cache = new CustomCache(urlName, apiType);
 
   expect(insertSheetMock.mock.calls).toEqual([
-    [CustomCache.buildSheetName(urlName, apiType)],
+    [CustomCache.buildSheetName(urlName, apiType)]
   ]);
   expect(setPropertyMock.mock.calls).toEqual([
-    [CustomCache.SCRIPT_ID_KEY, scriptId],
+    [CustomCache.SCRIPT_ID_KEY, scriptId]
   ]);
   expect(cache.spreadsheet).toBeTruthy();
   expect(cache.sheet).toBeTruthy();
@@ -51,8 +51,8 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
   CustomCache.getPropertiesServiceNS = () => ({
     getUserProperties: () => ({
       getProperty: getPropertyMock,
-      setProperty: setPropertyMock,
-    }),
+      setProperty: setPropertyMock
+    })
   });
 
   const mySheet = {};
@@ -65,14 +65,14 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
     openById: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock,
-    }),
+      insertSheet: insertSheetMock
+    })
   });
 
   const cache = new CustomCache(urlName, apiType);
 
   expect(insertSheetMock.mock.calls).toEqual([
-    [CustomCache.buildSheetName(urlName, apiType)],
+    [CustomCache.buildSheetName(urlName, apiType)]
   ]);
   expect(setPropertyMock.mock.calls).toEqual([]);
   expect(cache.spreadsheet).toBeTruthy();
@@ -89,8 +89,8 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
   CustomCache.getPropertiesServiceNS = () => ({
     getUserProperties: () => ({
       getProperty: getPropertyMock,
-      setProperty: setPropertyMock,
-    }),
+      setProperty: setPropertyMock
+    })
   });
 
   const mySheet = {};
@@ -101,8 +101,8 @@ test('initialization test existing spreadsheet, no existing sheet', () => {
     openById: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock,
-    }),
+      insertSheet: insertSheetMock
+    })
   });
 
   const cache = new CustomCache(urlName, apiType);
@@ -123,8 +123,8 @@ test('initialization test spreadsheet deleted', () => {
   CustomCache.getPropertiesServiceNS = () => ({
     getUserProperties: () => ({
       getProperty: getPropertyMock,
-      setProperty: setPropertyMock,
-    }),
+      setProperty: setPropertyMock
+    })
   });
 
   const mySheet = {};
@@ -137,22 +137,22 @@ test('initialization test spreadsheet deleted', () => {
     create: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock,
+      insertSheet: insertSheetMock
     }),
     openById: () => {
       throw Error(
         'Document ' + scriptId + ' is missing (perhaps it was deleted).'
       );
-    },
+    }
   });
 
   const cache = new CustomCache(urlName, apiType);
 
   expect(insertSheetMock.mock.calls).toEqual([
-    [CustomCache.buildSheetName(urlName, apiType)],
+    [CustomCache.buildSheetName(urlName, apiType)]
   ]);
   expect(setPropertyMock.mock.calls).toEqual([
-    [CustomCache.SCRIPT_ID_KEY, scriptId],
+    [CustomCache.SCRIPT_ID_KEY, scriptId]
   ]);
   expect(cache.spreadsheet).toBeTruthy();
   expect(cache.sheet).toBeTruthy();
@@ -168,8 +168,8 @@ test('initialization test other error', () => {
   CustomCache.getPropertiesServiceNS = () => ({
     getUserProperties: () => ({
       getProperty: getPropertyMock,
-      setProperty: setPropertyMock,
-    }),
+      setProperty: setPropertyMock
+    })
   });
 
   const mySheet = {};
@@ -183,11 +183,11 @@ test('initialization test other error', () => {
     create: () => ({
       getId: () => scriptId,
       getSheetByName: getSheetByNameMock,
-      insertSheet: insertSheetMock,
+      insertSheet: insertSheetMock
     }),
     openById: () => {
       throw Error('error text');
-    },
+    }
   });
 
   try {

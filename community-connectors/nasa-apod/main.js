@@ -79,7 +79,7 @@ function getData(request) {
     'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY',
     '&date=',
     request.dateRange.endDate,
-    '&hd=true',
+    '&hd=true'
   ];
   var response = UrlFetchApp.fetch(url.join(''));
   var item = JSON.parse(response.getContentText());
@@ -114,18 +114,18 @@ function getData(request) {
     }
   });
   data.push({
-    values: values,
+    values: values
   });
 
   return {
     schema: requestedFields.build(),
-    rows: data,
+    rows: data
   };
 }
 
 function getAuthType() {
   var response = {
-    type: 'NONE',
+    type: 'NONE'
   };
   return response;
 }

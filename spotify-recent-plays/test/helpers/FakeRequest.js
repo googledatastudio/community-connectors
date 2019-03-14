@@ -14,7 +14,7 @@ const buildFakeRequest = (params) => {
 
   request.dateRange = {
     startDate: startDate,
-    endDate: endDate,
+    endDate: endDate
   };
 
   return request;

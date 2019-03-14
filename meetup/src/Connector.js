@@ -43,7 +43,7 @@ Connector.customConfig = [
     displayName: 'Meetup Group Name in URL',
     helpText:
       'E.g. if the URL for your Meetup is https://www.meetup.com/gdg-silicon-valley/, enter "gdg-silicon-valley" here.',
-    placeholder: 'Igniter',
+    placeholder: 'Igniter'
   },
   {
     type: 'SELECT_SINGLE',
@@ -54,9 +54,9 @@ Connector.customConfig = [
       {label: 'Members', value: Connector.API_TYPE_MEMBERS},
       {label: 'General Info', value: Connector.API_TYPE_GENERAL_INFO},
       {label: 'Pro Groups', value: Connector.API_TYPE_PRO_GROUPS},
-      {label: 'Events', value: Connector.API_TYPE_EVENTS},
-    ],
-  },
+      {label: 'Events', value: Connector.API_TYPE_EVENTS}
+    ]
+  }
 ];
 
 /**
@@ -93,7 +93,7 @@ Connector.prototype.buildURL = function(request) {
         'sign=true',
         'photo-host=public',
         'only=id,joined,status,lat,lon,city,state',
-        'page=100',
+        'page=100'
       ].join('&');
       url = [baseURL, urlName, 'members'].join('/');
       break;
@@ -110,7 +110,7 @@ Connector.prototype.buildURL = function(request) {
           'fee',
           'manual_attendance_count',
           'local_date',
-          'local_time',
+          'local_time'
         ].join(',');
 
       urlParams = ['?', 'page=100', 'status=past,upcoming', onlyParam].join(
@@ -128,7 +128,7 @@ Connector.prototype.buildURL = function(request) {
           'link',
           'members',
           'group_photo.photo_link',
-          'meta_category',
+          'meta_category'
         ].join(',');
       urlParams = ['?', onlyParam].join('&');
       url = [baseURL, urlName].join('/');
@@ -155,7 +155,7 @@ Connector.prototype.buildURL = function(request) {
           'gender_unknown',
           'gender_female',
           'gender_male',
-          'gender_other',
+          'gender_other'
         ].join(',');
       urlParams = ['?', 'page=100', onlyParam].join('&');
       url = [baseURL, 'pro', urlName, 'groups'].join('/');
@@ -374,7 +374,7 @@ Connector.prototype.rowifyMemberData = function(apiResults, dataSchema) {
  */
 Connector.prototype.getFetchOptions = function() {
   var options = {
-    headers: {Authorization: 'Bearer ' + getOAuthService().getAccessToken()},
+    headers: {Authorization: 'Bearer ' + getOAuthService().getAccessToken()}
   };
   return options;
 };

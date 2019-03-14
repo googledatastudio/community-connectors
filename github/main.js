@@ -126,11 +126,11 @@ function formatDate(date) {
   return !date
     ? null
     : date instanceof Date
-    ? formatDate(date.toISOString())
-    : date.slice(0, 4) +
-      date.slice(5, 7) +
-      date.slice(8, 10) +
-      date.slice(11, 13);
+      ? formatDate(date.toISOString())
+      : date.slice(0, 4) +
+        date.slice(5, 7) +
+        date.slice(8, 10) +
+        date.slice(11, 13);
 }
 
 /**
@@ -191,7 +191,7 @@ function getPaginatedRows(options) {
       } else {
         body.forEach(handleRow);
       }
-    },
+    }
   });
 }
 
@@ -329,16 +329,16 @@ function combineConnectors(options) {
     options: Object.keys(connectors).map(function(connectorKey) {
       return {
         value: connectorKey,
-        label: connectors[connectorKey].label,
+        label: connectors[connectorKey].label
       };
-    }),
+    })
   };
 
   var getConfig = function getConfig(request) {
     var userConfig = getUserConfig(request);
     return {
       configParams: userConfig.configParams.concat([connectorOptionDef]),
-      dateRangeRequired: userConfig.dateRangeRequired,
+      dateRangeRequired: userConfig.dateRangeRequired
     };
   };
 
@@ -369,7 +369,7 @@ function combineConnectors(options) {
   return {
     getConfig: getConfig,
     getSchema: getSchema,
-    getData: getData,
+    getData: getData
   };
 }
 
@@ -450,8 +450,8 @@ var githubIssuesConnector = applyGetSchema({
       semantics: {
         conceptType: 'DIMENSION',
         semanticType: 'NUMBER',
-        semanticGroup: 'ID',
-      },
+        semanticGroup: 'ID'
+      }
     },
     {
       name: 'title',
@@ -460,8 +460,8 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'STRING',
       semantics: {
         conceptType: 'DIMENSION',
-        semanticType: 'TEXT',
-      },
+        semanticType: 'TEXT'
+      }
     },
     {
       name: 'open',
@@ -470,8 +470,8 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'BOOLEAN',
       semantics: {
         conceptType: 'DIMENSION',
-        semanticType: 'BOOLEAN',
-      },
+        semanticType: 'BOOLEAN'
+      }
     },
     {
       name: 'url',
@@ -480,8 +480,8 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'STRING',
       semantics: {
         conceptType: 'DIMENSION',
-        semanticType: 'URL',
-      },
+        semanticType: 'URL'
+      }
     },
     {
       name: 'reporter',
@@ -489,8 +489,8 @@ var githubIssuesConnector = applyGetSchema({
       description: 'Username of the user who reported the issue',
       dataType: 'STRING',
       semantics: {
-        conceptType: 'DIMENSION',
-      },
+        conceptType: 'DIMENSION'
+      }
     },
     {
       name: 'locked',
@@ -499,8 +499,8 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'BOOLEAN',
       semantics: {
         conceptType: 'DIMENSION',
-        semanticType: 'BOOLEAN',
-      },
+        semanticType: 'BOOLEAN'
+      }
     },
     {
       name: 'num_comments',
@@ -510,8 +510,8 @@ var githubIssuesConnector = applyGetSchema({
       semantics: {
         conceptType: 'METRIC',
         semanticType: 'NUMBER',
-        semanticGroup: 'NUMERIC',
-      },
+        semanticGroup: 'NUMERIC'
+      }
     },
     {
       name: 'is_pull_request',
@@ -520,8 +520,8 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'BOOLEAN',
       semantics: {
         conceptType: 'DIMENSION',
-        semanticType: 'BOOLEAN',
-      },
+        semanticType: 'BOOLEAN'
+      }
     },
     {
       name: 'created_at',
@@ -530,8 +530,8 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'STRING',
       semantics: {
         semanticType: 'YEAR_MONTH_DAY_HOUR',
-        semanticGroup: 'DATETIME',
-      },
+        semanticGroup: 'DATETIME'
+      }
     },
     {
       name: 'closed_at',
@@ -540,9 +540,9 @@ var githubIssuesConnector = applyGetSchema({
       dataType: 'STRING',
       semantics: {
         semanticType: 'YEAR_MONTH_DAY_HOUR',
-        semanticGroup: 'DATETIME',
-      },
-    },
+        semanticGroup: 'DATETIME'
+      }
+    }
   ],
 
   getData: function getData(request) {
@@ -564,23 +564,23 @@ var githubIssuesConnector = applyGetSchema({
         endpoint: 'issues',
         query: {
           state: 'all',
-          per_page: 100,
-        },
+          per_page: 100
+        }
       }),
       fetchOptions: {
         headers: {
           Accept: 'application/vnd.github.v3.full+json',
-          Authorization: 'token ' + getOAuthService().getAccessToken(),
-        },
+          Authorization: 'token ' + getOAuthService().getAccessToken()
+        }
       },
       handleRow: function(issueBlob) {
         result.push({
           values: fieldNames.map(function(fieldName) {
             return self.getFieldFromBlob(issueBlob, fieldName);
-          }),
+          })
         });
       },
-      getNextUrl: githubApiV3getNextUrl,
+      getNextUrl: githubApiV3getNextUrl
     });
 
     return {
@@ -588,7 +588,7 @@ var githubIssuesConnector = applyGetSchema({
       schema: fieldNames.map(function(fieldName) {
         return self.keyedSchema[fieldName];
       }),
-      rows: result,
+      rows: result
     };
   },
 
@@ -613,13 +613,13 @@ var githubIssuesConnector = applyGetSchema({
     },
     url: function url(issueBlob) {
       return issueBlob.html_url;
-    },
+    }
   },
 
   getFieldFromBlob: function getFieldFromBlob(issueBlob, fieldName) {
     var getter = this.fieldGetters[fieldName];
     return getter ? getter(issueBlob) : issueBlob[fieldName];
-  },
+  }
 });
 
 /**
@@ -633,20 +633,20 @@ var githubStarsConnector = applyGetSchema({
       name: 'starred_at',
       label: 'Starred At',
       dataType: 'STRING',
-      semantics: {conceptType: 'DIMENSION'},
+      semantics: {conceptType: 'DIMENSION'}
     },
     {
       name: 'stars',
       label: 'Stars',
       dataType: 'NUMBER',
-      semantics: {conceptType: 'METRIC'},
-    },
+      semantics: {conceptType: 'METRIC'}
+    }
   ],
 
   sampleData: [
     {
-      starred_at: '2017-05-31-T12:50:00Z',
-    },
+      starred_at: '2017-05-31-T12:50:00Z'
+    }
   ],
 
   /** @const */
@@ -707,8 +707,8 @@ var githubStarsConnector = applyGetSchema({
     var options = {
       headers: {
         Accept: 'application/vnd.github.v3.star+json',
-        Authorization: 'token ' + getOAuthService().getAccessToken(),
-      },
+        Authorization: 'token ' + getOAuthService().getAccessToken()
+      }
     };
 
     var responses = [];
@@ -719,7 +719,7 @@ var githubStarsConnector = applyGetSchema({
       handleRow: function(row) {
         responses.push(row);
       },
-      getNextUrl: githubApiV3getNextUrl,
+      getNextUrl: githubApiV3getNextUrl
     });
 
     return responses;
@@ -731,8 +731,8 @@ var githubStarsConnector = applyGetSchema({
       repository: request.configParams.repository,
       endpoint: 'stargazers',
       query: {
-        per_page: 100,
-      },
+        per_page: 100
+      }
     });
 
     var stars = [];
@@ -750,9 +750,9 @@ var githubStarsConnector = applyGetSchema({
 
     return {
       schema: dataSchema,
-      rows: this.rowifyStarData(stars, dataSchema),
+      rows: this.rowifyStarData(stars, dataSchema)
     };
-  },
+  }
 });
 
 /**
@@ -768,8 +768,8 @@ var githubConnector = combineConnectors({
         'The name of the organization (or user) that owns the repository',
       placeholder: 'googledatastudio',
       parameterControl: {
-        allowOverride: true,
-      },
+        allowOverride: true
+      }
     },
     {
       name: 'repository',
@@ -777,9 +777,9 @@ var githubConnector = combineConnectors({
       helpText: 'The name of the repository you want issues from',
       placeholder: 'community-connectors',
       parameterControl: {
-        allowOverride: true,
-      },
-    },
+        allowOverride: true
+      }
+    }
   ]),
 
   validateConfig: function validateConfig(configParams) {
@@ -798,8 +798,8 @@ var githubConnector = combineConnectors({
 
   connectors: {
     issues: githubIssuesConnector,
-    stars: githubStarsConnector,
-  },
+    stars: githubStarsConnector
+  }
 });
 
 var getConfig = githubConnector.getConfig;
@@ -812,7 +812,7 @@ var getData = githubConnector.getData;
 
 function getAuthType() {
   return {
-    type: 'OAUTH2',
+    type: 'OAUTH2'
   };
 }
 
@@ -858,8 +858,8 @@ function test_stars() {
       configParams: {
         organization: 'googledatastudio',
         repository: 'community-connectors',
-        combineConnectors__connectorSelection: 'stars',
-      },
+        combineConnectors__connectorSelection: 'stars'
+      }
     })
   );
 }

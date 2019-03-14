@@ -1,7 +1,7 @@
 //NOTE: You can obtain a Google Page Speed Insights API Key from here: https://developers.google.com/speed/docs/insights/v4/first-app
 function getAuthType() {
   return {
-    type: 'KEY',
+    type: 'KEY'
   };
 }
 
@@ -19,9 +19,9 @@ function getConfig(request) {
         name: 'urlTotest',
         displayName: 'Url to generate a Page Speed Insights Score',
         helpText: 'Enter the webpage url to get the Page Speed.',
-        placeholder: 'http://www.yourdomain.com/page',
-      },
-    ],
+        placeholder: 'http://www.yourdomain.com/page'
+      }
+    ]
   };
   return config;
 }
@@ -34,9 +34,9 @@ var fixedSchema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'NUMBER',
-      isReaggregatable: true,
+      isReaggregatable: true
     },
-    defaultAggregationType: 'AVG',
+    defaultAggregationType: 'AVG'
   },
   {
     name: 'weburl',
@@ -45,9 +45,9 @@ var fixedSchema = [
     dataType: 'STRING',
     semantics: {
       conceptType: 'DIMENSION',
-      semanticType: 'TEXT',
-    },
-  },
+      semanticType: 'TEXT'
+    }
+  }
 ];
 
 function getSchema(request) {
@@ -72,7 +72,7 @@ function getData(request) {
     request.configParams.urlTotest,
     '&strategy=mobile&key=',
     key,
-    '&fields=ruleGroups',
+    '&fields=ruleGroups'
   ];
   var url = urlparts.join('');
   var response = UrlFetchApp.fetch(url);
@@ -98,7 +98,7 @@ function getData(request) {
   requestedData = [{values: values}];
   return {
     schema: requestedSchema,
-    rows: requestedData,
+    rows: requestedData
   };
 }
 
@@ -111,13 +111,13 @@ function setCredentials(request) {
   var validCreds = validateKey(key);
   if (!validCreds) {
     return {
-      errorCode: 'INVALID_CREDENTIALS',
+      errorCode: 'INVALID_CREDENTIALS'
     };
   }
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty('dscc.key', key);
   return {
-    errorCode: 'NONE',
+    errorCode: 'NONE'
   };
 }
 
