@@ -172,7 +172,8 @@ function getData(request) {
       return field.getGroup();
     }
     if (endpoint !== field.getGroup()) {
-      cc.newUserError()
+      cc
+        .newUserError()
         .setText(
           'You can only choose fields in the same group. You chose fields from "' +
             endpoint +
@@ -227,12 +228,12 @@ function getDataStars(request, config, requestedFields) {
   var fetchOptions = {
     headers: {
       Accept: 'application/vnd.github.v3.star+json',
-      Authorization: 'token ' + getOAuthService().getAccessToken(),
-    },
+      Authorization: 'token ' + getOAuthService().getAccessToken()
+    }
   };
   var rows = [];
   config.query = {
-    per_page: 100,
+    per_page: 100
   };
   var url = getUrl(config);
   while (url) {
@@ -247,7 +248,7 @@ function getDataStars(request, config, requestedFields) {
 
   var response = {
     schema: requestedFields.build(),
-    rows: rows,
+    rows: rows
   };
   return response;
 }
@@ -295,8 +296,8 @@ function getDataIssue(request, config, requestedFields) {
   var fetchOptions = {
     headers: {
       Accept: 'application/vnd.github.v3.full+json',
-      Authorization: 'token ' + getOAuthService().getAccessToken(),
-    },
+      Authorization: 'token ' + getOAuthService().getAccessToken()
+    }
   };
   var rows = [];
   config.query = {state: 'all', per_page: 100};
@@ -313,7 +314,7 @@ function getDataIssue(request, config, requestedFields) {
 
   var response = {
     schema: requestedFields.build(),
-    rows: rows,
+    rows: rows
   };
   return response;
 }
@@ -334,12 +335,14 @@ function getUrl(config) {
 function validateConfig(config) {
   var config = config || {};
   if (!config.organization) {
-    cc.newUserError()
+    cc
+      .newUserError()
       .setText('Organization cannot be left blank.')
       .throwException();
   }
   if (!config.repository) {
-    cc.newUserError()
+    cc
+      .newUserError()
       .setText('Repository cannot be left blank.')
       .throwException();
   }
@@ -380,9 +383,9 @@ function formatDate(date) {
   return !date
     ? null
     : date instanceof Date
-    ? formatDate(date.toISOString())
-    : date.slice(0, 4) +
-      date.slice(5, 7) +
-      date.slice(8, 10) +
-      date.slice(11, 13);
+      ? formatDate(date.toISOString())
+      : date.slice(0, 4) +
+        date.slice(5, 7) +
+        date.slice(8, 10) +
+        date.slice(11, 13);
 }
