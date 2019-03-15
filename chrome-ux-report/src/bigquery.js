@@ -79,7 +79,7 @@ bqlocal.Jobs.getQueryResults = function(projectId, jobId) {
  */
 function getBqData(url) {
   var bqRequest = {
-    query: crux.queryString,
+    query: crux.dataQueryString,
     queryParameters: [
       {
         parameterType: {
@@ -94,14 +94,17 @@ function getBqData(url) {
     useLegacySql: false
   };
 
+  return getBigQueryResults(bqRequest);
+}
+
+function getBigQueryResults(request) {
   var bqClient = JSON.parse(propStore.get('script', 'bigQuery.client'));
   var bqOauthService = getOauthService(bqClient);
   var bqOAuthToken = bqOauthService.getAccessToken();
   bqlocal.setOAuthToken(bqOAuthToken);
-
   var projectId = bqClient.projectId;
 
-  var queryResults = bqlocal.Jobs.query(bqRequest, projectId);
+  var queryResults = bqlocal.Jobs.query(request, projectId);
   var jobId = queryResults.jobReference.jobId;
 
   // Check on status of the Query Job.
