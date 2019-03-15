@@ -1,6 +1,8 @@
-# Open Source Content for Google Data Studio
+# Community Connectors for Google Data Studio
 
-This repository contains open source content for [Google Data
+<a href="https://travis-ci.org/googledatastudio/community-connectors"><img src="https://travis-ci.org/googledatastudio/community-connectors.svg?branch=master" alt="Build Status"></a>
+
+This repository contains open source community connectors for [Google Data
 Studio](https://datastudio.google.com).
 
 ## Community Connectors

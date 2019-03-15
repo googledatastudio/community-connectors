@@ -3,7 +3,7 @@ var STRAVA_BASE_URL = 'https://www.strava.com/api/v3';
 
 function getAuthType() {
   return {
-    type: 'OAUTH2',
+    type: 'OAUTH2'
   };
 }
 
@@ -133,8 +133,8 @@ function formatQueryParams(queryParams) {
 function urlFetchOptions() {
   return {
     headers: {
-      Authorization: 'Bearer ' + getOAuthService().getAccessToken(),
-    },
+      Authorization: 'Bearer ' + getOAuthService().getAccessToken()
+    }
   };
 }
 
@@ -236,6 +236,6 @@ function getData(request) {
   );
   return {
     schema: requestedFields.build(),
-    rows: getAllDataFromAPI(request, requestedFields),
+    rows: getAllDataFromAPI(request, requestedFields)
   };
 }

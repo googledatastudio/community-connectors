@@ -23,7 +23,7 @@ var fTbl = fTbl || {};
  */
 var exampleFusionTable = {
   value: '1g5pO21XASHlIUm3zBq0Od-e_Y-Q4ck_taKigktca',
-  label: 'Example: 2017 Fuel Efficiency Data from fueleconomy.gov',
+  label: 'Example: 2017 Fuel Efficiency Data from fueleconomy.gov'
 };
 
 /**
@@ -40,7 +40,7 @@ fTbl.listTables = function() {
       var table = tables.items[i];
       var tableInfo = {
         value: table.tableId,
-        label: table.name,
+        label: table.name
       };
       tableList.push(tableInfo);
     }
@@ -96,14 +96,14 @@ function getConfig(request) {
       type: 'INFO',
       name: 'Unique1',
       text:
-        'In addition to all Fusion Tables in your account, the following list will include an example Fusion table with a fuel economy public dataset.',
+        'In addition to all Fusion Tables in your account, the following list will include an example Fusion table with a fuel economy public dataset.'
     },
     {
       type: 'SELECT_SINGLE',
       name: 'tableId',
       displayName: 'Select your Fusion Table',
-      options: fTbl.listTables(),
-    },
+      options: fTbl.listTables()
+    }
   ];
   return {configParams: customConfig};
 }
@@ -156,7 +156,7 @@ function getData(request) {
     schema: dataSchema,
     rows: result.rows.map(function(row) {
       return {values: row};
-    }),
+    })
   };
 }
 

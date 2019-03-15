@@ -35,6 +35,6 @@ function processOauth(clientKey) {
   var token = oauthService.getAccessToken();
   return {
     token: token,
-    projectId: client.projectId,
+    projectId: client.projectId
   };
 }

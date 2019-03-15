@@ -43,21 +43,21 @@ connector.customConfig = [
     type: 'INFO',
     name: 'Unique1',
     text:
-      'Enter the tag you want to search for in StackExchange, the maximum result count, and the sorting method.',
+      'Enter the tag you want to search for in StackExchange, the maximum result count, and the sorting method.'
   },
   {
     type: 'TEXTINPUT',
     name: 'tagged',
     displayName: 'Tag',
     helpText: 'Enter the tag you want to search for',
-    placeholder: connector.defaultTag,
+    placeholder: connector.defaultTag
   },
   {
     type: 'TEXTINPUT',
     name: 'pagesize',
     displayName: 'Result Count (max 100)',
     helpText: 'Enter how many questions should be shown',
-    placeholder: '20',
+    placeholder: '20'
   },
   {
     type: 'SELECT_SINGLE',
@@ -67,18 +67,18 @@ connector.customConfig = [
     options: [
       {
         label: 'activity (default)',
-        value: 'activity',
+        value: 'activity'
       },
       {
         label: 'votes',
-        value: 'votes',
+        value: 'votes'
       },
       {
         label: 'creation',
-        value: 'creation',
-      },
-    ],
-  },
+        value: 'creation'
+      }
+    ]
+  }
 ];
 
 /** @const */
@@ -91,8 +91,8 @@ connector.schema = [
     semantics: {
       semanticType: 'TEXT',
       semanticGroup: 'TEXT',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'owner.reputation',
@@ -103,8 +103,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'is_answered',
@@ -114,8 +114,8 @@ connector.schema = [
     semantics: {
       semanticType: 'BOOLEAN',
       semanticGroup: 'BOOLEAN',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'title',
@@ -124,8 +124,8 @@ connector.schema = [
     dataType: 'STRING',
     semantics: {
       semanticType: 'TEXT',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'link',
@@ -134,8 +134,8 @@ connector.schema = [
     dataType: 'STRING',
     semantics: {
       semanticType: 'URL',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'view_count',
@@ -146,8 +146,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'answer_count',
@@ -158,8 +158,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'score',
@@ -171,8 +171,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'question_id',
@@ -183,8 +183,8 @@ connector.schema = [
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
       conceptType: 'METRIC',
-      isReaggregatable: false,
-    },
+      isReaggregatable: false
+    }
   },
   {
     name: 'last_activity_date',
@@ -195,8 +195,8 @@ connector.schema = [
     semantics: {
       semanticType: 'YEAR_MONTH_DAY',
       semanticGroup: 'DATE_TIME',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'creation_date',
@@ -206,8 +206,8 @@ connector.schema = [
     semantics: {
       semanticType: 'YEAR_MONTH_DAY',
       semanticGroup: 'DATE_TIME',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'last_edit_date',
@@ -217,8 +217,8 @@ connector.schema = [
     semantics: {
       semanticType: 'YEAR_MONTH_DAY',
       semanticGroup: 'DATE_TIME',
-      conceptType: 'DIMENSION',
-    },
+      conceptType: 'DIMENSION'
+    }
   },
   {
     name: 'question_count',
@@ -229,9 +229,9 @@ connector.schema = [
     semantics: {
       semanticType: 'NUMBER',
       semanticGroup: 'NUMERIC',
-      conceptType: 'METRIC',
-    },
-  },
+      conceptType: 'METRIC'
+    }
+  }
 ];
 
 /** @const */
@@ -311,7 +311,7 @@ connector.getAuthType = function() {
  */
 connector.getConfig = function(request) {
   var config = {
-    configParams: connector.customConfig,
+    configParams: connector.customConfig
   };
   return config;
 };
@@ -380,7 +380,7 @@ connector.getCachedData = function(request) {
       '&pagesize=',
       request.configParams.pagesize,
       '&sort=',
-      request.configParams.sort,
+      request.configParams.sort
     ];
 
     try {
@@ -467,7 +467,7 @@ connector.getData = function(request) {
 
   return {
     schema: dataSchema,
-    rows: data,
+    rows: data
   };
 };
 

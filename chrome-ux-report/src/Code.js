@@ -23,7 +23,7 @@ crux.cacheFlushWhitelist = [
   'admins',
   'bigQuery.client',
   'firebase.client',
-  crux.lastDataUpdateFlag,
+  crux.lastDataUpdateFlag
 ];
 
 // Query used to pull data from BigQuery
@@ -42,15 +42,15 @@ function getConfig(request) {
       displayName: 'Enter origin URL:',
       placeholder: 'e.g. ' + crux.defaultUrl,
       parameterControl: {
-        allowOverride: true,
-      },
+        allowOverride: true
+      }
     },
     {
       type: 'INFO',
       name: 'information',
       text:
-        "'https://' is added by default. If needed, add 'http://' at the URL beginning (e.g. http://example.com)",
-    },
+        "'https://' is added by default. If needed, add 'http://' at the URL beginning (e.g. http://example.com)"
+    }
   ];
 
   // For admin users, show the additional option for changing the
@@ -66,11 +66,11 @@ function getConfig(request) {
       name: crux.lastDataUpdateFlag,
       displayName:
         'ADMIN ONLY: Date when BigQuery dataset was updated last (YYYYMMDD)',
-      placeholder: lastUpdate,
+      placeholder: lastUpdate
     });
   }
   return {
-    configParams: customConfig,
+    configParams: customConfig
   };
 }
 
@@ -83,8 +83,8 @@ crux.Schema = [
     dataType: 'STRING',
     semantics: {
       conceptType: 'DIMENSION',
-      semanticType: 'YEAR_MONTH',
-    },
+      semanticType: 'YEAR_MONTH'
+    }
   },
   {
     name: 'yyyymmdd',
@@ -94,8 +94,8 @@ crux.Schema = [
     dataType: 'STRING',
     semantics: {
       conceptType: 'DIMENSION',
-      semanticType: 'YEAR_MONTH_DAY',
-    },
+      semanticType: 'YEAR_MONTH_DAY'
+    }
   },
   {
     name: 'origin',
@@ -105,8 +105,8 @@ crux.Schema = [
     dataType: 'STRING',
     semantics: {
       conceptType: 'DIMENSION',
-      semanticType: 'TEXT',
-    },
+      semanticType: 'TEXT'
+    }
   },
   {
     name: 'fast_fp',
@@ -117,8 +117,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'avg_fp',
@@ -130,8 +130,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'slow_fp',
@@ -142,8 +142,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'fast_fcp',
@@ -155,8 +155,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'avg_fcp',
@@ -168,8 +168,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'slow_fcp',
@@ -181,8 +181,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'fast_dcl',
@@ -193,8 +193,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'avg_dcl',
@@ -206,8 +206,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'slow_dcl',
@@ -219,8 +219,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'fast_ol',
@@ -231,8 +231,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'avg_ol',
@@ -244,8 +244,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'slow_ol',
@@ -256,8 +256,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'fast_fid',
@@ -269,8 +269,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'avg_fid',
@@ -282,8 +282,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'slow_fid',
@@ -295,8 +295,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'desktopDensity',
@@ -307,8 +307,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'phoneDensity',
@@ -319,8 +319,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'tabletDensity',
@@ -331,8 +331,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: '_4GDensity',
@@ -343,8 +343,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: '_3GDensity',
@@ -355,8 +355,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: '_2GDensity',
@@ -367,8 +367,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'slow2GDensity',
@@ -379,8 +379,8 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
+      isReaggregatable: true
+    }
   },
   {
     name: 'offlineDensity',
@@ -391,9 +391,9 @@ crux.Schema = [
     semantics: {
       conceptType: 'METRIC',
       semanticType: 'PERCENT',
-      isReaggregatable: true,
-    },
-  },
+      isReaggregatable: true
+    }
+  }
 ];
 
 function getSchema(request) {
@@ -403,7 +403,7 @@ function getSchema(request) {
   getOriginDataset(request);
 
   return {
-    schema: crux.Schema,
+    schema: crux.Schema
   };
 }
 
@@ -615,19 +615,19 @@ function getData(request) {
       values.push(fieldValue);
     });
     return {
-      values: values,
+      values: values
     };
   });
 
   return {
     schema: requestedSchema,
-    rows: requestedData,
+    rows: requestedData
   };
 }
 
 function getAuthType() {
   return {
-    type: 'NONE',
+    type: 'NONE'
   };
 }
 

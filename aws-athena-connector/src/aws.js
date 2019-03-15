@@ -141,7 +141,7 @@ var AWS = (function() {
         service
       );
       var signature = Crypto.HMAC(Crypto.SHA256, StringToSign, key, {
-        asBytes: false,
+        asBytes: false
       });
 
       var authHeader =
@@ -161,7 +161,7 @@ var AWS = (function() {
         method: method,
         headers: headers,
         muteHttpExceptions: true,
-        payload: payload,
+        payload: payload
       };
 
       var response = UrlFetchApp.fetch(request, options);
@@ -216,7 +216,7 @@ var AWS = (function() {
       }
       accessKey = access_key;
       secretKey = secret_key;
-    },
+    }
   };
 
   function getCanonQuery(r) {
@@ -255,16 +255,16 @@ var AWS = (function() {
    */
   function getSignatureKey(Crypto, key, dateStamp, regionName, serviceName) {
     var kDate = Crypto.HMAC(Crypto.SHA256, dateStamp, 'AWS4' + key, {
-      asBytes: true,
+      asBytes: true
     });
     var kRegion = Crypto.HMAC(Crypto.SHA256, regionName, kDate, {
-      asBytes: true,
+      asBytes: true
     });
     var kService = Crypto.HMAC(Crypto.SHA256, serviceName, kRegion, {
-      asBytes: true,
+      asBytes: true
     });
     var kSigning = Crypto.HMAC(Crypto.SHA256, 'aws4_request', kService, {
-      asBytes: true,
+      asBytes: true
     });
 
     return kSigning;
@@ -359,7 +359,7 @@ var AWS = (function() {
                         (6 - e * 2))
                   );
               return a;
-            },
+            }
           }),
           d = (d.charenc = {});
         d.UTF8 = {
@@ -368,7 +368,7 @@ var AWS = (function() {
           },
           bytesToString: function(b) {
             return decodeURIComponent(escape(g.bytesToString(b)));
-          },
+          }
         };
         var g = (d.Binary = {
           stringToBytes: function(b) {
@@ -380,7 +380,7 @@ var AWS = (function() {
             for (var a = [], c = 0; c < b.length; c++)
               a.push(String.fromCharCode(b[c]));
             return a.join('');
-          },
+          }
         });
       })();
     Crypto = window.Crypto;
@@ -454,7 +454,7 @@ var AWS = (function() {
           2428436474,
           2756734187,
           3204031479,
-          3329325298,
+          3329325298
         ],
         e = (d.SHA256 = function(b, c) {
           var f = k.wordsToBytes(e._sha256(b));
@@ -476,7 +476,7 @@ var AWS = (function() {
             1359893119,
             2600822924,
             528734635,
-            1541459225,
+            1541459225
           ],
           d = [],
           g,

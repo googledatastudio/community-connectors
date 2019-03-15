@@ -30,16 +30,16 @@ Connector.prototype.getSchema = function() {
         label: 'Track Name',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'artist',
         label: 'Artist',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'played_at_hour',
@@ -48,8 +48,8 @@ Connector.prototype.getSchema = function() {
         semantics: {
           conceptType: 'DIMENSION',
           semanticGroup: 'DATETIME',
-          semanticType: 'YEAR_MONTH_DAY_HOUR',
-        },
+          semanticType: 'YEAR_MONTH_DAY_HOUR'
+        }
       },
       {
         name: 'played_at_date',
@@ -58,8 +58,8 @@ Connector.prototype.getSchema = function() {
         semantics: {
           conceptType: 'DIMENSION',
           semanticGroup: 'DATETIME',
-          semanticType: 'YEAR_MONTH_DAY',
-        },
+          semanticType: 'YEAR_MONTH_DAY'
+        }
       },
       {
         name: 'plays',
@@ -68,8 +68,8 @@ Connector.prototype.getSchema = function() {
         formula: 'COUNT(track_name)',
         semantics: {
           conceptType: 'METRIC',
-          isReaggregatable: false,
-        },
+          isReaggregatable: false
+        }
       },
       {
         name: 'tracks_count',
@@ -78,18 +78,18 @@ Connector.prototype.getSchema = function() {
         formula: 'COUNT(track_name)',
         semantics: {
           conceptType: 'METRIC',
-          isReaggregatable: false,
-        },
+          isReaggregatable: false
+        }
       },
       {
         name: 'popularity',
         label: 'Popularity',
         dataType: 'NUMBER',
         semantics: {
-          conceptType: 'METRIC',
-        },
-      },
-    ],
+          conceptType: 'METRIC'
+        }
+      }
+    ]
   };
 };
 
@@ -98,7 +98,7 @@ Connector.prototype.getSchema = function() {
  */
 Connector.prototype.getConfig = function() {
   return {
-    dateRangeRequired: true,
+    dateRangeRequired: true
   };
 };
 
@@ -199,13 +199,13 @@ Connector.prototype.buildTabularData = function(plays, dataSchema) {
 
   plays.forEach(function(play) {
     data.push({
-      values: dataBuilder.build(play),
+      values: dataBuilder.build(play)
     });
   });
 
   return {
     schema: dataSchema,
-    rows: data,
+    rows: data
   };
 };
 

@@ -24,56 +24,56 @@ Schema.prototype.getSchema = function() {
         semantics: {
           conceptType: 'DIMENSION',
           semanticType: 'YEAR_MONTH',
-          semanticGroup: 'DATETIME',
-        },
+          semanticGroup: 'DATETIME'
+        }
       },
       {
         name: 'activity_type_code',
         label: 'Activity Type',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'boarding_area',
         label: 'Boarding Area',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'geo_region',
         label: 'Geographic Region',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'geo_summary',
         label: 'Geographic Summary',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'operating_airline',
         label: 'Operating Airline',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'operating_airline_iata_code',
         label: 'Operating Airline IATA code',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'passenger_count',
@@ -81,42 +81,42 @@ Schema.prototype.getSchema = function() {
         dataType: 'NUMBER',
         semantics: {
           conceptType: 'METRIC',
-          isReaggregatable: true,
-        },
+          isReaggregatable: true
+        }
       },
       {
         name: 'price_category_code',
         label: 'Price Category',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'published_airline',
         label: 'Published Airline',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'published_airline_iata_code',
         label: 'Published Airline IATA Code',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
+          conceptType: 'DIMENSION'
+        }
       },
       {
         name: 'terminal',
         label: 'Terminal',
         dataType: 'STRING',
         semantics: {
-          conceptType: 'DIMENSION',
-        },
-      },
-    ],
+          conceptType: 'DIMENSION'
+        }
+      }
+    ]
   };
 };
 

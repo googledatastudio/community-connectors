@@ -16,7 +16,7 @@ function buildFbUrl(projectId, fileName) {
     crux.getEnvironment(),
     '/origins',
     fileName,
-    '.json',
+    '.json'
   ];
   var url = urlElements.join('');
   return url;
@@ -66,10 +66,10 @@ function processFirebase(origin) {
 function fbCache(method, oAuthToken, url, originData) {
   var responseOptions = {
     headers: {
-      Authorization: 'Bearer ' + oAuthToken,
+      Authorization: 'Bearer ' + oAuthToken
     },
     method: method,
-    contentType: 'application/json',
+    contentType: 'application/json'
   };
 
   // Add payload for post method

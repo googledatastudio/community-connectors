@@ -2,12 +2,12 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    'jest/globals': true,
+    'jest/globals': true
   },
   extends: 'eslint:recommended',
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 2017,
+    ecmaVersion: 2017
   },
   plugins: ['jest'],
   rules: {
@@ -29,11 +29,11 @@ module.exports = {
     quotes: [
       'error',
       'single',
-      {avoidEscape: true, allowTemplateLiterals: true},
+      {avoidEscape: true, allowTemplateLiterals: true}
     ],
     semi: [2, 'always'],
     'space-before-blocks': 2,
     'space-in-parens': 2,
-    'space-infix-ops': 2,
-  },
+    'space-infix-ops': 2
+  }
 };

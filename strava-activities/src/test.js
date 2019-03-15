@@ -4,10 +4,10 @@ function fakeGetDataRequest(dateRange) {
       .asArray()
       .map(function(field) {
         return {
-          name: field.getId(),
+          name: field.getId()
         };
       }),
-    dateRange: dateRange,
+    dateRange: dateRange
   };
 }
 
@@ -16,7 +16,7 @@ function testApiCallWithDateRange() {
     getData(
       fakeGetDataRequest({
         endDate: '2018-10-31',
-        startDate: '2018-10-01',
+        startDate: '2018-10-01'
       })
     )
   );

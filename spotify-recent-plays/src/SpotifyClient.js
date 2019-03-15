@@ -62,7 +62,7 @@ SpotifyClient.prototype.storeInCache = function(plays, cache) {
 
 SpotifyClient.prototype.fetchFromApi = function(startDate, endDate) {
   var headers = {
-    Authorization: 'Bearer ' + this.apiKey,
+    Authorization: 'Bearer ' + this.apiKey
   };
   var start = startDate.getTime();
   var end = endDate.getTime();
