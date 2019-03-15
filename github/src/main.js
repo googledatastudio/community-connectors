@@ -173,14 +173,14 @@ function getData(request) {
     }
     if (endpoint !== field.getGroup()) {
       cc.newUserError()
-        .setText(
-          'You can only choose fields in the same group. You chose fields from "' +
-            endpoint +
-            '" and "' +
-            field.getGroup() +
-            '"'
-        )
-        .throwException();
+          .setText(
+              'You can only choose fields in the same group. You chose fields from "' +
+                endpoint +
+                '" and "' +
+                field.getGroup() +
+                '"'
+          )
+          .throwException();
     }
     return endpoint;
   }, undefined);
@@ -189,11 +189,11 @@ function getData(request) {
 
   switch (endpoint) {
     case ISSUES_ENDPOINT:
-      return getDataIssue(request, config, requestedFields);
+    return getDataIssue(request, config, requestedFields);
     case STARS_ENDPOINT:
-      return getDataStars(request, config, requestedFields);
+    return getDataStars(request, config, requestedFields);
     default:
-      return cc
+    return cc
         .newUserError()
         .setText('Fields from group: "' + endpoint + '" are not supported.')
         .throwException();
@@ -204,16 +204,16 @@ function parseStarRow(requestedFields, star) {
   var row = requestedFields.asArray().map(function(requestedField) {
     switch (requestedField.getId()) {
       case 'stars':
-        return 1;
+      return 1;
       case 'starred_at':
-        return formatDate(star.starred_at);
+      return formatDate(star.starred_at);
       default:
-        return cc
+      return cc
           .newUserError()
           .setDebugText(
-            'Field "' +
-              requestedField.getId() +
-              '" has not been accounted for in code yet.'
+              'Field "' +
+                requestedField.getId() +
+                '" has not been accounted for in code yet.'
           )
           .setText('You cannot use ' + requestedField.getId() + ' yet.')
           .throwException();
@@ -226,7 +226,7 @@ function getDataStars(request, config, requestedFields) {
   var fetchOptions = {
     headers: {
       Accept: 'application/vnd.github.v3.star+json',
-      Authorization: 'token ' + getOAuthService().getAccessToken()
+      Authorization: 'token ' + getOAuthService().getAccessToken(),
     }
   };
   var rows = [];
@@ -255,32 +255,32 @@ function parseIssueRow(requestedFields, issue) {
   var row = requestedFields.asArray().map(function(requestedField) {
     switch (requestedField.getId()) {
       case 'open':
-        return issue.state === 'open';
+      return issue.state === 'open';
       case 'reporter':
-        return issue.user.login;
+      return issue.user.login;
       case 'num_comments':
-        return issue.comments;
+      return issue.comments;
       case 'is_pull_request':
-        return issue.pull_request !== undefined;
+      return issue.pull_request !== undefined;
       case 'created_at':
-        return formatDate(issue.created_at);
+      return formatDate(issue.created_at);
       case 'closed_at':
-        return formatDate(issue.closed_at);
+      return formatDate(issue.closed_at);
       case 'url':
-        return issue.html_url;
+      return issue.html_url;
       case 'number':
-        return '' + issue.number;
+      return '' + issue.number;
       case 'locked':
-        return issue.locked;
+      return issue.locked;
       case 'title':
-        return issue.title;
+      return issue.title;
       default:
-        return cc
+      return cc
           .newUserError()
           .setDebugText(
-            'Field "' +
-              requestedField.getId() +
-              '" has not been accounted for in code yet.'
+              'Field "' +
+                requestedField.getId() +
+                '" has not been accounted for in code yet.'
           )
           .setText('You cannot use ' + requestedField.getId() + ' yet.')
           .throwException();
@@ -323,8 +323,8 @@ function getUrl(config) {
   var query = config.query;
 
   var path = [organization, repository, endpoint]
-    .map(encodeURIComponent)
-    .join('/');
+      .map(encodeURIComponent)
+      .join('/');
 
   return 'https://api.github.com/repos/' + path + encodeQuery(query);
 }
@@ -333,13 +333,13 @@ function validateConfig(config) {
   var config = config || {};
   if (!config.organization) {
     cc.newUserError()
-      .setText('Organization cannot be left blank.')
-      .throwException();
+        .setText('Organization cannot be left blank.')
+        .throwException();
   }
   if (!config.repository) {
     cc.newUserError()
-      .setText('Repository cannot be left blank.')
-      .throwException();
+        .setText('Repository cannot be left blank.')
+        .throwException();
   }
   return true;
 }
@@ -364,22 +364,22 @@ function encodeQuery(queryParams) {
   if (!queryParams) return '';
 
   var query = Object.keys(queryParams)
-    .map(function(key) {
-      return (
-        encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key])
-      );
-    })
-    .join('&');
+      .map(function(key) {
+        return (
+            encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key])
+        );
+      })
+      .join('&');
 
   return query === '' ? '' : '?' + query;
 }
 
 function formatDate(date) {
   return !date
-    ? null
-    : date instanceof Date
-    ? formatDate(date.toISOString())
-    : date.slice(0, 4) +
+      ? null
+      : date instanceof Date
+      ? formatDate(date.toISOString())
+      : date.slice(0, 4) +
       date.slice(5, 7) +
       date.slice(8, 10) +
       date.slice(11, 13);
