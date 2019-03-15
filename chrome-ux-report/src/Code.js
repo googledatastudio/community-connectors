@@ -572,15 +572,15 @@ function urlExistsInDb(url) {
     queryParameters: [
       {
         parameterType: {
-          type: 'STRING',
+          type: 'STRING'
         },
         parameterValue: {
-          value: url,
+          value: url
         },
-        name: 'url',
-      },
+        name: 'url'
+      }
     ],
-    useLegacySql: false,
+    useLegacySql: false
   };
 
   var queryResults = getBigQueryResults(bqRequest);
