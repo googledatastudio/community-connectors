@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prettier": "prettier --write \"**/*.js\"",
+    "prettier:check": "prettier --check \"**/*.js\"",
     "lint": "eslint **/*.js --quiet"
   },
   "prettier": {

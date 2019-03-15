@@ -7,4 +7,4 @@ branches:
 cache:
   directories:
   - node_modules/
-script: npm run lint
+script: yarn prettier:check && yarn lint
