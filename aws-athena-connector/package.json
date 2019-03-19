@@ -1,0 +1,27 @@
+{
+  "name": "aws-athena-connector",
+  "deployments": {
+    "production": "AKfycbzBYBRgWS8yaLCQkOKAKqMdG85XxPwcxmVFGdglGN-1Vsb8O4wmpS7Kfac7VRR2MM7n",
+    "latest": "AKfycbw5I1tzx99ThZViZDFdQXGARDOW3WYDkCpUi-42KaA"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^2.0.1",
+    "argparse": "^1.0.10",
+    "chalk": "^2.4.2",
+    "opn": "^5.4.0",
+    "prettier": "^1.16.4",
+    "terminal-link": "^1.2.0"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "push": "clasp push",
+    "watch": "clasp push --watch",
+    "open": "clasp open",
+    "try_production": "node scripts/dscc-scripts.js -s try_production",
+    "try_latest": "node scripts/dscc-scripts.js -s try_latest",
+    "update_production": "node scripts/dscc-scripts.js -s update_production"
+  }
+}
