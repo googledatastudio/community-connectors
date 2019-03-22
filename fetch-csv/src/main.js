@@ -48,18 +48,18 @@ function getConfig(request) {
   connectorConfig
     .newSelectSingle()
     .setId('textQualifier')
-    .setName('Does the values have a text qualifier?')
+    .setName('Are the values surrounded by single or double quotes?')
     .setAllowOverride(false)
     .addOption(
       connectorConfig
         .newOptionBuilder()
-        .setLabel('No value')
+        .setLabel('No Quotes')
         .setValue('undefined')
     )
     .addOption(
       connectorConfig
         .newOptionBuilder()
-        .setLabel('Simple quote')
+        .setLabel('Single quote')
         .setValue("'")
     )
     .addOption(
@@ -72,7 +72,7 @@ function getConfig(request) {
   connectorConfig
     .newSelectSingle()
     .setId('containsHeader')
-    .setName('Does your CSV have a header row?')
+    .setName('Does the CSV have a header row?')
     .setAllowOverride(false)
     .addOption(
       connectorConfig
@@ -110,12 +110,12 @@ function findLineSeparator(content) {
 
 function fetchData(url) {
   if (!url || !url.match(/^https?:\/\/.+$/g)) {
-    sendUserError('Input error: Invalid URL');
+    sendUserError('"' + url + '" is not a valid url.');
   }
   var response = UrlFetchApp.fetch(url);
   var content = response.getContentText();
   if (!content) {
-    sendUserError('Error during parsing content: Empty content');
+    sendUserError('"' + url + '" returned no content.');
   }
   return content;
 }
@@ -203,21 +203,32 @@ function getData(request) {
     valueSeparator = textQualifier + valueSeparator + textQualifier;
   }
 
-  var rows = contentRows.map(function(contentRow) {
-    if (textQualifier !== 'undefined') {
-      contentRow = contentRow.substring(1, contentRow.length - 1);
-    }
-    var allValues = contentRow.split(valueSeparator);
-    if (buildedFields.length !== allValues.length) {
-      sendUserError(
-        'Error during parsing content: the number of columns on each row is not respect'
-      );
-    }
-    var requestedValues = allValues.filter(function(value, index) {
-      return requestedFieldsIndex.indexOf(index) >= 0;
+  var rows = contentRows
+    .filter(function(contentRow) {
+      // Remove rows that are empty.
+      return contentRow.trim() !== '';
+    })
+    .map(function(contentRow, idx) {
+      if (textQualifier !== 'undefined') {
+        contentRow = contentRow.substring(1, contentRow.length - 1);
+      }
+      var allValues = contentRow.split(valueSeparator);
+      if (buildedFields.length !== allValues.length) {
+        sendUserError(
+          'Error parsing content. Row: ' +
+            idx +
+            ' has ' +
+            allValues.length +
+            ' field(s), but ' +
+            buildedFields.length +
+            ' field(s) were expected.'
+        );
+      }
+      var requestedValues = allValues.filter(function(value, index) {
+        return requestedFieldsIndex.indexOf(index) >= 0;
+      });
+      return {values: requestedValues};
     });
-    return {values: requestedValues};
-  });
   if (containsHeader === 'true') {
     rows = rows.slice(1);
   }
