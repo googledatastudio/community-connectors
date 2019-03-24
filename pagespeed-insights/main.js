@@ -1,4 +1,4 @@
-//NOTE: You can obtain a Google Page Speed Insights API Key from here: https://developers.google.com/speed/docs/insights/v5/get-started
+// NOTE: You can obtain a Google Page Speed Insights API Key from here: https://developers.google.com/speed/docs/insights/v5/get-started
 function getAuthType() {
   return {
     type: 'KEY'
