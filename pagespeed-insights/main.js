@@ -80,6 +80,16 @@ var fixedSchema = [
       conceptType: 'DIMENSION',
       semanticType: 'TEXT'
     }
+  },
+  {
+    name: 'webReport',
+    label: 'Insights Web Report',
+    description: 'The uri of for the full Pagespeed Insights report',
+    dataType: 'STRING',
+    semantics: {
+      conceptType: 'DIMENSION',
+      semanticType: 'URL'
+    }
   }
 ];
 
@@ -147,6 +157,12 @@ function getData(request) {
        var mobileCount = Object.keys(opportunitiesMobile).length
         values.push(mobileCount);
         break;
+       case 'webReport':
+        var urltoTest = request.configParams.urlTotest;
+        var webReportUrl = "https://developers.google.com/speed/pagespeed/insights/?url="+urltoTest;
+        values.push(webReportUrl);
+        break;
+        
       default:
         values.push('');
         break;
