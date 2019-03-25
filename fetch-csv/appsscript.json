@@ -1,0 +1,20 @@
+{
+  "timeZone": "Europe/Paris",
+  "dependencies": {},
+  "dataStudio": {
+    "name": "Fetch CSV",
+    "logoUrl": "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/fetch-csv/fetch-csv-logo.jpg",
+    "company": "Google Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/google/datastudio/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/tree/master/fetch-csv",
+    "shortDescription": "Fetch data from a CSV",
+    "description": "This connector lets users query data from a CSV with the possibility to chose the delimiter and a text qualifier",
+    "authType": [
+      "NONE"
+    ],
+    "feeType": [
+      "FREE"
+    ]
+  }
+}
