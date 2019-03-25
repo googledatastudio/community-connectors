@@ -94,9 +94,7 @@ var fixedSchema = [
 ];
 
 function getSchema(request) {
-  return {
-    schema: fixedSchema
-  };
+  return {schema: fixedSchema};
 }
 /**
  * @param {deviceCat} deviceCategory - Can be 'mobile' or 'desktop' only.
@@ -142,14 +140,12 @@ function getData(request) {
         break;
       case 'pageSpeedDesktop':
         var pageSpeedDesktop =
-          parsedResponseDesktop.lighthouseResult.categories.performance.score *
-          100;
+          parsedResponseDesktop.lighthouseResult.categories.performance.score;
         values.push(pageSpeedDesktop);
         break;
       case 'pageSpeedMobile':
         var pageSpeedMobile =
-          parsedResponseMobile.lighthouseResult.categories.performance.score *
-          100;
+          parsedResponseMobile.lighthouseResult.categories.performance.score;
         values.push(pageSpeedMobile);
         break;
       case 'OpportunitiesDesktop':
@@ -174,11 +170,7 @@ function getData(request) {
     }
   });
 
-  requestedData = [
-    {
-      values: values
-    }
-  ];
+  requestedData = [{values: values}];
   return {
     schema: requestedSchema,
     rows: requestedData
@@ -240,7 +232,6 @@ function buildOpportunities(audits) {
   }
   return audits;
 }
-
 function validateKey(key) {
   if (key == '' || key == null) {
     return false;
