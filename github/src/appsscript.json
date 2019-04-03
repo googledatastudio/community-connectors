@@ -9,7 +9,7 @@
   },
   "dataStudio": {
     "name": "GitHub",
-    "logoUrl": "https://assets-cdn.github.com/images/modules/open_graph/github-mark.png",
+    "logoUrl": "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/github/logo.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/github#readme",
