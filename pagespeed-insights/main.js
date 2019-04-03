@@ -28,7 +28,7 @@ function getConfig(request) {
 
 var fixedSchema = [
   {
-    name: 'pageSpeedDesktop',
+    name: 'pageSpeed',
     label: 'PS Insights Desktop Score',
     dataType: 'NUMBER',
     semantics: {
@@ -138,7 +138,7 @@ function getData(request) {
         var urltoTest = request.configParams.urlTotest;
         values.push(urltoTest);
         break;
-      case 'pageSpeedDesktop':
+      case 'pageSpeed':
         var pageSpeedDesktop =
           parsedResponseDesktop.lighthouseResult.categories.performance.score;
         values.push(pageSpeedDesktop);

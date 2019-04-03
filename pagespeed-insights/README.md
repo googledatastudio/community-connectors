@@ -42,11 +42,11 @@ There are a few next steps that could improve this connector. please feel free
 to open a PR with any of these improvements.
 
 1. Refactor the Connector to use the new Data connector Service. 
-2. Listing the actual Opportunities that are not complied with as a separate set of dimensions
+2. Listing the actual opportunities that are not complied with as a separate set of dimensions
    to be displayed in a table.
 3. Better error handling when the url is not valid or if the api key expires/
    goes over quota.
-
+4. Add Configuarable cacheing using Data Studio api
 ## Changelog 
 ### Version 2.0
 1. Breaking out mobile and desktop score into separate metrics
@@ -70,7 +70,7 @@ author of this connector), or open an issue in the repo.
 [Page Speed Insights Tutorial]: https://developers.google.com/speed/docs/insights/v4/first-app
 [PageSpeed Insights]: https://developers.google.com/speed/pagespeed/insights/
 [Google PageSpeed Insights API]: https://developers.google.com/speed/docs/insights/v5/get-started
-[production deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbwYBSNglQqisTakQq4ONpnLW1-HWB9VoKCvhlyha8K1Dg_41ep44N45WBuhSt6J3Tyl-g
+[production deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbxNlR9D-nb_2du5Zm9HfgsdeIrfr42IRY47qrUiApsnKaLq4D9UXDqGwSTrXWLF4S3qRw
 [appsscript]: https://script.google.com
 [data studio]: https://datastudio.google.com
 [community connector]: https://developers.google.com/datastudio/connector
