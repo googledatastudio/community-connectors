@@ -41,13 +41,13 @@ yourself.
 There are a few next steps that could improve this connector. please feel free
 to open a PR with any of these improvements.
 
-1. Refactor the Connector to use the new Data connector Service. 
+1. Refactor the Connector to use the new Data connector Service.
 2. Listing the actual opportunities that are not complied with as a separate set of dimensions
    to be displayed in a table.
 3. Better error handling when the url is not valid or if the api key expires/
    goes over quota.
 4. Add Configuarable cacheing using Data Studio api
-## Changelog 
+## Changelog
 ### Version 2.0
 1. Breaking out mobile and desktop score into separate metrics
 2. Adding the count of the number of opportunities to improve the url
@@ -57,7 +57,7 @@ If you have any feedback, feel free to tweet at [@ukdatageek] (the original
 author of this connector), or open an issue in the repo.
 
 ## To Contribute:
-1. Fork this project and make your changes. 
+1. Fork this project and make your changes.
 2. Make sure you run `prettier --write "**/*.js"` on your code before you push to make your code look great and easy to read. 
 3. Raise an issue in github and describe what you are going to fix 
 4. Push your changes to branch with the issue name in it eg 145/update-api-to-v5
