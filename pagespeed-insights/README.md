@@ -58,8 +58,8 @@ author of this connector), or open an issue in the repo.
 
 ## To Contribute:
 1. Fork this project and make your changes.
-2. Make sure you run `prettier --write "**/*.js"` on your code before you push to make your code look great and easy to read.
-3. Raise an issue in github and describe what you are going to fix
+2. Make sure you run `prettier --write "**/*.js"` on your code before you push to make your code look great and easy to read. 
+3. Raise an issue in github and describe what you are going to fix 
 4. Push your changes to branch with the issue name in it eg 145/update-api-to-v5
 5. Create a pull request with details of the change
 
