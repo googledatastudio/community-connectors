@@ -22,14 +22,14 @@ const exec = (command, options) => {
 const parser = new argparse.ArgumentParser({
   version: '1.0',
   addHelp: true,
-  description: 'Scripts for managing connectors.'
+  description: 'Scripts for managing connectors.',
 });
 
 parser.addArgument(['-s', '--script'], {
   choices: ['try_production', 'update_production', 'try_latest'],
   dest: 'script',
   help: 'The script to run.',
-  required: true
+  required: true,
 });
 
 const args = parser.parseArgs();

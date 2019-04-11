@@ -41,14 +41,27 @@ yourself.
 There are a few next steps that could improve this connector. please feel free
 to open a PR with any of these improvements.
 
-1. Breaking out mobile and desktop score into separate metrics
-1. Listing the rules that are not complied with as a separate set of dimensions
+1. Refactor the Connector to use the new Data connector Service.
+2. Listing the actual opportunities that are not complied with as a separate set of dimensions
    to be displayed in a table.
-1. Better error handling when the url is not valid or if the api key expires/
+3. Better error handling when the url is not valid or if the api key expires/
    goes over quota.
+4. Add Configuarable cacheing using Data Studio api
+## Changelog
+### Version 2.0
+1. Breaking out mobile and desktop score into separate metrics
+2. Adding the count of the number of opportunities to improve the url
+3. Added a direct link to the actual report on the web
 
 If you have any feedback, feel free to tweet at [@ukdatageek] (the original
 author of this connector), or open an issue in the repo.
+
+## To Contribute:
+1. Fork this project and make your changes.
+2. Make sure you run `prettier --write "**/*.js"` on your code before you push to make your code look great and easy to read.
+3. Raise an issue in github and describe what you are going to fix
+4. Push your changes to branch with the issue name in it eg 145/update-api-to-v5
+5. Create a pull request with details of the change
 
 
 [@ukdatageek]: https://twitter.com/ukdatageek
@@ -56,7 +69,7 @@ author of this connector), or open an issue in the repo.
 [error handling]: https://developers.google.com/datastudio/connector/error-handling
 [Page Speed Insights Tutorial]: https://developers.google.com/speed/docs/insights/v4/first-app
 [PageSpeed Insights]: https://developers.google.com/speed/pagespeed/insights/
-[Google PageSpeed Insights API]: https://developers.google.com/speed/docs/insights/v4/getting-started
+[Google PageSpeed Insights API]: https://developers.google.com/speed/docs/insights/v5/get-started
 [production deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbxNlR9D-nb_2du5Zm9HfgsdeIrfr42IRY47qrUiApsnKaLq4D9UXDqGwSTrXWLF4S3qRw
 [appsscript]: https://script.google.com
 [data studio]: https://datastudio.google.com
