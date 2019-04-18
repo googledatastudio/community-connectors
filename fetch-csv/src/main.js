@@ -59,13 +59,13 @@ function getConfig(request) {
     .addOption(
       connectorConfig
         .newOptionBuilder()
-        .setLabel('Single quote')
+        .setLabel('Single Quotes')
         .setValue("'")
     )
     .addOption(
       connectorConfig
         .newOptionBuilder()
-        .setLabel('Double quote')
+        .setLabel('Double Quotes')
         .setValue('"')
     );
 
