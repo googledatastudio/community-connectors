@@ -1,27 +1,20 @@
 {
-  "name": "meetup",
-  "version": "0.0.4",
-  "description": "",
-  "main": "main.js",
+  "dsccConnector": {
+    "production": "AKfycbyZtshcB0dG8SoMwZmRRq_tFLPQZLk0pmu3gIQz2Y__ygVUimLVj1aBF9EXhjUJQ_m6",
+    "latest": "AKfycbwTSDWJg-rkELb-rOxDo6XbZDIxi6dnml7gFar6kdQ"
+  },
   "scripts": {
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "push": "cd src && clasp push",
-    "pre-deploy": "yarn config set version-tag-prefix \"meetup-v\" && yarn version",
-    "clasp-deploy": "cd src && clasp push && clasp version $npm_package_version && clasp deploy $(clasp versions | tail -n 1 | cut -f1 -d'-') $npm_package_version",
-    "deploy": "yarn pre-deploy && yarn clasp-deploy"
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
   },
-  "author": "Matt Hamrick",
-  "license": "MIT",
   "devDependencies": {
-    "@google/clasp": "^1.1.5",
-    "jest-cli": "^22.0.4"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "**/*.js"
-    ],
-    "bail": true,
-    "testEnvironment": "node"
+    "@google/dscc-scripts": "^1.0.0",
+    "prettier": "^1.16.4"
   }
 }
