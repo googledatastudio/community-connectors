@@ -17,7 +17,6 @@ limitations under the License.
 /** Handles fetching data from Google Cloud Platform. */
 function GoogleCloud() {}
 
-
 /**
  * Fetches the list of all Google Cloud projects managed by the user.
  *
@@ -32,4 +31,4 @@ GoogleCloud.prototype.listCloudProjects = function() {
   });
   var projects = JSON.parse(response.getContentText()).projects;
   return projects;
-}
+};

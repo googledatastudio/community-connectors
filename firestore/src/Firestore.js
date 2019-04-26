@@ -14,34 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/** 
- * Handles fetching data from Firestore. 
+/**
+ * Handles fetching data from Firestore.
  *
  * @constructor
  */
 function Firestore() {
-  
   /** @const */
-  this.PREDEFINED_FIELDS = [
-    'name',
-    'createTime',
-    'updateTime'
-  ];
-  
+  this.PREDEFINED_FIELDS = ['name', 'createTime', 'updateTime'];
+
   /** @const */
   this.PAGE_SIZE = 100;
-  
+
   /** @const */
   this.RETRIES = 3;
-  
+
   /** @const */
   this.CACHE_TTL = 20; // seconds
-  
+
   /** @const */
   this.AUTH_URL = 'https://www.googleapis.com/oauth2/v4/token/';
-  
+
   this.cache = CacheService.getScriptCache();
-  
+
   this.authToken = null;
   const userProperties = PropertiesService.getUserProperties();
   const email = userProperties.getProperty('dscc.email');
@@ -50,7 +45,6 @@ function Firestore() {
     this.authToken = this.getAuthToken(email, key);
   }
 }
-
 
 // TODO: Add support for other field types and nested collections.
 /**
@@ -62,9 +56,14 @@ function Firestore() {
  * @param {number} numResults Maximum documents to fetch.
  * @return {Array} Tabular data for fields matching schema.
  */
-Firestore.prototype.getData = function(project, collection, schema, numResults) {
+Firestore.prototype.getData = function(
+  project,
+  collection,
+  schema,
+  numResults
+) {
   const documents = this.fetchDocuments(project, collection, numResults);
-    
+
   var data = [];
   const instance = this;
   documents.forEach(function(document) {
@@ -73,7 +72,7 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
     schema.forEach(function(field) {
       if (instance.PREDEFINED_FIELDS.indexOf(field.name) >= 0) {
         var value = document[field.name];
-        switch(field.name) {
+        switch (field.name) {
           case 'createTime':
           case 'updateTime':
             values.push(instance.parseTimestamp(value));
@@ -87,10 +86,15 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
       } else {
         const valueWrapper = document.fields[field.name];
         if (valueWrapper) {
-          switch(field.dataType) {
+          switch (field.dataType) {
             case 'STRING':
-              if (field.semantics && field.semantics.semanticGroup === 'DATE_AND_TIME') {
-                values.push(instance.parseTimestamp(valueWrapper.timestampValue)); 
+              if (
+                field.semantics &&
+                field.semantics.semanticGroup === 'DATE_AND_TIME'
+              ) {
+                values.push(
+                  instance.parseTimestamp(valueWrapper.timestampValue)
+                );
               } else {
                 values.push(valueWrapper.stringValue);
               }
@@ -106,10 +110,10 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
               values.push(valueWrapper.booleanValue);
               break;
             default:
-              throw 'Unsupported data type: ' + field.dataType;    
+              throw 'Unsupported data type: ' + field.dataType;
           }
         } else {
-          values.push(null); 
+          values.push(null);
         }
       }
     });
@@ -117,10 +121,9 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
       values: values
     });
   });
-  
-  return data;
-}
 
+  return data;
+};
 
 /**
  * Fetches documents from Firestore or cache.
@@ -137,14 +140,15 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
     '/databases/(default)/documents/',
     collection,
     '?pageSize=',
-    this.PAGE_SIZE];
+    this.PAGE_SIZE
+  ];
   const url = urlComponents.join('');
-  
+
   const cached = this.cache.get(url);
   if (cached) {
     return JSON.parse(Utilities.unzip(cached).getDataAsString());
   }
-  
+
   var documents = [];
   var token = null;
   while (documents.length < numResults) {
@@ -155,20 +159,19 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
     if (response.nextPageToken) {
       token = response.nextPageToken;
     } else {
-      break; 
+      break;
     }
   }
-  
+
   try {
     const zip = Utilities.zip(Utilities.newBlob(JSON.stringify(documents)));
-    this.cache.put(url, zip, this.CACHE_TTL); 
+    this.cache.put(url, zip, this.CACHE_TTL);
   } catch (e) {
-    // Ignore. This usually means the data is too big to cache (which does make 
+    // Ignore. This usually means the data is too big to cache (which does make
     // the cache less useful...).
   }
   return documents;
-}
-
+};
 
 /**
  * Fetch a single page of documents from Firestore and return the raw response as JSON.
@@ -179,14 +182,14 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
 Firestore.prototype.fetchPage = function(baseUrl, token) {
   var url = baseUrl;
   if (token) {
-    url = url + '&pageToken=' + token; 
+    url = url + '&pageToken=' + token;
   }
-  
-  var options = {}
+
+  var options = {};
   if (this.authToken) {
-    options = {headers: {'Authorization': 'Bearer ' + this.authToken}};
+    options = {headers: {Authorization: 'Bearer ' + this.authToken}};
   }
-  
+
   var tries = this.RETRIES;
   while (tries > 0) {
     try {
@@ -197,11 +200,12 @@ Firestore.prototype.fetchPage = function(baseUrl, token) {
       tries--;
     }
   }
-  throw 'Failed to complete fetch from Firestore after ' + this.RETRIES + ' attempts.';
-}
+  throw 'Failed to complete fetch from Firestore after ' +
+    this.RETRIES +
+    ' attempts.';
+};
 
-
-/** 
+/**
  * Convert Firestore timestamp to Data Studio YEAR_MONTH_DAY_HOUR, which is the finest datetime format.
  *
  * @param {string} timestamp Timestamp in the Firestore format (YYYY-MM-DDTHH:MM:SSZ).
@@ -212,19 +216,17 @@ Firestore.prototype.parseTimestamp = function(timestamp) {
     return null;
   }
   return timestamp.replace(/-|T|:.*/g, '');
-}
+};
 
-
-/** 
+/**
  * Extract the document ID from the document path.
  *
  * @param {string} path Absolute path to a Firestore document.
  * @return {string} The ID portion of the path.
  */
 Firestore.prototype.parseDocumentId = function(path) {
-  return path.substring(path.lastIndexOf('/') + 1); 
-}
-
+  return path.substring(path.lastIndexOf('/') + 1);
+};
 
 /**
  * Request auth token for accessing Firestore, expiring in 1 hour.
@@ -256,19 +258,22 @@ Firestore.prototype.getAuthToken = function(email, key) {
   const signature = Utilities.computeRsaSha256Signature(signatureInput, key);
   const encodedSignature = this.base64EncodeSafe(signature);
   const jwt = signatureInput + '.' + encodedSignature;
-  
+
   var options = {
-    payload: 'grant_type=' + decodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') + '&assertion=' + jwt
+    payload:
+      'grant_type=' +
+      decodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer') +
+      '&assertion=' +
+      jwt
   };
   const response = UrlFetchApp.fetch(this.AUTH_URL, options);
   return JSON.parse(response.getContentText()).access_token;
-}
-
+};
 
 /**
- * @param {string} unencoded 
+ * @param {string} unencoded
  * @return {string} Encoded to base 64.
  */
 Firestore.prototype.base64EncodeSafe = function(unencoded) {
   return Utilities.base64EncodeWebSafe(unencoded).replace(/=/g, '');
-}
+};
