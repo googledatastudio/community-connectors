@@ -14,6 +14,7 @@
     "update_production": "dscc-scripts connector update_production"
   },
   "devDependencies": {
+    "@google/clasp": "^2.1.0",
     "@google/dscc-scripts": "^1.0.0",
     "prettier": "^1.16.4"
   }
