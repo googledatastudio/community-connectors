@@ -12,12 +12,14 @@
     "singleQuote": true,
     "trailingComma": "none",
     "bracketSpacing": false,
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "endOfLine": "lf"
   },
   "devDependencies": {
-    "@google/clasp": "^2.0.1",
-    "eslint": "^5.15.1",
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-gen": "^2.0.6",
+    "eslint": "^5.16.0",
     "eslint-config-google": "^0.12.0",
-    "prettier": "^1.16.4"
+    "prettier": "^1.17.0"
   }
 }
