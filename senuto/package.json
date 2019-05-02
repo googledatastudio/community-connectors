@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@google/clasp": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^24.7.1",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^24.7.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/*.js"
+    ]
+  }
+}
