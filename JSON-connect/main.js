@@ -128,7 +128,7 @@ function getCachedData( url ) {
     cacheData = cache.getAll( cacheKeys );
 
     for ( var key  in cacheKeys ) {
-      if( cacheData[ cacheKeys[key] ] != undefined ) content.push( JSON.parse( cacheData[ cacheKeys[key] ] ) );
+      if( cacheData[ cacheKeys[ key ] ] != undefined ) content.push( JSON.parse( cacheData[ cacheKeys[ key ] ] ) );
     }
   } else {
     content    = fetchJSON( url );
@@ -174,6 +174,10 @@ function getFields( request, content ) {
   var fields        = cc.getFields();
   var types         = cc.FieldType;
   var aggregations  = cc.AggregationType;
+  
+  if( !Array.isArray( content ) ) content = [ content ];
+  
+  if( typeof content[ 0 ] !== "object" || content[ 0 ] === null ) sendUserError( 'Invalid JSON format' );
 
   Object.keys( content[ 0 ] ).forEach( function( key ) {
       var isNumeric   = !isNaN( parseFloat( content[ 0 ][ key ] ) ) && isFinite( content[ 0 ][ key ] );
@@ -224,6 +228,8 @@ function validateValue( val ) {
  * @returns {Object}                  An object only containing the requested columns.
  */
 function getColumns(  content, requestedFields ) {
+  if( !Array.isArray( content ) ) content = [ content ];
+  
   return content.map(function( row ) {
     var rowValues = [];
 

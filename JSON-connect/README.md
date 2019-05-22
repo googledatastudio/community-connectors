@@ -11,7 +11,9 @@ You can try out the latest production version of [JSON connect](https://datastud
 ## Configuration
 
 ### JSON data source URL
-Enter the URL of a JSON data source. In case of a "Invalid JSON format" error, validate your JSON using a validation tool like [JSONLint.com](https://jsonlint.com/) 
+Enter the URL of a JSON data source. (Demo: [jsonplaceholder.typicode.com ](https://jsonplaceholder.typicode.com/comments)
+
+In case of a "Invalid JSON format" error, validate your JSON using a validation tool like [JSONLint.com](https://jsonlint.com/) 
 
 ### Caching
 Enable caching by checking the 'Cache response' checkbox. This is usefull with large datasets. The cache will expire after ten minutes. The rows in your dataset may not exceed 100KB
