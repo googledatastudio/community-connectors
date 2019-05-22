@@ -24,11 +24,11 @@
  *
  * @param {String} message The exception message
  */
-function sendUserError( message ) {
+function sendUserError(message) {
   var cc = DataStudioApp.createCommunityConnector();
-      cc.newUserError()
-        .setText( message )
-        .throwException();
+  cc.newUserError()
+    .setText(message)
+    .throwException();
 
   console.log(message);
 }
@@ -39,7 +39,7 @@ function sendUserError( message ) {
  * @returns {Object} `AuthType` used by the connector.
  */
 function getAuthType() {
-  return { type: 'NONE' };
+  return {type: 'NONE'};
 }
 
 /**
@@ -60,27 +60,30 @@ function isAdminUser() {
  * @param   {Object} request  Config request parameters.
  * @returns {Object}          Connector configuration to be displayed to the user.
  */
-function getConfig( request ) {
-  var cc      = DataStudioApp.createCommunityConnector();
-  var config  = cc.getConfig();
+function getConfig(request) {
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
 
-  config.newInfo()
-    .setId( 'instructions' )
-    .setText( 'Fill out the form to connect to a JSON data source.' );
+  config
+    .newInfo()
+    .setId('instructions')
+    .setText('Fill out the form to connect to a JSON data source.');
 
-  config.newTextInput()
-    .setId( 'url' )
-    .setName( 'Enter the URL of a JSON data source' )
-    .setHelpText( 'e.g. https://my-url.org/json')
-    .setPlaceholder( 'https://my-url.org/json' );
+  config
+    .newTextInput()
+    .setId('url')
+    .setName('Enter the URL of a JSON data source')
+    .setHelpText('e.g. https://my-url.org/json')
+    .setPlaceholder('https://my-url.org/json');
 
-  config.newCheckbox()
-    .setId( 'cache' )
-    .setName( 'Cache response' )
-    .setHelpText( 'Usefull with big datasets. Response is cached for 10 minutes')
+  config
+    .newCheckbox()
+    .setId('cache')
+    .setName('Cache response')
+    .setHelpText('Usefull with big datasets. Response is cached for 10 minutes')
     .setAllowOverride(true);
 
-  config.setDateRangeRequired( false );
+  config.setDateRangeRequired(false);
 
   return config.build();
 }
@@ -91,17 +94,17 @@ function getConfig( request ) {
  * @param   {string} url  The URL to get the data from
  * @returns {Object}      The response object
  */
-function fetchJSON( url ) {
+function fetchJSON(url) {
   try {
-    var response = UrlFetchApp.fetch( url );
-  } catch ( e ) {
-    sendUserError( '"' + url + '" returned an error:' + e );
+    var response = UrlFetchApp.fetch(url);
+  } catch (e) {
+    sendUserError('"' + url + '" returned an error:' + e);
   }
 
   try {
-    var content   = JSON.parse( response )
-  } catch( e ) {
-    sendUserError( 'Invalid JSON format. ' + e );
+    var content = JSON.parse(response);
+  } catch (e) {
+    sendUserError('Invalid JSON format. ' + e);
   }
 
   return content;
@@ -114,31 +117,31 @@ function fetchJSON( url ) {
  * @param   {string} url  The URL to get the data from
  * @returns {Object}      The response object
  */
-function getCachedData( url ) {
-  var cacheExpTime    = 600;
-  var cache           = CacheService.getUserCache();
-  var cacheKey        = url.replace(/[^a-zA-Z0-9]+/g, '');
-  var cacheKeyString  = cache.get( cacheKey + '.keys' );
-  var cacheKeys       = ( cacheKeyString !== null ) ? cacheKeyString.split( ',' ) : [];
-  var cacheData       = {};
-  var content         = [];
+function getCachedData(url) {
+  var cacheExpTime = 600;
+  var cache = CacheService.getUserCache();
+  var cacheKey = url.replace(/[^a-zA-Z0-9]+/g, '');
+  var cacheKeyString = cache.get(cacheKey + '.keys');
+  var cacheKeys = cacheKeyString !== null ? cacheKeyString.split(',') : [];
+  var cacheData = {};
+  var content = [];
 
+  if (cacheKeyString !== null && cacheKeys.length > 0) {
+    cacheData = cache.getAll(cacheKeys);
 
-  if( cacheKeyString !== null && cacheKeys.length > 0 ) {
-    cacheData = cache.getAll( cacheKeys );
-
-    for ( var key  in cacheKeys ) {
-      if( cacheData[ cacheKeys[ key ] ] != undefined ) content.push( JSON.parse( cacheData[ cacheKeys[ key ] ] ) );
+    for (var key in cacheKeys) {
+      if (cacheData[cacheKeys[key]] != undefined)
+        content.push(JSON.parse(cacheData[cacheKeys[key]]));
     }
   } else {
-    content    = fetchJSON( url );
+    content = fetchJSON(url);
 
-    for ( var key  in content ) {
-      cacheData[ cacheKey + '.' + key ] = JSON.stringify( content[ key ] );
+    for (var key in content) {
+      cacheData[cacheKey + '.' + key] = JSON.stringify(content[key]);
     }
 
-    cache.putAll( cacheData );
-    cache.put( cacheKey + '.keys', Object.keys( cacheData ), cacheExpTime );
+    cache.putAll(cacheData);
+    cache.put(cacheKey + '.keys', Object.keys(cacheData), cacheExpTime);
   }
 
   return content;
@@ -151,12 +154,13 @@ function getCachedData( url ) {
  * @param   {Boolean} cache Parameter to determine whether the request should be cached
  * @returns {Object}        The response object
  */
-function fetchData( url, cache ) {
-  if ( !url || !url.match( /^https?:\/\/.+$/g ) ) sendUserError( '"' + url + '" is not a valid url.' );
+function fetchData(url, cache) {
+  if (!url || !url.match(/^https?:\/\/.+$/g))
+    sendUserError('"' + url + '" is not a valid url.');
 
-  var content  = ( cache ) ? getCachedData( url ) : fetchJSON( url );
+  var content = cache ? getCachedData(url) : fetchJSON(url);
 
-  if ( !content ) sendUserError( '"' + url + '" returned no content.' );
+  if (!content) sendUserError('"' + url + '" returned no content.');
 
   return content;
 }
@@ -169,24 +173,26 @@ function fetchData( url, cache ) {
  * @return  {Object}           An object with the connector configuration
  */
 
-function getFields( request, content ) {
-  var cc            = DataStudioApp.createCommunityConnector();
-  var fields        = cc.getFields();
-  var types         = cc.FieldType;
-  var aggregations  = cc.AggregationType;
-  
-  if( !Array.isArray( content ) ) content = [ content ];
-  
-  if( typeof content[ 0 ] !== "object" || content[ 0 ] === null ) sendUserError( 'Invalid JSON format' );
+function getFields(request, content) {
+  var cc = DataStudioApp.createCommunityConnector();
+  var fields = cc.getFields();
+  var types = cc.FieldType;
+  var aggregations = cc.AggregationType;
 
-  Object.keys( content[ 0 ] ).forEach( function( key ) {
-      var isNumeric   = !isNaN( parseFloat( content[ 0 ][ key ] ) ) && isFinite( content[ 0 ][ key ] );
-      var field       = ( isNumeric ) ? fields.newMetric() : fields.newDimension();
+  if (!Array.isArray(content)) content = [content];
 
-      field.setType( ( isNumeric ) ? types.NUMBER : types.TEXT );
-      field.setId( key.replace(/\s/g, '_' ).toLowerCase() );
-      field.setName( key );
-  } );
+  if (typeof content[0] !== 'object' || content[0] === null)
+    sendUserError('Invalid JSON format');
+
+  Object.keys(content[0]).forEach(function(key) {
+    var isNumeric =
+      !isNaN(parseFloat(content[0][key])) && isFinite(content[0][key]);
+    var field = isNumeric ? fields.newMetric() : fields.newDimension();
+
+    field.setType(isNumeric ? types.NUMBER : types.TEXT);
+    field.setId(key.replace(/\s/g, '_').toLowerCase());
+    field.setName(key);
+  });
 
   return fields;
 }
@@ -197,10 +203,10 @@ function getFields( request, content ) {
  * @param {Object} request Schema request parameters.
  * @returns {Object} Schema for the given request.
  */
-function getSchema( request ) {
-  var content   = fetchData( request.configParams.url, request.configParams.cache );
-  var fields    = getFields( request, content ).build();
-  return { schema: fields };
+function getSchema(request) {
+  var content = fetchData(request.configParams.url, request.configParams.cache);
+  var fields = getFields(request, content).build();
+  return {schema: fields};
 }
 
 /**
@@ -209,15 +215,15 @@ function getSchema( request ) {
  * @param   {Mixed} val   The value to validate
  * @returns {Mixed}       Either a string or number
  */
-function validateValue( val ) {
-  switch ( typeof val ) {
-    case "string":
-    case "number":
+function validateValue(val) {
+  switch (typeof val) {
+    case 'string':
+    case 'number':
       return val;
-    case "object":
-      return JSON.stringify( val );
+    case 'object':
+      return JSON.stringify(val);
   }
-  return "";
+  return '';
 }
 
 /**
@@ -227,18 +233,17 @@ function validateValue( val ) {
  * @param   {Object} requestedFields  Fields requested in the getData request.
  * @returns {Object}                  An object only containing the requested columns.
  */
-function getColumns(  content, requestedFields ) {
-  if( !Array.isArray( content ) ) content = [ content ];
-  
-  return content.map(function( row ) {
+function getColumns(content, requestedFields) {
+  if (!Array.isArray(content)) content = [content];
+
+  return content.map(function(row) {
     var rowValues = [];
 
-    requestedFields.asArray().forEach( function ( field ) {
-      rowValues.push( validateValue( row[ field.getId() ] ) );
+    requestedFields.asArray().forEach(function(field) {
+      rowValues.push(validateValue(row[field.getId()]));
     });
 
-
-    return { values: rowValues };
+    return {values: rowValues};
   });
 }
 
@@ -248,14 +253,16 @@ function getColumns(  content, requestedFields ) {
  * @param   {Object} request  Data request parameters.
  * @returns {Object}          Contains the schema and data for the given request.
  */
-function getData( request ) {
-  var content           = fetchData( request.configParams.url, request.configParams.cache  );
-  var fields            = getFields( request, content );
-  var requestedFieldIds = request.fields.map( function( field ) { return field.name; } );
-  var requestedFields   = fields.forIds( requestedFieldIds );
+function getData(request) {
+  var content = fetchData(request.configParams.url, request.configParams.cache);
+  var fields = getFields(request, content);
+  var requestedFieldIds = request.fields.map(function(field) {
+    return field.name;
+  });
+  var requestedFields = fields.forIds(requestedFieldIds);
 
   return {
     schema: requestedFields.build(),
-    rows: getColumns(  content, requestedFields)
+    rows: getColumns(content, requestedFields),
   };
 }
