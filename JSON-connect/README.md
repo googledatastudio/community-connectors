@@ -11,7 +11,7 @@ You can try out the latest production version of [JSON connect](https://datastud
 ## Configuration
 
 ### JSON data source URL
-Enter the URL of a JSON data source. (Demo: [jsonplaceholder.typicode.com ](https://jsonplaceholder.typicode.com/comments)
+Enter the URL of a JSON data source. (Demo content: [https://jsonplaceholder.typicode.com/comments](https://jsonplaceholder.typicode.com/comments) )
 
 In case of a "Invalid JSON format" error, validate your JSON using a validation tool like [JSONLint.com](https://jsonlint.com/) 
 
