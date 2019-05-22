@@ -263,6 +263,6 @@ function getData(request) {
 
   return {
     schema: requestedFields.build(),
-    rows: getColumns(content, requestedFields),
+    rows: getColumns(content, requestedFields)
   };
 }
