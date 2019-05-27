@@ -130,9 +130,8 @@ function getCachedData(url) {
     cacheData = cache.getAll(cacheKeys);
 
     for (var key in cacheKeys) {
-      if (cacheData[cacheKeys[key]] != undefined) {
+      if (cacheData[cacheKeys[key]] != undefined)
         content.push(JSON.parse(cacheData[cacheKeys[key]]));
-      }
     }
   } else {
     content = fetchJSON(url);
@@ -156,15 +155,12 @@ function getCachedData(url) {
  * @returns {Object}        The response object
  */
 function fetchData(url, cache) {
-  if (!url || !url.match(/^https?:\/\/.+$/g)) {
+  if (!url || !url.match(/^https?:\/\/.+$/g))
     sendUserError('"' + url + '" is not a valid url.');
-  }
 
   var content = cache ? getCachedData(url) : fetchJSON(url);
 
-  if (!content) {
-    sendUserError('"' + url + '" returned no content.');
-  }
+  if (!content) sendUserError('"' + url + '" returned no content.');
 
   return content;
 }
@@ -183,13 +179,10 @@ function getFields(request, content) {
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
 
-  if (!Array.isArray(content)) {
-    content = [content];
-  }
+  if (!Array.isArray(content)) content = [content];
 
-  if (typeof content[0] !== 'object' || content[0] === null) {
+  if (typeof content[0] !== 'object' || content[0] === null)
     sendUserError('Invalid JSON format');
-  }
 
   Object.keys(content[0]).forEach(function(key) {
     var isNumeric =
@@ -241,9 +234,7 @@ function validateValue(val) {
  * @returns {Object}                  An object only containing the requested columns.
  */
 function getColumns(content, requestedFields) {
-  if (!Array.isArray(content)) {
-    content = [content];
-  }
+  if (!Array.isArray(content)) content = [content];
 
   return content.map(function(row) {
     var rowValues = [];
