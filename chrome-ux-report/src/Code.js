@@ -485,7 +485,7 @@ function validateUrl(configParams) {
   // Remove '/' at the end
   var lastChar = url.substring(url.length - 1);
   if (lastChar === '/') {
-    url = url.substring(0, url.length - 2);
+    url = url.substring(0, url.length - 1);
   }
 
   // Add 'https://' at the beginning if needed
