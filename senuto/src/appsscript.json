@@ -1,0 +1,14 @@
+{
+  "timeZone": "Europe/Warsaw",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "dataStudio": {
+    "name": "Senuto",
+    "company": "Senuto",
+    "companyUrl": "http://senuto.com/",
+    "logoUrl": "https://www.senuto.com/pl/wp-content/uploads/2018/08/senuto-logo.png",
+    "addonUrl": "http://senuto.com/",
+    "supportUrl": "http://senuto.com/",
+    "description": "SENUTO Community Connector for Data Studio"
+  }
+}
