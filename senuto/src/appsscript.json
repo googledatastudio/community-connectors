@@ -1,9 +1,8 @@
 {
   "timeZone": "Europe/Warsaw",
-  "dependencies": {
-  },
+  "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
-    "dataStudio": {
+  "dataStudio": {
     "name": "Senuto",
     "company": "Senuto",
     "companyUrl": "http://senuto.com/",
