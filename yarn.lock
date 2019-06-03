@@ -54,10 +54,10 @@
     url "^0.11.0"
     watch "^1.0.2"
 
-"@google/dscc-gen@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@google/dscc-gen/-/dscc-gen-2.0.6.tgz#257d2fd4b268d24a897b02359099394811a477bd"
-  integrity sha512-Kkcxcp9Vxvdz1InKMcjQ3prmZH5wR6heUiJrbWlLkahgTXmzjK7E48BQN3m5Cy6zpb9T1i7ep9nU9FBnTX7KGw==
+"@google/dscc-gen@^2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@google/dscc-gen/-/dscc-gen-2.0.9.tgz#64bf90f5c228d5de8bde6a7ee70ba9502e979ab5"
+  integrity sha512-XYw1umnxMdCxkirUA8/jLPEkx20sErM1pLqlCzH1zAJRNICBQ9yTgtK4N6qjbeUqZ6tj7LdQ7/S1BOnbV1oy8g==
   dependencies:
     "@google/clasp" "^2.1.0"
     "@types/mz" "^0.0.32"
