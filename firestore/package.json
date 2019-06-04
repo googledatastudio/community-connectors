@@ -1,7 +1,7 @@
 {
   "dsccConnector": {
-    "production": "AKfycbw811I4FFXb8XCP3SM3yW_hJD2xH6ZLRohvQXnjbWqy1_jLbTnZMqoLPbxUeQa5GJrB",
-    "latest": "AKfycbyMsbdVOhTWZ2l2EeENdzejK348_NGOffeMkOWy2Hjn"
+    "production": "AKfycbxhmDIW2r3jS3blPBQyYZsJ7Pf1WzO4iOuUNUFIEU_Jp8q-NGaivCyJurjXzcPnK9U7uA",
+    "latest": "AKfycbzudJGt3sHKYMDpYKtBnXhf2zlJvpIfusgApGHJY4ih"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.js\"",
