@@ -140,7 +140,7 @@ function getFields(request, content) {
       1,
       firstLineContent.length - 1
     );
-    separator = textQualifier + valueSeparator + textQualifier;
+    valueSeparator = textQualifier + valueSeparator + textQualifier;
   }
   var firstLineColumns = firstLineContent.split(valueSeparator);
 
