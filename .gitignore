@@ -1,2 +1,3 @@
 node_modules
 /community-connectors/meetup/BUILD
+yarn-error.log
