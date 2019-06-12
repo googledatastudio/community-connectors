@@ -60,14 +60,20 @@ function Firestore() {
  * @param {string} collection The Firestore collection to use.
  * @param {Object} schema The set of fields for which to retrieve data.
  * @param {number} numResults Maximum documents to fetch.
+ * @param {boolean} useCollectionGroups Whether to use collection groups.
+ * @param {Object} filters The filters used for Firestore (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Filter)
  * @return {Array} Tabular data for fields matching schema.
  */
-Firestore.prototype.getData = function(project, collection, schema, numResults) {
-  const documents = this.fetchDocuments(project, collection, numResults);
+Firestore.prototype.getData = function(
+	  project, collection, schema, numResults, useCollectionGroups, filters) {
+  const documents = this.fetchDocuments(
+	  project, collection, numResults, useCollectionGroups, filters);
     
   var data = [];
   const instance = this;
-  documents.forEach(function(document) {
+  documents.forEach(function(doc) {
+    var document = doc.document;
+    if (!document) return;
     var values = [];
     // Provide values in the order defined by the schema.
     schema.forEach(function(field) {
@@ -128,32 +134,52 @@ Firestore.prototype.getData = function(project, collection, schema, numResults) 
  * @param {string} project The Google Cloud project ID containing Firestore instance.
  * @param {string} collection The Firestore collection to use.
  * @param {number} numResults Maximum documents to fetch.
+ * @param {boolean} useCollectionGroups Whether to use collection groups.
+ * @param {Object} filters The filters used for Firestore (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Filter)
  * @return {Array} Array of Firestore documents.
  */
-Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
+Firestore.prototype.fetchDocuments = function(
+    project, collection, numResults, useCollectionGroups, filters) {
   const urlComponents = [
     'https://firestore.googleapis.com/v1beta1/projects/',
     project,
     '/databases/(default)/documents/',
-    collection,
-    '?pageSize=',
-    this.PAGE_SIZE];
+    useCollectionGroups ? "" : collection, // Only add if not using collection groups
+    ':runQuery'];
   const url = urlComponents.join('');
+  // Add collection to url for a distinct cacheKey
+  const cacheKey = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.MD5, Utilities.base64Encode(
+      (useCollectionGroups ? url + "collectionGroup/" + collection : url) + JSON.stringify(filters)
+    )
+  );
   
-  const cached = this.cache.get(url);
+  const cached = this.cache.get(cacheKey);
   if (cached) {
     return JSON.parse(Utilities.unzip(cached).getDataAsString());
   }
   
   var documents = [];
   var token = null;
+  var oldToken = null;
   while (documents.length < numResults) {
-    var response = this.fetchPage(url, token);
-    if (response.documents && response.documents.length > 0) {
-      Array.prototype.push.apply(documents, response.documents);
+    var response = this.fetchPage(url, token, collection, useCollectionGroups, filters);
+    oldToken = token;
+    if (response && response.length > 0) {
+      Array.prototype.push.apply(documents, response);
     }
-    if (response.nextPageToken) {
-      token = response.nextPageToken;
+	// Get last document name if existent
+    if (response && response.length > 0) {
+      var lastDocument = response.pop();
+      if (lastDocument && lastDocument.document) {
+        token = lastDocument.document.name;
+      } else {
+        break;
+      }
+	  // Last result from previous request and from this was the same
+      if (oldToken === token) {
+        break;
+      }
     } else {
       break; 
     }
@@ -161,12 +187,14 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
   
   try {
     const zip = Utilities.zip(Utilities.newBlob(JSON.stringify(documents)));
-    this.cache.put(url, zip, this.CACHE_TTL); 
+    this.cache.put(cacheKey, zip, this.CACHE_TTL); 
   } catch (e) {
     // Ignore. This usually means the data is too big to cache (which does make 
     // the cache less useful...).
   }
-  return documents;
+  return documents.filter(function(document) {
+    return !!document;
+  });
 }
 
 
@@ -175,16 +203,48 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults) {
  *
  * @param {string} baseUrl The URL excluding the page token.
  * @param {?string} token Optional token for the page (absent on first request).
+ * @param {string} collection The collection id used for collection group queries.
+ * @param {boolean} useCollectionGroups Whether to use collection groups.
+ * @param {Object} filters The filters used for Firestore (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Filter)
  */
-Firestore.prototype.fetchPage = function(baseUrl, token) {
+Firestore.prototype.fetchPage = function(
+    baseUrl, token, collection, useCollectionGroups, filters) {
   var url = baseUrl;
+  
+  var data = {
+    structuredQuery: {
+      limit: this.PAGE_SIZE,
+      where: filters,
+      orderBy: [{
+        field: {
+          fieldPath: "__name__"
+        },
+        direction: "ASCENDING"
+      }]
+    }
+  };
   if (token) {
-    url = url + '&pageToken=' + token; 
+    data.structuredQuery.startAt = {
+      values: [{
+        referenceValue: token,
+      }],
+      before: false
+    };
+  }
+  if (useCollectionGroups) {
+    data.structuredQuery.from = [{
+      collectionId: collection,
+      allDescendants: true
+    }];
   }
   
-  var options = {}
+  var options = {
+    method : 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(data)
+  };
   if (this.authToken) {
-    options = {headers: {'Authorization': 'Bearer ' + this.authToken}};
+    options.headers = {'Authorization': 'Bearer ' + this.authToken};
   }
   
   var tries = this.RETRIES;
