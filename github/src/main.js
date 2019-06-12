@@ -89,6 +89,22 @@ function getFields() {
 
   fields
     .newDimension()
+    .setId('label')
+    .setName('Label')
+    .setDescription('Issue has this label.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.TEXT);
+
+  fields
+    .newDimension()
+    .setId('milestone')
+    .setName('Milestone')
+    .setDescription('Issue added to this milestone.')
+    .setGroup(ISSUES_ENDPOINT)
+    .setType(types.TEXT);
+
+  fields
+    .newDimension()
     .setId('locked')
     .setName('Is Locked')
     .setDescription('True if the issue is locked, false otherwise.')
@@ -274,6 +290,10 @@ function parseIssueRow(requestedFields, issue) {
         return issue.locked;
       case 'title':
         return issue.title;
+      case 'label':
+        return issue.label;
+      case 'milestone':
+        return issue.milestone;
       default:
         return cc
           .newUserError()
