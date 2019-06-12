@@ -86,7 +86,7 @@ function getFields() {
     .setDescription('Issue reporter username.')
     .setGroup(ISSUES_ENDPOINT)
     .setType(types.TEXT);
-  
+
   fields
     .newDimension()
     .setId('label')
