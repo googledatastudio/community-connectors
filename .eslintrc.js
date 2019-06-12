@@ -17,6 +17,7 @@ module.exports = {
     'no-var': 'off',
     'no-throw-literal': 'off',
     'new-cap': 'off',
+    'quote-props': 'off',
     'no-multi-str': 'off',
     'no-unused-vars': 'off',
     indent: 'off',
