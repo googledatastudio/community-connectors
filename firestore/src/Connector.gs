@@ -99,6 +99,16 @@ Connector.prototype.getConfig = function(request) {
         options: options
       },
       {
+        name: 'useCollectionGroups',
+        type: 'SELECT_SINGLE',
+        displayName: 'Collection or Collection Groups',
+        helpText: 'Specifies whether only a single collection should be used or a whole collection group.',
+        options: [
+          {label: 'Single Collection', value: 'no'},
+          {label: 'Collection Group', value: 'yes'}
+        ]        
+      },
+      {
         name: 'collection',
         type: 'TEXTINPUT',
         displayName: 'Collection',
@@ -180,12 +190,19 @@ Connector.prototype.getData = function(request) {
   }
   const numResults = parseInt(numResultsValue, 10);
   
+  var useCollectionGroupsValue = request.configParams.useCollectionGroups;
+  if (!useCollectionGroupsValue) {
+    useCollectionGroupsValue = 'no';
+  }
+  const useCollectionGroups = useCollectionGroupsValue === 'yes';
+  console.log(useCollectionGroups);
+  
   // Prepare the schema for the fields requested.
   const requestedSchema = this.getFilteredSchema(request);
   
   // Fetch and filter the requested data from firestore
   const firestore = new Firestore();
-  const data = firestore.getData(project, collection, requestedSchema, numResults);
+  const data = firestore.getData(project, collection, requestedSchema, numResults, useCollectionGroups);
   
   return {schema: requestedSchema, rows: data};
 }
