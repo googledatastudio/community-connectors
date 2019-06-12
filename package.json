@@ -6,7 +6,7 @@
   "scripts": {
     "prettier": "prettier --write '**/*.js' '**/*.json'",
     "prettier:check": "prettier --check \"**/*.js\"",
-    "lint": "eslint **/*.js --quiet"
+    "lint": "eslint \"**/*.js\" --quiet"
   },
   "prettier": {
     "singleQuote": true,
