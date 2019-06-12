@@ -61,16 +61,18 @@ function Firestore() {
  * @param {Object} schema The set of fields for which to retrieve data.
  * @param {number} numResults Maximum documents to fetch.
  * @param {boolean} useCollectionGroups Whether to use collection groups.
+ * @param {Object} filters The filters used for Firestore (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Filter)
  * @return {Array} Tabular data for fields matching schema.
  */
-Firestore.prototype.getData = function(project, collection, schema, numResults, useCollectionGroups) {
-  const documents = this.fetchDocuments(project, collection, numResults, useCollectionGroups);
+Firestore.prototype.getData = function(
+	  project, collection, schema, numResults, useCollectionGroups, filters) {
+  const documents = this.fetchDocuments(
+	  project, collection, numResults, useCollectionGroups, filters);
     
   var data = [];
   const instance = this;
   documents.forEach(function(doc) {
     var document = doc.document;
-    console.log("document", document);
     if (!document) return;
     var values = [];
     // Provide values in the order defined by the schema.
@@ -133,9 +135,11 @@ Firestore.prototype.getData = function(project, collection, schema, numResults, 
  * @param {string} collection The Firestore collection to use.
  * @param {number} numResults Maximum documents to fetch.
  * @param {boolean} useCollectionGroups Whether to use collection groups.
+ * @param {Object} filters The filters used for Firestore (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Filter)
  * @return {Array} Array of Firestore documents.
  */
-Firestore.prototype.fetchDocuments = function(project, collection, numResults, useCollectionGroups) {
+Firestore.prototype.fetchDocuments = function(
+    project, collection, numResults, useCollectionGroups, filters) {
   const urlComponents = [
     'https://firestore.googleapis.com/v1beta1/projects/',
     project,
@@ -144,7 +148,11 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults, u
     ':runQuery'];
   const url = urlComponents.join('');
   // Add collection to url for a distinct cacheKey
-  const cacheKey = useCollectionGroups ? url + "collectionGroup/" + collection : url;
+  const cacheKey = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.MD5, Utilities.base64Encode(
+      (useCollectionGroups ? url + "collectionGroup/" + collection : url) + JSON.stringify(filters)
+    )
+  );
   
   const cached = this.cache.get(cacheKey);
   if (cached) {
@@ -155,7 +163,7 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults, u
   var token = null;
   var oldToken = null;
   while (documents.length < numResults) {
-    var response = this.fetchPage(url, token, collection, useCollectionGroups);
+    var response = this.fetchPage(url, token, collection, useCollectionGroups, filters);
     oldToken = token;
     if (response && response.length > 0) {
       Array.prototype.push.apply(documents, response);
@@ -194,16 +202,19 @@ Firestore.prototype.fetchDocuments = function(project, collection, numResults, u
  * Fetch a single page of documents from Firestore and return the raw response as JSON.
  *
  * @param {string} baseUrl The URL excluding the page token.
+ * @param {?string} token Optional token for the page (absent on first request).
  * @param {string} collection The collection id used for collection group queries.
  * @param {boolean} useCollectionGroups Whether to use collection groups.
- * @param {?string} token Optional token for the page (absent on first request).
+ * @param {Object} filters The filters used for Firestore (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Filter)
  */
-Firestore.prototype.fetchPage = function(baseUrl, token, collection, useCollectionGroups) {
+Firestore.prototype.fetchPage = function(
+    baseUrl, token, collection, useCollectionGroups, filters) {
   var url = baseUrl;
   
   var data = {
     structuredQuery: {
       limit: this.PAGE_SIZE,
+      where: filters,
       orderBy: [{
         field: {
           fieldPath: "__name__"

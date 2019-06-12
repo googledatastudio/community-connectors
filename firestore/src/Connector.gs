@@ -35,6 +35,16 @@ function Connector(enableLogging) {
     semanticGroup: 'DATE_AND_TIME',
     semanticType: 'YEAR_MONTH_DAY_HOUR'
   };
+
+  /** @const */
+  this.OPERATOR_TYPES = [
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUAL',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUAL',
+	'EQUAL',
+	'ARRAY_CONTAINS'
+  ];
   
   /** @const */
   this.cloud = new GoogleCloud();
@@ -129,6 +139,22 @@ Connector.prototype.getConfig = function(request) {
         placeholder: 'field1:STRING\nfield2:STRING\nfield3:NUMBER\nfield4:BOOLEAN'
       },
       {
+        type: 'INFO',
+        text: 'If you only need to use a part of documents in Data Studio you can provider filters,\
+               to not fetch these documents from Firestore. Use the following format: \
+			   <field_name1>;<operator1>;<value1>, where operator is one of EQUAL, LESS_THAN, ARRAY_CONTAINS, ... \
+			   (complete list: https://firebase.google.com/docs/firestore/reference/rest/v1beta1/StructuredQuery#Operator_1). \
+			   And for value provide the value as a Value JSON \
+			   (https://firebase.google.com/docs/firestore/reference/rest/v1beta1/Value), \
+			   for example: {"stringValue":"video"}. \ Complete example for one filter: type;EQUAL;{"stringValue":"video"}'
+      },
+      {
+        name: 'filters',
+        type: 'TEXTAREA',
+        displayName: 'Firestore "Filters"',
+        placeholder: 'type;EQUAL;{"stringValue":"video"}\ntimestamp;GREATER_THAN;{"timestampValue":"2014-10-02T15:01:23.045123456Z"}'
+      },
+      {
         name: 'numResults',
         type: 'SELECT_SINGLE',
         displayName: 'Max Documents',
@@ -195,14 +221,15 @@ Connector.prototype.getData = function(request) {
     useCollectionGroupsValue = 'no';
   }
   const useCollectionGroups = useCollectionGroupsValue === 'yes';
-  console.log(useCollectionGroups);
+  const filters = this.parseFiltersCsv(request.configParams.filters);
   
   // Prepare the schema for the fields requested.
   const requestedSchema = this.getFilteredSchema(request);
   
   // Fetch and filter the requested data from firestore
   const firestore = new Firestore();
-  const data = firestore.getData(project, collection, requestedSchema, numResults, useCollectionGroups);
+  const data = firestore.getData(
+    project, collection, requestedSchema, numResults, useCollectionGroups, filters);
   
   return {schema: requestedSchema, rows: data};
 }
@@ -275,6 +302,64 @@ Connector.prototype.parseSchemaCsv = function(configCsv) {
   return schema;
 }
 
+/**
+ * Converts the user-specified filters into Firestore filters.
+ *
+ * @param {string} filtersCsv The user-specified database filters.
+ * @return {Object} The user-specified portion of the Firestore filters.
+ */
+Connector.prototype.parseFiltersCsv = function(filtersCsv) {
+  const parsed = Utilities.parseCsv(filtersCsv, ';');
+  var filters = [];
+  const instance = this;
+  parsed.forEach(function(row) {
+    if (row.length != 3) {
+      throw 'Invalid filters: row should have format "<field>;<operator>;<value>", instead got "' + row + '"';
+    }
+    const fieldPath = row[0].trim();
+    const operator = row[1].trim().toUpperCase();
+    const valueString = row[2].trim();
+    
+    if (fieldPath.length === 0) {
+      throw 'Invalid filter: empty field in row "' + row + '"'; 
+    }
+    
+    if (instance.OPERATOR_TYPES.indexOf(operator) < 0) {
+      throw 'Invalid filter: operator must be one of: ' + instance.OPERATOR_TYPES.toString(); 
+    }
+
+    var value;
+    // Try parsing value to JSON
+    try {
+      value = JSON.parse(valueString);
+    } catch(e) {
+    throw 'Invalid filter: value must be a valid JSON in this form: \
+      https://firebase.google.com/docs/firestore/reference/rest/v1beta1/Value';
+    }
+    
+    var filter = {
+      fieldFilter: {
+        field: {
+          fieldPath: fieldPath
+        },
+        op: operator,
+        value: value
+      }
+    };
+    
+    filters.push(filter);
+  });
+  if (filters.length == 0) {
+    return undefined;
+  } else {
+    return {
+      compositeFilter: {
+        op: "AND",
+        filters: filters
+      }
+    };
+  }
+}
 
 /** Predefined Data Studio function for defining auth. */
 Connector.prototype.getAuthType = function() {
