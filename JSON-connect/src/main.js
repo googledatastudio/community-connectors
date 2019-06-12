@@ -130,8 +130,9 @@ function getCachedData(url) {
     cacheData = cache.getAll(cacheKeys);
 
     for (var key in cacheKeys) {
-      if (cacheData[cacheKeys[key]] != undefined)
+      if (cacheData[cacheKeys[key]] != undefined) {
         content.push(JSON.parse(cacheData[cacheKeys[key]]));
+      }
     }
   } else {
     content = fetchJSON(url);
@@ -155,8 +156,9 @@ function getCachedData(url) {
  * @returns {Object}        The response object
  */
 function fetchData(url, cache) {
-  if (!url || !url.match(/^https?:\/\/.+$/g))
+  if (!url || !url.match(/^https?:\/\/.+$/g)) {
     sendUserError('"' + url + '" is not a valid url.');
+  }
 
   var content = cache ? getCachedData(url) : fetchJSON(url);
 
@@ -181,8 +183,9 @@ function getFields(request, content) {
 
   if (!Array.isArray(content)) content = [content];
 
-  if (typeof content[0] !== 'object' || content[0] === null)
+  if (typeof content[0] !== 'object' || content[0] === null) {
     sendUserError('Invalid JSON format');
+  }
 
   Object.keys(content[0]).forEach(function(key) {
     var isNumeric =
