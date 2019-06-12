@@ -15,7 +15,6 @@
     "templates": {
       "default": "1g7Z1hjCIkAHmL4QStbWNvuSUe-eQ-vnk"
     },
-    "UrlFetchApp": [],
     "useQueryConfig": true
   },
   "oauthScopes": [ "https://www.googleapis.com/auth/bigquery.readonly" ]

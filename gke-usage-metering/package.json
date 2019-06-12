@@ -1,14 +1,21 @@
 {
-  "author": "yangguan@google.com",
-  "dependencies": {
-    "@types/google-apps-script": "0.0.33"
+  "dsccConnector": {
+    "production": "AKfycby2Nele4wWYAynBxIOMbqA8h5HbQ3EKDLuRmSydKVq7-PywZ19mJhER11j6lkEJZITlEg",
+    "latest": "AKfycbx-FqrbPZFCf5YA-V_WNLtFI_p26L3zkMYF3ABOT_L9"
   },
-  "description": "\"Data Studio Community Connector for GKE Usage Metering\"",
-  "license": "ISC",
-  "main": "\"\"",
-  "name": "datastudio-community-connector-for-gke-usage-metering",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
   },
-  "version": "0.1.0"
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-scripts": "^1.0.0",
+    "prettier": "^1.16.4"
+  }
 }
