@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": [ "es6" ],
+    "outDir": "build/"
+  },
+  "include": [
+    "data-studio.d.ts",
+    "gkeUsageMetering.ts",
+    "main.ts",
+    "query.ts"
+  ]
+}

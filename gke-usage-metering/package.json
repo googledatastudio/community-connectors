@@ -1,0 +1,14 @@
+{
+  "author": "yangguan@google.com",
+  "dependencies": {
+    "@types/google-apps-script": "0.0.33"
+  },
+  "description": "\"Data Studio Community Connector for GKE Usage Metering\"",
+  "license": "ISC",
+  "main": "\"\"",
+  "name": "datastudio-community-connector-for-gke-usage-metering",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.0"
+}
