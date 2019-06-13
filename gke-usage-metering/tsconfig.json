@@ -4,9 +4,9 @@
     "outDir": "build/"
   },
   "include": [
-    "data-studio.d.ts",
-    "gkeUsageMetering.ts",
-    "main.ts",
-    "query.ts"
+    "src/data-studio.d.ts",
+    "src/gkeUsageMetering.ts",
+    "src/main.ts",
+    "src/query.ts"
   ]
 }
