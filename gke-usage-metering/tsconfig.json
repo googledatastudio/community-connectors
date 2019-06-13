@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "lib": [ "es6" ],
-    "outDir": "build/"
+    "outDir": "build/",
+    "types": ["google-apps-script"]
   },
   "include": [
     "src/data-studio.d.ts",

@@ -16,6 +16,7 @@
   "devDependencies": {
     "@google/clasp": "^2.1.0",
     "@google/dscc-scripts": "^1.0.0",
+    "@types/google-apps-script": "0.0.53",
     "prettier": "^1.16.4"
   }
 }
