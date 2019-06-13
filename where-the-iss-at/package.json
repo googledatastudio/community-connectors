@@ -1,27 +1,21 @@
 {
-  "name": "where-the-iss-at",
-  "deployments": {
-    "production": "AKfycbyO4TGWSebgohiXCVoeJX7FTQqtmSHlqMcufeudJdPmGB6SSxIe4R1qCSpjztrO48fF0g",
-    "latest": "AKfycbzFGgQXmRXoypMm15bknaPi4G9Bhw0Ati5zOedJClsD"
-  },
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "@google/clasp": "^2.0.1",
-    "argparse": "^1.0.10",
-    "chalk": "^2.4.2",
-    "opn": "^5.4.0",
-    "prettier": "^1.16.4",
-    "terminal-link": "^1.2.0"
+  "dsccConnector": {
+    "production": "AKfycbxBAWD_K0jJNXO9Y-IbyUNhwiI4xWq7Xccq9efx-LaaHRFIe5jECnKQ8cZkBlwCC40",
+    "latest": "AKfycbwnxXfwUxp6i-CV-E2HvYNkQ7uvIN2OBuRYHcpxgzA"
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.js\"",
-    "push": "clasp push",
-    "watch": "clasp push --watch",
-    "open": "clasp open",
-    "try_production": "node scripts/dscc-scripts.js -s try_production",
-    "try_latest": "node scripts/dscc-scripts.js -s try_latest",
-    "update_production": "node scripts/dscc-scripts.js -s update_production"
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-scripts": "^1.0.0",
+    "prettier": "^1.16.4"
   }
 }

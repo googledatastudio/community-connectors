@@ -291,45 +291,51 @@ var AWS = (function() {
               return (b << (32 - a)) | (b >>> a);
             },
             endian: function(b) {
-              if (b.constructor == Number)
+              if (b.constructor == Number) {
                 return (k.rotl(b, 8) & 16711935) | (k.rotl(b, 24) & 4278255360);
+              }
               for (var a = 0; a < b.length; a++) b[a] = k.endian(b[a]);
               return b;
             },
             randomBytes: function(b) {
-              for (var a = []; b > 0; b--)
+              for (var a = []; b > 0; b--) {
                 a.push(Math.floor(Math.random() * 256));
+              }
               return a;
             },
             bytesToWords: function(b) {
-              for (var a = [], c = 0, e = 0; c < b.length; c++, e += 8)
+              for (var a = [], c = 0, e = 0; c < b.length; c++, e += 8) {
                 a[e >>> 5] |= (b[c] & 255) << (24 - (e % 32));
+              }
               return a;
             },
             wordsToBytes: function(b) {
-              for (var a = [], c = 0; c < b.length * 32; c += 8)
+              for (var a = [], c = 0; c < b.length * 32; c += 8) {
                 a.push((b[c >>> 5] >>> (24 - (c % 32))) & 255);
+              }
               return a;
             },
             bytesToHex: function(b) {
-              for (var a = [], c = 0; c < b.length; c++)
+              for (var a = [], c = 0; c < b.length; c++) {
                 a.push((b[c] >>> 4).toString(16)),
                   a.push((b[c] & 15).toString(16));
+              }
               return a.join('');
             },
             hexToBytes: function(b) {
-              for (var a = [], c = 0; c < b.length; c += 2)
+              for (var a = [], c = 0; c < b.length; c += 2) {
                 a.push(parseInt(b.substr(c, 2), 16));
+              }
               return a;
             },
             bytesToBase64: function(b) {
               if (typeof btoa == 'function') return btoa(g.bytesToString(b));
-              for (var a = [], c = 0; c < b.length; c += 3)
+              for (var a = [], c = 0; c < b.length; c += 3) {
                 for (
                   var e = (b[c] << 16) | (b[c + 1] << 8) | b[c + 2], p = 0;
                   p < 4;
                   p++
-                )
+                ) {
                   c * 8 + p * 6 <= b.length * 8
                     ? a.push(
                         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.charAt(
@@ -337,6 +343,8 @@ var AWS = (function() {
                         )
                       )
                     : a.push('=');
+                }
+              }
               return a.join('');
             },
             base64ToBytes: function(b) {
@@ -345,7 +353,7 @@ var AWS = (function() {
                 var b = b.replace(/[^A-Z0-9+\/]/gi, ''), a = [], c = 0, e = 0;
                 c < b.length;
                 e = ++c % 4
-              )
+              ) {
                 e != 0 &&
                   a.push(
                     (('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.indexOf(
@@ -358,6 +366,7 @@ var AWS = (function() {
                       ) >>>
                         (6 - e * 2))
                   );
+              }
               return a;
             }
           }),
@@ -372,13 +381,15 @@ var AWS = (function() {
         };
         var g = (d.Binary = {
           stringToBytes: function(b) {
-            for (var a = [], c = 0; c < b.length; c++)
+            for (var a = [], c = 0; c < b.length; c++) {
               a.push(b.charCodeAt(c) & 255);
+            }
             return a;
           },
           bytesToString: function(b) {
-            for (var a = [], c = 0; c < b.length; c++)
+            for (var a = [], c = 0; c < b.length; c++) {
               a.push(String.fromCharCode(b[c]));
+            }
             return a.join('');
           }
         });
@@ -566,8 +577,9 @@ var AWS = (function() {
           var f = d.slice(0), d = d.slice(0), q = 0;
           q < c._blocksize * 4;
           q++
-        )
+        ) {
           (f[q] ^= 92), (d[q] ^= 54);
+        }
         c = c(f.concat(c(d.concat(e), {asBytes: !0})), {asBytes: !0});
         return g && g.asBytes
           ? c
