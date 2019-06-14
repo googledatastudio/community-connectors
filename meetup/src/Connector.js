@@ -170,7 +170,7 @@ Connector.prototype.buildURL = function(request) {
 };
 
 /**
- * Makes a requset to the Meetup API & returns the results & the nextLink, if applicable.
+ * Makes a request to the Meetup API & returns the results & the nextLink, if applicable.
  *
  * @param {string} url - The url to request.
  * @param {object} options - The options to use for the UrlFetchApp, if necessary.
