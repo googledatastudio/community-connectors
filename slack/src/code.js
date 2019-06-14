@@ -1,5 +1,5 @@
 /*
-This connector can connect to your any specified Slack channel, 
+This connector can connect to your any specified Slack channel,
 and bring the data to the Data Studio.
 */
 
