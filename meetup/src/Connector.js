@@ -1,6 +1,4 @@
-function Connector() {
-  this.cache = null;
-}
+function Connector() {}
 
 /** @const */
 Connector.OAUTH_CONST = 'OAUTH2';
@@ -172,73 +170,26 @@ Connector.prototype.buildURL = function(request) {
 };
 
 /**
- * Gets data from the cache using a paginated strategy. Since this data was put
- * into the cache in order, we can return the rest of the results from the cache
- * after our first cache hit.
+ * Makes a request to the Meetup API & returns the results & the nextLink, if applicable.
  *
- * @param {object} cache The cache.
- * @param {object} cacheKey The key to lokup in the cache.
- * @return {object|undefined} either the aggregated values from the cache or undefined, if the key was not found.
- */
-Connector.prototype.getFromCachePaginated = function(cache, cacheKey) {
-  var cached = cache.getRestFrom(
-    cacheKey,
-    function(acc, row) {
-      const cachedValue = JSON.parse(row[1]);
-      const results = acc.json.concat(cachedValue.json);
-      const nextLink = cachedValue.nextLink;
-      return {json: results, nextLink: nextLink};
-    },
-    {json: [], nextLink: undefined}
-  );
-  return cached;
-};
-
-/**
- * Attempts to get the data from the cache. If it fails, it makes all necessary
- * requests, and caches results as it goes.
- *
- * @param {object} request - The request passed to `Connector.getData(request)`.
  * @param {string} url - The url to request.
  * @param {object} options - The options to use for the UrlFetchApp, if necessary.
- * @return {object} The response from the cache, or `this.wrappedFetch`.
+ * @return {object} The response from `this.wrappedFetch`.
  */
-Connector.prototype.getCachedData = function(request, url, options) {
-  if (this.cache === null) {
-    this.cache = new CustomCache(
-      request.configParams.url_name,
-      request.configParams.api_type
-    );
-  }
-  var cache = this.cache;
-  var cacheKey = url;
-  var cached = this.getFromCachePaginated(cache, cacheKey);
+Connector.prototype.requestData = function(url, options) {
   var nextUrl = url;
-  if (cached) {
-    return cached;
-  } else {
-    try {
-      var results = [];
-      var shouldCache = true;
-      var response = this.wrappedFetch(nextUrl, options);
-      var JSONed = JSON.parse(response);
-      results = results.concat(JSONed);
-      nextUrl = this.getNextLink(response);
+  try {
+    var results = [];
+    var response = this.wrappedFetch(nextUrl, options);
+    var JSONed = JSON.parse(response);
+    results = results.concat(JSONed);
+    nextUrl = this.getNextLink(response);
 
-      if (!nextUrl || JSONed.length !== 100) {
-        shouldCache = false;
-      }
-
-      var toCache = {json: results, nextLink: nextUrl};
-
-      if (shouldCache) {
-        cache.put(cacheKey, toCache);
-      }
-      return toCache;
-    } catch (e) {
-      console.log(e);
-      this.throwError('Unable to get data from meetup.com', true);
-    }
+    var result = {json: results, nextLink: nextUrl};
+    return result;
+  } catch (e) {
+    console.log(e);
+    this.throwError('Unable to get data from meetup.com', true);
   }
 };
 
@@ -284,11 +235,11 @@ Connector.prototype.paginatedResult = function(request, url) {
     Connector.LOCK_TIMEOUT_MINUTES;
   lock.waitLock(timeout);
   var options = this.getFetchOptions();
-  var response = this.getCachedData(request, url, options);
+  var response = this.requestData(url, options);
   var nextUrl = response.nextLink;
   var responses = response.json;
   while (nextUrl) {
-    var r = this.getCachedData(request, nextUrl, options);
+    var r = this.requestData(nextUrl, options);
     responses = responses.concat(r.json);
     nextUrl = r.nextLink;
   }
