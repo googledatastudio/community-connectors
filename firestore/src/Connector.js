@@ -96,7 +96,7 @@ Connector.prototype.getConfig = function(request) {
         helpText:
           'Select the Firestore collections to use for this Data Source. To use multiple \
                    collections, separate each collection by comma. Keep in mind that you can \
-				           only have one schema across your collections.'
+                   only have one schema across your collections.'
       },
       {
         type: 'INFO',
