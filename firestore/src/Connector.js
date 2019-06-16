@@ -21,12 +21,7 @@ limitations under the License.
  */
 function Connector(enableLogging) {
   /** @const */
-  this.FIELD_TYPES = [
-    'STRING',
-    'NUMBER',
-    'BOOLEAN',
-    'TIMESTAMP'
-  ];
+  this.FIELD_TYPES = ['STRING', 'NUMBER', 'BOOLEAN', 'TIMESTAMP'];
 
   /** @const */
   this.TIMESTAMP_SEMANTICS = {
@@ -36,7 +31,7 @@ function Connector(enableLogging) {
   };
   /** @const */
   this.cloud = new GoogleCloud();
-  
+
   /** @const */
   this.enableLogging = enableLogging;
 }
@@ -84,7 +79,7 @@ Connector.prototype.getConfig = function(request) {
     const yId = y.label.toLowerCase();
     return xId === yId ? 0 : xId < yId ? -1 : 1;
   });
-  
+
   return {
     configParams: [
       {
@@ -98,13 +93,15 @@ Connector.prototype.getConfig = function(request) {
         name: 'collection',
         type: 'TEXTINPUT',
         displayName: 'Collection',
-        helpText: 'Select the Firestore collections to use for this Data Source. To use multiple \
+        helpText:
+          'Select the Firestore collections to use for this Data Source. To use multiple \
                    collections, separate each collection by comma. Keep in mind that you can \
 				           only have one schema across your collections.'
       },
       {
         type: 'INFO',
-        text: 'Firestore is a schema-less database. In order to use Firestore with Data Studio, \
+        text:
+          'Firestore is a schema-less database. In order to use Firestore with Data Studio, \
                you must supply a set of fields in the collection you want to use. \
                Use the following format: <field_name1>:<type1>, where type is one of STRING, \
                NUMBER, BOOLEAN, or TIMESTAMP. Note: "name" is a reserved field.'
@@ -195,10 +192,15 @@ Connector.prototype.getData = function(request) {
   const collections = collectionValue.split(',');
   var rows = [];
   collections.forEach(function(collection) {
-	  const data = firestore.getData(project, collection, requestedSchema, numResults);
-	  rows = rows.concat(data);
+    const data = firestore.getData(
+      project,
+      collection,
+      requestedSchema,
+      numResults
+    );
+    rows = rows.concat(data);
   });
-  
+
   return {schema: requestedSchema, rows: rows};
 };
 
