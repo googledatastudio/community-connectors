@@ -14,10 +14,10 @@
     "logoUrl": "https://secure.meetupstatic.com/s/img/286374644891845767035/logo/meetup-logo-script-1200x630.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/meetup",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/meetup/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Meetup%20Connector%20Issue",
     "description": "Provides Meetup.com data for groups, pro groups, members, and events.",
-    "sources": ["meetup"],
+    "sources": ["MEETUP"],
     "templates": {
       "default": "1SCkPDeMw0rB_EmTELbXoEQ1qzYRlu7pC"
     }

@@ -4,7 +4,7 @@
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "logoUrl": "https://github.com/canyousayyes/datastudio-aws-athena-connector/raw/master/assets/logo.png",
-    "addonUrl": "https://github.com/canyousayyes/datastudio-aws-athena-connector#readme",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/aws-athena/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=AWS%20Athena%20Connector%20Issue",
     "description": "This connector calls API to AWS Athena and AWS Glue to query data from AWS S3. Users can therefore create reports using S3 as the data source.",
     "shortDescription": "Query AWS S3 data using AWS Athena",

@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "prettier": "prettier --write '**/*.js' '**/*.json'",
-    "prettier:check": "prettier --check \"**/*.js\"",
-    "lint": "eslint \"**/*.js\" --quiet"
+    "prettier:check": "prettier --check '**/*.js' '**/*.json'",
+    "lint": "eslint '**/*.js' --quiet"
   },
   "prettier": {
     "singleQuote": true,

@@ -4,9 +4,9 @@
   "dataStudio": {
     "name": "Google Fit",
     "company": "Google Data Studio Developer Relations",
-    "company_url": "https://fit.google.com/",
+    "company_url": "https://developers.google.com/datastudio/",
     "logoUrl": "https://gstatic.com/images/branding/product/1x/gfit_512dp.png",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/google-fit",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/google-fit/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Google%20Fit%20Connector%20Issue",
     "description": "The Google Fit connector for Data Studio allows you to retrieve Google Fit activity data and create time based graphs of your activity.",
     "shortDescription": "Google Fit activity data."

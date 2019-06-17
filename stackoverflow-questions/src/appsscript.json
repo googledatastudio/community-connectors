@@ -4,10 +4,10 @@
     "logoUrl": "https://cdn.sstatic.net/Sites/stackoverflow/company/img/logos/se/se-icon.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/stackoverflow-questions",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/stackoverflow-questions/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Stack%20Overflow%20Questions%20Connector%20Issue",
     "description": "Get Stack Overflow questions and relevant metadata by tag.",
-    "sources": ["Stack Overflow"],
+    "sources": ["STACK_OVERFLOW"],
     "templates": {
       "default": "1lR9CGfx3uyQp6oz7oAgA1rsqZViA-IQs"
     }

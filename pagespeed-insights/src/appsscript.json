@@ -4,9 +4,9 @@
   "dataStudio": {
     "name": "Page Speed Insights Score",
     "logoUrl": "https://www.gstatic.com/images/icons/material/product/2x/pagespeed_64dp.png",
-    "company": "Google Data Studio Developer Relations",
-    "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/pagespeed-insights",
+    "company": "Grant Kemp",
+    "companyUrl": "https://twitter.com/ukdatageek",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/pagespeed-insights/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Page%20Speed%20Insights%20Connector%20Issue",
     "description": "PageSpeed Insights analyzes the content of a web page, then generates suggestions to make that page faster. This connector allows you to surface Page Speed Scores and ensure that your site loads quickly.",
     "shortDescription": "Get the Page Speed Insights Score for a Url to see site optimization.",
