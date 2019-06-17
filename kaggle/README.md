@@ -34,4 +34,4 @@ Click [here][managed-deployment] to try the managed deployment.
 [kaggle-api]: https://github.com/Kaggle/kaggle-api
 [managed-deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbz8WVuZI1FRHJM3g_ucqP-L7B9EIIPDsC9RofvZk1Xw-bD6p55SNjs7JudEsOYK1o2t
 [error-handling]: https://developers.google.com/datastudio/connector/error-handling
-[getAuthType]: https://devsite.googleplex.com/datastudio/connector/oauth2
+[getAuthType]: https://developers.google.com/datastudio/connector/oauth2
