@@ -3,7 +3,7 @@
   "exceptionLogging": "STACKDRIVER",
   "dataStudio": {
     "name": "Google Fit",
-    "company": "Google",
+    "company": "Google Data Studio Developer Relations",
     "company_url": "https://fit.google.com/",
     "logoUrl": "https://gstatic.com/images/branding/product/1x/gfit_512dp.png",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/google-fit",

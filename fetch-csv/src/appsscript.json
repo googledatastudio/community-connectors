@@ -4,7 +4,7 @@
   "dataStudio": {
     "name": "Fetch CSV",
     "logoUrl": "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/fetch-csv/fetch-csv-logo.jpg",
-    "company": "Google Developer Relations",
+    "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/google/datastudio/issues",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Fetch%20CSV%20Connector%20Issue",

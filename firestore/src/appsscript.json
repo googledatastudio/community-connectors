@@ -12,7 +12,7 @@
   "dataStudio": {
     "name": "Google Cloud Firestore",
     "logoUrl": "http://i66.tinypic.com/2mevmeq.png",
-    "company": "Google",
+    "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://firebase.google.com/products/firestore/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/firestore",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Firestore%20Connector%20Issue",
