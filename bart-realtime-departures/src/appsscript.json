@@ -5,7 +5,7 @@
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Bart%20Real%20Time%20Departures%20Connector%20Issue",
     "description": "Real-time departure information from the Bay Area Rapid Transit (BART) API."
   }
 }

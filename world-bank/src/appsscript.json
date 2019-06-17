@@ -16,7 +16,7 @@
     "company": "Data Studio DevRel",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=World%20Bank%20Connector%20Issue",
     "description": "Access the latest data on population and demographic estimates and projections from the World Bank Health, Nutrition, and Population BigQuery dataset. Big query table can be found here: https://bigquery.cloud.google.com/dataset/bigquery-public-data:world_bank_health_population",
     "sources": ["WORLD_BANK_HEALTH_NUTRITION_AND_POPULATION"],
     "useQueryConfig": true

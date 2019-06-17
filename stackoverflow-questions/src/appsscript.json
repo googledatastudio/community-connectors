@@ -5,7 +5,7 @@
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/stackoverflow-questions",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Stack%20Overflow%20Questions%20Connector%20Issue",
     "description": "Get Stack Overflow questions and relevant metadata by tag.",
     "sources": ["Stack Overflow"],
     "templates": {

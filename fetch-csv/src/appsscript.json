@@ -7,7 +7,7 @@
     "company": "Google Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/google/datastudio/issues",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/tree/master/fetch-csv",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Fetch%20CSV%20Connector%20Issue",
     "shortDescription": "Fetch data from a CSV",
     "description": "This connector lets users query data from a CSV with the possibility to chose the delimiter and a text qualifier",
     "authType": ["NONE"],

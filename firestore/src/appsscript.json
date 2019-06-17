@@ -15,7 +15,7 @@
     "company": "Google",
     "companyUrl": "https://firebase.google.com/products/firestore/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/firestore",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Firestore%20Connector%20Issue",
     "description": "Get arbitrary data from a single Google Cloud Firestore collection.",
     "shortDescription": "Get arbitrary data from a single Google Cloud Firestore collection.",
     "authType": ["NONE"],

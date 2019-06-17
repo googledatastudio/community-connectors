@@ -15,7 +15,7 @@
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/meetup",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Meetup%20Connector%20Issue",
     "description": "Provides Meetup.com data for groups, pro groups, members, and events.",
     "sources": ["meetup"],
     "templates": {

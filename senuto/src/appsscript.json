@@ -8,7 +8,7 @@
     "companyUrl": "http://senuto.com/",
     "logoUrl": "https://images.senuto.com/img/logo_senuto_small.png",
     "addonUrl": "http://senuto.com/",
-    "supportUrl": "http://senuto.com/",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Senuto%20Connector%20Issue",
     "description": "SENUTO Community Connector for Data Studio"
   }
 }

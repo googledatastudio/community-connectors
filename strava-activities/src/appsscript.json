@@ -16,7 +16,7 @@
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/strava-activities",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Strava%20Activities%20Connector%20Issue",
     "description": "Get strava activity data.",
     "sources": ["strava"]
   }
