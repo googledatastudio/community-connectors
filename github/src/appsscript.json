@@ -14,10 +14,10 @@
     "logoUrl": "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/github/logo.png",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/github#readme",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/github/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=GitHub%20Connector%20Issue",
     "description": "Get GitHub data for specific repositories.",
-    "sources": ["GitHub"],
+    "sources": ["GITHUB"],
     "templates": {
       "default": "1PikgkhyXNpPNmsL5khagMQJZq5zDOANz"
     }

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [ "es6" ],
+    "lib": ["es6"],
     "outDir": "build/",
     "types": ["google-apps-script"]
   },
