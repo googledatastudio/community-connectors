@@ -64,6 +64,14 @@ function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
 
+  var option1 = config.newOptionBuilder()
+    .setLabel("Text")
+    .setValue("text");
+
+  var option2 = config.newOptionBuilder()
+    .setLabel("Inline")
+    .setValue("inline");
+
   config
     .newInfo()
     .setId('instructions')
@@ -82,6 +90,15 @@ function getConfig(request) {
     .setName('Cache response')
     .setHelpText('Usefull with big datasets. Response is cached for 10 minutes')
     .setAllowOverride(true);
+
+  config
+    .newSelectSingle()
+    .setId('nestedData')
+    .setName('Nested data')
+    .setHelpText('How to import nested data, as text or inline.')
+    .setAllowOverride(true)
+    .addOption(option1)
+    .addOption(option2);
 
   config.setDateRangeRequired(false);
 
@@ -166,34 +183,77 @@ function fetchData(url, cache) {
 }
 
 /**
+ *  Creates the fields
+ *
+ * @param   {Object}  fields  The list of fields
+ * @param   {Object}  types   The list of types
+ * @param   {String}  key     The key value of the current element
+ * @param   {Mixed}   value   The value of the current element
+ */
+function createField( fields, types, key, value ) {
+  var isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+  var field = isNumeric ? fields.newMetric() : fields.newDimension();
+  field.setType(isNumeric ? types.NUMBER : types.TEXT);
+  field.setId(key.replace(/\s/g, '_').toLowerCase());
+  field.setName(key);
+}
+
+/**
+ * Extracts the objects recursive fields and adds it to fields
+ *
+ * @param   {Object}  fields  The list of fields
+ * @param   {Object}  types   The list of types
+ * @param   {String}  key     The key value of the current element
+ * @param   {Mixed}   value   The value of the current element
+ * @param   {boolean} isInline if true
+ */
+function createFields(fields, types, key, value, isInline) {
+  if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+    Object.keys(value).forEach(function(currentKey) {
+      if (currentKey == '' || currentKey == null) {
+        return;
+      }
+      currentKey = currentKey.replace('.', '_')
+      var elementKey = key;
+      if (elementKey != null) {
+        elementKey += '.' + currentKey
+      } else {
+        elementKey = currentKey 
+      }
+      if (isInline && value[currentKey] != null) { 
+        createFields(fields, types, elementKey, value[currentKey], isInline);
+      } else {
+        createField(fields, types, currentKey, value)
+      }
+    });
+  } else if (key !== null) {
+    createField(fields, types, key, value)
+  }
+}
+
+/**
  * Parses first line of content to determine the data schema
  *
  * @param   {Object}  request getSchema/getData request parameter.
  * @param   {Object}  content The content object
  * @return  {Object}           An object with the connector configuration
  */
-
 function getFields(request, content) {
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
+  var isInline = request.configParams.nestedData == 'inline';
 
   if (!Array.isArray(content)) content = [content];
 
   if (typeof content[0] !== 'object' || content[0] === null)
     sendUserError('Invalid JSON format');
-
-  Object.keys(content[0]).forEach(function(key) {
-    var isNumeric =
-      !isNaN(parseFloat(content[0][key])) && isFinite(content[0][key]);
-    var field = isNumeric ? fields.newMetric() : fields.newDimension();
-
-    field.setType(isNumeric ? types.NUMBER : types.TEXT);
-    field.setId(key.replace(/\s/g, '_').toLowerCase());
-    field.setName(key);
-  });
-
+  try {
+    createFields(fields, types, null, content[0], isInline);
+  } catch (e) {
+    sendUserError("Unable to identify the field. Error: \n" + e + "\n" + e.stack)
+  }
   return fields;
 }
 
@@ -240,7 +300,29 @@ function getColumns(content, requestedFields) {
     var rowValues = [];
 
     requestedFields.asArray().forEach(function(field) {
-      rowValues.push(validateValue(row[field.getId()]));
+      var currentValue = row;
+      var valuePaths = field.getId().split('.');
+
+      for (var index in valuePaths) {
+        var currentPath = valuePaths[index];
+
+        if (currentValue[currentPath] !== undefined) {
+          currentValue = currentValue[currentPath];
+          continue;
+        }
+
+        var keys = Object.keys(currentValue);
+
+        for (var index_keys in keys) {
+          var key = keys[index_keys].replace(/\s/g, '_').toLowerCase();
+          if (key == currentPath) {
+            currentValue = currentValue[keys[index_keys]];
+            break;
+          }
+        }
+      }
+
+      rowValues.push(validateValue(currentValue));
     });
 
     return {values: rowValues};
