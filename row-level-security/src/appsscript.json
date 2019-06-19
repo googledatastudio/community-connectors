@@ -1,0 +1,25 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "oauthScopes": ["https://www.googleapis.com/auth/script.external_request", "https://www.googleapis.com/auth/userinfo.email" ],
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "OAuth2",
+        "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+        "version": "32"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "dataStudio": {
+    "name": "Row Level Security Example",
+    "logoUrl": "https://www.gstatic.com/images/icons/material/system/1x/language_black_48dp.png",
+    "company": "Data Studio DevRel",
+    "companyUrl": "https://developers.google.com/datastudio/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "description": "Row Level Security Example",
+    "sources": ["BIGQUERY"],
+    "useQueryConfig": true
+  }
+}
