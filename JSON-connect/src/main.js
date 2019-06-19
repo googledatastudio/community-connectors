@@ -64,13 +64,15 @@ function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
 
-  var option1 = config.newOptionBuilder()
-    .setLabel("Text")
-    .setValue("text");
+  var option1 = config
+    .newOptionBuilder()
+    .setLabel('Text')
+    .setValue('text');
 
-  var option2 = config.newOptionBuilder()
-    .setLabel("Inline")
-    .setValue("inline");
+  var option2 = config
+    .newOptionBuilder()
+    .setLabel('Inline')
+    .setValue('inline');
 
   config
     .newInfo()
@@ -190,7 +192,7 @@ function fetchData(url, cache) {
  * @param   {String}  key     The key value of the current element
  * @param   {Mixed}   value   The value of the current element
  */
-function createField( fields, types, key, value ) {
+function createField(fields, types, key, value) {
   var isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
   var field = isNumeric ? fields.newMetric() : fields.newDimension();
   field.setType(isNumeric ? types.NUMBER : types.TEXT);
@@ -213,21 +215,21 @@ function createFields(fields, types, key, value, isInline) {
       if (currentKey == '' || currentKey == null) {
         return;
       }
-      currentKey = currentKey.replace('.', '_')
+      currentKey = currentKey.replace('.', '_');
       var elementKey = key;
       if (elementKey != null) {
-        elementKey += '.' + currentKey
+        elementKey += '.' + currentKey;
       } else {
-        elementKey = currentKey 
+        elementKey = currentKey;
       }
-      if (isInline && value[currentKey] != null) { 
+      if (isInline && value[currentKey] != null) {
         createFields(fields, types, elementKey, value[currentKey], isInline);
       } else {
-        createField(fields, types, currentKey, value)
+        createField(fields, types, currentKey, value);
       }
     });
   } else if (key !== null) {
-    createField(fields, types, key, value)
+    createField(fields, types, key, value);
   }
 }
 
@@ -252,7 +254,9 @@ function getFields(request, content) {
   try {
     createFields(fields, types, null, content[0], isInline);
   } catch (e) {
-    sendUserError("Unable to identify the field. Error: \n" + e + "\n" + e.stack)
+    sendUserError(
+      'Unable to identify the field. Error: \n' + e + '\n' + e.stack
+    );
   }
   return fields;
 }
