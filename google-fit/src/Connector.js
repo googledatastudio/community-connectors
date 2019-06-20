@@ -413,8 +413,8 @@ connector.getSchema = function(request) {
  * @typedef {Object} Response
  * @property {Field[]} schema - The schema for the requested field(s). The Field.name and Field.dataType are required. The order of the Field objects determines the expected order of values for each row.
  * @property {Object[]} rows - The rows of values for the requested field(s).
- * @property {string[]} rows.values	- The values for the requested field(s). The order of values must correspond to order of the Fields defined in schema.
- * @property {boolean} cachedData	- If true, this means the data response was from a cache. If false or omitted, this means the data response was fetched directly from the source. Note that parameter is not currently used, you should set this value as it will become effective in an upcoming release. For now, setting this value will have no effect.
+ * @property {string[]} rows.values - The values for the requested field(s). The order of values must correspond to order of the Fields defined in schema.
+ * @property {boolean} cachedData - If true, this means the data response was from a cache. If false or omitted, this means the data response was fetched directly from the source. Note that parameter is not currently used, you should set this value as it will become effective in an upcoming release. For now, setting this value will have no effect.
  */
 
 /**

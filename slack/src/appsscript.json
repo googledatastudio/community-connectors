@@ -2,11 +2,10 @@
   "dataStudio": {
     "name": "Slack message Connector",
     "company": "Seo Gregory Pallichirayil",
-    "companyUrl": "",
     "logoUrl": "https://www.gstatic.com/images/branding/product/1x/google_fonts_48dp.png",
-    "addonUrl": "https://api.slack.com/methods/channels.history",
-     "supportUrl": "https://developers.google.com/datastudio/connector/faq",
-    "description": "This connector can connect to your any specified Slack channel, and bring the data to the Data Studio.",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/slack/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Slack%20Connector%20Issue",
+    "description": "Connect to any Slack channel and bring that data into Data Studio.",
     "shortDescription": "This Connector uses Slack API to fetch messages from any channel.",
     "authType": ["NONE"],
     "feeType": ["FREE"],
@@ -15,8 +14,5 @@
       "default": ""
     }
   },
-  "urlFetchWhitelist": [
-    "https://slack.com/api/channels.history"
-  ]
+  "urlFetchWhitelist": ["https://slack.com/api/channels.history"]
 }
-

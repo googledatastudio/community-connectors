@@ -1,11 +1,13 @@
 {
   "timeZone": "America/Los_Angeles",
   "dependencies": {
-    "libraries": [{
-      "userSymbol": "OAuth2",
-      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
-      "version": "30"
-    }]
+    "libraries": [
+      {
+        "userSymbol": "OAuth2",
+        "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+        "version": "30"
+      }
+    ]
   },
   "oauthScopes": ["https://www.googleapis.com/auth/script.external_request"],
   "dataStudio": {
@@ -13,9 +15,9 @@
     "logoUrl": "https://1n4rcn88bk4ziht713dla5ub-wpengine.netdna-ssl.com/wp-content/uploads/2017/12/press-thumbnail-asset-logo-02.jpg",
     "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/strava-activities",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/strava-activities/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Strava%20Activities%20Connector%20Issue",
     "description": "Get strava activity data.",
-    "sources": ["strava"]
+    "sources": ["STRAVA"]
   }
 }

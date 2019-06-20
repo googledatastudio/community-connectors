@@ -1,22 +1,24 @@
 {
   "timeZone": "Pacific/Pago_Pago",
   "dependencies": {
-    "libraries": [{
-      "userSymbol": "OAuth2",
-      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
-      "version": "26"
-    }]
+    "libraries": [
+      {
+        "userSymbol": "OAuth2",
+        "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+        "version": "26"
+      }
+    ]
   },
   "exceptionLogging": "STACKDRIVER",
   "dataStudio": {
     "name": "Spotify Track Popularity",
     "logoUrl": "https://developer.spotify.com/assets/branding-guidelines/logo@2x.png",
-    "company": "Google Developer Relations",
+    "company": "Google Data Studio Developer Relations",
     "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/spotify-recent-plays",
-    "supportUrl": "https://github.com/google/datastudio/issues",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/spotify/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Spotify%20Connector%20Issue",
     "description": "This connector queries the most popular tracks for an artist through the Spotify API.",
     "shortDescription": "Query track popularity statistics by artist through Spotify.",
-    "sources": ["Spotify"]
+    "sources": ["SPOTIFY"]
   }
 }

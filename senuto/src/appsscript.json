@@ -6,9 +6,9 @@
     "name": "Senuto",
     "company": "Senuto",
     "companyUrl": "http://senuto.com/",
-    "logoUrl": "https://www.senuto.com/pl/wp-content/uploads/2018/08/senuto-logo.png",
-    "addonUrl": "http://senuto.com/",
-    "supportUrl": "http://senuto.com/",
-    "description": "SENUTO Community Connector for Data Studio"
+    "logoUrl": "https://images.senuto.com/img/logo_senuto_small.png",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/senuto/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Senuto%20Connector%20Issue",
+    "description": "SENUTO Community Connector for Data Studio."
   }
 }

@@ -1,11 +1,11 @@
 {
   "dataStudio": {
-    "name": "Where the ISS at?",
+    "name": "Where's the ISS?",
     "logoUrl": "https://www.clickinsight.ca/wp-content/uploads/2019/01/cc-logo-orange-bg-400px.png",
-    "company": "Google Data Studio Developer Relations",
-    "companyUrl": "https://developers.google.com/datastudio/",
-    "addonUrl": "https://github.com/googledatastudio/community-connectors/",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues",
+    "company": "Marc Soares",
+    "companyUrl": "https://twitter.com/Marc_Soares",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/where-the-iss-at/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Where%20is%20the%20ISS%20Connector%20Issue",
     "description": "Real-time positional data for the International Space Station from the \"Where the ISS at?\" API."
   }
 }
