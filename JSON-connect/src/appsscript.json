@@ -1,15 +1,15 @@
 {
   "dataStudio": {
-    "name":               "JSON connect",
-    "logoUrl":            "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/JSON-connect/assets/logo.png",
-    "company":            "Lingewoud",
-    "companyUrl":         "https://lingewoud.nl/",
-    "addonUrl":           "https://github.com/googledatastudio/community-connectors/blob/master/JSON-connect/README.md",
-    "supportUrl":         "https://github.com/googledatastudio/community-connectors/issues/new?title=JSON%20Connect%20Connector%20Issue",
-    "shortDescription":   "Connect to JSON data by URL",
-    "description" :       "Free JSON connector. Fetch data from any JSON data source by URL. Use caching to speed up rendering.",
-    "sources":            [ "CUSTOM_JSON" ],
-    "authType":           [ "NONE" ],
-    "feeType":            [ "FREE" ]
+    "name": "JSON Connect",
+    "logoUrl": "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/JSON-connect/assets/logo.png",
+    "company": "Lingewoud",
+    "companyUrl": "https://lingewoud.nl/",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/JSON-connect/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=JSON%20Connect%20Connector%20Issue",
+    "shortDescription": "Connect to JSON data by URL",
+    "description": "Free JSON connector. Fetch data from any JSON data source by URL. Use caching to speed up rendering.",
+    "sources": ["CUSTOM_JSON"],
+    "authType": ["NONE"],
+    "feeType": ["FREE"]
   }
 }
