@@ -179,7 +179,9 @@ function fetchData(url, cache) {
   try {
     var content = cache ? getCachedData(url) : fetchJSON(url);
   } catch (e) {
-    sendUserError( 'Your request could not be cached. The rows of your dataset probably exceed the 100KB cache limit.');
+    sendUserError(
+      'Your request could not be cached. The rows of your dataset probably exceed the 100KB cache limit.'
+    );
   }
   if (!content) sendUserError('"' + url + '" returned no content.');
 
