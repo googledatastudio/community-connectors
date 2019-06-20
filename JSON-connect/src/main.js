@@ -25,7 +25,6 @@
  * @param {String} message The exception message
  */
 function sendUserError(message) {
-  console.log(message);
   var cc = DataStudioApp.createCommunityConnector();
   cc.newUserError()
     .setText(message)
@@ -180,14 +179,7 @@ function fetchData(url, cache) {
   try {
     var content = cache ? getCachedData(url) : fetchJSON(url);
   } catch (e) {
-    sendUserError(
-      'Unable to download or cache "' +
-        url +
-        '". Error: \n' +
-        e +
-        '\n' +
-        e.stack
-    );
+    sendUserError( 'Your request could not be cached. The rows of your dataset probably exceed the 100KB cache limit.');
   }
   if (!content) sendUserError('"' + url + '" returned no content.');
 
@@ -294,7 +286,7 @@ function getFields(request, content) {
   var fields = cc.getFields();
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
-  var isInline = request.configParams.nestedData == 'inline';
+  var isInline = request.configParams.nestedData === 'inline';
 
   if (!Array.isArray(content)) content = [content];
 
