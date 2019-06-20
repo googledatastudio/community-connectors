@@ -7,26 +7,26 @@ module.exports = {
     node: true
   },
   rules: {
+    // Settings for Appsscript.
+    'no-multi-str': 'off',
+    'no-var': 'off',
     'comma-dangle': ['error', 'never'],
-    // This should be turned on in the future. // 'max-len': ['error', {code: 100}],
+    // These should be turned on in the future
     'max-len': 'off',
     camelcase: 'off',
-    // This should be turned on in the future
-    eqeqeq: 'off',
     'guard-for-in': 'off',
-    'no-var': 'off',
     'no-throw-literal': 'off',
-    'new-cap': 'off',
-    'quote-props': 'off',
-    'no-multi-str': 'off',
     'no-unused-vars': 'off',
-    indent: 'off',
     'require-jsdoc': 'off',
-    // This should be turned on in the future
     'valid-jsdoc': 'off',
-    // This should be turned on in the future
     'one-var': 'off',
-    // Turned off because prettier manages this
-    quotes: 'off'
+    // Turned off because prettier manages this.
+    quotes: 'off',
+    indent: 'off',
+    // Turned off because they don't matter.
+    'quote-props': 'off',
+    'new-cap': 'off',
+    // Additional rules.
+    curly: 'error'
   }
 };
