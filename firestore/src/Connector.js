@@ -189,7 +189,7 @@ Connector.prototype.getData = function(request) {
 
   // Fetch and filter the requested data from firestore
   const firestore = new Firestore();
-  const collections = collectionValue.split(',');
+  const collections = collection.split(',');
   var rows = [];
   collections.forEach(function(collection) {
     const data = firestore.getData(
