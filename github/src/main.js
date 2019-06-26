@@ -3,11 +3,11 @@ var NEXT_URL_PATTERN = /<([^>]+)>; rel="next"/;
 var ISSUES_ENDPOINT = 'issues';
 var STARS_ENDPOINT = 'stargazers';
 
-// https://devsite.googleplex.com/datastudio/connector/reference#isadminuser
+// https://developers.google.com/datastudio/connector/reference#isadminuser
 function isAdminUser() {
   return false;
 }
-// https://devsite.googleplex.com/datastudio/connector/reference#getauthtype
+// https://developers.google.com/datastudio/connector/reference#getauthtype
 function getAuthType() {
   var AuthTypes = cc.AuthType;
   return cc
@@ -16,7 +16,7 @@ function getAuthType() {
     .build();
 }
 
-// https://devsite.googleplex.com/datastudio/connector/reference#getconfig
+// https://developers.google.com/datastudio/connector/reference#getconfig
 function getConfig(request) {
   var config = cc.getConfig();
 
@@ -166,13 +166,13 @@ function getFields() {
   return fields;
 }
 
-// https://devsite.googleplex.com/datastudio/connector/reference#getschema
+// https://developers.google.com/datastudio/connector/reference#getschema
 function getSchema(request) {
   validateConfig(request.configParams);
   return {schema: getFields().build()};
 }
 
-// https://devsite.googleplex.com/datastudio/connector/reference#getdata
+// https://developers.google.com/datastudio/connector/reference#getdata
 function getData(request) {
   var config = request.configParams;
   validateConfig(config);

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["es6"],
+    "outDir": "build/",
+    "types": ["google-apps-script"]
+  },
+  "include": [
+    "src/data-studio.d.ts",
+    "src/gkeUsageMetering.ts",
+    "src/main.ts",
+    "src/query.ts"
+  ]
+}

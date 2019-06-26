@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "prettier": "prettier --write '**/*.js' '**/*.json'",
-    "prettier:check": "prettier --check \"**/*.js\"",
-    "lint": "eslint \"**/*.js\" --quiet"
+    "prettier:check": "prettier --check '**/*.js'",
+    "lint": "eslint '**/*.js' --quiet",
+    "fix": "yarn lint --fix && yarn prettier",
+    "travis": "yarn prettier:check && yarn lint"
   },
   "prettier": {
     "singleQuote": true,

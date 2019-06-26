@@ -29,7 +29,6 @@ function Connector(enableLogging) {
     semanticGroup: 'DATE_AND_TIME',
     semanticType: 'YEAR_MONTH_DAY_HOUR'
   };
-
   /** @const */
   this.cloud = new GoogleCloud();
 
@@ -95,8 +94,9 @@ Connector.prototype.getConfig = function(request) {
         type: 'TEXTINPUT',
         displayName: 'Collection',
         helpText:
-          'Select the Firestore collection to use for this Data Source. To use multiple \
-                   collections, create additional Data Sources.'
+          'Select the Firestore collections to use for this Data Source. To use multiple \
+                   collections, separate each collection by comma. Keep in mind that you can \
+                   only have one schema across your collections.'
       },
       {
         type: 'INFO',
@@ -189,14 +189,19 @@ Connector.prototype.getData = function(request) {
 
   // Fetch and filter the requested data from firestore
   const firestore = new Firestore();
-  const data = firestore.getData(
-    project,
-    collection,
-    requestedSchema,
-    numResults
-  );
+  const collections = collection.split(',');
+  var rows = [];
+  collections.forEach(function(collection) {
+    const data = firestore.getData(
+      project,
+      collection,
+      requestedSchema,
+      numResults
+    );
+    rows = rows.concat(data);
+  });
 
-  return {schema: requestedSchema, rows: data};
+  return {schema: requestedSchema, rows: rows};
 };
 
 /**
