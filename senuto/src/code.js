@@ -230,7 +230,6 @@ function getData(request) {
   // Fetch and parse data from API
   var url = [
     'https://api.senuto.com/api/data_studio/visibility_analysis/domain_positions/getPositionsHistoryChartData2?',
-    ,
     'domain=',
     request.configParams.domain,
     '&date_min=2016-03-01',
