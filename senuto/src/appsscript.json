@@ -5,7 +5,7 @@
   "dataStudio": {
     "name": "Senuto",
     "company": "Senuto",
-    "companyUrl": "http://senuto.com/",
+    "companyUrl": "https://senuto.com/",
     "logoUrl": "https://images.senuto.com/img/logo_senuto_small.png",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/senuto/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Senuto%20Connector%20Issue",
