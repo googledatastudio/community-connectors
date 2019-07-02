@@ -4,12 +4,16 @@ var PASSWORD_PROPERTY_PATH = 'dscc.password';
 
 // TODO - implement your credentials validation logic here.
 function validateCredentials(username, password) {
-  var rawResponse = UrlFetchApp.fetch('https://apiv2dev.rankwatch.com/user/profile/json/', {
-    method: 'GET',
-    headers: {
-      'Authorization': 'Basic ' + Utilities.base64Encode(username + ':' + password)
+  var rawResponse = UrlFetchApp.fetch(
+    'https://apiv2dev.rankwatch.com/user/profile/json/',
+    {
+      method: 'GET',
+      headers: {
+        Authorization:
+          'Basic ' + Utilities.base64Encode(username + ':' + password)
+      }
     }
-  });
+  );
   content = JSON.parse(rawResponse);
   return content['errno'] == 0;
 }
@@ -40,14 +44,14 @@ function setCredentials(request) {
   var validCreds = validateCredentials(username, password);
   if (!validCreds) {
     return {
-      errorCode: 'INVALID_CREDENTIALS',
+      errorCode: 'INVALID_CREDENTIALS'
     };
   }
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty(USERNAME_PROPERTY_PATH, username);
   userProperties.setProperty(PASSWORD_PROPERTY_PATH, password);
   return {
-    errorCode: 'NONE',
+    errorCode: 'NONE'
   };
 }
 
