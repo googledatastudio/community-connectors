@@ -251,7 +251,6 @@ function getData(request) {
               values.push(content['data'][k]['p_id'] + ' ');
               break;
             case 'keyword':
-              //Logger.log(content['data'][k]['keyword']);
               values.push(content['data'][k]['keyword']);
               break;
             case 'initial_rank':
