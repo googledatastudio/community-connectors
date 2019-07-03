@@ -77,7 +77,7 @@ function getConfig(request) {
 
 // https://developers.google.com/datastudio/connector/reference#getschema
 function getSchema(request) {
-  s = {
+  var s = {
     schema: [
       {
         name: 'keyword',
@@ -210,27 +210,17 @@ function getData(request) {
   var data = [];
 
   for (var j = 0; j < 10; j++) {
-    var offset = parseInt(500 * j);
+    var offset = 500 * j;
 
     var userProperties = PropertiesService.getUserProperties();
     username = userProperties.getProperty('dscc.username');
     password = userProperties.getProperty('dscc.password');
 
-    var rawResponse = UrlFetchApp.fetch(
-      'https://apiv2dev.rankwatch.com/project/detail/json/p_id/' +
-        request.configParams.projectId +
-        '/s_id/' +
-        request.configParams.sId +
-        '/count/500/offset/' +
-        offset +
-        '/',
-      {
-        method: 'GET',
-        headers: {
-          Authorization:
-            'Basic ' + Utilities.base64Encode(username + ':' + password)
-        }
-      }
+    var rawResponse = requestProjectDetails(
+      request.configParams.projectId,
+      request.configParams.sId,
+      offset,
+      Utilities.base64Encode(username + ':' + password)
     );
 
     var content = JSON.parse(rawResponse.getContentText());
@@ -300,4 +290,22 @@ function getData(request) {
     schema: dataSchema,
     rows: data
   };
+}
+
+function requestProjectDetails(projectId, sId, offset, auth) {
+  return UrlFetchApp.fetch(
+    'https://apiv2dev.rankwatch.com/project/detail/json/p_id/' +
+      projectId +
+      '/s_id/' +
+      sId +
+      '/count/500/offset/' +
+      offset +
+      '/',
+    {
+      method: 'GET',
+      headers: {
+        Authorization: 'Basic ' + auth
+      }
+    }
+  );
 }

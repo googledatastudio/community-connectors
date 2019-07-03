@@ -23,7 +23,6 @@ function getAuthType() {
   return cc
     .newAuthTypeResponse()
     .setAuthType(cc.AuthType.USER_PASS)
-    .setHelpUrl('https://www.example.org/connector-auth-help')
     .build();
 }
 
