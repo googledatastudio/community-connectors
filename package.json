@@ -19,9 +19,9 @@
   },
   "devDependencies": {
     "@google/clasp": "^2.1.0",
-    "@google/dscc-gen": "^2.0.9",
-    "eslint": "^5.16.0",
-    "eslint-config-google": "^0.12.0",
-    "prettier": "^1.17.0"
+    "@google/dscc-gen": "^2.0.13",
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
+    "prettier": "^1.18.2"
   }
 }
