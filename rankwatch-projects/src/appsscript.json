@@ -8,9 +8,9 @@
     "companyUrl": "https://www.rankwatch.com",
     "sources": ["RANKWATCH"],
     "logoUrl": "https://cdnasset.rankwatch.com/image/rankwatch_logo_128.png",
-    "addonUrl": "https://www.rankwatch.com/gds-connector",
-    "supportUrl": "https://www.rankwatch.com/contact-us.html",
-    "description": "This connector will allow you to view latest ranking for keywords added in your project.",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/rankwatch-projects/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Rankwatch%20Projects%20Issue",
+    "description": "View latest ranking for keywords added in your Rankwatch projects.",
     "authType": ["USER_PASS"],
     "forceViewersCredentials": true
   },

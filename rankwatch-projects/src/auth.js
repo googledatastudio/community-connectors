@@ -2,7 +2,6 @@ var cc = DataStudioApp.createCommunityConnector();
 var USERNAME_PROPERTY_PATH = 'dscc.username';
 var PASSWORD_PROPERTY_PATH = 'dscc.password';
 
-// TODO - implement your credentials validation logic here.
 function validateCredentials(username, password) {
   var rawResponse = UrlFetchApp.fetch(
     'https://apiv2dev.rankwatch.com/user/profile/json/',
