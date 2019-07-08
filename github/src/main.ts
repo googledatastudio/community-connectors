@@ -1,7 +1,174 @@
+interface ConfigParams {
+  organization: string;
+  repository: string;
+}
+
+interface Variables {
+  organization: string;
+  repository: string;
+  stars?: boolean;
+  issues?: boolean;
+  star_gazer_pointer?: string;
+  issues_pointer?: string;
+  pull_requests_pointer?: string;
+  title?: boolean;
+  url?: boolean;
+  closed?: boolean;
+  author?: boolean;
+  number?: boolean;
+  labels?: boolean;
+  milestone?: boolean;
+  locked?: boolean;
+  comments?: boolean;
+}
+
+interface PageInfo {
+  endCursor?: string;
+  hasNextPage: boolean;
+}
+
+interface IssueResult {
+  totalCount: number;
+  pageInfo: PageInfo;
+  nodes: Array<{
+    number?: number;
+    title?: string;
+    closed?: boolean;
+    url?: string;
+    author?: {
+      login: string;
+    };
+    labels?: {
+      nodes: Array<{name: string}>;
+    };
+    milestone?: {
+      title: string;
+    };
+    locked?: boolean;
+    comments?: {
+      totalCount: number;
+    };
+  }>;
+}
+interface StarResult {
+  totalCount: number;
+  pageInfo: PageInfo;
+  nodes: {
+    createdAt: string;
+  };
+}
+
+interface QueryResult {
+  data: {
+    organization: {
+      repository: {
+        issues?: IssueResult;
+        pullRequests?: IssueResult;
+        stargazers?: StarResult;
+      };
+    };
+  };
+}
+
+type Group = 'stargazers' | 'issues';
+
 var cc = DataStudioApp.createCommunityConnector();
-var NEXT_URL_PATTERN = /<([^>]+)>; rel="next"/;
-var ISSUES_ENDPOINT = 'issues';
-var STARS_ENDPOINT = 'stargazers';
+var ISSUES = 'issues';
+var STARS = 'stargazers';
+var BASE_QUERY_STRING =
+  '\
+query (\
+$organization: String!,\
+$repository: String!,\
+\
+$stars: Boolean = false, \
+$issues: Boolean = false, \
+\
+$star_gazer_pointer: String, \
+$issues_pointer: String,\
+$pull_requests_pointer: String,\
+\
+$title: Boolean = false, \
+$url: Boolean = false, \
+$closed: Boolean = false,\
+$author: Boolean=false,\
+$number: Boolean=false,\
+$labels: Boolean=false,\
+$milestone: Boolean=false,\
+$locked: Boolean=false,\
+$comments: Boolean=false\
+) {  organization(login: $organization) {\
+repository(name: $repository) {\
+issues(first: 1, after: $issues_pointer) @include(if: $issues) {\
+totalCount\
+pageInfo {\
+endCursor\
+hasNextPage\
+}\
+nodes {\
+number @include(if: $number)\
+title @include(if: $title)\
+closed @include(if: $closed)\
+url @include(if: $url)\
+author @include(if: $author) {\
+login\
+}\
+labels(first: 100) @include(if: $labels) {\
+nodes {\
+name\
+}\
+}\
+milestone @include(if: $milestone) {\
+title\
+}\
+locked @include(if: $locked)\
+comments @include(if: $comments) {\
+totalCount\
+}\
+}\
+}\
+pullRequests(first: 1, after: $pull_requests_pointer) @include(if: $issues) {\
+totalCount\
+pageInfo {\
+endCursor\
+hasNextPage\
+}\
+nodes {\
+number @include(if: $number)\
+title @include(if: $title)\
+closed @include(if: $closed)\
+url @include(if: $url)\
+author @include(if: $author) {\
+login\
+}\
+labels(first: 100) @include(if: $labels) {\
+nodes {\
+name\
+}\
+}\
+milestone @include(if: $milestone) {\
+title\
+}\
+locked @include(if: $locked)\
+comments @include(if: $comments) {\
+totalCount\
+}\
+}\
+}\
+stargazers(first: 1, after: $star_gazer_pointer) @include(if: $stars) {\
+totalCount\
+pageInfo {\
+endCursor\
+hasNextPage\
+}\
+nodes {\
+createdAt\
+}\
+}\
+}\
+}\
+}\
+';
 
 // https://developers.google.com/datastudio/connector/reference#isadminuser
 function isAdminUser() {
@@ -52,7 +219,7 @@ function getFields() {
     .setId('number')
     .setName('Number')
     .setDescription('The issue number.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.TEXT);
 
   fields
@@ -60,7 +227,7 @@ function getFields() {
     .setId('title')
     .setName('Title')
     .setDescription('The title of the issue.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.TEXT);
 
   fields
@@ -68,7 +235,7 @@ function getFields() {
     .setId('open')
     .setName('Is Open')
     .setDescription('True if the issue is open, false otherwise.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.BOOLEAN);
 
   fields
@@ -76,7 +243,7 @@ function getFields() {
     .setId('url')
     .setName('Issue URL')
     .setDescription('The URL of the issue.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.URL);
 
   fields
@@ -84,7 +251,7 @@ function getFields() {
     .setId('reporter')
     .setName('Reporter')
     .setDescription('Issue reporter username.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.TEXT);
 
   fields
@@ -92,7 +259,7 @@ function getFields() {
     .setId('label')
     .setName('Label')
     .setDescription('Issue has this label.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.TEXT);
 
   fields
@@ -100,7 +267,7 @@ function getFields() {
     .setId('milestone')
     .setName('Milestone')
     .setDescription('Issue added to this milestone.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.TEXT);
 
   fields
@@ -108,7 +275,7 @@ function getFields() {
     .setId('locked')
     .setName('Is Locked')
     .setDescription('True if the issue is locked, false otherwise.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.BOOLEAN);
 
   var defaultMetric = fields
@@ -116,7 +283,7 @@ function getFields() {
     .setId('num_comments')
     .setName('Number of Comments')
     .setDescription('Number of commments on the issue.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.NUMBER);
 
   fields
@@ -124,7 +291,7 @@ function getFields() {
     .setId('is_pull_request')
     .setName('Is Pull Request')
     .setDescription('True if this issue is a Pull Request, false otherwise.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.BOOLEAN);
 
   fields
@@ -132,7 +299,7 @@ function getFields() {
     .setId('created_at')
     .setName('Creation Time')
     .setDescription('The time this issue was created.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.YEAR_MONTH_DAY_HOUR);
 
   fields
@@ -140,7 +307,7 @@ function getFields() {
     .setId('closed_at')
     .setName('Close Time')
     .setDescription('The time this issue was closed.')
-    .setGroup(ISSUES_ENDPOINT)
+    .setGroup(ISSUES)
     .setType(types.YEAR_MONTH_DAY_HOUR);
 
   // Stars
@@ -149,7 +316,7 @@ function getFields() {
     .setId('starred_at')
     .setName('Starred Date')
     .setDescription('The date the star was given.')
-    .setGroup(STARS_ENDPOINT)
+    .setGroup(STARS)
     .setType(types.YEAR_MONTH_DAY_HOUR);
 
   fields
@@ -157,7 +324,7 @@ function getFields() {
     .setId('stars')
     .setName('Stars')
     .setDescription('The number of stars')
-    .setGroup(STARS_ENDPOINT)
+    .setGroup(STARS)
     .setType(types.NUMBER);
 
   fields.setDefaultDimension(defaultDimension.getId());
@@ -172,6 +339,100 @@ function getSchema(request) {
   return {schema: getFields().build()};
 }
 
+function getGroup(requestedFields) {
+  return requestedFields.asArray().reduce(function(group, field) {
+    if (!group) {
+      return field.getGroup();
+    }
+    if (group !== field.getGroup()) {
+      cc.newUserError()
+        .setText(
+          'You can only choose fields in the same group. You chose fields from "' +
+            group +
+            '" and "' +
+            field.getGroup() +
+            '"'
+        )
+        .throwException();
+    }
+    return group;
+  }, undefined);
+}
+
+function getVariables(
+  group: Group,
+  configParams: ConfigParams,
+  // TODO - not sure what to do type-wise here.
+  requestedFields: any
+): Variables {
+  var variables = configParams;
+  variables[group] = true;
+  return requestedFields
+    .asArray()
+    .reduce(function(variables: Variables, field) {
+      variables[field.getId()] = true;
+      return variables;
+    }, variables);
+}
+
+// variables will include pagination.
+function getPage(variables: Variables): QueryResult {
+  var payload = {
+    query: BASE_QUERY_STRING,
+    variables: variables
+  };
+  var options = {
+    method: 'POST',
+    contentType: 'application/json',
+    payload: JSON.stringify(payload),
+    headers: {
+      Accept: 'application/vnd.github.v3.star+json',
+      Authorization: 'token ' + getOAuthService().getAccessToken()
+    }
+  };
+  return JSON.parse(
+    UrlFetchApp.fetch('https://api.github.com/graphql', options)
+  );
+}
+
+function graphqlFetch(variables: Variables): QueryResult[] {
+  var hasNextPage = true;
+  var maxPages = 10;
+  var currentPage = 0;
+  var data: QueryResult[] = [];
+  while (hasNextPage && currentPage < maxPages) {
+    currentPage++;
+    var response = getPage(variables);
+
+    var starData = response.data.organization.repository.stargazers;
+    if (starData !== undefined) {
+      hasNextPage = starData.pageInfo.hasNextPage;
+      variables.star_gazer_pointer = starData.pageInfo.endCursor;
+    }
+
+    var issueData = response.data.organization.repository.issues;
+    if (issueData !== undefined) {
+      hasNextPage = issueData.pageInfo.hasNextPage;
+      variables.issues_pointer = issueData.pageInfo.endCursor;
+      if (variables.issues_pointer === null) {
+        // Stop requesting issues once the pointer is explicitly null.
+        variables.issues = false;
+      }
+    }
+
+    var pullRequestData = response.data.organization.repository.pullRequests;
+    if (pullRequestData !== undefined) {
+      hasNextPage = pullRequestData.pageInfo.hasNextPage;
+      variables.pull_requests_pointer = pullRequestData.pageInfo.endCursor;
+      if (variables.issues_pointer === null) {
+        variables.issues = false;
+      }
+    }
+    data.push(response);
+  }
+  return data;
+}
+
 // https://developers.google.com/datastudio/connector/reference#getdata
 function getData(request) {
   var config = request.configParams;
@@ -183,37 +444,18 @@ function getData(request) {
     })
   );
 
-  var endpoint = requestedFields.asArray().reduce(function(endpoint, field) {
-    if (!endpoint) {
-      return field.getGroup();
+  var group = getGroup(requestedFields);
+  var variables = getVariables(group, request.configParams, requestedFields);
+  var graphqlData = graphqlFetch(variables);
+  switch (group) {
+    case ISSUES: {
+      // Parse the data as issues
     }
-    if (endpoint !== field.getGroup()) {
-      cc.newUserError()
-        .setText(
-          'You can only choose fields in the same group. You chose fields from "' +
-            endpoint +
-            '" and "' +
-            field.getGroup() +
-            '"'
-        )
-        .throwException();
+    case STARS: {
+      // Parse the data as stars
     }
-    return endpoint;
-  }, undefined);
-
-  config.endpoint = endpoint;
-
-  switch (endpoint) {
-    case ISSUES_ENDPOINT:
-      return getDataIssue(request, config, requestedFields);
-    case STARS_ENDPOINT:
-      return getDataStars(request, config, requestedFields);
-    default:
-      return cc
-        .newUserError()
-        .setText('Fields from group: "' + endpoint + '" are not supported.')
-        .throwException();
   }
+  return;
 }
 
 function parseStarRow(requestedFields, star) {
