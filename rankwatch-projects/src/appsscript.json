@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "libraries": []
+  },
+  "dataStudio": {
+    "name": "Project Connector By RankWatch",
+    "company": "RankWatch",
+    "companyUrl": "https://www.rankwatch.com",
+    "sources": ["RANKWATCH"],
+    "logoUrl": "https://cdnasset.rankwatch.com/image/rankwatch_logo_128.png",
+    "addonUrl": "https://www.rankwatch.com/gds-connector",
+    "supportUrl": "https://www.rankwatch.com/contact-us.html",
+    "description": "This connector will allow you to view latest ranking for keywords added in your project.",
+    "authType": ["USER_PASS"],
+    "forceViewersCredentials": true
+  },
+  "urlFetchWhitelist": [
+    "https://apiv2dev.rankwatch.com/user/profile/json/",
+    "https://apiv2dev.rankwatch.com/project/list/json/",
+    "https://apiv2dev.rankwatch.com/project/detail/json/"
+  ]
+}
