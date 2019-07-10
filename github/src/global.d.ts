@@ -28,7 +28,7 @@ interface DefaultConfigParams {
 }
 interface GetDataRequest<T> {
   configParams?: T;
-  scriptParams: {
+  scriptParams?: {
     sampleExtraction: boolean;
     lastRefresh: string;
   };
