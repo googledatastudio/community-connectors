@@ -4,7 +4,7 @@
     "latest": "AKfycbzjN8qxLV_tUlu3hr3qP8ftmf-wHqPV1ybCOd-YXf0"
   },
   "scripts": {
-    "prettier": "prettier --write \"src/**/*.js\"",
+    "prettier": "prettier --write 'src/**/*.{js,ts}'",
     "push": "dscc-scripts connector push_changes",
     "watch": "dscc-scripts connector watch_changes",
     "open": "dscc-scripts connector open_script",
@@ -16,6 +16,8 @@
   "devDependencies": {
     "@google/clasp": "^2.1.0",
     "@google/dscc-scripts": "^1.0.0",
+    "@types/google-apps-script": "^0.0.54",
+    "@types/google-apps-script-oauth2": "^24.0.1",
     "prettier": "^1.16.4"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "types": ["google-apps-script", "google-apps-script-oauth2"]
+  }
+}

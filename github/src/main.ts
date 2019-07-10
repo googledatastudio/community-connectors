@@ -1,4 +1,4 @@
-interface ConfigParams {
+interface GHConfigParams {
   organization: string;
   repository: string;
 }
@@ -20,6 +20,8 @@ interface Variables {
   milestone?: boolean;
   locked?: boolean;
   comments?: boolean;
+  created_at?: boolean;
+  closed_at?: boolean;
 }
 
 interface PageInfo {
@@ -31,6 +33,7 @@ interface IssueResult {
   totalCount: number;
   pageInfo: PageInfo;
   nodes: Array<{
+    is_pull_request?: boolean;
     number?: number;
     title?: string;
     closed?: boolean;
@@ -48,14 +51,16 @@ interface IssueResult {
     comments?: {
       totalCount: number;
     };
+    created_at?: string;
+    closed_at?: string;
   }>;
 }
 interface StarResult {
   totalCount: number;
   pageInfo: PageInfo;
-  nodes: {
+  nodes: Array<{
     createdAt: string;
-  };
+  }>;
 }
 
 interface QueryResult {
@@ -75,100 +80,103 @@ type Group = 'stargazers' | 'issues';
 var cc = DataStudioApp.createCommunityConnector();
 var ISSUES = 'issues';
 var STARS = 'stargazers';
-var BASE_QUERY_STRING =
-  '\
-query (\
-$organization: String!,\
-$repository: String!,\
-\
-$stars: Boolean = false, \
-$issues: Boolean = false, \
-\
-$star_gazer_pointer: String, \
-$issues_pointer: String,\
-$pull_requests_pointer: String,\
-\
-$title: Boolean = false, \
-$url: Boolean = false, \
-$closed: Boolean = false,\
-$author: Boolean=false,\
-$number: Boolean=false,\
-$labels: Boolean=false,\
-$milestone: Boolean=false,\
-$locked: Boolean=false,\
-$comments: Boolean=false\
-) {  organization(login: $organization) {\
-repository(name: $repository) {\
-issues(first: 1, after: $issues_pointer) @include(if: $issues) {\
-totalCount\
-pageInfo {\
-endCursor\
-hasNextPage\
-}\
-nodes {\
-number @include(if: $number)\
-title @include(if: $title)\
-closed @include(if: $closed)\
-url @include(if: $url)\
-author @include(if: $author) {\
-login\
-}\
-labels(first: 100) @include(if: $labels) {\
-nodes {\
-name\
-}\
-}\
-milestone @include(if: $milestone) {\
-title\
-}\
-locked @include(if: $locked)\
-comments @include(if: $comments) {\
-totalCount\
-}\
-}\
-}\
-pullRequests(first: 1, after: $pull_requests_pointer) @include(if: $issues) {\
-totalCount\
-pageInfo {\
-endCursor\
-hasNextPage\
-}\
-nodes {\
-number @include(if: $number)\
-title @include(if: $title)\
-closed @include(if: $closed)\
-url @include(if: $url)\
-author @include(if: $author) {\
-login\
-}\
-labels(first: 100) @include(if: $labels) {\
-nodes {\
-name\
-}\
-}\
-milestone @include(if: $milestone) {\
-title\
-}\
-locked @include(if: $locked)\
-comments @include(if: $comments) {\
-totalCount\
-}\
-}\
-}\
-stargazers(first: 1, after: $star_gazer_pointer) @include(if: $stars) {\
-totalCount\
-pageInfo {\
-endCursor\
-hasNextPage\
-}\
-nodes {\
-createdAt\
-}\
-}\
-}\
-}\
-}\
-';
+var BASE_QUERY_STRING = `
+query (
+$organization: String!,
+$repository: String!,
+$stars: Boolean = false,
+$issues: Boolean = false,
+$star_gazer_pointer: String,
+$issues_pointer: String,
+$pull_requests_pointer: String,
+$title: Boolean = false,
+$url: Boolean = false,
+$closed: Boolean = false,
+$author: Boolean = false,
+$number: Boolean = false,
+$labels: Boolean = false,
+$milestone: Boolean = false,
+$locked: Boolean = false,
+$comments: Boolean = false,
+$created_at: Boolean = false,
+$closed_at: Boolean = false
+) {
+  organization(login: $organization) {
+    repository(name: $repository) {
+      issues(first: 1, after: $issues_pointer) @include(if: $issues) {
+        totalCount
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        nodes {
+          number @include(if: $number)
+          title @include(if: $title)
+          closed @include(if: $closed)
+          url @include(if: $url)
+          createdAt @include(if: $created_at)
+          closedAt @include(if: $closed_at)
+          author @include(if: $author) {
+            login
+          }
+          labels(first: 100) @include(if: $labels) {
+            nodes {
+              name
+            }
+          }
+          milestone @include(if: $milestone) {
+            title
+          }
+          locked @include(if: $locked)
+          comments @include(if: $comments) {
+            totalCount
+          }
+        }
+      }
+      pullRequests(first: 1, after: $pull_requests_pointer) @include(if: $issues) {
+        totalCount
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        nodes {
+          number @include(if: $number)
+          title @include(if: $title)
+          closed @include(if: $closed)
+          url @include(if: $url)
+          createdAt @include(if: $created_at)
+          closedAt @include(if: $closed_at)
+          author @include(if: $author) {
+            login
+          }
+          labels(first: 100) @include(if: $labels) {
+            nodes {
+              name
+            }
+          }
+          milestone @include(if: $milestone) {
+            title
+          }
+          locked @include(if: $locked)
+          comments @include(if: $comments) {
+            totalCount
+          }
+        }
+      }
+      stargazers(first: 100, after: $star_gazer_pointer) @include(if: $stars) {
+        totalCount
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        nodes {
+          createdAt
+        }
+      }
+    }
+  }
+}
+`;
 
 // https://developers.google.com/datastudio/connector/reference#isadminuser
 function isAdminUser() {
@@ -184,7 +192,7 @@ function getAuthType() {
 }
 
 // https://developers.google.com/datastudio/connector/reference#getconfig
-function getConfig(request) {
+const getConfig: GetConfig = (request) => {
   var config = cc.getConfig();
 
   config
@@ -206,12 +214,11 @@ function getConfig(request) {
     .setAllowOverride(true);
 
   return config.build();
-}
+};
 
-function getFields() {
+const getFields: GetFields = () => {
   var fields = cc.getFields();
   var types = cc.FieldType;
-  var aggregations = cc.AggregationType;
 
   // Issues
   var defaultDimension = fields
@@ -331,58 +338,57 @@ function getFields() {
   fields.setDefaultMetric(defaultMetric.getId());
 
   return fields;
-}
+};
 
 // https://developers.google.com/datastudio/connector/reference#getschema
-function getSchema(request) {
+const getSchema: GetSchema<GHConfigParams> = (request) => {
   validateConfig(request.configParams);
   return {schema: getFields().build()};
-}
+};
 
-function getGroup(requestedFields) {
-  return requestedFields.asArray().reduce(function(group, field) {
+const getGroup = (requestedFields: Fields): Group => {
+  let group = undefined;
+  for (const field of requestedFields.asArray()) {
     if (!group) {
-      return field.getGroup();
-    }
-    if (group !== field.getGroup()) {
+      group = field.getGroup();
+    } else if (group !== field.getGroup()) {
       cc.newUserError()
         .setText(
-          'You can only choose fields in the same group. You chose fields from "' +
-            group +
-            '" and "' +
-            field.getGroup() +
-            '"'
+          `You can only choose fields in the same group. You chose fields from "${group}" and "${field.getGroup()}"`
         )
         .throwException();
     }
+  }
+  if (group === 'stargazers' || group === 'issues') {
     return group;
-  }, undefined);
-}
+  } else {
+    cc.newUserError()
+      .setText(`Group: ${group} is not supported`)
+      .throwException();
+  }
+};
 
-function getVariables(
+const getVariables = (
   group: Group,
-  configParams: ConfigParams,
-  // TODO - not sure what to do type-wise here.
-  requestedFields: any
-): Variables {
+  configParams: GHConfigParams,
+  requestedFields: Fields
+): Variables => {
   var variables = configParams;
   variables[group] = true;
-  return requestedFields
-    .asArray()
-    .reduce(function(variables: Variables, field) {
-      variables[field.getId()] = true;
-      return variables;
-    }, variables);
-}
+  for (const field of requestedFields.asArray()) {
+    variables[field.getId()] = true;
+  }
+  return variables;
+};
 
 // variables will include pagination.
-function getPage(variables: Variables): QueryResult {
+const getPage = (variables: Variables): QueryResult => {
   var payload = {
     query: BASE_QUERY_STRING,
     variables: variables
   };
-  var options = {
-    method: 'POST',
+  var options: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
+    method: 'post',
     contentType: 'application/json',
     payload: JSON.stringify(payload),
     headers: {
@@ -391,11 +397,14 @@ function getPage(variables: Variables): QueryResult {
     }
   };
   return JSON.parse(
-    UrlFetchApp.fetch('https://api.github.com/graphql', options)
+    UrlFetchApp.fetch(
+      'https://api.github.com/graphql',
+      options
+    ).getContentText()
   );
-}
+};
 
-function graphqlFetch(variables: Variables): QueryResult[] {
+const graphqlFetch = (variables: Variables): QueryResult[] => {
   var hasNextPage = true;
   var maxPages = 10;
   var currentPage = 0;
@@ -422,6 +431,10 @@ function graphqlFetch(variables: Variables): QueryResult[] {
 
     var pullRequestData = response.data.organization.repository.pullRequests;
     if (pullRequestData !== undefined) {
+      // Manually add this this is a pull request.
+      response.data.organization.repository.pullRequests.nodes.forEach((pr) => {
+        pr.is_pull_request = true;
+      });
       hasNextPage = pullRequestData.pageInfo.hasNextPage;
       variables.pull_requests_pointer = pullRequestData.pageInfo.endCursor;
       if (variables.issues_pointer === null) {
@@ -431,14 +444,134 @@ function graphqlFetch(variables: Variables): QueryResult[] {
     data.push(response);
   }
   return data;
-}
+};
+
+const issueResultsToGetDataRows = (
+  issueResults: IssueResult[],
+  requestedFields: Fields
+): GetDataRows => {
+  let rows: GetDataRows = [];
+  for (const issueResult of issueResults) {
+    rows = rows.concat(
+      issueResult.nodes.map((issue) => {
+        var row: GetDataRowValue[] = requestedFields
+          .asArray()
+          .map((requestedField) => {
+            switch (requestedField.getId()) {
+              case 'open':
+                return !issue.closed;
+              case 'reporter':
+                return issue.author.login;
+              case 'num_comments':
+                return issue.comments.totalCount;
+              case 'is_pull_request':
+                return issue.is_pull_request !== undefined;
+              case 'created_at':
+                return formatDate(issue.created_at);
+              case 'closed_at':
+                return formatDate(issue.closed_at);
+              case 'url':
+                return issue.url;
+              case 'number':
+                return '' + issue.number;
+              case 'locked':
+                return issue.locked;
+              case 'title':
+                return issue.title;
+              case 'label':
+                return issue.labels.nodes.map((label) => label.name).join(', ');
+              case 'milestone':
+                return issue.milestone.title;
+              default:
+                return cc
+                  .newUserError()
+                  .setDebugText(
+                    'Field "' +
+                      requestedField.getId() +
+                      '" has not been accounted for in code yet.'
+                  )
+                  .setText('You cannot use ' + requestedField.getId() + ' yet.')
+                  .throwException();
+            }
+          });
+        const result: GetDataRow = {values: row};
+        return result;
+      })
+    );
+  }
+  return rows;
+};
+
+const starResultsToGetDataRows = (
+  starResults: StarResult[],
+  requestedFields: Fields
+): GetDataRows => {
+  let rows: GetDataRows = [];
+  for (const starResult of starResults) {
+    rows = rows.concat(
+      starResult.nodes.map((stars) => {
+        var row = requestedFields.asArray().map((requestedField) => {
+          switch (requestedField.getId()) {
+            case 'stars':
+              return 1;
+            case 'starred_at':
+              return formatDate(stars.createdAt);
+            default:
+              return null;
+          }
+        });
+        const result: GetDataRow = {values: row};
+        return result;
+      })
+    );
+  }
+  return rows;
+};
+
+const toGetDataRows = (
+  queryResults: QueryResult[],
+  requestedFields: Fields
+): GetDataRows => {
+  if (queryResults.length === 0) {
+    return [];
+  }
+  if (queryResults[0].data.organization.repository.stargazers !== undefined) {
+    let starResults: StarResult[] = [];
+    for (const queryResult of queryResults) {
+      const stargazers = queryResult.data.organization.repository.stargazers;
+      if (stargazers) {
+        starResults = starResults.concat(stargazers);
+      }
+    }
+    return starResultsToGetDataRows(starResults, requestedFields);
+  }
+  if (
+    queryResults[0].data.organization.repository.issues !== undefined ||
+    queryResults[0].data.organization.repository.pullRequests !== undefined
+  ) {
+    let issueResults: IssueResult[] = [];
+    for (const queryResult of queryResults) {
+      const issueResult = queryResult.data.organization.repository.issues;
+      if (issueResults) {
+        issueResults = issueResults.concat([issueResult]);
+      }
+      const pullRequests =
+        queryResult.data.organization.repository.pullRequests;
+      if (pullRequests) {
+        issueResults = issueResults.concat([pullRequests]);
+      }
+    }
+    return issueResultsToGetDataRows(issueResults, requestedFields);
+  }
+  return [];
+};
 
 // https://developers.google.com/datastudio/connector/reference#getdata
-function getData(request) {
+const getData: GetData<GHConfigParams> = (request) => {
   var config = request.configParams;
   validateConfig(config);
 
-  var requestedFields = getFields().forIds(
+  var requestedFields: Fields = getFields().forIds(
     request.fields.map(function(field) {
       return field.name;
     })
@@ -446,153 +579,15 @@ function getData(request) {
 
   var group = getGroup(requestedFields);
   var variables = getVariables(group, request.configParams, requestedFields);
-  var graphqlData = graphqlFetch(variables);
-  switch (group) {
-    case ISSUES: {
-      // Parse the data as issues
-    }
-    case STARS: {
-      // Parse the data as stars
-    }
-  }
-  return;
-}
-
-function parseStarRow(requestedFields, star) {
-  var row = requestedFields.asArray().map(function(requestedField) {
-    switch (requestedField.getId()) {
-      case 'stars':
-        return 1;
-      case 'starred_at':
-        return formatDate(star.starred_at);
-      default:
-        return cc
-          .newUserError()
-          .setDebugText(
-            'Field "' +
-              requestedField.getId() +
-              '" has not been accounted for in code yet.'
-          )
-          .setText('You cannot use ' + requestedField.getId() + ' yet.')
-          .throwException();
-    }
-  });
-  return {values: row};
-}
-
-function getDataStars(request, config, requestedFields) {
-  var fetchOptions = {
-    headers: {
-      Accept: 'application/vnd.github.v3.star+json',
-      Authorization: 'token ' + getOAuthService().getAccessToken()
-    }
-  };
-  var rows = [];
-  config.query = {
-    per_page: 100
-  };
-  var url = getUrl(config);
-  while (url) {
-    var response = UrlFetchApp.fetch(url, fetchOptions);
-    var parsedResponse = JSON.parse(response);
-    parsedResponse.forEach(function(issue) {
-      rows.push(parseStarRow(requestedFields, issue));
-    });
-    // do something with the response.
-    url = getNextUrl(response);
-  }
-
-  var response = {
+  var queryResults = graphqlFetch(variables);
+  var parsed = toGetDataRows(queryResults, requestedFields);
+  return {
     schema: requestedFields.build(),
-    rows: rows
+    rows: parsed
   };
-  return response;
-}
+};
 
-function parseIssueRow(requestedFields, issue) {
-  var row = requestedFields.asArray().map(function(requestedField) {
-    switch (requestedField.getId()) {
-      case 'open':
-        return issue.state === 'open';
-      case 'reporter':
-        return issue.user.login;
-      case 'num_comments':
-        return issue.comments;
-      case 'is_pull_request':
-        return issue.pull_request !== undefined;
-      case 'created_at':
-        return formatDate(issue.created_at);
-      case 'closed_at':
-        return formatDate(issue.closed_at);
-      case 'url':
-        return issue.html_url;
-      case 'number':
-        return '' + issue.number;
-      case 'locked':
-        return issue.locked;
-      case 'title':
-        return issue.title;
-      case 'label':
-        return issue.label;
-      case 'milestone':
-        return issue.milestone;
-      default:
-        return cc
-          .newUserError()
-          .setDebugText(
-            'Field "' +
-              requestedField.getId() +
-              '" has not been accounted for in code yet.'
-          )
-          .setText('You cannot use ' + requestedField.getId() + ' yet.')
-          .throwException();
-    }
-  });
-  return {values: row};
-}
-
-function getDataIssue(request, config, requestedFields) {
-  var fetchOptions = {
-    headers: {
-      Accept: 'application/vnd.github.v3.full+json',
-      Authorization: 'token ' + getOAuthService().getAccessToken()
-    }
-  };
-  var rows = [];
-  config.query = {state: 'all', per_page: 100};
-  var url = getUrl(config);
-  while (url) {
-    var response = UrlFetchApp.fetch(url, fetchOptions);
-    var parsedResponse = JSON.parse(response);
-    parsedResponse.forEach(function(issue) {
-      rows.push(parseIssueRow(requestedFields, issue));
-    });
-    // do something with the response.
-    url = getNextUrl(response);
-  }
-
-  var response = {
-    schema: requestedFields.build(),
-    rows: rows
-  };
-  return response;
-}
-
-function getUrl(config) {
-  var organization = config.organization;
-  var repository = config.repository;
-  var endpoint = config.endpoint;
-  var query = config.query;
-
-  var path = [organization, repository, endpoint]
-    .map(encodeURIComponent)
-    .join('/');
-
-  return 'https://api.github.com/repos/' + path + encodeQuery(query);
-}
-
-function validateConfig(config) {
-  var config = config || {};
+const validateConfig = (config: GHConfigParams): boolean => {
   if (!config.organization) {
     cc.newUserError()
       .setText('Organization cannot be left blank.')
@@ -604,45 +599,10 @@ function validateConfig(config) {
       .throwException();
   }
   return true;
-}
+};
 
-function getNextUrl(response) {
-  var headers = response.getAllHeaders();
-  var linkHeaders = headers['Link'] || [];
-  if (typeof linkHeaders === 'string') {
-    linkHeaders = [linkHeaders];
-  }
-  for (var j = 0; j < linkHeaders.length; j++) {
-    var link = linkHeaders[j];
-    if (!link) continue;
-    var match = link.match(NEXT_URL_PATTERN);
-    if (!match) continue;
-    return match[1];
-  }
-  return null;
-}
-
-function encodeQuery(queryParams) {
-  if (!queryParams) return '';
-
-  var query = Object.keys(queryParams)
-    .map(function(key) {
-      return (
-        encodeURIComponent(key) + '=' + encodeURIComponent(queryParams[key])
-      );
-    })
-    .join('&');
-
-  return query === '' ? '' : '?' + query;
-}
-
-function formatDate(date) {
-  return !date
-    ? null
-    : date instanceof Date
-    ? formatDate(date.toISOString())
-    : date.slice(0, 4) +
-      date.slice(5, 7) +
-      date.slice(8, 10) +
-      date.slice(11, 13);
-}
+const formatDate = (date: string): string => {
+  return (
+    date.slice(0, 4) + date.slice(5, 7) + date.slice(8, 10) + date.slice(11, 13)
+  );
+};
