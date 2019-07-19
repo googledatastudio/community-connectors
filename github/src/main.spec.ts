@@ -1,4 +1,15 @@
 function runTests() {
+  runTest(getDataTest, 'Can run getData', 'getDataTest failed');
+  runTest(
+    getDataTest_justNumber,
+    'Can run getData_justNumber',
+    'getDataTest_justNumber failed'
+  );
+  runTest(
+    getDataTest_starsStuff,
+    'Can run getData_starsStuff',
+    'getData_starsStuff failed'
+  );
   runTest(
     getVariablesSameGroupTest,
     'Sets variables correctly',
@@ -14,13 +25,6 @@ function runTests() {
     'Can get all issues',
     'issueGraphqlFetchTest failed'
   );
-  // runTest(getDataTest, 'Can run getData', 'getDataTest failed');
-  // runTest(
-  //   getDataTest_justNumber,
-  //   'Can run getData',
-  //   'getDataTest_justNumber failed'
-  // );
-  runTest(getDataTest_starsStuff, 'Can get stars', 'getDataTest failed');
 }
 
 const runTest = (
@@ -104,7 +108,6 @@ const getDataTest_starsStuff = (): boolean => {
     configParams: {organization: 'googledatastudio', repository: 'dscc-gen'}
   };
   const actual = Connector.getData(request);
-  Logger.log(actual);
   return (
     actual.rows.length > 0 &&
     actual.schema.length > 0 &&

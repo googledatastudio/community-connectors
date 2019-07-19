@@ -221,6 +221,12 @@ login
     var fields = cc.getFields();
     var types = cc.FieldType;
 
+    // cc.getFields() returns a Singleton, simply return it since this has
+    // already run.
+    if (fields.getFieldById('number') !== null) {
+      return fields;
+    }
+
     // Issues
     var defaultDimension = fields
       .newDimension()
