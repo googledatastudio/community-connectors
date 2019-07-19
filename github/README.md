@@ -45,7 +45,7 @@ complete the connector setup.
   `YOUR_SCRIPT_ID` with the value you noted in step #1.**
 
 1. Click `Register application`.
-1. Visit [Apps Script][appsscript] and open your GitHub connector Apps Script
+1. Visit [Apps Script] and open your GitHub connector Apps Script
    project. Click on **File** -> **Project Properties** ->
    **Script Properties**.
 1. Add the following key-value pairs as script properties:
