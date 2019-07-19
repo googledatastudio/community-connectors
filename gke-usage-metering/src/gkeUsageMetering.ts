@@ -134,7 +134,10 @@ namespace gkeUsageMetering {
         .setText('The resource usage dataset ID is not specified')
         .throwException();
     }
-    if (fullResourceUsageDataset.indexOf('.') < 0) {
+    // fullResourceUsageDataset should be in the format of ${PROJECT_ID}.${DATASET_ID}.
+    // GCP project ID can contain letters, numbers, single quotes, hyphens, spaces or
+    // exclamation points; BigQuery dataset IDs can contain letters, numbers and underscores
+    if (!fullResourceUsageDataset.match(/^[a-z][a-z-\d]{5,29}\.[a-zA-Z_\d]{1,1024}$/)) {
       return connector
         .newUserError()
         .setText('Invalid resource usage dataset ID: dataset ID must be in the format of \"${PROJECT_ID}.${DATASET_ID}\}"')
@@ -148,7 +151,9 @@ namespace gkeUsageMetering {
         .setText('The GCP billing table ID is not specified')
         .throwException();
     }
-    if ((fullBillingTable.match(/\./g) || []).length != 2) {
+    // fullBillingTable should be in the format of ${PROJECT_ID}.${DATASET_ID}.${TABLE_ID}.
+    // Bigquery table IDs can contain letters, numbers and underscores.
+    if (!fullBillingTable.match(/^[a-z][a-z-\d]{5,29}\.[a-zA-Z_\d]{1,1024}\.[a-zA-Z_\d]{1,1024}$/)) {
       return connector
         .newUserError()
         .setText('Invalid GCP billing table ID: table ID must be in the format of \"${PROJECT_ID}.${DATASET_ID}.${TABLE_ID}\"')
