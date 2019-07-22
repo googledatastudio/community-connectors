@@ -63,13 +63,6 @@ namespace gkeUsageMetering {
     .setType(types.NUMBER);
 
     fields
-    .newMetric()
-    .setAggregation(aggregations.SUM)
-    .setDescription('The usage amount in pricing unit')
-    .setId('amount_in_pricing_units')
-    .setType(types.NUMBER);
-
-    fields
       .newMetric()
       .setAggregation(aggregations.SUM)
       .setDescription('The allocated cost')
