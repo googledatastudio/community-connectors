@@ -1,17 +1,12 @@
 ## Deploy a Community Connector yourself
 
-1. Visit [Google Apps Script](https://script.google.com/) and create a new
-   project.
-2. You should see a shell project with a blank `myFunction` function in the
-   `Code.gs` file. Delete the `myFunction` function and copy over the contents
-   of the `main.js` file from the repository.
-3. If the repository has any other `.js` or `.gs` file, you will need to create
-   those files in Apps Scripts environment(**File > New > Script File**) and
-   copy over the content.
-4. In the Apps Script development environment, select **View > Show manifest
-   file**. This will create a new `appsscript.json` manifest file. Remove all
-   content from this manifest file and replace it with the content of the
-   `appsscript.json` file in the repository.
-5. To use the Community Connector in Data Studio, follow the [guide on Community
-   Connector Developer
-   site](https://developers.google.com/datastudio/connector/use).
+1.  Visit [Google Apps Script](https://script.google.com/) and create a new
+    project.
+1.  In the Apps Script development environment, select **View > Show manifest
+    file**. Replace the contents of this file with the content of the
+    `src/appsscript.json` file from the repository.
+1.  For every `.js` file under `src`, you will need to create a file in Apps
+    Scripts (**File > New > Script File**), then copy over the content from the
+    repository.
+1.  To use the Community Connector in Data Studio, follow the
+    [guide on Community Connector Developer site](https://developers.google.com/datastudio/connector/use).

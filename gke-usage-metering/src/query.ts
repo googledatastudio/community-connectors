@@ -221,8 +221,7 @@ namespace gkeUsageMetering {
       NULL AS resource_name_with_type_and_unit,
       resource_usage.sku_id,
       FORMAT_TIMESTAMP('%Y%m%d', resource_usage.start_time) AS usage_start_time,
-      resource_usage.amount AS amount,
-      0 AS amount_in_pricing_units,
+      0 AS amount,
       resource_usage.amount * resource_usage.rate AS cost,
       resource_usage.amount_with_untracked * resource_usage.rate AS cost_with_unallocated_untracked,
       "request" AS type
@@ -444,12 +443,11 @@ namespace gkeUsageMetering {
       AS resource_name_with_type_and_unit,
       resource_usage.sku_id,
       FORMAT_TIMESTAMP('%Y%m%d', resource_usage.start_time) AS usage_start_time,
-      resource_usage.amount AS amount,
       CASE
         WHEN resource_name = 'cpu' THEN amount/3600
         WHEN resource_name = 'memory' THEN amount/(3600*POW(2,30))
       END
-      AS amount_in_pricing_units,
+      AS amount,
       resource_usage.amount * resource_usage.rate AS cost,
       resource_usage.amount_with_untracked * resource_usage.rate AS cost_with_unallocated_untracked,
       "request" AS type
@@ -518,12 +516,11 @@ namespace gkeUsageMetering {
             AS resource_name_with_type_and_unit,
             filtered_resource_usage.sku_id,
             FORMAT_TIMESTAMP('%Y%m%d', filtered_resource_usage.start_time) AS usage_start_time,
-            filtered_resource_usage.amount AS amount,
             CASE
               WHEN resource_name = 'cpu' THEN amount/3600
               WHEN resource_name = 'memory' THEN amount/(3600*POW(2,30))
               END
-            AS amount_in_pricing_units,
+            AS amount,
             filtered_resource_usage.amount * filtered_resource_usage.rate AS cost,
             0 AS cost_with_unallocated_untracked,
             "consumption" AS type
