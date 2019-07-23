@@ -1,36 +1,50 @@
 # AWS Athena Connector for Data Studio
 
-![](./example.png)
-
 *This is not an official Google product*
 
-This [Data Studio](https://datastudio.google.com)
-[Community Connector](https://developers.google.com/datastudio/connector) lets
-users query data from AWS S3 Buckets directly.
+This [Data Studio] [Community Connector] lets you query data directly from AWS S3 Buckets.
 
-The connector is using [AWS Athena](https://aws.amazon.com/athena/) for
-underlying queries.
+The connector uses [AWS Athena] for underlying
+queries.
 
-## Try the Community Connector in Data Studio
+![](./example.png)
 
-### Notes
+## Set up the Community Connector for personal use
 
-This example is running in the `us-west-2` region.
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script.
 
-### Create IAM User
+### Deploy the connector
+Follow the [deployment guide] to deploy the Community Connector.
 
-Create an [IAM User](https://console.aws.amazon.com/iam/home) with
-**programmatic access**.
+## Using the connector in Data Studio
 
-Attach managed policies `AmazonAthenaFullAccess` and `AmazonS3ReadOnlyAccess` to
-this user.
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
 
-Remember the user's access key and secret.
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
 
-### Create Athena Table
+### Usage example with sample data
 
-Visit the [Athena Console](https://us-west-2.console.aws.amazon.com/athena/home)
-and create a sample table:
+The following steps walk through an example of using the connector to query
+sample data. **Note**: This example uses sample data located in the `us-west-2`
+region.
+
+#### 1. Create IAM User
+
+Create an [IAM User] with **programmatic access**.
+
+Attach managed policies `AmazonAthenaFullAccess` and `AmazonS3ReadOnlyAccess`
+to this user.
+
+Note the user's access key and secret; you'll need it later.
+
+#### 2. Create Athena Table
+
+Visit the [Athena Console] and create a sample table using the following
+statement:
 
 ```
 CREATE EXTERNAL TABLE IF NOT EXISTS cloudfront_logs (
@@ -53,32 +67,47 @@ CREATE EXTERNAL TABLE IF NOT EXISTS cloudfront_logs (
   ) LOCATION 's3://athena-examples-us-west-2/cloudfront/plaintext/';
 ```
 
-You could then try `SELECT * FROM "default"."cloudfront_logs" limit 10;` to
-preview the table.
+You can try `SELECT * FROM "default"."cloudfront_logs" limit 10;` to preview
+the table.
 
-### Setup Connector
+### 3. Create a data source using the connector
 
-In the connector, fill in the values like this:
+Use the connector to create a new data source in Data Studio. Configure the
+connector as follows:
 
 Key                      | Value
 ------------------------ | -----
-`AWS_ACCESS_KEY_ID`      | {KEY}
-`AWS_SECRET_ACCESS_KEY`  | {SECRET}
+`AWS_ACCESS_KEY_ID`      | {KEY} - From step #1.
+`AWS_SECRET_ACCESS_KEY`  | {SECRET} - From Step #1.
 `AWS Region`             | {AWS_REGION}
 `Glue Database Name`     | `default`
 `Glue Table Name`        | `cloudfront_logs`
 `Query Output Location`  | `s3://aws-athena-query-results-{account_id}-us-west-2/data-studio`
 `Date Range Column Name` | `LogDate`
 
-For `Query Output Location`, AWS should have created a S3 bucket to store the
-query results, you could find the bucket name in S3 console.
+For `Query Output Location`, AWS should have created an S3 bucket to store the
+query results, you can find the bucket name in the S3 console. If not, create
+an S3 bucket that starts with the name `aws-athena-query-results-`.
 
-If not, you could create a S3 bucket that starts with the name
-`aws-athena-query-results-` yourself.
+Click **CONNECT** and then create a report to query the sample data. Note that
+the date range for the sample is from `2014-07-05` to `2014-08-05`.
 
-### Create Report
+## Troubleshooting
 
-Data Studio will automatically crawls the table schema.
+### This app isn't verified
 
-You could then try to explore the data. Note that the sample data is ranged from
-`2014-07-05` to `2014-08-05`.
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+[Data Studio]: https://datastudio.google.com
+[Community Connector]: https://developers.google.com/datastudio/connector
+[AWS Athena]: https://aws.amazon.com/athena/
+[deployment guide]: ../deploy.md
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[IAM User]: https://console.aws.amazon.com/iam/home
+[Athena Console]: https://us-west-2.console.aws.amazon.com/athena/home
+[This app isn't verified]: ../verification.md

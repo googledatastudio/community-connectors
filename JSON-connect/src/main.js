@@ -19,6 +19,9 @@
 //
 //  This copyright notice MUST APPEAR in all copies of the script!
 
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prefer-spread */
+
 /**
  * Throws and logs script exceptions.
  *
@@ -298,9 +301,7 @@ function getFields(request, content) {
   try {
     createFields(fields, types, null, content[0], isInline);
   } catch (e) {
-    sendUserError(
-      'Unable to identify the field. Error: \n' + e + '\n' + e.stack
-    );
+    sendUserError('Unable to identify the data format of one of your fields.');
   }
   return fields;
 }
@@ -315,6 +316,35 @@ function getSchema(request) {
   var content = fetchData(request.configParams.url, request.configParams.cache);
   var fields = getFields(request, content).build();
   return {schema: fields};
+}
+
+/**
+ * Performs a deep merge of objects and returns new object. Does not modify
+ * objects (immutable) and merges arrays via concatenation.
+ * Thanks to jhildenbiddle https://stackoverflow.com/users/4903063/jhildenbiddle
+ * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+ *
+ * @param            Objects to merge
+ * @returns {object} New object with merged key/values
+ */
+function mergeDeep() {
+  var objects = Array.prototype.slice.call(arguments);
+
+  return objects.reduce(function(prev, obj) {
+    Object.keys(obj).forEach(function(key) {
+      var pVal = prev[key];
+      var oVal = obj[key];
+
+      if (Array.isArray(pVal) && Array.isArray(oVal)) {
+        prev[key] = pVal.concat.apply(pVal, toConsumableArray(oVal));
+      } else if (pVal === Object(pVal) && oVal === Object(oVal)) {
+        prev[key] = mergeDeep(pVal, oVal);
+      } else {
+        prev[key] = oVal;
+      }
+    });
+    return prev;
+  }, {});
 }
 
 /**
@@ -357,6 +387,38 @@ function validateValue(field, val) {
 }
 
 /**
+ * Returns the (nested) values for requested columns
+ *
+ * @param   {Object} valuePaths       Field name. If nested; field name and parent field name
+ * @param   {Object} row              Current content row
+ * @returns {Mixed}                   The field values for the columns
+ */
+function getColumnValue(valuePaths, row) {
+  for (var index in valuePaths) {
+    var currentPath = valuePaths[index];
+
+    if (row[currentPath] === null) {
+      return '';
+    }
+
+    if (row[currentPath] !== undefined) {
+      row = row[currentPath];
+      continue;
+    }
+    var keys = Object.keys(row);
+
+    for (var index_keys in keys) {
+      var key = keys[index_keys].replace(/\s/g, '_').toLowerCase();
+      if (key == currentPath) {
+        row = row[keys[index_keys]];
+        break;
+      }
+    }
+  }
+  return row;
+}
+
+/**
  * Returns an object containing only the requested columns
  *
  * @param   {Object} content          The content object
@@ -370,31 +432,11 @@ function getColumns(content, requestedFields) {
     var rowValues = [];
 
     requestedFields.asArray().forEach(function(field) {
-      var currentValue = row;
       var valuePaths = field.getId().split('.');
+      var fieldValue = row === null ? '' : getColumnValue(valuePaths, row);
 
-      for (var index in valuePaths) {
-        var currentPath = valuePaths[index];
-
-        if (currentValue[currentPath] !== undefined) {
-          currentValue = currentValue[currentPath];
-          continue;
-        }
-
-        var keys = Object.keys(currentValue);
-
-        for (var index_keys in keys) {
-          var key = keys[index_keys].replace(/\s/g, '_').toLowerCase();
-          if (key == currentPath) {
-            currentValue = currentValue[keys[index_keys]];
-            break;
-          }
-        }
-      }
-
-      rowValues.push(validateValue(field, currentValue));
+      rowValues.push(validateValue(field, fieldValue));
     });
-
     return {values: rowValues};
   });
 }

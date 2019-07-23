@@ -2,16 +2,15 @@
 
 *This is not an official Google product*
 
-This [Data Studio][data studio] [Community Connector][community connector] lets
-you query data about repositories in GitHub.
+This [Data Studio][data studio] [Community Connector][community connector] lets you query data about repositories in GitHub.
 
 ![Data Studio Report using the GitHub Community Connector][github report]
 
-## Setup the Community Connector
+## Set up the Community Connector for personal use
 
-To use this Community Connector, there is a one-time setup to deploy your own
-personal instance of the connector using Apps Script. The GitHub connector
-also requires additional setup in GitHub to configure OAuth.
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script. The
+GitHub connector also requires additional setup in GitHub to configure OAuth.
 
 ### 1. Deploy the connector
 Follow the [deployment guide] to deploy the Community
@@ -55,13 +54,16 @@ complete the connector setup.
   | `OAUTH_CLIENT_ID`     | {YOUR CLIENT ID}     |
   | `OAUTH_CLIENT_SECRET` | {YOUR CLIENT SECRET} |
 
-## Using the connector
+## Using the connector in Data Studio
 
-Follow the [Use a Community Connector] guide to use the connector in Data Studio.
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
 
-**Note**: Once you've used the connector, as long as you do not
+**Note**: After using the connector in Data Studio, as long as you do not
 [revoke access], it will remain listed in the [connector list] for easy access
 when [creating a new data source].
+
+## Troubleshooting
 
 ### This app isn't verified
 
