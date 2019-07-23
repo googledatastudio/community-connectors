@@ -9,9 +9,11 @@
     "forceViewersCredentials": true,
     "logoUrl": "https://cloud.google.com/images/products/logos/container-engine-logo-2x.png",
     "name": "GKE Usage Metering",
+    "privacyPolicyUrl": "https://policies.google.com/privacy",
     "shortDescription": "Connect to GKE usage metering data.",
     "sources": ["GOOGLE_BIGQUERY"],
     "supportUrl": "https://issuetracker.google.com/issues/new?component=187077&template=0",
+    "termsOfServiceUrl": "https://cloud.google.com/terms/",
     "templates": {
       "default": "1g7Z1hjCIkAHmL4QStbWNvuSUe-eQ-vnk"
     },
