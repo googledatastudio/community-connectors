@@ -5,6 +5,8 @@
   "dataStudio": {
     "name": "Senuto",
     "company": "Senuto",
+    "privacyPolicyUrl": "https://www.senuto.com/en/privacy-policy/",
+    "termsOfServiceUrl": "https://www.senuto.com/en/terms-of-use/",    
     "companyUrl": "https://senuto.com/",
     "logoUrl": "https://images.senuto.com/img/logo_senuto_small.png",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/senuto/README.md",
