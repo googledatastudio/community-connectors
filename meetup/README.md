@@ -2,30 +2,36 @@
 
 *This is not an official Google product*
 
-This [Data Studio](https://datastudio.google.com) [Community
-Connector](https://developers.google.com/datastudio/connector) lets users query
-data for Meetups from the [Meetup API](https://secure.meetup.com/meetup_api).
+This [Data Studio] [Community Connector] lets users query data from
+[Meetup].
 
-## Deploy the Community Connector yourself
+This connector uses the [Meetup API].
 
-Use the [deployment guide](../deploy.md) to deploy the Community Connector
-yourself. After following these steps, you will need to add the OAUTH library to
-your script and create an OAUTH consumer through Meetup.com.
+## Set up the Community Connector for personal use
 
-### Add the OAUTH2 library to your Script
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script. The
+connector also requires additional setup in Meetup to configure OAuth.
 
-1.  Follow setup as described in the [AppsScript OAUTH2
-    README](https://github.com/googlesamples/apps-script-oauth2)
+### 1. Deploy the connector
 
-    **Note: You should only do the steps under the "Setup" heading. The rest
-    will be covered in "Meetup OAUTH App" below.**
+Follow the [deployment guide] to deploy the Community Connector.
 
-### Configure Meetup OAUTH App
+Make a note of the Script ID for the connector, you'll need it for the next
+step.
 
-1.  Go to the [Your OAuth Consumers
-    page](https://secure.meetup.com/meetup_api/oauth_consumers/#).
-1.  Click on *Create New Consumer*.
-1.  Complete the form...
+- To find your Script ID, Visit [Apps Script], then click on
+  **File** -> **Project Properties**, and you'll see the id under the **Info**
+  tab.
+
+### 2. Meetup OAuth Configuration
+
+The Meetup connector requires an OAuth 2.0 client. Follow the steps below to
+complete the connector setup.
+
+1.  In Meetup, go to [Your OAuth Consumers page].
+1.  Click **Create New Consumer**.
+1.  Complete the form, use the following table for guidance:
 
     Text Field              | Response
     ----------------------- | --------
@@ -36,31 +42,38 @@ your script and create an OAUTH consumer through Meetup.com.
     **Note: While you can choose your own values for "Consumer Name" and
     "Application Website", you must follow the pattern for the "Redirect URI" in
     the table above**.
-
-    To find your script_id, Visit [Apps Script](https://script.google.com), then
-    click on **File** -> **Project Properties**, and you'll see the id under the
-    **Info** tab.
-
-1.  Agree to the Platform terms of service and click `Register Consumer`.
-
-1.  Visit [Apps Script](https://script.google.com), then click on **File** ->
-    **Project Properties** -> **Script Properties**.
-
-1.  Add the following key-value pairs.
-
+1.  Visit [Apps Script] and open your Meetup connector Apps Script project.
+    Click on **File** -> **Project Properties** -> **Script Properties**.
+    Using the information obtained from Meetup, add the following key-value pairs
+    as script properties:
     Key                   | Value
     --------------------- | --------------------
     `OAUTH_CLIENT_ID`     | {YOUR CLIENT ID}
     `OAUTH_CLIENT_SECRET` | {YOUR CLIENT SECRET}
 
-## Examples and use cases covered in the connector
+## Using the connector in Data Studio
 
--   **Manual Defined Semantics** Example of how you can manually define the
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
+
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
+
+## Troubleshooting
+
+### This app isn't verified
+
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+## Developer examples covered in the connector
+
+-   **Manual Defined Semantics**  Example of how you can manually define the
     semantics for your schema fields.
--   **Caching Through Google Sheets** Example of how you can use Google Sheets
-    as a caching mechanism.
 -   **OAUTH2 Authentication** Example of how to authenticate with 3rd party
-    OAUTH2, in this case, GitHub's OAUTH2 service.
+    OAUTH2, in this case, Meetup's's OAUTH2 service.
 -   **Using Project Properties** Example of how to use Project Properties
     (Specifically Script Properties) to save data needed for script execution.
     Script Properties are useful in situations where values are needed for
@@ -69,6 +82,19 @@ your script and create an OAUTH consumer through Meetup.com.
 -   **Testing Your Connector** Example of how you can use regular javascript
     testing strategies for Community Connectors.
 
-## Testing
+### Testing
 
 To test the connector run `yarn install && yarn test`
+
+[Data Studio]: https://datastudio.google.com
+[Community Connector]: https://developers.google.com/datastudio/connector
+[Meetup]: https://www.meetup.com/
+[Meetup API]: https://secure.meetup.com/meetup_api
+[deployment guide]: ../deploy.md
+[Your OAuth Consumers page]: https://secure.meetup.com/meetup_api/oauth_consumers/#
+[Apps Script]: https://script.google.com
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[This app isn't verified]: ../verification.md
