@@ -1,31 +1,47 @@
-# PageSpeed Insights Community Connector
+# PageSpeed Insights Community Connector for Data Studio
 
-*This is not an official google product*
+*This is not an official Google product*
 
-This [Data Studio] [community connector] lets
-you see the Google [PageSpeed Insights] score for a given
-page on your website.
+This [Data Studio] [Community Connector] lets users query the Google
+[PageSpeed Insights] score for a given page on your website.
 
 This community connector uses the [Google PageSpeed Insights API].
 
-## Try the connector in Data Studio
+## Set up the Community Connector for personal use
 
-You can try out the [managed deployment][production deployment] of the latest
-code.
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script.
 
-### Usage
+### Deploy the connector
 
-1. Get a free api key from google. Visit the [page speed insights tutorial]
-   and click the `get key` button to get your api key.
-1. Paste the key into the credentials box.
+Follow the [deployment guide] to deploy the Community Connector.
 
-## Deploy the connector yourself
+## Using the connector in Data Studio
 
-Use the [deployment guide] to deploy the community connector
-yourself.
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
 
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
 
-## Examples and use cases covered in the connector
+### Authentication: API Key
+
+The connector requires an API Key to authenticate and connect to your account.
+Follow the steps below to obtain a free API key from Google:
+
+1. Visit the [Page Speed Insights Tutorial], click **GET A KEY**.
+1. Paste the key into the credentials box during connector authentication.
+
+## Troubleshooting
+
+### This app isn't verified
+
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+## Developer examples and use cases covered in the connector
 
 - **3rd party key based authentication** This community connector requires the
   use of a third-party 'key' based authentication.
@@ -36,8 +52,9 @@ yourself.
   score, and also returns the configuration which was set by the user as a
   custom dimension.
 
-## Next Steps
+## Additional info
 
+### Future work
 There are a few next steps that could improve this connector. please feel free
 to open a PR with any of these improvements.
 
@@ -47,8 +64,9 @@ to open a PR with any of these improvements.
 3. Better error handling when the url is not valid or if the api key expires/
    goes over quota.
 4. Add Configuarable cacheing using Data Studio api
-## Changelog
-### Version 2.0
+
+### Changelog
+#### Version 2.0
 1. Breaking out mobile and desktop score into separate metrics
 2. Adding the count of the number of opportunities to improve the url
 3. Added a direct link to the actual report on the web
@@ -56,7 +74,7 @@ to open a PR with any of these improvements.
 If you have any feedback, feel free to tweet at [@ukdatageek] (the original
 author of this connector), or open an issue in the repo.
 
-## To Contribute:
+### To Contribute
 1. Fork this project and make your changes.
 2. Make sure you run `prettier --write "**/*.js"` on your code before you push to make your code look great and easy to read. 
 3. Raise an issue in github and describe what you are going to fix 
@@ -64,14 +82,16 @@ author of this connector), or open an issue in the repo.
 5. Create a pull request with details of the change
 
 
-[@ukdatageek]: https://twitter.com/ukdatageek
-[Data Studio Community Connector GitHub]: https://github.com/googledatastudio/community-connectors/issues
-[error handling]: https://developers.google.com/datastudio/connector/error-handling
-[Page Speed Insights Tutorial]: https://developers.google.com/speed/docs/insights/v4/first-app
+[Data Studio]: https://datastudio.google.com
+[Community Connector]: https://developers.google.com/datastudio/connector
 [PageSpeed Insights]: https://developers.google.com/speed/pagespeed/insights/
 [Google PageSpeed Insights API]: https://developers.google.com/speed/docs/insights/v5/get-started
-[production deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbxNlR9D-nb_2du5Zm9HfgsdeIrfr42IRY47qrUiApsnKaLq4D9UXDqGwSTrXWLF4S3qRw
-[appsscript]: https://script.google.com
-[data studio]: https://datastudio.google.com
-[community connector]: https://developers.google.com/datastudio/connector
 [deployment guide]: ../deploy.md
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[Page Speed Insights Tutorial]: https://developers.google.com/speed/docs/insights/v4/first-app
+[This app isn't verified]: ../verification.md
+[error handling]: https://developers.google.com/datastudio/connector/error-handling
+[@ukdatageek]: https://twitter.com/ukdatageek
