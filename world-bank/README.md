@@ -60,7 +60,6 @@ proceed.
 [Create a Service Account Key]: https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys
 [stringify]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify]]
 [Apps Script]: https://script.google.com
-
 [Use a Community Connector]: https://developers.google.com/datastudio/connector/use
 [revoke access]: https://support.google.com/datastudio/answer/9053467
 [connector list]: https://datastudio.google.com/c/datasources/create
