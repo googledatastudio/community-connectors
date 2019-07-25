@@ -1,37 +1,68 @@
 # Kaggle Community Connector for Data Studio
 
-![Screenshot](./KaggleSampleDataset.png?raw=true "Screenshot")
-
 *This is not an official Google product*
 
-This [Data Studio][datastudio] [Community Connector][community-connector] lets
-users import any dataset from [kaggle][kaggle]. This Community Connector uses
-the [Kaggle API][kaggle-api].
+This [Data Studio] [Community Connector] lets users query datasets from
+[kaggle].
 
-## Try This Connector
+This Community Connector uses the [Kaggle API].
 
-Click [here][managed-deployment] to try the managed deployment.
+![A report in Data Studio displaying a Kaggle dataset about FIFA players][screenshot]
 
-## Prerequisites for using Kaggle connector
+## Set up the Community Connector for personal use
 
-1. Sign up for a [Kaggle][kaggle] account.
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script.
+
+### Deploy the connector
+
+Follow the [deployment guide] to deploy the Community Connector.
+
+## Using the connector in Data Studio
+
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
+
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
+
+### Authentication: Username and Token
+
+The Kaggle connector requires a username and token to authenticate and connect
+to your account. The following steps explain how to obtain the username and
+token required to authenticate:
+
+1. Sign in to your [kaggle] account or create a new account if you don't
+already have one.
 1. Go to the 'Account' tab of your user profile
-  (https://www.kaggle.com/{username}/account) and select 'Create API Token'.
-  This will trigger the download of kaggle.json, a file containing your API
-  credentials.
+(https://www.kaggle.com/{username}/account) and select
+**Create New API Token**. This will trigger the download of kaggle.json,
+a file containing your API credentials.
+   - In Data Studio, when authenticating the connector use the value of
+   `username` for the **Username** field and the value of `key` for
+   the **Token** field.
 
-   **Note: Kaggle requires username and password for authentication which can
-   be found in the downloaded kaggle.json file. The username should be used as
-   it is whereas the "key" should be used as password for authentication.**
+## Troubleshooting
 
-## Limitations
+### This app isn't verified
+
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+### Limitations
 
 - Currently, only CSV files up to 20MB size are supported.
 
-[datastudio]: https://datastudio.google.com
-[community-connector]: https://developers.google.com/datastudio/connector
+[Data Studio]: https://datastudio.google.com
+[Community Connector]: https://developers.google.com/datastudio/connector
 [kaggle]: https://www.kaggle.com
-[kaggle-api]: https://github.com/Kaggle/kaggle-api
-[managed-deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbz8WVuZI1FRHJM3g_ucqP-L7B9EIIPDsC9RofvZk1Xw-bD6p55SNjs7JudEsOYK1o2t
-[error-handling]: https://developers.google.com/datastudio/connector/error-handling
-[getAuthType]: https://developers.google.com/datastudio/connector/oauth2
+[Kaggle API]: https://github.com/Kaggle/kaggle-api
+[screenshot]: ./KaggleSampleDataset.png?raw=true
+[deployment guide]: ../deploy.md
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[This app isn't verified]: ../verification.md
