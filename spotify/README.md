@@ -32,6 +32,7 @@ complete the connector setup:
 1. Visit the [Spotify developer dashboard].
 1. Click **CREATE A CLIENT ID**.
 1. Complete the form, use the following table for guidance:
+
    Text Field                     | Response
    -------------------------------|----------------------------
    **Application Name**           | Spotify Community Connector
@@ -47,6 +48,7 @@ complete the connector setup:
    Click on **File** -> **Project Properties** -> **Script Properties**.
    Using the information obtained from Spotify, add the following key-value
    pairs as script properties:
+
    Key                   | Value
    ----------------------|----------------------
    `OAUTH_CLIENT_ID`     | {YOUR CLIENT ID} 
