@@ -46,6 +46,7 @@ complete the connector setup.
     Click on **File** -> **Project Properties** -> **Script Properties**.
     Using the information obtained from Meetup, add the following key-value pairs
     as script properties:
+
     Key                   | Value
     --------------------- | --------------------
     `OAUTH_CLIENT_ID`     | {YOUR CLIENT ID}
