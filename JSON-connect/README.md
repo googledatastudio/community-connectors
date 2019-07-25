@@ -1,38 +1,59 @@
 # JSON connect - Community Connector for Data Studio
+
 *This is not an official Google product*
 
-This [Data Studio](https://datastudio.google.com) [Community
-Connector](https://developers.google.com/datastudio/connector) lets users connect
-to custom JSON data sources
+This [Data Studio] [Community Connector] lets users query data from a [JSON]
+data source.
 
-## Try the Community Connector in Data Studio
-You can try out the latest production version of [JSON connect](https://datastudio.google.com/datasources/create?connectorId=AKfycbzDZJEtN414a8F_vWQ3z9MHFJKXpXzGz8rq7De5jfPMmJz-k49Dpd4gbW5olVa0BvI)
+![Screenshot of the JSON connect connector configuration in Data Studio][screenshot]
 
-## Configuration
+## Set up the Community Connector for personal use
 
-### JSON data source URL
-Enter the URL of a JSON data source. (Demo content: [https://jsonplaceholder.typicode.com/comments](https://jsonplaceholder.typicode.com/comments) )
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script.
 
-In case of a "Invalid JSON format" error, validate your JSON using a validation tool like [JSONLint.com](https://jsonlint.com/) 
+### Deploy the connector
 
-### Caching
+Follow the [deployment guide] to deploy the Community Connector.
+
+## Using the connector in Data Studio
+
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
+
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
+
+### Configuration
+
+#### JSON data source URL
+Enter the URL of a JSON data source. (Demo content: [https://jsonplaceholder.typicode.com/comments])
+
+In case of a "Invalid JSON format" error, validate your JSON using a validation tool like [JSONLint.com].
+
+**Note**: The first row of the dataset is used to determine the data schema.
+
+#### Caching
 Enable caching by checking the 'Cache response' checkbox. This is usefull with large datasets. The cache will expire after ten minutes. The rows in your dataset may not exceed 100KB
 
-*The first row of the dataset is used to determine the data schema*
+## Troubleshooting
 
-## Deploy a Community Connector yourself
-1. Visit [Google Apps Script](https://script.google.com/) and create a new
-   project.
-2. You should see a shell project with a blank `myFunction` function in the
-   `Code.gs` file. Delete the `myFunction` function and copy over the contents
-   of the `main.js` file from the repository.
-3. If the repository has any other `.js` or `.gs` file, you will need to create
-   those files in Apps Scripts environment(**File > New > Script File**) and
-   copy over the content.
-4. In the Apps Script development environment, select **View > Show manifest
-   file**. This will create a new `appsscript.json` manifest file. Remove all
-   content from this manifest file and replace it with the content of the
-   `appsscript.json` file in the repository.
-5. To use the Community Connector in Data Studio, follow the [guide on Community
-   Connector Developer
-   site](https://developers.google.com/datastudio/connector/use).
+### This app isn't verified
+
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+[Data Studio]: https://datastudio.google.com
+[Community Connector]: https://developers.google.com/datastudio/connector
+[JSON]: https://www.json.org/
+[screenshot]: json-connect.png
+[deployment guide]: ../deploy.md
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[https://jsonplaceholder.typicode.com/comments]: https://jsonplaceholder.typicode.com/comments
+[JSONLint.com]: https://jsonlint.com/
+[This app isn't verified]: ../verification.md

@@ -1,9 +1,11 @@
-# NASA Astronomy Picture of the Day (apod) Community Connector for Data Studio
+# Google Kubernetes Engine Connector for Data Studio
 
 *This is not an official Google product*
 
-This [Data Studio] [Community Connector] lets users access NASA's
-[Astronomy Picture of the Day] in Data Studio.
+This [Data Studio] [Community Connector] lets you query for information about
+your GKE cluster resource usage.
+
+![A report showing the monthly view of usage metering][gke-report]
 
 ## Set up the Community Connector for personal use
 
@@ -33,7 +35,7 @@ proceed.
 
 [Data Studio]: https://datastudio.google.com
 [Community Connector]: https://developers.google.com/datastudio/connector
-[Astronomy Picture of the Day]: https://apod.nasa.gov/apod/astropix.html
+[gke-report]: gke-report.png
 [deployment guide]: ../deploy.md
 [Use a Community Connector]: https://developers.google.com/datastudio/connector/use
 [revoke access]: https://support.google.com/datastudio/answer/9053467

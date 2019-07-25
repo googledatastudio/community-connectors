@@ -1,14 +1,17 @@
 # Google Fit Community Connector for Data Studio
 
-![Screenshot](./screenshot.jpg?raw=true "Screenshot")
-
 *This is not an official Google product*
 
-This [Data Studio][_datastudio] [Community Connector][_cc] allows users to query
-[Google Fit][_gf] for fitness data. This connector uses the Google Fit [REST
-API][_gf rest].
+This [Data Studio] [Community Connector] lets users query [Google Fit] for
+fitness data.
 
-## Supported data
+This connector uses the [Google Fit REST API].
+
+![An example report in Data Studo that shows fitness activity data from Google Fit][screenshot]
+
+## Features
+
+### Supported data
 
 The Google Fit Community Connector supports the following types of Google Fit
 data.
@@ -17,35 +20,55 @@ data.
 -   Steps
 -   Weight
 
-## Try out the connector
+## Set up the Community Connector for personal use
 
-You can use the latest version of the Google Fit Community Connector using this
-link: [Google Fit Community Connector][_latest deployment]
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script.
 
-## Deploy the connector
+### Deploy the connector
 
-You can deploy the connector yourself in your own project.
+Follow the [deployment guide] to deploy the Community Connector.
 
--   Follow the [deployment guide](../deploy.md) for Datastudio Community
-    Connectors. Be sure to copy all files.
+## Using the connector in Data Studio
 
-## Use cases
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
 
--   **Logging** \
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
+
+## Troubleshooting
+
+### This app isn't verified
+
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+## Developer examples covered in the connector
+
+-   **Logging**  
     Example of using a global flag to toggle logging and also [logging method
     parameters and output to Stackdriver][_cc logging].
--   **Defining a namespace** \
+-   **Defining a namespace**  
     Example of [Defining a namespace][_js namespace] for your connector.
--   **Using the sampleExtraction property** \
+-   **Using the sampleExtraction property**  
     Example of returning pre-defined sample data-set for more efficient
     `getData()` queries when sampleExtraction is `true`. Learn more about
     [sampleExtraction][_sample extraction].
 
-[_datastudio]: https://datastudio.google.com
-[_cc]: https://developers.google.com/datastudio/connector
-[_gf]: https://fit.google.com
-[_gf rest]: https://developers.google.com/fit/rest/
+[Data Studio]: https://datastudio.google.com
+[Community Connector]: https://developers.google.com/datastudio/connector
+[Google Fit]: https://fit.google.com
+[Google Fit REST API]: https://developers.google.com/fit/rest/
+[screenshot]: ./screenshot.jpg?raw=true
+[deployment guide]: ../deploy.md
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[This app isn't verified]: ../verification.md
 [_cc logging]: https://developers.google.com/datastudio/connector/debug#apps_script_logging
 [_js namespace]: https://stackoverflow.com/questions/881515/how-do-i-declare-a-namespace-in-javascript
 [_sample extraction]: https://developers.google.com/datastudio/connector/reference#getdata
-[_latest deployment]: https://datastudio.google.com/datasources/create?connectorId=AKfycbwFrL1OLXR3wqfnxowGFF3w3D4eq-54vAwjxDWcWRjiZMxX7jhII_1Ddx6y76GDHrxIew

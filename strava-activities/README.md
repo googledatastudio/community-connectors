@@ -1,4 +1,4 @@
-# Strava Activities Connector
+# Strava Activities Community Connector for Data Studio
 
 *This is not an official Google product*
 
@@ -7,33 +7,48 @@ authenticated user.
 
 This connector uses the [Strava API].
 
-## Deploy the Community Connector yourself
+## Set up the Community Connector for personal use
 
-To deploy this community connector:
+To use this Community Connector in Data Studio there is a one-time setup to
+deploy your own personal instance of the connector using Apps Script. The
+connector also requires additional setup in Strava to configure OAuth.
 
-1. Configure a Strava OAUTH2 Application.
-1. Follow common deployment steps for all connectors.
+### 1. Deploy the connector
 
-### Configure the Strava OAUTH App
+Follow the [deployment guide] to deploy the Community Connector.
+
+### 2. Strava OAuth Configuration
 
 1.  Create a [Strava API Application] 
 1.  Set the `Authorization Callback Domain` to `script.google.com`
 1.  Make note of your `Client ID` and `Client Secret`.
-1.  Open this script in [Google Apps Script], then click **File** ->
-    **Project Properties** -> **Script Properties**.
-1.  Add the following key-value pairs.
-
+1.  Visit [Google Apps Script] and open your Strava connector Apps Script
+    project. Click **File** -> **Project Properties** -> **Script Properties**.
+    Using the information obtained from Strava, add the following key-value
+    pairs as script properties:
     Key                   | Value
     --------------------- | --------------------
     `OAUTH_CLIENT_ID`     | {YOUR CLIENT ID}
     `OAUTH_CLIENT_SECRET` | {YOUR CLIENT SECRET}
 
-### Follow [deployment guide]
+## Using the connector in Data Studio
 
-Use the [deployment guide] to deploy the Community Connector yourself.
+Once you've set up and deployed the connector, follow the
+[Use a Community Connector] guide to use the connector in Data Studio.
 
+**Note**: After using the connector in Data Studio, as long as you do not
+[revoke access], it will remain listed in the [connector list] for easy access
+when [creating a new data source].
 
-## Examples and use cases covered in the connector
+## Troubleshooting
+
+### This app isn't verified
+
+When authorizing the community connector, if you are presented with an
+"unverified" warning screen see [This app isn't verified] for details on how to
+proceed.
+
+## Developer examples and use cases covered in the connector
 
 -   **DataStudioApp** Example of using the DataStudioApp Service in Apps
     Scripts.
@@ -52,7 +67,11 @@ Use the [deployment guide] to deploy the Community Connector yourself.
 [Community Connector]: https://developers.google.com/datastudio/connector
 [Strava API]: https://developers.strava.com/docs/reference/#api-Activities-getLoggedInAthleteActivities
 [deployment guide]: ../deploy.md
-[AppsScript OAUTH2 README]: https://github.com/googlesamples/apps-script-oauth2
 [Strava API Application]: https://www.strava.com/settings/api
 [Google Apps Script]: https://script.google.com
+[Use a Community Connector]: https://developers.google.com/datastudio/connector/use
+[revoke access]: https://support.google.com/datastudio/answer/9053467
+[connector list]: https://datastudio.google.com/c/datasources/create
+[creating a new data source]: https://support.google.com/datastudio/answer/6300774
+[This app isn't verified]: ../verification.md
 [CacheService]: https://developers.google.com/apps-script/reference/cache/cache-service
