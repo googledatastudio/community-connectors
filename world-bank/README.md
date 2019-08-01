@@ -30,6 +30,7 @@ copy and the output, it will be used in the next step.
 1.  Visit [Apps Script] and open your World Bank connector Apps Script project.
     Click on **File** -> **Project Properties** -> **Script Properties**.
     Using the stringified value of the Service Account Key JSON object, add the following key-value pair as a script property:
+
     Key                     | Value
     ---------------------   | --------------------
     `SERVICE_ACCOUNT_CREDS` | {STRINGIFIED JSON SERVICE ACCOUNT OBJECT}
