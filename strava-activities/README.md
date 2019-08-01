@@ -26,6 +26,7 @@ Follow the [deployment guide] to deploy the Community Connector.
     project. Click **File** -> **Project Properties** -> **Script Properties**.
     Using the information obtained from Strava, add the following key-value
     pairs as script properties:
+
     Key                   | Value
     --------------------- | --------------------
     `OAUTH_CLIENT_ID`     | {YOUR CLIENT ID}
