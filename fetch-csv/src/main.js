@@ -172,7 +172,7 @@ function getData(request) {
     return field.name;
   });
   var fields = getFields(request, content);
-  var requestedFields = fields.forIds(requestedFieldIds);
+  // var requestedFields = fields.forIds(requestedFieldIds);
   var buildedFields = fields.build();
 
   var requestedFieldsIndex = buildedFields.reduce(function(
@@ -234,9 +234,23 @@ function getData(request) {
   }
 
   var result = {
-    schema: requestedFields.build(),
+    schema:  fixInvalidOrder(requestedFieldIds, buildedFields),
     rows: rows
   };
 
   return result;
+}
+
+/**
+ * @param {String[]} fieldsIdsFromRequest Array of requested fields ids.
+ * @param {Object[]} fieldsInOrderFromCsvFile fields.build() return value.
+ * @returns {Object[]}.
+ */
+function fixInvalidOrder(
+    fieldsIdsFromRequest,
+    fieldsInOrderFromCsvFile
+) {
+  return fieldsInOrderFromCsvFile.filter(function (fieldFromCsvFile) {
+    return fieldsIdsFromRequest.indexOf(fieldFromCsvFile.name) >= 0;
+  });
 }
