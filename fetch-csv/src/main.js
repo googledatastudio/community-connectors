@@ -172,7 +172,6 @@ function getData(request) {
     return field.name;
   });
   var fields = getFields(request, content);
-  // var requestedFields = fields.forIds(requestedFieldIds);
   var buildedFields = fields.build();
 
   var requestedFieldsIndex = buildedFields.reduce(function(
@@ -234,7 +233,7 @@ function getData(request) {
   }
 
   var result = {
-    schema:  fixInvalidOrder(requestedFieldIds, buildedFields),
+    schema: fixInvalidOrder(requestedFieldIds, buildedFields),
     rows: rows
   };
 
