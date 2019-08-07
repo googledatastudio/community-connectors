@@ -234,9 +234,20 @@ function getData(request) {
   }
 
   var result = {
-    schema: requestedFields.build(),
+    schema: getAnOrderFromCsvFile(requestedFieldIds, buildedFields),
     rows: rows
   };
 
   return result;
+}
+
+/**
+ * @param {String[]} fieldsIdsFromRequest Array of requested fields ids.
+ * @param {Object[]} fieldsInOrderFromCsvFile fields.build() return value.
+ * @returns {Object[]}.
+ */
+function getAnOrderFromCsvFile(fieldsIdsFromRequest, fieldsInOrderFromCsvFile) {
+  return fieldsInOrderFromCsvFile.filter(function(fieldFromCsvFile) {
+    return fieldsIdsFromRequest.indexOf(fieldFromCsvFile.name) >= 0;
+  });
 }
