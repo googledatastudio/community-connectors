@@ -14,44 +14,109 @@ connector.apiDownloadSlug = 'datasets/download-raw';
 connector.pingUrl = connector.apiBaseUrl + 'competitions/list';
 connector.fileSizeLimitInBytes = 20971520;
 
+
+//---------------------------------------------------- getAuth() starts here ---------------------------------------------//
 function getAuthType() {
+  var cc = DataStudioApp.createCommunityConnector();
+  return cc
+    .newAuthTypeResponse()
+    .setAuthType(cc.AuthType.USER_PASS)
+    .build();
+}
+
+function isAuthValid() {
+  var kaggleAuth = getStoredCredentials();
+  return validateCredentials(kaggleAuth.userName, kaggleAuth.apiToken);
+}
+
+function getStoredCredentials() {
+  var userProperties = PropertiesService.getUserProperties();
+  var user = userProperties.getProperty(connector.usernameKey);
+  var token = userProperties.getProperty(connector.tokenKey);
+  var kaggleAuth = {
+    userName: user,
+    apiToken: token
+  };
+  return kaggleAuth;
+}
+
+function validateCredentials(username, token) {
+  if (username === null || token === null) {
+    return false;
+  }
+  // To check if the credentials entered are valid.
+  var authParamPlain = username + ':' + token;
+  var authParamBase64 = Utilities.base64Encode(authParamPlain);
+  var options = {
+    headers: {
+      Authorization: 'Basic ' + authParamBase64
+    }
+  };
+  try {
+    var response = UrlFetchApp.fetch(connector.pingUrl, options);
+  } catch (err) {
+    return false;
+  }
+  // Status OK: 200
+  // Status unauthorized: 401
+  if (response.getResponseCode() == 200) {
+    return true;
+  }
+  return false;
+}
+
+
+// Added for USER_TOKEN auth type.
+function setCredentials(request) {
+  var creds = request.userToken;
+  var username = creds.username;
+  var token = creds.token;
+
+  // Optional
+  // Check if the provided username and key are valid through a
+  // call to your service.
+  var validCreds = validateCredentials(username, token);
+  if (validCreds === false) {
+    return {
+      errorCode: 'INVALID_CREDENTIALS'
+    };
+  }
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.setProperty(connector.usernameKey, username);
+  userProperties.setProperty(connector.tokenKey, token);
   return {
-    helpUrl: 'https://www.kaggle.com/docs/api#authentication',
-    type: 'USER_TOKEN'
+    errorCode: 'NONE'
   };
 }
 
-function getConfig(request) {
-  var config = {
-    configParams: [
-      {
-        type: 'INFO',
-        name: 'generalInfo',
-        text:
-          'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found under the "Data" tab in Kaggle UI.'
-      },
-      {
-        type: 'TEXTINPUT',
-        name: 'ownerSlug',
-        displayName: 'Owner slug',
-        placeholder: connector.ownerSlug
-      },
-      {
-        type: 'TEXTINPUT',
-        name: 'datasetSlug',
-        displayName: 'Dataset slug',
-        placeholder: connector.datasetSlug
-      },
-      {
-        type: 'TEXTINPUT',
-        name: 'fileName',
-        displayName: 'Filename (CSV files only. Include .csv at end.)',
-        placeholder: connector.fileName
-      }
-    ]
-  };
-  return config;
+function resetAuth() {
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.deleteProperty(connector.usernameKey);
+  userProperties.deleteProperty(connector.tokenKey);
 }
+
+function isAdminUser() {
+  return false;
+}
+//---------------------------------------------------- getAuth() end here ---------------------------------------------//
+
+
+//----------------------------------------------- getConfig() Starts here -----------------------------------------------------//
+function getConfig(request) {
+  var cc = DataStudioApp.createCommunityConnector();
+  var config = cc.getConfig();
+  return config.build();
+  config.newInfo().setId('INFO').setName('generalInfo').setText('Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found in Data Sources under the "Data" tab in Kaggle UI.');
+  config.newTextInput().setId("ownerSlug").setName("Owner slug").setPlaceholder(connector.ownerSlug);
+  config.newTextInput().setId("datasetSlug").setName("Dataset slug").setPlaceholder(connector.datasetSlug);
+  config.newTextInput().setId("fileName").setName("Filename (CSV files only. Include .csv at end.)").setPlaceholder(connector.fileName);
+  return config.build();
+}
+
+//--------------------------------------------- getConfig() ends here -----------------------------------------------------//
+
+
+//--------------------------------------------- getSchema() starts here -----------------------------------------------------//
 
 function getSchema(request) {
   request = validateConfig(request);
@@ -95,9 +160,10 @@ function validateConfig(request) {
   if (fileIsSmall === false) {
     throwConnectorError('Please use smaller than 20MB csv files.', true);
   }
-
   return request;
 }
+
+//--------------------------------------------- getSchema() ends here -----------------------------------------------------//
 
 function getData(request) {
   request = validateConfig(request);
@@ -214,69 +280,7 @@ function kaggleFetch(path, kaggleAuth) {
   return response;
 }
 
-function isAuthValid() {
-  var kaggleAuth = getStoredCredentials();
-  return validateCredentials(kaggleAuth.userName, kaggleAuth.apiToken);
-}
 
-function validateCredentials(username, token) {
-  if (username === null || token === null) {
-    return false;
-  }
-
-  // To check if the credentials entered are valid.
-  var authParamPlain = username + ':' + token;
-  var authParamBase64 = Utilities.base64Encode(authParamPlain);
-  var options = {
-    headers: {
-      Authorization: 'Basic ' + authParamBase64
-    }
-  };
-  try {
-    var response = UrlFetchApp.fetch(connector.pingUrl, options);
-  } catch (err) {
-    return false;
-  }
-  // Status OK: 200
-  // Status unauthorized: 401
-  if (response.getResponseCode() == 200) {
-    return true;
-  }
-  return false;
-}
-
-// Added for USER_TOKEN auth type.
-function setCredentials(request) {
-  var creds = request.userToken;
-  var username = creds.username;
-  var token = creds.token;
-
-  // Optional
-  // Check if the provided username and key are valid through a
-  // call to your service.
-  var validCreds = validateCredentials(username, token);
-  if (validCreds === false) {
-    return {
-      errorCode: 'INVALID_CREDENTIALS'
-    };
-  }
-  var userProperties = PropertiesService.getUserProperties();
-  userProperties.setProperty(connector.usernameKey, username);
-  userProperties.setProperty(connector.tokenKey, token);
-  return {
-    errorCode: 'NONE'
-  };
-}
-
-function resetAuth() {
-  var userProperties = PropertiesService.getUserProperties();
-  userProperties.deleteProperty(connector.usernameKey);
-  userProperties.deleteProperty(connector.tokenKey);
-}
-
-function isAdminUser() {
-  return false;
-}
 
 function throwConnectorError(message, userSafe) {
   userSafe =
@@ -314,17 +318,6 @@ function isFileTypeSupported(filename) {
   return fileTypeIsSupported;
 }
 
-function getStoredCredentials() {
-  var userProperties = PropertiesService.getUserProperties();
-  var user = userProperties.getProperty(connector.usernameKey);
-  var token = userProperties.getProperty(connector.tokenKey);
-  var kaggleAuth = {
-    userName: user,
-    apiToken: token
-  };
-  return kaggleAuth;
-}
-
 function isFileSmall(config) {
   var apiPath = 'datasets/view';
   var pathElements = [apiPath, config.ownerSlug, config.datasetSlug];
@@ -344,3 +337,4 @@ function isFileSmall(config) {
     }
   }
 }
+
