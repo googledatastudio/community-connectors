@@ -14,8 +14,6 @@ connector.apiDownloadSlug = 'datasets/download-raw';
 connector.pingUrl = connector.apiBaseUrl + 'competitions/list';
 connector.fileSizeLimitInBytes = 20971520;
 
-
-//---------------------------------------------------- getAuth() starts here ---------------------------------------------//
 function getAuthType() {
   var cc = DataStudioApp.createCommunityConnector();
   return cc
@@ -24,84 +22,6 @@ function getAuthType() {
     .build();
 }
 
-function isAuthValid() {
-  var kaggleAuth = getStoredCredentials();
-  return validateCredentials(kaggleAuth.userName, kaggleAuth.apiToken);
-}
-
-function getStoredCredentials() {
-  var userProperties = PropertiesService.getUserProperties();
-  var user = userProperties.getProperty(connector.usernameKey);
-  var token = userProperties.getProperty(connector.tokenKey);
-  var kaggleAuth = {
-    userName: user,
-    apiToken: token
-  };
-  return kaggleAuth;
-}
-
-function validateCredentials(username, token) {
-  if (username === null || token === null) {
-    return false;
-  }
-  // To check if the credentials entered are valid.
-  var authParamPlain = username + ':' + token;
-  var authParamBase64 = Utilities.base64Encode(authParamPlain);
-  var options = {
-    headers: {
-      Authorization: 'Basic ' + authParamBase64
-    }
-  };
-  try {
-    var response = UrlFetchApp.fetch(connector.pingUrl, options);
-  } catch (err) {
-    return false;
-  }
-  // Status OK: 200
-  // Status unauthorized: 401
-  if (response.getResponseCode() == 200) {
-    return true;
-  }
-  return false;
-}
-
-
-// Added for USER_TOKEN auth type.
-function setCredentials(request) {
-  var creds = request.userToken;
-  var username = creds.username;
-  var token = creds.token;
-
-  // Optional
-  // Check if the provided username and key are valid through a
-  // call to your service.
-  var validCreds = validateCredentials(username, token);
-  if (validCreds === false) {
-    return {
-      errorCode: 'INVALID_CREDENTIALS'
-    };
-  }
-  var userProperties = PropertiesService.getUserProperties();
-  userProperties.setProperty(connector.usernameKey, username);
-  userProperties.setProperty(connector.tokenKey, token);
-  return {
-    errorCode: 'NONE'
-  };
-}
-
-function resetAuth() {
-  var userProperties = PropertiesService.getUserProperties();
-  userProperties.deleteProperty(connector.usernameKey);
-  userProperties.deleteProperty(connector.tokenKey);
-}
-
-function isAdminUser() {
-  return false;
-}
-//---------------------------------------------------- getAuth() end here ---------------------------------------------//
-
-
-//----------------------------------------------- getConfig() Starts here -----------------------------------------------------//
 function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
@@ -113,10 +33,6 @@ function getConfig(request) {
   return config.build();
 }
 
-//--------------------------------------------- getConfig() ends here -----------------------------------------------------//
-
-
-//--------------------------------------------- getSchema() starts here -----------------------------------------------------//
 
 function getSchema(request) {
   request = validateConfig(request);
@@ -160,10 +76,9 @@ function validateConfig(request) {
   if (fileIsSmall === false) {
     throwConnectorError('Please use smaller than 20MB csv files.', true);
   }
+
   return request;
 }
-
-//--------------------------------------------- getSchema() ends here -----------------------------------------------------//
 
 function getData(request) {
   request = validateConfig(request);
@@ -280,7 +195,69 @@ function kaggleFetch(path, kaggleAuth) {
   return response;
 }
 
+function isAuthValid() {
+  var kaggleAuth = getStoredCredentials();
+  return validateCredentials(kaggleAuth.userName, kaggleAuth.apiToken);
+}
 
+function validateCredentials(username, token) {
+  if (username === null || token === null) {
+    return false;
+  }
+
+  // To check if the credentials entered are valid.
+  var authParamPlain = username + ':' + token;
+  var authParamBase64 = Utilities.base64Encode(authParamPlain);
+  var options = {
+    headers: {
+      Authorization: 'Basic ' + authParamBase64
+    }
+  };
+  try {
+    var response = UrlFetchApp.fetch(connector.pingUrl, options);
+  } catch (err) {
+    return false;
+  }
+  // Status OK: 200
+  // Status unauthorized: 401
+  if (response.getResponseCode() == 200) {
+    return true;
+  }
+  return false;
+}
+
+// Added for USER_TOKEN auth type.
+function setCredentials(request) {
+  var creds = request.userToken;
+  var username = creds.username;
+  var token = creds.token;
+
+  // Optional
+  // Check if the provided username and key are valid through a
+  // call to your service.
+  var validCreds = validateCredentials(username, token);
+  if (validCreds === false) {
+    return {
+      errorCode: 'INVALID_CREDENTIALS'
+    };
+  }
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.setProperty(connector.usernameKey, username);
+  userProperties.setProperty(connector.tokenKey, token);
+  return {
+    errorCode: 'NONE'
+  };
+}
+
+function resetAuth() {
+  var userProperties = PropertiesService.getUserProperties();
+  userProperties.deleteProperty(connector.usernameKey);
+  userProperties.deleteProperty(connector.tokenKey);
+}
+
+function isAdminUser() {
+  return false;
+}
 
 function throwConnectorError(message, userSafe) {
   userSafe =
@@ -318,6 +295,17 @@ function isFileTypeSupported(filename) {
   return fileTypeIsSupported;
 }
 
+function getStoredCredentials() {
+  var userProperties = PropertiesService.getUserProperties();
+  var user = userProperties.getProperty(connector.usernameKey);
+  var token = userProperties.getProperty(connector.tokenKey);
+  var kaggleAuth = {
+    userName: user,
+    apiToken: token
+  };
+  return kaggleAuth;
+}
+
 function isFileSmall(config) {
   var apiPath = 'datasets/view';
   var pathElements = [apiPath, config.ownerSlug, config.datasetSlug];
@@ -337,4 +325,3 @@ function isFileSmall(config) {
     }
   }
 }
-
