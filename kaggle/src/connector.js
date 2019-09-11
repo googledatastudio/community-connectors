@@ -26,13 +26,30 @@ function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
   return config.build();
-  config.newInfo().setId('INFO').setName('generalInfo').setText('Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found in Data Sources under the "Data" tab in Kaggle UI.');
-  config.newTextInput().setId("ownerSlug").setName("Owner slug").setPlaceholder(connector.ownerSlug);
-  config.newTextInput().setId("datasetSlug").setName("Dataset slug").setPlaceholder(connector.datasetSlug);
-  config.newTextInput().setId("fileName").setName("Filename (CSV files only. Include .csv at end.)").setPlaceholder(connector.fileName);
+  config
+    .newInfo()
+    .setId('INFO')
+    .setName('generalInfo')
+    .setText(
+      'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found in Data Sources under the "Data" tab in Kaggle UI.'
+    );
+  config
+    .newTextInput()
+    .setId('ownerSlug')
+    .setName('Owner slug')
+    .setPlaceholder(connector.ownerSlug);
+  config
+    .newTextInput()
+    .setId('datasetSlug')
+    .setName('Dataset slug')
+    .setPlaceholder(connector.datasetSlug);
+  config
+    .newTextInput()
+    .setId('fileName')
+    .setName('Filename (CSV files only. Include .csv at end.)')
+    .setPlaceholder(connector.fileName);
   return config.build();
 }
-
 
 function getSchema(request) {
   request = validateConfig(request);
