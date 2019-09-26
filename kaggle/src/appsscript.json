@@ -14,7 +14,7 @@
     "privacyPolicyUrl": "https://policies.google.com/privacy",
     "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file up to 20MB size for each data source. Add the connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-\u0026-authentication",
     "sources": ["KAGGLE"],
-    "authType": ["USER_PASS"],
+    "authType": ["USER_TOKEN"],
     "feeType": ["FREE"]
   },
   "urlFetchWhitelist": [
