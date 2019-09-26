@@ -18,18 +18,16 @@ function getAuthType() {
   var cc = DataStudioApp.createCommunityConnector();
   return cc
     .newAuthTypeResponse()
-    .setAuthType(cc.AuthType.USER_PASS)
+    .setAuthType(cc.AuthType.USER_TOKEN)
     .build();
 }
 
 function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
-  return config.build();
   config
     .newInfo()
     .setId('INFO')
-    .setName('generalInfo')
     .setText(
       'Enter the following information for the desired Kaggle dataset. The kaggle URL for datasets will contain the Owner slug and Dataset slug: https://www.kaggle.com/{ownerSlug}/{datasetSlug}. Filename can be found in Data Sources under the "Data" tab in Kaggle UI.'
     );
