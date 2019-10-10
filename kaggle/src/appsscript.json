@@ -1,8 +1,9 @@
 {
   "timeZone": "America/Los_Angeles",
-  "dependencies": {},
+  "dependencies": {
+  },
   "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "V8",
+  "runtimeVersion": "STABLE",
   "dataStudio": {
     "name": "Kaggle",
     "logoUrl": "https://www.kaggle.com/static/images/logos/kaggle-logo-transparent.png",
@@ -12,14 +13,12 @@
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title\u003dKaggle%20Connector%20Issue",
     "termsOfServiceUrl": "https://policies.google.com/terms",
     "privacyPolicyUrl": "https://policies.google.com/privacy",
-    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file up to 20MB size for each data source. Add the connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-\u0026-authentication",
+    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file up to 20MB size for each data source. Add the connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-\u0026-authentication. Use the deployment link: https://datastudio.google.com/u/0/datasources/create?connectorId=AKfycbz8N8nRisgB6Xi7Z-HP70vuWfz4nQ378CQaOwE_tTs1Sn6Avq_AiDaB0DqqfXFxIaHxpA to test the functionality of the connector.",
     "sources": ["KAGGLE"],
     "authType": ["USER_TOKEN"],
     "feeType": ["FREE"]
   },
   "urlFetchWhitelist": [
-    "https://www.kaggle.com/",
-    "https://www.kaggle.com/unsdsn/world-happiness",
-    "https://www.kaggle.com/*"
+    "https://www.kaggle.com/"
   ]
 }
