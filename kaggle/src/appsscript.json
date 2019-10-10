@@ -1,7 +1,6 @@
 {
   "timeZone": "America/Los_Angeles",
-  "dependencies": {
-  },
+  "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "STABLE",
   "dataStudio": {
@@ -18,7 +17,5 @@
     "authType": ["USER_TOKEN"],
     "feeType": ["FREE"]
   },
-  "urlFetchWhitelist": [
-    "https://www.kaggle.com/"
-  ]
+  "urlFetchWhitelist": ["https://www.kaggle.com/"]
 }
