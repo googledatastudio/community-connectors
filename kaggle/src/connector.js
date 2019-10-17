@@ -37,11 +37,7 @@ function getSchema(request) {
     request = validateConfig(request);
     var result = getFileData(request.configParams);
   } catch (e) {
-<<<<<<< HEAD
     throwConnectorError(e,true);
-=======
-    throwConnectorError(e, true);
->>>>>>> 941e3c6f7280f88a4e2c72b684a9361d3f65b7b1
   }
   var rawData = result.csvData;
   var cacheKey = result.cacheKey;
