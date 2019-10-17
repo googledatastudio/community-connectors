@@ -56,11 +56,7 @@ function getSchema(request) {
 function validateConfig(request) {
   request.configParams = request.configParams || {};
   var config = request.configParams;
-<<<<<<< HEAD
   
-=======
-
->>>>>>> 941e3c6f7280f88a4e2c72b684a9361d3f65b7b1
   config.ownerSlug = config.ownerSlug || connector.ownerSlug;
   config.datasetSlug = config.datasetSlug || connector.datasetSlug;
   config.fileName = config.fileName || connector.fileName;
@@ -68,18 +64,11 @@ function validateConfig(request) {
   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
     throwConnectorError('Only .csv filetypes are supported');
-<<<<<<< HEAD
   }
   else if (fileTypeIsSupported === true) {
     var fileIsSmall = isFileSmall(config);
     if (fileIsSmall === false) {
       throwConnectorError('Please use .csv files smaller than 20MB.');
-=======
-  } else if (fileTypeIsSupported === true) {
-    var fileIsSmall = isFileSmall(config);
-    if (fileIsSmall === false) {
-      throwConnectorError('Please use .csv files less than 20MB in size.');
->>>>>>> 941e3c6f7280f88a4e2c72b684a9361d3f65b7b1
     }
   }
   return request;
@@ -171,16 +160,10 @@ function getFileData(config) {
     config.fileName
   ];
   var path = pathElements.join('/');
-<<<<<<< HEAD
   try{
   var response = kaggleFetch(path, kaggleAuth);
   }
   catch(e){
-=======
-  try {
-    var response = kaggleFetch(path, kaggleAuth);
-  } catch (e) {
->>>>>>> 941e3c6f7280f88a4e2c72b684a9361d3f65b7b1
     throwConnectorError(e);
   }
   var fileContent = response.getContentText();
@@ -205,7 +188,6 @@ function kaggleFetch(path, kaggleAuth) {
       Authorization: 'Basic ' + authParamBase64
     }
   };
-<<<<<<< HEAD
   try{
     var response = UrlFetchApp.fetch(fullUrl, options);
     if (response.getResponseCode()!= 200)
@@ -214,21 +196,6 @@ function kaggleFetch(path, kaggleAuth) {
     }
   }
   catch(e){
-=======
-  try {
-    var response = UrlFetchApp.fetch(fullUrl, options);
-    if (response.getResponseCode() != 200) {
-      throwConnectorError(
-        'Response from URL: ' +
-          "'" +
-          fullUrl +
-          "'" +
-          ' is ' +
-          response.getContentText('UTF-8')
-      );
-    }
-  } catch (e) {
->>>>>>> 941e3c6f7280f88a4e2c72b684a9361d3f65b7b1
     throwConnectorError(e);
   }
   return response;
@@ -299,17 +266,10 @@ function isAdminUser() {
 
 function throwConnectorError(text) {
   DataStudioApp.createCommunityConnector()
-<<<<<<< HEAD
       .newUserError()
       .setDebugText(text)
       .setText(text)
       .throwException();
-=======
-    .newUserError()
-    .setDebugText(text)
-    .setText(text)
-    .throwException();
->>>>>>> 941e3c6f7280f88a4e2c72b684a9361d3f65b7b1
 }
 
 function buildBrowsableFileUrl(config) {
