@@ -1,0 +1,16 @@
+{
+  "timeZone": "America/Santiago",
+  "dependencies": {
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "dataStudio": {
+    "name": "Jira Community Connector",
+    "logoUrl": "https://wac-cdn.atlassian.com/dam/jcr:e348b562-4152-4cdc-8a55-3d297e509cc8/Jira%20Software-blue.svg?cdnVersion=673",
+    "company": "Atlassian",
+    "companyUrl": "https://www.atlassian.com/",
+    "addonUrl": "none",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "Connector for Jira Cloud.",
+    "sources": ["jira"]
+  }
+}
