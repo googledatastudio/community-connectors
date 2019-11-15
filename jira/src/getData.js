@@ -26,8 +26,8 @@ function responseToRows(requestedFields, response, request) {
           var result = ''
           
           if(field){
-            if(field.displayName || field.value || field.name){
-              result = field.displayName || field.value || field.name;
+            if(field.displayName || field.value || field.name || field){
+              result = field.displayName || field.value || field.name || field;
             }
             else if(field.join){
               result = field.join();
@@ -37,7 +37,6 @@ function responseToRows(requestedFields, response, request) {
             }
           }
           if(fieldType == 'YEAR_MONTH_DAY_HOUR'){
-            Logger.log(field);
             result = Utilities.formatDate(new Date(field), timeZone, format) 
           }
           return row.push(result);
