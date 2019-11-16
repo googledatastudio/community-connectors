@@ -133,7 +133,7 @@ function getParams() {
   };
   var params = {
     contentType: 'application/json',
-    headers: headers, //Authentication sent as a header
+    headers: headers, // Authentication sent as a header
     method: 'get',
     validateHttpsCertificates: false,
     followRedirects: true,
