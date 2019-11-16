@@ -4,7 +4,7 @@
 
 This [Data Studio][data studio] [Community Connector][community connector] lets you query data about issues in Jira.
 
-![Data Studio Report using the GitHub Community Connector][github report]
+![Data Studio Report using the Jira Community Connector][jira report]
 
 ## Set up the Community Connector for personal use
 
@@ -27,7 +27,7 @@ step.
 The Jira connector requires an API token. Follow the steps below to
 complete the connector setup.
 
-1. Go to [Atlassian API tokens]: https://id.atlassian.com/manage/api-tokens
+1. Go to [Atlassian account API tokens][atlassian api tokens].
 2. Click on *Create API token*.
 3. Add a label to your token.
 4. Use your token for authentication when setting the Jira Community Connector.
@@ -56,7 +56,7 @@ proceed.
 
 [jira report]: Jira-dscc-example.png
 [deployment guide]: ../deploy.md
-[Atlassian API token]: https://id.atlassian.com/manage/api-tokens
+[atlassian api token]: https://id.atlassian.com/manage/api-tokens
 [Apps Script]: https://script.google.com
 [data studio]: https://datastudio.google.com
 [community connector]: https://developers.google.com/datastudio/connector
