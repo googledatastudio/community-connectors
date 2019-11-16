@@ -17,10 +17,10 @@ function getFields(fieldsData) {
       .setName('Url')
       .setType(types.URL);
   fieldsData.forEach(
-    function(field){
+    function(field) {
       var type = null;
       var fieldSchema = field.schema ? field.schema.type : null;
-      switch(fieldSchema){
+      switch(fieldSchema) {
         case 'datetime':
           type = types.YEAR_MONTH_DAY_HOUR;
           break;
@@ -29,7 +29,7 @@ function getFields(fieldsData) {
         default:
           type = types.TEXT;
       };
-      if(fieldSchema === 'number'){
+      if(fieldSchema === 'number') {
         fields.newMetric()
         .setDescription(field.id)
         .setId(field.key)

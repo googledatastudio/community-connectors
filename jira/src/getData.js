@@ -51,7 +51,7 @@ function responseToRows(requestedFields, response, request) {
  * @param {object} value 
  * @return {boolean} True if is not '', null or undefined
 */
-function hasValue(value){
+function hasValue(value) {
   return ['', null, undefined].indexOf(value) < 0;
 }
 
