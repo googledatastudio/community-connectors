@@ -24,19 +24,19 @@ function responseToRows(requestedFields, response, request) {
         default:
           var field = issue.fields[fieldId] 
           var result = ''
-          
-          if(field){
-            if(field.displayName || field.value || field.name || field){
+
+          if (field) {
+            if (field.displayName || field.value || field.name || field) {
               result = field.displayName || field.value || field.name || field;
             }
-            else if(field.join){
+            else if (field.join) {
               result = field.join();
             }
-            else if(field.stringify){
+            else if (field.stringify) {
               result = field.stringify();
             }
           }
-          if(fieldType == 'YEAR_MONTH_DAY_HOUR'){
+          if (fieldType == 'YEAR_MONTH_DAY_HOUR') {
             result = Utilities.formatDate(new Date(field), timeZone, format) 
           }
           return row.push(result);
@@ -61,9 +61,6 @@ function hasValue(value){
  * @return {object} The data.
  */
 function getData(request) {
-  var userProperties = PropertiesService.getUserProperties();
-  var userName = userProperties.getProperty('dscc.username');
-  var token = userProperties.getProperty('dscc.token');
   var requestedFieldIds = request.fields.map(function(field) {
     return field.name;
   });
@@ -76,18 +73,7 @@ function getData(request) {
     hasValue(request.configParams.projects) && hasValue(request.configParams.additionalQuery) ? 'AND ' : '',
     hasValue(request.configParams.additionalQuery) ? request.configParams.additionalQuery : ''
   ];
-  var headers = {
-    "Authorization":"Basic " + Utilities.base64Encode(userName + ':' + token)
-  };
-  var params = {
-    "contentType":"application/json",
-    "headers":headers, //Authentication sent as a header
-    "method":'get',
-    "validateHttpsCertificates":false,
-    "followRedirects":true,
-    "muteHttpExceptions":true,
-    "escaping":true
-  };
+  var params = getParams();
   var response = null;
   var parsedResponse = null;
   var startAt = 0;
@@ -104,13 +90,13 @@ function getData(request) {
       '&startAt=',
       startAt
     ];
-    
+
     // Fetch and parse data from API
-    response = UrlFetchApp.fetch(encodeURI(url.join('')), params)
-    parsedResponse = JSON.parse(response)
-    issues = issues.concat(parsedResponse.issues)
-    total = parsedResponse.total
-    startAt += parsedResponse.maxResults
+    response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
+    parsedResponse = JSON.parse(response);
+    issues = issues.concat(parsedResponse.issues);
+    total = parsedResponse.total;
+    startAt += parsedResponse.maxResults;
   }while(startAt <= total);
   var rows = responseToRows(requestedFields, issues, request);
   return {
@@ -118,3 +104,26 @@ function getData(request) {
     rows: rows
   };
 }
+
+/**
+ * Gets request params to call jira api using UrlFetchApp
+ * @returns {object} Object containing request params
+ */
+ function getParams() {
+  var userProperties = PropertiesService.getUserProperties();
+  var userName = userProperties.getProperty('dscc.username');
+  var token = userProperties.getProperty('dscc.token');
+  var headers = {
+    "Authorization":"Basic " + Utilities.base64Encode(userName + ':' + token)
+  };
+  var params = {
+    "contentType":"application/json",
+    "headers":headers, //Authentication sent as a header
+    "method":'get',
+    "validateHttpsCertificates":false,
+    "followRedirects":true,
+    "muteHttpExceptions":true,
+    "escaping":true
+  };
+  return params;
+ }

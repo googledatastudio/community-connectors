@@ -65,18 +65,7 @@ function getSchema(request) {
  * @return {object} Jira fields.
  */
 function getJiraFields(request) {
-  var headers = {
-    "Authorization":"Basic " + Utilities.base64Encode(request.configParams.username + ':' + request.configParams.apiToken)
-  };
-  var params = {
-    "contentType":"application/json",
-    "headers":headers, //Authentication sent as a header
-    "method":'get',
-    "validateHttpsCertificates":false,
-    "followRedirects":true,
-    "muteHttpExceptions":true,
-    "escaping":true
-  };
+  var params = getParams();
   var url = [
       'https://',
       request.configParams.host,
