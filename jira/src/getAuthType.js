@@ -12,7 +12,8 @@ function isAdminUser() {
  */
 function getAuthType() {
   var cc = DataStudioApp.createCommunityConnector();
-  return cc.newAuthTypeResponse()
+  return cc
+    .newAuthTypeResponse()
     .setAuthType(cc.AuthType.USER_TOKEN)
     .setHelpUrl('https://id.atlassian.com/manage/api-tokens')
     .build();
@@ -35,7 +36,7 @@ function isAuthValid() {
   var userProperties = PropertiesService.getUserProperties();
   var userName = userProperties.getProperty('dscc.username');
   var token = userProperties.getProperty('dscc.token');
-  
+
   return hasValue(userName) && hasValue(token);
 }
 
@@ -49,7 +50,7 @@ function setCredentials(request) {
   var username = creds.username;
   var token = creds.token;
   var validCreds = hasValue(username) && hasValue(token);
-  
+
   if (!validCreds) {
     return {
       errorCode: 'INVALID_CREDENTIALS'
@@ -62,4 +63,3 @@ function setCredentials(request) {
     errorCode: 'NONE'
   };
 }
-

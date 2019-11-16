@@ -18,26 +18,26 @@ function responseToRows(requestedFields, response, request) {
         case 'id':
           return row.push(issue.id);
         case 'url':
-          return row.push('https://'+ request.configParams.host +'/browse/' + issue.key);
+          return row.push(
+            'https://' + request.configParams.host + '/browse/' + issue.key
+          );
         case 'issuekey':
           return row.push(issue.key);
         default:
-          var field = issue.fields[fieldId] 
-          var result = ''
+          var field = issue.fields[fieldId];
+          var result = '';
 
           if (field) {
             if (field.displayName || field.value || field.name || field) {
               result = field.displayName || field.value || field.name || field;
-            }
-            else if (field.join) {
+            } else if (field.join) {
               result = field.join();
-            }
-            else if (field.stringify) {
+            } else if (field.stringify) {
               result = field.stringify();
             }
           }
           if (fieldType == 'YEAR_MONTH_DAY_HOUR') {
-            result = Utilities.formatDate(new Date(field), timeZone, format) 
+            result = Utilities.formatDate(new Date(field), timeZone, format);
           }
           return row.push(result);
       }
@@ -48,9 +48,9 @@ function responseToRows(requestedFields, response, request) {
 
 /**
  * Return true if valid
- * @param {object} value 
+ * @param {object} value
  * @return {boolean} True if is not '', null or undefined
-*/
+ */
 function hasValue(value) {
   return ['', null, undefined].indexOf(value) < 0;
 }
@@ -67,11 +67,26 @@ function getData(request) {
   var fieldsData = getJiraFields(request);
   var requestedFields = getFields(fieldsData).forIds(requestedFieldIds);
   var jql = [
-    request.configParams.dateForQuery != 'none' ? request.configParams.dateForQuery +' >= ' + request.dateRange.startDate + ' AND ' + request.configParams.dateForQuery + ' <= ' + request.dateRange.endDate : '',
-    request.configParams.dateForQuery != 'none' ? 'AND ': '',
-    hasValue(request.configParams.projects) ? 'project in (' + request.configParams.projects + ')' : '',
-    hasValue(request.configParams.projects) && hasValue(request.configParams.additionalQuery) ? 'AND ' : '',
-    hasValue(request.configParams.additionalQuery) ? request.configParams.additionalQuery : ''
+    request.configParams.dateForQuery != 'none'
+      ? request.configParams.dateForQuery +
+        ' >= ' +
+        request.dateRange.startDate +
+        ' AND ' +
+        request.configParams.dateForQuery +
+        ' <= ' +
+        request.dateRange.endDate
+      : '',
+    request.configParams.dateForQuery != 'none' ? 'AND ' : '',
+    hasValue(request.configParams.projects)
+      ? 'project in (' + request.configParams.projects + ')'
+      : '',
+    hasValue(request.configParams.projects) &&
+    hasValue(request.configParams.additionalQuery)
+      ? 'AND '
+      : '',
+    hasValue(request.configParams.additionalQuery)
+      ? request.configParams.additionalQuery
+      : ''
   ];
   var params = getParams();
   var response = null;
@@ -79,7 +94,7 @@ function getData(request) {
   var startAt = 0;
   var total = null;
   var issues = [];
-  do{
+  do {
     var url = [
       'https://',
       request.configParams.host,
@@ -109,22 +124,21 @@ function getData(request) {
  * Gets request params to call jira api using UrlFetchApp
  * @returns {object} Object containing request params
  */
- function getParams() {
+function getParams() {
   var userProperties = PropertiesService.getUserProperties();
   var userName = userProperties.getProperty('dscc.username');
   var token = userProperties.getProperty('dscc.token');
   var headers = {
-    "Authorization":"Basic " + Utilities.base64Encode(userName + ':' + token)
+    Authorization: 'Basic ' + Utilities.base64Encode(userName + ':' + token)
   };
   var params = {
-    "contentType":"application/json",
-    "headers":headers, //Authentication sent as a header
-    "method":'get',
-    "validateHttpsCertificates":false,
-    "followRedirects":true,
-    "muteHttpExceptions":true,
-    "escaping":true
+    contentType: 'application/json',
+    headers: headers, //Authentication sent as a header
+    method: 'get',
+    validateHttpsCertificates: false,
+    followRedirects: true,
+    muteHttpExceptions: true,
+    escaping: true
   };
   return params;
- }
- 
+}
