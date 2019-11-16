@@ -27,7 +27,7 @@ step.
 The Jira connector requires an API token. Follow the steps below to
 complete the connector setup.
 
-1. Go to [Atlassian account API tokens][atlassian api tokens].
+1. Go to [Atlassian account API tokens][atlassian api token].
 2. Click on *Create API token*.
 3. Add a label to your token.
 4. Use your token for authentication when setting the Jira Community Connector.
