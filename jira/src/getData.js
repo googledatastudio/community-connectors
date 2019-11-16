@@ -97,7 +97,7 @@ function getData(request) {
     issues = issues.concat(parsedResponse.issues);
     total = parsedResponse.total;
     startAt += parsedResponse.maxResults;
-  }while(startAt <= total);
+  } while (startAt <= total);
   var rows = responseToRows(requestedFields, issues, request);
   return {
     schema: requestedFields.build(),
