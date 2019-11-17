@@ -27,23 +27,30 @@ function responseToRows(requestedFields, response, request) {
           var field = issue.fields[fieldId];
           var result = '';
           if (field) {
-            if (field.constructor === "".constructor) {
+            if (field.constructor === ''.constructor) {
               // Process strings here
               if (fieldType == 'YEAR_MONTH_DAY_HOUR') {
-                result = Utilities.formatDate(new Date(field), timeZone, format);
-              }
-              else {
+                result = Utilities.formatDate(
+                  new Date(field),
+                  timeZone,
+                  format
+                );
+              } else {
                 result = field;
               }
-            } else if (field.constructor === 0..constructor) {
+            } else if (field.constructor === (0).constructor) {
               // Process numbers here
               result = field;
             } else if (field.constructor === [].constructor) {
               // Process arrays here
               result = field.join();
-            } else if (field.constructor === ({}).constructor) {
+            } else if (field.constructor === {}.constructor) {
               // Process object here
-              result = field.displayName || field.value || field.name || JSON.stringify(field);
+              result =
+                field.displayName ||
+                field.value ||
+                field.name ||
+                JSON.stringify(field);
             }
           }
           return row.push(result);
