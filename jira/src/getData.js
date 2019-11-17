@@ -26,18 +26,25 @@ function responseToRows(requestedFields, response, request) {
         default:
           var field = issue.fields[fieldId];
           var result = '';
-
           if (field) {
-            if (field.displayName || field.value || field.name || field) {
-              result = field.displayName || field.value || field.name || field;
-            } else if (field.join) {
+            if (field.constructor === "".constructor) {
+              // Process strings here
+              if (fieldType == 'YEAR_MONTH_DAY_HOUR') {
+                result = Utilities.formatDate(new Date(field), timeZone, format);
+              }
+              else {
+                result = field;
+              }
+            } else if (field.constructor === 0..constructor) {
+              // Process numbers here
+              result = field;
+            } else if (field.constructor === [].constructor) {
+              // Process arrays here
               result = field.join();
-            } else if (field.stringify) {
-              result = field.stringify();
+            } else if (field.constructor === ({}).constructor) {
+              // Process object here
+              result = field.displayName || field.value || field.name || JSON.stringify(field);
             }
-          }
-          if (fieldType == 'YEAR_MONTH_DAY_HOUR') {
-            result = Utilities.formatDate(new Date(field), timeZone, format);
           }
           return row.push(result);
       }
@@ -103,7 +110,8 @@ function getData(request) {
       jql.join('+'),
       '&maxResults=100',
       '&startAt=',
-      startAt
+      startAt,
+      '&fields=*all'
     ];
 
     // Fetch and parse data from API
