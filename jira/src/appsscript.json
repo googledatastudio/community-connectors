@@ -9,7 +9,7 @@
     "supportUrl": "https://github.com/google/datastudio/issues",
     "description": "This connector calls Jira Software rest API. User can create JIRA dashboards using data studio.",
     "shortDescription": "Jira Software Datastudio Community Connector",
-    "authType": ["NONE"],
+    "authType": ["USER_TOKEN"],
     "feeType": ["FREE"],
     "sources": ["JIRA"]
   }
