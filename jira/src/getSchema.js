@@ -27,6 +27,7 @@ function getFields(fieldsData) {
         break;
       case 'number':
         type = types.NUMBER;
+        break;
       default:
         type = types.TEXT;
     }
