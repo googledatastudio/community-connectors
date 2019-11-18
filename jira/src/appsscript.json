@@ -1,7 +1,7 @@
 {
   "exceptionLogging": "STACKDRIVER",
   "dataStudio": {
-    "name": "Jira Community Connector",
+    "name": "Jira Issues",
     "logoUrl": "https://raw.githubusercontent.com/googledatastudio/community-connectors/master/jira/logo.png",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/jira/README.md",
     "company": "Intellisys D. Corp.",
