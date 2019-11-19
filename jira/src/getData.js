@@ -132,13 +132,13 @@ function getData(request) {
       } else {
         switch (response.getResponseCode()) {
           case 400:
-            throw 'ERROR: Bad request.';
+            throw 'Bad request.';
           case 401:
-            throw 'ERROR: Unauthorized. Please validate credentials.';
+            throw 'Unauthorized. Please validate credentials.';
           case 500:
-            throw 'ERROR: Server error.';
+            throw 'Server error.';
           default:
-            throw 'ERROR: Code ' + response.getResponseCode();
+            throw 'Error code ' + response.getResponseCode();
         }
       }
     } while (startAt <= total);
