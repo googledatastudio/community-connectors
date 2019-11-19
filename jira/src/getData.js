@@ -108,26 +108,49 @@ function getData(request) {
   var startAt = 0;
   var total = null;
   var issues = [];
-  do {
-    var url = [
-      'https://',
-      request.configParams.host,
-      '/rest/api/3/search?',
-      'jql=',
-      jql.join('+'),
-      '&maxResults=100',
-      '&startAt=',
-      startAt,
-      '&fields=*all'
-    ];
+  try {
+    do {
+      var url = [
+        'https://',
+        request.configParams.host,
+        '/rest/api/3/search?',
+        'jql=',
+        jql.join('+'),
+        '&maxResults=100',
+        '&startAt=',
+        startAt,
+        '&fields=*all'
+      ];
 
-    // Fetch and parse data from API
-    response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
-    parsedResponse = JSON.parse(response);
-    issues = issues.concat(parsedResponse.issues);
-    total = parsedResponse.total;
-    startAt += parsedResponse.maxResults;
-  } while (startAt <= total);
+      // Fetch and parse data from API
+      response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
+      if (response.getResponseCode() === 200) {
+        parsedResponse = JSON.parse(response);
+        issues = issues.concat(parsedResponse.issues);
+        total = parsedResponse.total;
+        startAt += parsedResponse.maxResults;
+      } else {
+        switch (response.getResponseCode()) {
+          case 400:
+            throw 'ERROR: Bad request.';
+          case 401:
+            throw 'ERROR: Unauthorized. Please validate credentials.';
+          case 500:
+            throw 'ERROR: Server error.';
+          default:
+            throw 'ERROR: Code ' + response.getResponseCode();
+        }
+      }
+    } while (startAt <= total);
+  } catch (e) {
+    DataStudioApp.createCommunityConnector()
+      .newUserError()
+      .setDebugText('Error fetching data from API. Exception details: ' + e)
+      .setText(
+        'There was an error communicating with the service. Try again later, or file an issue if this error persists.'
+      )
+      .throwException();
+  }
   var rows = responseToRows(requestedFields, issues, request);
   return {
     schema: requestedFields.build(),
