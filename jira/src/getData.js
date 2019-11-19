@@ -6,7 +6,7 @@
  * @return {object} An object containing rows with values.
  */
 function responseToRows(requestedFields, response, request) {
-  const timeZone = 'GMT';
+  const timeZone = Session.getScriptTimeZone();
   const format = 'yyyyMMddHH';
   // Transform parsed data and filter for requested fields
   return response.map(function(issue) {
