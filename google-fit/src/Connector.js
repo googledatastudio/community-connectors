@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 /**
  * Returns a configuration object for the connector. DataStudio uses this to set up the connector.
  *
@@ -23,99 +22,187 @@ limitations under the License.
  * @return {Object} A JavaScript object representing the schema for the given request.
  */
 function getSchema(request) {
-  if(request.configParams.googleFitDataType === 'activity') {
+  if (request.configParams.googleFitDataType === 'activity') {
     var schema = createActivityField();
-  }
-  else if(request.configParams.googleFitDataType === 'steps') {
+  } else if (request.configParams.googleFitDataType === 'steps') {
     var schema = createStepsField();
-  }
-  else if(request.configParams.googleFitDataType === 'weight') {
+  } else if (request.configParams.googleFitDataType === 'weight') {
     var schema = createWeightField();
-  }
-  else if(request.configParams.googleFitDataType === 'heart_rate') {
+  } else if (request.configParams.googleFitDataType === 'heart_rate') {
     var schema = createHeartRateField();
-  }
-  else if(request.configParams.googleFitDataType === 'heart_rate_daily') {
+  } else if (request.configParams.googleFitDataType === 'heart_rate_daily') {
     var schema = createHeartRateDailyField();
   }
-  return { 'schema': schema};
+  return {schema: schema};
 }
-
 
 /** Functions to create schema for slected config params data type
  *
- * @return {Object} A JavaScript object representing the schema 
+ * @return {Object} A JavaScript object representing the schema
  */
-function createActivityField(){
+function createActivityField() {
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
-  
-  fields.newMetric().setId('ActiveSeconds').setName('ActiveSeconds').setType(types.NUMBER);
-  fields.newDimension().setId('StartTime').setName('StartTime').setType(types.YEAR_MONTH_DAY);
-  fields.newDimension().setId('EndTime').setName('EndTime').setType(types.YEAR_MONTH_DAY);
-  fields.newDimension().setId('ActivityCode').setName('ActivityCode').setType(types.NUMBER);
-  fields.newDimension().setId('ActivityDescription').setName('ActivityDescription').setType(types.TEXT);
+
+  fields
+    .newMetric()
+    .setId('ActiveSeconds')
+    .setName('ActiveSeconds')
+    .setType(types.NUMBER);
+  fields
+    .newDimension()
+    .setId('StartTime')
+    .setName('StartTime')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newDimension()
+    .setId('EndTime')
+    .setName('EndTime')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newDimension()
+    .setId('ActivityCode')
+    .setName('ActivityCode')
+    .setType(types.NUMBER);
+  fields
+    .newDimension()
+    .setId('ActivityDescription')
+    .setName('ActivityDescription')
+    .setType(types.TEXT);
   return fields.build();
 }
 
 /** Functions to create schema for slected config params data type
  *
- * @return {Object} A JavaScript object representing the schema 
+ * @return {Object} A JavaScript object representing the schema
  */
-function createStepsField(){
+function createStepsField() {
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
-  
-  fields.newDimension().setId('StartTime').setName('StartTime').setDescription('Start Time').setType(types.YEAR_MONTH_DAY);
-  fields.newDimension().setId('EndTime').setName('EndTime').setDescription('EndTime').setType(types.YEAR_MONTH_DAY);
-  fields.newMetric().setId('Steps').setName('Steps').setDescription('Steps').setType(types.NUMBER);
+
+  fields
+    .newDimension()
+    .setId('StartTime')
+    .setName('StartTime')
+    .setDescription('Start Time')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newDimension()
+    .setId('EndTime')
+    .setName('EndTime')
+    .setDescription('EndTime')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newMetric()
+    .setId('Steps')
+    .setName('Steps')
+    .setDescription('Steps')
+    .setType(types.NUMBER);
   return fields.build();
 }
 
 /** Functions to create schema for slected config params data type
  *
- * @return {Object} A JavaScript object representing the schema 
+ * @return {Object} A JavaScript object representing the schema
  */
-function createWeightField(){
+function createWeightField() {
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
-  fields.newDimension().setId('StartTime').setName('StartTime').setDescription('Start Time').setType(types.YEAR_MONTH_DAY);
-  fields.newDimension().setId('EndTime').setName('EndTime').setDescription('EndTime').setType(types.YEAR_MONTH_DAY);
-  fields.newMetric().setId('Weight').setName('Weight').setDescription('Weight').setType(types.NUMBER);
+  fields
+    .newDimension()
+    .setId('StartTime')
+    .setName('StartTime')
+    .setDescription('Start Time')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newDimension()
+    .setId('EndTime')
+    .setName('EndTime')
+    .setDescription('EndTime')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newMetric()
+    .setId('Weight')
+    .setName('Weight')
+    .setDescription('Weight')
+    .setType(types.NUMBER);
   return fields.build();
 }
 
 /** Functions to create schema for slected config params data type
  *
- * @return {Object} A JavaScript object representing the schema 
+ * @return {Object} A JavaScript object representing the schema
  */
-function createHeartRateField(){
+function createHeartRateField() {
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
-  fields.newDimension().setId('StartTime').setName('StartTime').setDescription('Start Time').setType(types.YEAR_MONTH_DAY);
-  fields.newDimension().setId('EndTime').setName('EndTime').setDescription('EndTime').setType(types.YEAR_MONTH_DAY);
-  fields.newMetric().setId('HeartRate').setName('HeartRate').setDescription('HeartRate').setType(types.NUMBER);
+  fields
+    .newDimension()
+    .setId('StartTime')
+    .setName('StartTime')
+    .setDescription('Start Time')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newDimension()
+    .setId('EndTime')
+    .setName('EndTime')
+    .setDescription('EndTime')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newMetric()
+    .setId('HeartRate')
+    .setName('HeartRate')
+    .setDescription('HeartRate')
+    .setType(types.NUMBER);
   return fields.build();
 }
 
 /** Functions to create schema for slected config params data type
  *
- * @return {Object} A JavaScript object representing the schema 
+ * @return {Object} A JavaScript object representing the schema
  */
-function createHeartRateDailyField(){
+function createHeartRateDailyField() {
   var cc = DataStudioApp.createCommunityConnector();
   var fields = cc.getFields();
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
-  fields.newDimension().setId('StartTime').setName('StartTime').setDescription('Start Time').setType(types.YEAR_MONTH_DAY);
-  fields.newDimension().setId('EndTime').setName('EndTime').setDescription('EndTime').setType(types.YEAR_MONTH_DAY);
-  fields.newMetric().setId('HeartRateAvg').setName('HeartRateAvg').setDescription('Heart Rate Average').setType(types.NUMBER).setAggregation(aggregations.AVG);
-  fields.newMetric().setId('HeartRateMax').setName('HeartRateMax').setDescription('Heart Rate Max').setType(types.NUMBER).setAggregation(aggregations.MAX);
-  fields.newMetric().setId('HeartRateMin').setName('HeartRateMin').setDescription('Heart Rate Min').setType(types.NUMBER).setAggregation(aggregations.MIN);
+  fields
+    .newDimension()
+    .setId('StartTime')
+    .setName('StartTime')
+    .setDescription('Start Time')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newDimension()
+    .setId('EndTime')
+    .setName('EndTime')
+    .setDescription('EndTime')
+    .setType(types.YEAR_MONTH_DAY);
+  fields
+    .newMetric()
+    .setId('HeartRateAvg')
+    .setName('HeartRateAvg')
+    .setDescription('Heart Rate Average')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG);
+  fields
+    .newMetric()
+    .setId('HeartRateMax')
+    .setName('HeartRateMax')
+    .setDescription('Heart Rate Max')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.MAX);
+  fields
+    .newMetric()
+    .setId('HeartRateMin')
+    .setName('HeartRateMin')
+    .setDescription('Heart Rate Min')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.MIN);
   return fields.build();
 }
 
@@ -126,23 +213,48 @@ function createHeartRateDailyField(){
  * @return {Object} A JavaScript object representing the connector configuration that should be displayed to the user.
  * @see {@link https://developers.google.com/datastudio/connector/reference#getconfig|getConfig reference}
  */
-function getConfig(request){
-  
+function getConfig(request) {
   var cc = DataStudioApp.createCommunityConnector();
   var config = cc.getConfig();
-  config.newSelectSingle().setId("googleFitDataType")
-  .setName("Google Fit Data")
-  .setHelpText('Enter the type of data you want to get from Google Fit.')
-  .setAllowOverride(true)
-  .addOption(config.newOptionBuilder().setLabel('Activity').setValue('activity'))
-  .addOption(config.newOptionBuilder().setLabel('Steps').setValue('steps'))
-  .addOption(config.newOptionBuilder().setLabel('Weight').setValue('weight'))
-  .addOption(config.newOptionBuilder().setLabel('Heart Rate').setValue('heart_rate'))
-  .addOption(config.newOptionBuilder().setLabel('Heart Rate Daily').setValue('heart_rate_daily'));
+  config
+    .newSelectSingle()
+    .setId('googleFitDataType')
+    .setName('Google Fit Data')
+    .setHelpText('Enter the type of data you want to get from Google Fit.')
+    .setAllowOverride(true)
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Activity')
+        .setValue('activity')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Steps')
+        .setValue('steps')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Weight')
+        .setValue('weight')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Heart Rate')
+        .setValue('heart_rate')
+    )
+    .addOption(
+      config
+        .newOptionBuilder()
+        .setLabel('Heart Rate Daily')
+        .setValue('heart_rate_daily')
+    );
   config.setDateRangeRequired(true);
   return config.build();
-};
-
+}
 
 /**
  * Used by DataStudio to perform a data request.
@@ -153,7 +265,7 @@ function getConfig(request){
 function getData(request) {
   var fit = new GoogleFit();
   var dataType = request.configParams.googleFitDataType;
-  
+
   var startDate = new Date(0);
   if (request.dateRange.startDate) {
     startDate = new Date(request.dateRange.startDate);
@@ -162,34 +274,30 @@ function getData(request) {
   if (request.dateRange.endDate) {
     endDate = new Date(request.dateRange.endDate);
   }
-  if(dataType == 'activity'){
+  if (dataType == 'activity') {
     return getDataActivity(request, fit, startDate, endDate);
-  }
-  else if(dataType == 'steps'){
+  } else if (dataType == 'steps') {
     return getDataSteps(request, fit, startDate, endDate);
-  }
-  else if(dataType == 'weight'){
+  } else if (dataType == 'weight') {
     return getDataWeight(request, fit, startDate, endDate);
-  }
-  else if(dataType == 'heart_rate'){
+  } else if (dataType == 'heart_rate') {
     return getDataHeartRate(request, fit, startDate, endDate);
-  }
-  else if(dataType == 'heart_rate_daily'){
+  } else if (dataType == 'heart_rate_daily') {
     return getDataDailyHeartRate(request, fit, startDate, endDate);
   }
-};
+}
 
 /** Data functions implement getData for that specific data type. All functions take a request, GoogleFit instance, start date, and end date.
  *
  * @param {Request} request - a JavaScript object containing the data request parameters.
  * @param {!object} instance of GoogleFit()
- * @param {String} Date variable 
- * @param {String} Date variable 
+ * @param {String} Date variable
+ * @param {String} Date variable
  * @return {!object} Data for the given request.
  */
 function getDataActivity(request, fit, startDate, endDate) {
   var data = [];
-  var schemaData = createActivityField(); 
+  var schemaData = createActivityField();
   // Prepare the schema for the fields requested.
   var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < schemaData.length; i++) {
@@ -235,19 +343,19 @@ function getDataActivity(request, fit, startDate, endDate) {
     schema: dataSchema,
     rows: data
   };
-};
+}
 
 /** Data functions implement getData for that specific data type. All functions take a request, GoogleFit instance, start date, and end date.
  *
  * @param {Request} request - a JavaScript object containing the data request parameters.
  * @param {!object} instance of GoogleFit()
- * @param {String} Date variable 
- * @param {String} Date variable 
+ * @param {String} Date variable
+ * @param {String} Date variable
  * @return {!object} Data for the given request.
  */
 function getDataSteps(request, fit, startDate, endDate) {
   var data = [];
-  var schemaData = createStepsField(); 
+  var schemaData = createStepsField();
   // Prepare the schema for the fields requested.
   var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < schemaData.length; i++) {
@@ -286,19 +394,19 @@ function getDataSteps(request, fit, startDate, endDate) {
     schema: dataSchema,
     rows: data
   };
-};
+}
 
 /** Data functions implement getData for that specific data type. All functions take a request, GoogleFit instance, start date, and end date.
  *
  * @param {Request} request - a JavaScript object containing the data request parameters.
  * @param {!object} instance of GoogleFit()
- * @param {String} Date variable 
- * @param {String} Date variable 
+ * @param {String} Date variable
+ * @param {String} Date variable
  * @return {!object} Data for the given request.
  */
 function getDataWeight(request, fit, startDate, endDate) {
   var data = [];
-  var schemaData = createWeightField(); 
+  var schemaData = createWeightField();
   // Prepare the schema for the fields requested.
   var dataSchema = request.fields.map(function(field) {
     for (var i = 0; i < schemaData.length; i++) {
@@ -337,14 +445,14 @@ function getDataWeight(request, fit, startDate, endDate) {
     schema: dataSchema,
     rows: data
   };
-};
+}
 
 /** Data functions implement getData for that specific data type. All functions take a request, GoogleFit instance, start date, and end date.
  *
  * @param {Request} request - a JavaScript object containing the data request parameters.
  * @param {!object} instance of GoogleFit()
- * @param {String} Date variable 
- * @param {String} Date variable 
+ * @param {String} Date variable
+ * @param {String} Date variable
  * @return {!object} Data for the given request.
  */
 function getDataHeartRate(request, fit, startDate, endDate) {
@@ -388,17 +496,17 @@ function getDataHeartRate(request, fit, startDate, endDate) {
     schema: dataSchema,
     rows: data
   };
-};
+}
 
 /** Data functions implement getData for that specific data type. All functions take a request, GoogleFit instance, start date, and end date.
  *
  * @param {Request} request - a JavaScript object containing the data request parameters.
  * @param {!object} instance of GoogleFit()
- * @param {String} Date variable 
- * @param {String} Date variable 
+ * @param {String} Date variable
+ * @param {String} Date variable
  * @return {!object} Data for the given request.
  */
-function getDataDailyHeartRate(request,fit,startDate,endDate) {
+function getDataDailyHeartRate(request, fit, startDate, endDate) {
   var data = [];
   var schemaData = createHeartRateDailyField();
   // Prepare the schema for the fields requested.
@@ -449,7 +557,7 @@ function getDataDailyHeartRate(request,fit,startDate,endDate) {
     schema: dataSchema,
     rows: data
   };
-};
+}
 
 /**
  * An authentication type object.
@@ -463,12 +571,12 @@ function getDataDailyHeartRate(request,fit,startDate,endDate) {
  *
  * @return {AuthType} an object representing the auth type.
  */
-function getAuthType(){
+function getAuthType() {
   var response = {
     type: 'NONE'
   };
   return response;
-};
+}
 
 /**
  * Stringifies parameters and responses for a given function and logs them to
@@ -486,4 +594,4 @@ function logAndExecute(functionName, parameter) {
   var returnString = JSON.stringify(returnObject, null, 2);
 
   return returnObject;
-};
+}

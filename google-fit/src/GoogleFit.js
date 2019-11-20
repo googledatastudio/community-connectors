@@ -229,7 +229,7 @@ var ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
 var oneDayMs = 24 * 60 * 60 * 1000;
 
 function fetchAggregateData(dataSourceId, startTimeMs, endTimeMs) {
-  try{
+  try {
     var data = JSON.parse(
       UrlFetchApp.fetch(
         'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
@@ -247,13 +247,12 @@ function fetchAggregateData(dataSourceId, startTimeMs, endTimeMs) {
         }
       )
     );
-  }
-  catch(e){
+  } catch (e) {
     DataStudioApp.createCommunityConnector()
-    .newUserError()
-    .setDebugText(e)
-    .setText(e)
-    .throwException();
+      .newUserError()
+      .setDebugText(e)
+      .setText(e)
+      .throwException();
   }
   return data.bucket;
 }
@@ -288,32 +287,34 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
 
   // The URL for the Google Fit REST API
   var uri =
-      'https://www.googleapis.com/fitness/v1/users/me/dataSources/' +
-      dataSource +
-      '/datasets/' +
-      startTime.getTime() * nanoSecondsPerMillisecond +
-      '-' +
-      endTime.getTime() * nanoSecondsPerMillisecond;
- 
+    'https://www.googleapis.com/fitness/v1/users/me/dataSources/' +
+    dataSource +
+    '/datasets/' +
+    startTime.getTime() * nanoSecondsPerMillisecond +
+    '-' +
+    endTime.getTime() * nanoSecondsPerMillisecond;
+
   var options = {
     muteHttpExceptions: true,
     headers: {
       Authorization: 'Bearer ' + ScriptApp.getOAuthToken()
     }
-  };  
+  };
 
-  try{
+  try {
     var response = UrlFetchApp.fetch(uri, options);
-    if (response.getResponseCode()!= 200)
-    {
+    if (response.getResponseCode() != 200) {
       DataStudioApp.createCommunityConnector()
-      .newUserError()
-      .setDebugText("Response from URL:"+uri+"is"+response.getContentText("UTF-8"))
-      .setText("Response from URL:"+uri+"is"+response.getContentText("UTF-8"))
-      .throwException();
+        .newUserError()
+        .setDebugText(
+          'Response from URL:' + uri + 'is' + response.getContentText('UTF-8')
+        )
+        .setText(
+          'Response from URL:' + uri + 'is' + response.getContentText('UTF-8')
+        )
+        .throwException();
     }
-  }
-  catch(e){
+  } catch (e) {
     DataStudioApp.createCommunityConnector()
       .newUserError()
       .setDebugText(e)
@@ -321,5 +322,4 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
       .throwException();
   }
   return JSON.parse(response);
-  
 };
