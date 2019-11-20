@@ -229,22 +229,32 @@ var ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
 var oneDayMs = 24 * 60 * 60 * 1000;
 
 function fetchAggregateData(dataSourceId, startTimeMs, endTimeMs) {
-  var data = JSON.parse(
-    UrlFetchApp.fetch(
-      'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
-      {
-        contentType: 'application/json',
-        headers: {Authorization: 'Bearer ' + ScriptApp.getOAuthToken()},
-        method: 'post',
-        payload: JSON.stringify({
-          aggregateBy: [{dataSourceId: dataSourceId}],
-          bucketByTime: {durationMillis: oneDayMs},
-          startTimeMillis: startTimeMs,
-          endTimeMillis: endTimeMs
-        })
-      }
-    )
-  );
+  try{
+    var data = JSON.parse(
+      UrlFetchApp.fetch(
+        'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
+        {
+          contentType: 'application/json',
+          muteHttpExceptions: true,
+          headers: {Authorization: 'Bearer ' + ScriptApp.getOAuthToken()},
+          method: 'post',
+          payload: JSON.stringify({
+            aggregateBy: [{dataSourceId: dataSourceId}],
+            bucketByTime: {durationMillis: oneDayMs},
+            startTimeMillis: startTimeMs,
+            endTimeMillis: endTimeMs
+          })
+        }
+      )
+    );
+  }
+  catch(e){
+    DataStudioApp.createCommunityConnector()
+    .newUserError()
+    .setDebugText(e)
+    .setText(e)
+    .throwException();
+  }
   return data.bucket;
 }
 
@@ -278,18 +288,38 @@ GoogleFit.prototype._getDatasets = function(dataSource, startTime, endTime) {
 
   // The URL for the Google Fit REST API
   var uri =
-    'https://www.googleapis.com/fitness/v1/users/me/dataSources/' +
-    dataSource +
-    '/datasets/' +
-    startTime.getTime() * nanoSecondsPerMillisecond +
-    '-' +
-    endTime.getTime() * nanoSecondsPerMillisecond;
+      'https://www.googleapis.com/fitness/v1/users/me/dataSources/' +
+      dataSource +
+      '/datasets/' +
+      startTime.getTime() * nanoSecondsPerMillisecond +
+      '-' +
+      endTime.getTime() * nanoSecondsPerMillisecond;
+ 
+  var options = {
+    muteHttpExceptions: true,
+    headers: {
+      Authorization: 'Bearer ' + ScriptApp.getOAuthToken()
+    }
+  };  
 
-  return JSON.parse(
-    UrlFetchApp.fetch(uri, {
-      headers: {
-        Authorization: 'Bearer ' + ScriptApp.getOAuthToken()
-      }
-    })
-  );
+  try{
+    var response = UrlFetchApp.fetch(uri, options);
+    if (response.getResponseCode()!= 200)
+    {
+      DataStudioApp.createCommunityConnector()
+      .newUserError()
+      .setDebugText("Response from URL:"+uri+"is"+response.getContentText("UTF-8"))
+      .setText("Response from URL:"+uri+"is"+response.getContentText("UTF-8"))
+      .throwException();
+    }
+  }
+  catch(e){
+    DataStudioApp.createCommunityConnector()
+      .newUserError()
+      .setDebugText(e)
+      .setText(e)
+      .throwException();
+  }
+  return JSON.parse(response);
+  
 };

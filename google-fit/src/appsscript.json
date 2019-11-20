@@ -1,20 +1,21 @@
 {
   "timeZone": "America/Los_Angeles",
+  "dependencies": {
+  },
+  "webapp": {
+    "access": "MYSELF",
+    "executeAs": "USER_DEPLOYING"
+  },
   "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": ["https://www.googleapis.com/auth/script.external_request", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/fitness.activity.read", "https://www.googleapis.com/auth/fitness.body.read"],
   "dataStudio": {
     "name": "Google Fit",
-    "company": "Google Data Studio Developer Relations",
-    "company_url": "https://developers.google.com/datastudio/",
     "logoUrl": "https://gstatic.com/images/branding/product/1x/gfit_512dp.png",
+    "company": "Google Data Studio Developer Relations",
+    "companyUrl": "https://developers.google.com/datastudio/",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/google-fit/README.md",
-    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Google%20Fit%20Connector%20Issue",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title\u003dGoogle%20Fit%20Connector%20Issue",
     "description": "The Google Fit connector for Data Studio allows you to retrieve Google Fit activity data and create time based graphs of your activity.",
     "shortDescription": "Google Fit activity data."
-  },
-  "oauthScopes": [
-    "https://www.googleapis.com/auth/script.external_request",
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/fitness.activity.read",
-    "https://www.googleapis.com/auth/fitness.body.read"
-  ]
+  }
 }
