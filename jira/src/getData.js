@@ -102,6 +102,7 @@ function getData(request) {
       ? request.configParams.additionalQuery
       : ''
   ];
+  var resource = getResource().pop();
   var params = getParams();
   var response = null;
   var parsedResponse = null;
@@ -111,8 +112,8 @@ function getData(request) {
   try {
     do {
       var url = [
-        'https://',
-        request.configParams.host,
+        'https://api.atlassian.com/ex/jira/',
+        resource.id,
         '/rest/api/3/search?',
         'jql=',
         jql.join('+'),
@@ -124,23 +125,12 @@ function getData(request) {
 
       // Fetch and parse data from API
       response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
-      if (response.getResponseCode() === 200) {
+      handleResponse(response, function(response) {
         parsedResponse = JSON.parse(response);
         issues = issues.concat(parsedResponse.issues);
         total = parsedResponse.total;
         startAt += parsedResponse.maxResults;
-      } else {
-        switch (response.getResponseCode()) {
-          case 400:
-            throw 'Bad request.';
-          case 401:
-            throw 'Unauthorized. Please validate credentials.';
-          case 500:
-            throw 'Server error.';
-          default:
-            throw 'Error code ' + response.getResponseCode();
-        }
-      }
+      });
     } while (startAt <= total);
   } catch (e) {
     DataStudioApp.createCommunityConnector()
@@ -163,11 +153,9 @@ function getData(request) {
  * @returns {object} Object containing request params
  */
 function getParams() {
-  var userProperties = PropertiesService.getUserProperties();
-  var userName = userProperties.getProperty('dscc.username');
-  var token = userProperties.getProperty('dscc.token');
+  var jiraService = getJiraService();
   var headers = {
-    Authorization: 'Basic ' + Utilities.base64Encode(userName + ':' + token)
+    Authorization: 'Bearer ' + jiraService.getAccessToken()
   };
   var params = {
     contentType: 'application/json',
@@ -179,4 +167,42 @@ function getParams() {
     escaping: true
   };
   return params;
+}
+
+/**
+ * @returns {object} response object containing resources.
+ */
+function getResource() {
+  var url = 'https://api.atlassian.com/oauth/token/accessible-resources';
+  var params = getParams();
+  var response = UrlFetchApp.fetch(url, params);
+
+  return JSON.parse(handleResponse(response));
+}
+
+/**
+ * Handles HTTPResponse depending on status code
+ * @param {object} response HTTPResponse
+ * @param {object} callback function to process response
+ * @returns callback, if not passed response is returned
+ */
+function handleResponse(response, callback) {
+  if (response.getResponseCode() === 200) {
+    if (callback) {
+      return callback(response);
+    } else {
+      return response;
+    }
+  } else {
+    switch (response.getResponseCode()) {
+      case 400:
+        throw 'Bad request.';
+      case 401:
+        throw 'Unauthorized. Please validate credentials.';
+      case 500:
+        throw 'Server error.';
+      default:
+        throw 'Error code ' + response.getResponseCode();
+    }
+  }
 }

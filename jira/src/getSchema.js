@@ -68,7 +68,12 @@ function getSchema(request) {
  */
 function getJiraFields(request) {
   var params = getParams();
-  var url = ['https://', request.configParams.host, '/rest/api/3/field?'];
+  var resource = getResource().pop();
+  var url = [
+    'https://api.atlassian.com/ex/jira/',
+    resource.id,
+    '/rest/api/3/field?'
+  ];
   // Fetch and parse data from API
   var response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
   return JSON.parse(response);

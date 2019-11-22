@@ -13,14 +13,6 @@ function getConfig() {
     .setText('Enter the following information to connect to Jira Cloud.');
 
   config
-    .newTextInput()
-    .setId('host')
-    .setName('Host')
-    .setHelpText('Jira cloud host')
-    .setPlaceholder('examplehost.atlassian.net')
-    .setAllowOverride(true);
-
-  config
     .newSelectSingle()
     .setId('dateForQuery')
     .setName('Date for query')

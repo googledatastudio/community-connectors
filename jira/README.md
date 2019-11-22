@@ -23,14 +23,18 @@ step.
   **File** -> **Project Properties**, and you'll see the id under the **Info**
   tab.
 
-### 2. Jira access token
-The Jira connector requires an API token. Follow the steps below to
+### 2. Atlassian OAuth 2.0 (3LO) App connected to Jira platform REST API
+The Jira connector requires an OAuth2 app registered. Follow the steps below to
 complete the connector setup.
 
-1. Go to [Atlassian account API tokens][atlassian api token].
-2. Click on *Create API token*.
-3. Add a label to your token.
-4. Use your token for authentication when setting the Jira Community Connector.
+ 1. Go to [Atlassian apps][atlassian apps]
+ 2. Click *Create a new app*
+ 3. Provide a name for your app in this case Datastudio and click create.
+ 4. Complete app information, description and avatar.
+ 5. Under *APIS AND FEATURES* click *+Add*
+ 6. Add Jira REST API with scopes read:jira-work and read:jira-user 
+ 5. Go to OAuth 2.0 (3LO) and set the callback to https://script.google.com/macros/d/{SCRIPT ID}/usercallback find Script Id under **File** -> **Project Properties** -> **Info**
+ 6. Copy Client ID and Key and add to your script properties under **File** -> **Project Properties** -> **Script Properties** as *CLIENT_ID* and *KEY*
 
 ## Using the connector in Data Studio
 
@@ -51,12 +55,12 @@ proceed.
 
 ## Developer examples covered in the connector
 
-- **Atlassian API token**  
-  Example of how to create a token for Atlassian account.
+- **Atlassian OAuth 2.0 (3LO) Apps**  
+  Example of how to create an OAuth2 (3LO) App for Atlassian and connected to Jira platform REST API.
 
 [jira report]: Jira-dscc-example.png
 [deployment guide]: ../deploy.md
-[atlassian api token]: https://id.atlassian.com/manage/api-tokens
+[atlassian apps]: https://developer.atlassian.com/apps/ 
 [Apps Script]: https://script.google.com
 [data studio]: https://datastudio.google.com
 [community connector]: https://developers.google.com/datastudio/connector

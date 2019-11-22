@@ -14,8 +14,7 @@ function getAuthType() {
   var cc = DataStudioApp.createCommunityConnector();
   return cc
     .newAuthTypeResponse()
-    .setAuthType(cc.AuthType.USER_TOKEN)
-    .setHelpUrl('https://id.atlassian.com/manage/api-tokens')
+    .setAuthType(cc.AuthType.OAUTH2)
     .build();
 }
 
@@ -23,9 +22,7 @@ function getAuthType() {
  * Resets the auth service.
  */
 function resetAuth() {
-  var user_tokenProperties = PropertiesService.getUserProperties();
-  user_tokenProperties.deleteProperty('dscc.username');
-  user_tokenProperties.deleteProperty('dscc.password');
+  getJiraService().reset();
 }
 
 /**
@@ -33,33 +30,13 @@ function resetAuth() {
  * @return {boolean} True if the auth service has access.
  */
 function isAuthValid() {
-  var userProperties = PropertiesService.getUserProperties();
-  var userName = userProperties.getProperty('dscc.username');
-  var token = userProperties.getProperty('dscc.token');
-
-  return hasValue(userName) && hasValue(token);
+  return getJiraService().hasAccess();
 }
-
 /**
- * Sets the credentials.
- * @param {Request} request The set credentials request.
- * @return {object} An object with an errorCode.
+ * Gets the 3P authorization URL.
+ * @return {string} The authorization URL.
+ * @see https://developers.google.com/apps-script/reference/script/authorization-info
  */
-function setCredentials(request) {
-  var creds = request.userToken;
-  var username = creds.username;
-  var token = creds.token;
-  var validCreds = hasValue(username) && hasValue(token);
-
-  if (!validCreds) {
-    return {
-      errorCode: 'INVALID_CREDENTIALS'
-    };
-  }
-  var userProperties = PropertiesService.getUserProperties();
-  userProperties.setProperty('dscc.username', username);
-  userProperties.setProperty('dscc.token', token);
-  return {
-    errorCode: 'NONE'
-  };
+function get3PAuthorizationUrls() {
+  return getJiraService().getAuthorizationUrl();
 }
