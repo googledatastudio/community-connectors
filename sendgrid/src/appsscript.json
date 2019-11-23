@@ -1,0 +1,22 @@
+{
+  "dataStudio": {
+    "name": "SendGrid Global Stats",
+    "company": "script.gs",
+    "companyUrl": "https://script.gs/",
+    "logoUrl": "https://raw.githubusercontent.com/schoraria911/gds-community-connectors/master/SendGrid/Global%20Stats/images/script-gs.png",
+    "addonUrl": "https://github.com/schoraria911/gds-community-connectors/tree/master/SendGrid/Global%20Stats",
+    "supportUrl": "https://github.com/schoraria911/gds-community-connectors/issues/new?title=SendGrid%20Global%20Stats%20Connector%20Issue",
+    "description": "An UNOFFICIAL Google Data Studio Open Source Community Connector for visualising Global Stats of your SendGrid user’s email statistics for a given date range using this API - https://sendgrid.com/docs/API_Reference/Web_API_v3/Stats/global.html.",
+    "shortDescription": "UNOFFICIAL Data Studio Community Connector for visualising Global Stats of your SendGrid user’s email statistics.",
+    "authType": ["KEY"],
+    "feeType": ["FREE"],
+    "sources": ["SENDGRID"],
+    "useQueryConfig": false,
+    "templates": {
+      "default": "10KOEVbvyFA0scuj7fj50xt159sSwgubQ"
+    }
+  },
+  "urlFetchWhitelist": [
+    "https://api.sendgrid.com/v3/"
+  ]
+}
