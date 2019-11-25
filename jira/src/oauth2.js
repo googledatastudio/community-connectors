@@ -17,10 +17,11 @@ function getJiraService() {
     .setClientSecret(clientSecret)
     .setCallbackFunction('usercallback')
     .setPropertyStore(PropertiesService.getUserProperties())
-    .setScope('read:jira-user read:jira-work')
+    .setScope('read:jira-user read:jira-work offline_access')
     .setParam('audience', 'api.atlassian.com')
     .setParam('response_type', 'code')
     .setParam('prompt', 'consent')
+    .setParam('grant_type', 'refresh_token')
     .setParam('state', getStateToken('usercallback'));
 }
 /**
