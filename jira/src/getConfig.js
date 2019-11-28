@@ -1,77 +1,85 @@
+var cc = DataStudioApp.createCommunityConnector();
 /**
  * Builds the Community Connector config.
  * @return {Config} The Community Connector config.
  * @see https://developers.google.com/apps-script/reference/data-studio/config
  */
-function getConfig() {
-  var cc = DataStudioApp.createCommunityConnector();
+function getConfig(request) {
+  var configParams = request.configParams;
+  var isFirstRequest = configParams ? configParams.mode === undefined : false;
   var config = cc.getConfig();
-
+  if (isFirstRequest) {
+    config.setIsSteppedConfig(true);
+  }
   config
     .newInfo()
-    .setId('instructions')
-    .setText('Enter the following information to connect to Jira Cloud.');
-
+    .setId('Info')
+    .setText(
+      'You can choose filters created in Jira or custom JQL. When using custom JQL "startDate" and "endDate" will be replaced with date range.'
+    );
   config
     .newSelectSingle()
-    .setId('dateForQuery')
-    .setName('Date for query')
-    .setHelpText('Select the type of date to filter')
-    .setAllowOverride(true)
+    .setHelpText('Select the desired mode to search for issues.')
+    .setId('mode')
+    .setName('Mode')
+    .setIsDynamic(true)
+    .setAllowOverride(false)
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel('None')
-        .setValue('none')
+        .setLabel('Custom JQL')
+        .setValue('jql')
     )
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel('Date created')
-        .setValue('created')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Date updated')
-        .setValue('updated')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Date resolved')
-        .setValue('resolved')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Date status category changed')
-        .setValue('statusCategoryChangedDate')
-    )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel('Due date')
-        .setValue('duedate')
+        .setLabel('User filters')
+        .setValue('filters')
     );
-
-  config
-    .newTextInput()
-    .setId('projects')
-    .setName('Projects')
-    .setHelpText('Enter projects keys separated by comma.')
-    .setPlaceholder('AA,BB,CC')
-    .setAllowOverride(true);
-
-  config
-    .newTextInput()
-    .setId('additionalQuery')
-    .setName('Additional Query')
-    .setHelpText('Enter additional JQL to refine search.')
-    .setPlaceholder('assignee in (enmanuel_parache)')
-    .setAllowOverride(true);
-
+  if (!isFirstRequest) {
+    if (configParams.mode === undefined) {
+      cc.newUserError()
+        .setText('You must choose a mode.')
+        .throwException();
+    }
+    switch (configParams.mode) {
+      case 'jql': {
+        config
+          .newTextArea()
+          .setId('jql')
+          .setName('JQL')
+          .setHelpText('Enter JQL to search issues.')
+          .setPlaceholder(
+            'project in (AA, BB) and created >= "startDate" and created <= "endDate"'
+          )
+          .setAllowOverride(true);
+        break;
+      }
+      case 'filters': {
+        var userFilters = getFromJira('/rest/api/3/filter/my');
+        var filterSelector = config
+          .newSelectSingle()
+          .setId('userFilters')
+          .setName('User filters')
+          .setHelpText('Select the desired filter')
+          .setAllowOverride(true);
+        userFilters.forEach(function(filter) {
+          filterSelector.addOption(
+            config
+              .newOptionBuilder()
+              .setLabel(filter.name)
+              .setValue(filter.jql)
+          );
+        });
+        break;
+      }
+      default: {
+        cc.newUserError()
+          .setText('You must either select "JQL" or "Filters"')
+          .throwException();
+      }
+    }
+  }
   config.setDateRangeRequired(true);
-
   return config.build();
 }

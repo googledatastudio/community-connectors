@@ -56,25 +56,7 @@ function getFields(fieldsData) {
  * @return {object} The schema.
  */
 function getSchema(request) {
-  var fieldsData = getJiraFields(request);
+  var fieldsData = getFromJira('/rest/api/3/field');
   var fields = getFields(fieldsData).build();
   return {schema: fields};
-}
-
-/**
- * Builds the Community Connector schema.
- * @param {object} request The request.
- * @return {object} Jira fields.
- */
-function getJiraFields(request) {
-  var params = getParams();
-  var resource = getResource().pop();
-  var url = [
-    'https://api.atlassian.com/ex/jira/',
-    resource.id,
-    '/rest/api/3/field?'
-  ];
-  // Fetch and parse data from API
-  var response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
-  return JSON.parse(response);
 }

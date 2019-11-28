@@ -59,16 +59,23 @@ function responseToRows(requestedFields, response, request) {
     return {values: row};
   });
 }
-
 /**
- * Return true if valid
- * @param {object} value
- * @return {boolean} True if is not '', null or undefined
+ * Returns JQL string from configuration.
+ * @param {object} request Datastudio request object
+ * @returns JQL string.
  */
-function hasValue(value) {
-  return ['', null, undefined].indexOf(value) < 0;
+function getJQL(request) {
+  switch (request.configParams.mode) {
+    case 'jql': {
+      return request.configParams.jql
+        .replace(/startDate/g, request.dateRange.startDate)
+        .replace(/endDate/g, request.dateRange.endDate);
+    }
+    case 'filters': {
+      return request.configParams.userFilters;
+    }
+  }
 }
-
 /**
  * Gets the data for the community connector
  * @param {object} request The request.
@@ -78,59 +85,25 @@ function getData(request) {
   var requestedFieldIds = request.fields.map(function(field) {
     return field.name;
   });
-  var fieldsData = getJiraFields(request);
+  var fieldsData = getFromJira('/rest/api/3/field');
   var requestedFields = getFields(fieldsData).forIds(requestedFieldIds);
-  var jql = [
-    request.configParams.dateForQuery != 'none'
-      ? request.configParams.dateForQuery +
-        ' >= ' +
-        request.dateRange.startDate +
-        ' AND ' +
-        request.configParams.dateForQuery +
-        ' <= ' +
-        request.dateRange.endDate
-      : '',
-    request.configParams.dateForQuery != 'none' ? 'AND ' : '',
-    hasValue(request.configParams.projects)
-      ? 'project in (' + request.configParams.projects + ')'
-      : '',
-    hasValue(request.configParams.projects) &&
-    hasValue(request.configParams.additionalQuery)
-      ? 'AND '
-      : '',
-    hasValue(request.configParams.additionalQuery)
-      ? request.configParams.additionalQuery
-      : ''
-  ];
-  var resource = getResource().pop();
-  var params = getParams();
+  var jql = getJQL(request);
   var response = null;
-  var parsedResponse = null;
   var startAt = 0;
   var total = null;
   var issues = [];
   try {
     do {
-      var url = [
-        'https://api.atlassian.com/ex/jira/',
-        resource.id,
-        '/rest/api/3/search?',
-        'jql=',
-        jql.join('+'),
-        '&maxResults=100',
-        '&startAt=',
-        startAt,
-        '&fields=*all'
-      ];
-
       // Fetch and parse data from API
-      response = UrlFetchApp.fetch(encodeURI(url.join('')), params);
-      handleResponse(response, function(response) {
-        parsedResponse = JSON.parse(response);
-        issues = issues.concat(parsedResponse.issues);
-        total = parsedResponse.total;
-        startAt += parsedResponse.maxResults;
+      response = getFromJira('/rest/api/3/search', {
+        maxResults: 100,
+        startAt: startAt,
+        fields: '*all',
+        jql: jql
       });
+      issues = issues.concat(response.issues);
+      total = response.total;
+      startAt += response.maxResults;
     } while (startAt <= total);
   } catch (e) {
     DataStudioApp.createCommunityConnector()
@@ -205,4 +178,31 @@ function handleResponse(response, callback) {
         throw 'Error code ' + response.getResponseCode();
     }
   }
+}
+/**
+ * Get data from Jira REST API
+ * @param {string} endpoint Jira REST API endpoint
+ * @param {object} params Object containing query parameters
+ * @returns {object} Data returned by endpoint
+ */
+function getFromJira(endpoint, params) {
+  var host = 'https://api.atlassian.com/ex/jira/';
+  var resource = getResource().pop();
+  var queryParams = [];
+
+  if (endpoint.substr(0, 1) != '/') {
+    throw 'Endpoint must start with /';
+  }
+
+  if (params) {
+    for (var key in params) {
+      queryParams.push(key + '=' + params[key]);
+    }
+  }
+  var url = [host, resource.id, endpoint, '?', queryParams.join('&')].join('');
+
+  var response = UrlFetchApp.fetch(encodeURI(url), getParams());
+  return handleResponse(response, function(response) {
+    return JSON.parse(response);
+  });
 }
