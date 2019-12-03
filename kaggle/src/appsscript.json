@@ -1,7 +1,6 @@
 {
   "timeZone": "America/Los_Angeles",
-  "dependencies": {
-  },
+  "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
   "urlFetchWhitelist": ["https://www.kaggle.com/"],
   "runtimeVersion": "V8",
