@@ -3,9 +3,9 @@ var connector = {};
 // Kaggle URL format: https://www.kaggle.com/{ownerSlug}/{datasetSlug}.
 // Sample Kaggle URL: https://www.kaggle.com/unsdsn/world-happiness
 // Filename refers to the dataset under the 'Data' tab.
-connector.ownerSlug = 'unsdsn';
-connector.datasetSlug = 'world-happiness';
-connector.fileName = '2016.csv';
+connector.ownerSlug = 'dgomonov';
+connector.datasetSlug = 'new-york-city-airbnb-open-data';
+connector.fileName = 'AB_NYC_2019.csv';
 connector.usernameKey = 'USERNAME';
 connector.tokenKey = 'KEY';
 connector.kaggleUrl = 'https://www.kaggle.com';
@@ -37,7 +37,11 @@ function getSchema(request) {
     request = validateConfig(request);
     var result = getFileData(request.configParams);
   } catch (e) {
+<<<<<<< HEAD
     throwConnectorError(e,true);
+=======
+    throwConnectorError(e, true);
+>>>>>>> 167306e3b69f947f68eff3ae6db8b84a6c430971
   }
   var rawData = result.csvData;
   var cacheKey = result.cacheKey;
@@ -56,7 +60,11 @@ function getSchema(request) {
 function validateConfig(request) {
   request.configParams = request.configParams || {};
   var config = request.configParams;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 167306e3b69f947f68eff3ae6db8b84a6c430971
   config.ownerSlug = config.ownerSlug || connector.ownerSlug;
   config.datasetSlug = config.datasetSlug || connector.datasetSlug;
   config.fileName = config.fileName || connector.fileName;
@@ -64,8 +72,12 @@ function validateConfig(request) {
   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
     throwConnectorError('Only .csv filetypes are supported');
+<<<<<<< HEAD
   }
   else if (fileTypeIsSupported === true) {
+=======
+  } else if (fileTypeIsSupported === true) {
+>>>>>>> 167306e3b69f947f68eff3ae6db8b84a6c430971
     var fileIsSmall = isFileSmall(config);
     if (fileIsSmall === false) {
       throwConnectorError('Please use .csv files smaller than 20MB.');
@@ -160,10 +172,16 @@ function getFileData(config) {
     config.fileName
   ];
   var path = pathElements.join('/');
+<<<<<<< HEAD
   try{
   var response = kaggleFetch(path, kaggleAuth);
   }
   catch(e){
+=======
+  try {
+    var response = kaggleFetch(path, kaggleAuth);
+  } catch (e) {
+>>>>>>> 167306e3b69f947f68eff3ae6db8b84a6c430971
     throwConnectorError(e);
   }
   var fileContent = response.getContentText();
@@ -188,6 +206,7 @@ function kaggleFetch(path, kaggleAuth) {
       Authorization: 'Basic ' + authParamBase64
     }
   };
+<<<<<<< HEAD
   try{
     var response = UrlFetchApp.fetch(fullUrl, options);
     if (response.getResponseCode()!= 200)
@@ -196,6 +215,16 @@ function kaggleFetch(path, kaggleAuth) {
     }
   }
   catch(e){
+=======
+  try {
+    var response = UrlFetchApp.fetch(fullUrl, options);
+    if (response.getResponseCode() != 200) {
+      throwConnectorError(
+        'Response from URL:' + fullUrl + 'is' + response.getContentText('UTF-8')
+      );
+    }
+  } catch (e) {
+>>>>>>> 167306e3b69f947f68eff3ae6db8b84a6c430971
     throwConnectorError(e);
   }
   return response;
@@ -266,10 +295,17 @@ function isAdminUser() {
 
 function throwConnectorError(text) {
   DataStudioApp.createCommunityConnector()
+<<<<<<< HEAD
       .newUserError()
       .setDebugText(text)
       .setText(text)
       .throwException();
+=======
+    .newUserError()
+    .setDebugText(text)
+    .setText(text)
+    .throwException();
+>>>>>>> 167306e3b69f947f68eff3ae6db8b84a6c430971
 }
 
 function buildBrowsableFileUrl(config) {
