@@ -84,7 +84,7 @@ function validateConfig(request) {
   } else if (fileTypeIsSupported === true) {
     var fileIsSmall = isFileSmall(config);
     if (fileIsSmall === false) {
-	throwConnectorError('Please use .csv files smaller than 20MB.');
+      throwConnectorError('Please use .csv files smaller than 20MB.');
     }
   }
   return request;
