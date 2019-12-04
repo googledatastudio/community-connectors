@@ -78,23 +78,15 @@ function validateConfig(request) {
   config.datasetSlug = config.datasetSlug || connector.datasetSlug;
   config.fileName = config.fileName || connector.fileName;
 
-  var fileTypeIsSupported = isFileTypeSupported(config.fileName);
+   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
-<<<<<<< HEAD
-    throwConnectorError('Only .csv filetypes are supported.', true);
-  }
-
-  var fileIsSmall = isFileSmall(config);
-  if (fileIsSmall === false) {
-    throwConnectorError('Please use .csv files smaller than 20MB.', true);
-=======
     throwConnectorError('Only .csv filetypes are supported');
-  } else if (fileTypeIsSupported === true) {
+  }
+  else if (fileTypeIsSupported === true) {
     var fileIsSmall = isFileSmall(config);
     if (fileIsSmall === false) {
       throwConnectorError('Please use .csv files smaller than 20MB.');
     }
->>>>>>> b3347c863f2a87709c906f29364893d333fdd093
   }
   return request;
 }
