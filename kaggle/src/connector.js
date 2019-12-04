@@ -81,11 +81,10 @@ function validateConfig(request) {
   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
     throwConnectorError('Only .csv filetypes are supported');
-  }
-  else if (fileTypeIsSupported === true) {
+  } else if (fileTypeIsSupported === true) {
     var fileIsSmall = isFileSmall(config);
     if (fileIsSmall === false) {
-      throwConnectorError('Please use .csv files less than 20MB in size.');
+	throwConnectorError('Please use .csv files smaller than 20MB.');
     }
   }
   return request;
