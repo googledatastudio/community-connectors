@@ -50,16 +50,11 @@ function getConfig(request) {
 }
 
 function getSchema(request) {
-  request = validateConfig(request);
   try {
+    request = validateConfig(request);
     var result = getFileData(request.configParams);
   } catch (e) {
-    var fileUrl = buildBrowsableFileUrl(request.configParams);
-    throwConnectorError(
-      'Please ensure Owner slug, Dataset slug, and Filename are correct. Unable to find file: ' +
-        fileUrl,
-      true
-    );
+    throwConnectorError(e, true);
   }
   var rawData = result.csvData;
   var cacheKey = result.cacheKey;
@@ -78,20 +73,29 @@ function getSchema(request) {
 function validateConfig(request) {
   request.configParams = request.configParams || {};
   var config = request.configParams;
+
   config.ownerSlug = config.ownerSlug || connector.ownerSlug;
   config.datasetSlug = config.datasetSlug || connector.datasetSlug;
   config.fileName = config.fileName || connector.fileName;
 
   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
+<<<<<<< HEAD
     throwConnectorError('Only .csv filetypes are supported.', true);
   }
 
   var fileIsSmall = isFileSmall(config);
   if (fileIsSmall === false) {
     throwConnectorError('Please use .csv files smaller than 20MB.', true);
+=======
+    throwConnectorError('Only .csv filetypes are supported');
+  } else if (fileTypeIsSupported === true) {
+    var fileIsSmall = isFileSmall(config);
+    if (fileIsSmall === false) {
+      throwConnectorError('Please use .csv files smaller than 20MB.');
+    }
+>>>>>>> b3347c863f2a87709c906f29364893d333fdd093
   }
-
   return request;
 }
 
@@ -100,8 +104,7 @@ function getData(request) {
   try {
     var result = getFileData(request.configParams);
   } catch (e) {
-    var fileUrl = buildBrowsableFileUrl(request.configParams);
-    throwConnectorError('Unable to fetch data from file: ' + fileUrl, true);
+    throwConnectorError(e);
   }
   var rawData = result.csvData;
   var cacheKey = result.cacheKey;
@@ -175,7 +178,6 @@ function processData(data, fields) {
 
 function getFileData(config) {
   var kaggleAuth = getStoredCredentials();
-
   var pathElements = [
     connector.apiDownloadSlug,
     config.ownerSlug,
@@ -183,11 +185,13 @@ function getFileData(config) {
     config.fileName
   ];
   var path = pathElements.join('/');
-
-  var response = kaggleFetch(path, kaggleAuth);
+  try {
+    var response = kaggleFetch(path, kaggleAuth);
+  } catch (e) {
+    throwConnectorError(e);
+  }
   var fileContent = response.getContentText();
   var csvData = Utilities.parseCsv(fileContent);
-
   pathElements.shift();
   var cacheKey = pathElements.join('--');
   var result = {
@@ -202,11 +206,21 @@ function kaggleFetch(path, kaggleAuth) {
   var authParamPlain = kaggleAuth.userName + ':' + kaggleAuth.apiToken;
   var authParamBase64 = Utilities.base64Encode(authParamPlain);
   var options = {
+    muteHttpExceptions: true,
     headers: {
       Authorization: 'Basic ' + authParamBase64
     }
   };
-  var response = UrlFetchApp.fetch(fullUrl, options);
+  try {
+    var response = UrlFetchApp.fetch(fullUrl, options);
+    if (response.getResponseCode() != 200) {
+      throwConnectorError(
+        'Response from URL:' + fullUrl + 'is' + response.getContentText('UTF-8')
+      );
+    }
+  } catch (e) {
+    throwConnectorError(e);
+  }
   return response;
 }
 
@@ -219,7 +233,6 @@ function validateCredentials(username, token) {
   if (username === null || token === null) {
     return false;
   }
-
   // To check if the credentials entered are valid.
   var authParamPlain = username + ':' + token;
   var authParamBase64 = Utilities.base64Encode(authParamPlain);
@@ -274,15 +287,12 @@ function isAdminUser() {
   return false;
 }
 
-function throwConnectorError(message, userSafe) {
-  userSafe =
-    typeof userSafe !== 'undefined' && typeof userSafe === 'boolean'
-      ? userSafe
-      : false;
-  if (userSafe) {
-    message = 'DS_USER:' + message;
-  }
-  throw new Error(message);
+function throwConnectorError(text) {
+  DataStudioApp.createCommunityConnector()
+    .newUserError()
+    .setDebugText(text)
+    .setText(text)
+    .throwException();
 }
 
 function buildBrowsableFileUrl(config) {
@@ -300,13 +310,10 @@ function buildBrowsableFileUrl(config) {
 function isFileTypeSupported(filename) {
   var supportedExtension = '.csv';
   var extensionLength = supportedExtension.length;
-
   var length = filename.length;
   var extension = filename.substring(length - extensionLength, length);
   extension = extension.toLowerCase();
-
   var fileTypeIsSupported = extension === supportedExtension;
-
   return fileTypeIsSupported;
 }
 
@@ -325,7 +332,6 @@ function isFileSmall(config) {
   var apiPath = 'datasets/view';
   var pathElements = [apiPath, config.ownerSlug, config.datasetSlug];
   var fullPath = pathElements.join('/');
-
   var kaggleAuth = getStoredCredentials();
   var response = kaggleFetch(fullPath, kaggleAuth);
   var fileContent = response.getContentText();
