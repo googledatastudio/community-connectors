@@ -78,11 +78,10 @@ function validateConfig(request) {
   config.datasetSlug = config.datasetSlug || connector.datasetSlug;
   config.fileName = config.fileName || connector.fileName;
 
-   var fileTypeIsSupported = isFileTypeSupported(config.fileName);
+  var fileTypeIsSupported = isFileTypeSupported(config.fileName);
   if (fileTypeIsSupported === false) {
     throwConnectorError('Only .csv filetypes are supported');
-  }
-  else if (fileTypeIsSupported === true) {
+  } else if (fileTypeIsSupported === true) {
     var fileIsSmall = isFileSmall(config);
     if (fileIsSmall === false) {
       throwConnectorError('Please use .csv files smaller than 20MB.');
