@@ -2,6 +2,7 @@
   "timeZone": "America/Los_Angeles",
   "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
+  "urlFetchWhitelist": ["https://www.kaggle.com/"],
   "runtimeVersion": "V8",
   "dataStudio": {
     "name": "Kaggle",
@@ -10,16 +11,11 @@
     "companyUrl": "https://developers.google.com/datastudio",
     "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/kaggle/README.md",
     "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title\u003dKaggle%20Connector%20Issue",
-    "termsOfServiceUrl": "https://policies.google.com/terms",
-    "privacyPolicyUrl": "https://policies.google.com/privacy",
-    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file up to 20MB size for each data source. Add the connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-\u0026-authentication",
+    "description": "Connect to and visualize Kaggle datasets. This connector supports a single CSV file up to 20MB size for each data source. Add the connector multiple times for multiple data sources. Steps to get your Kaggle API key: https://www.kaggle.com/docs/api#getting-started-installation-\u0026-authentication.",
     "sources": ["KAGGLE"],
     "authType": ["USER_TOKEN"],
-    "feeType": ["FREE"]
-  },
-  "urlFetchWhitelist": [
-    "https://www.kaggle.com/",
-    "https://www.kaggle.com/unsdsn/world-happiness",
-    "https://www.kaggle.com/*"
-  ]
+    "feeType": ["FREE"],
+    "privacyPolicyUrl": "https://policies.google.com/privacy",
+    "termsOfServiceUrl": "https://policies.google.com/terms"
+  }
 }
