@@ -77,17 +77,141 @@ function getJQL(request) {
   }
 }
 /**
+ * Returns dimension filters from datastudio as JQL
+ * @param {object} dimensionsFilters array containing filtesr from Datastudio
+ * @returns {string} filter composed as JQL
+ */
+function getFilterAsJQL(dimensionsFilters) {
+  var operators = {
+    EQUALS: {
+      INCLUDE: 'FIELD = VALUE',
+      EXCLUDE: 'FIELD != VALUE'
+    },
+    CONTAINS: {
+      INCLUDE: 'FIELD ~ VALUE',
+      EXCLUDE: 'FIELD !~ VALUE'
+    },
+    REGEXP_PARTIAL_MATCH: null, // Not supported
+    REGEXP_EXACT_MATCH: null, // Not supported
+    IN_LIST: {
+      INCLUDE: 'FIELD in (VALUE)',
+      EXCLUDE: 'FIELD not in (VALUE)'
+    },
+    IS_NULL: {
+      INCLUDE: 'FIELD is null',
+      EXCLUDE: 'FIELD is not null'
+    },
+    BETWEEN: {
+      INCLUDE: 'FIELD >= VALUE AND FIELD <= VALUE',
+      EXCLUDE: '!(FIELD >= VALUE AND FIELD <= VALUE)'
+    },
+    NUMERIC_GREATER_THAN: {
+      INCLUDE: 'FIELD > VALUE',
+      EXCLUDE: '!(FIELD > VALUE)'
+    },
+    NUMERIC_GREATER_THAN_OR_EQUAL: {
+      INCLUDE: 'FIELD >= VALUE',
+      EXCLUDE: '!(FIELD >= VALUE)'
+    },
+    NUMERIC_LESS_THAN: {
+      INCLUDE: 'FIELD < VALUE',
+      EXCLUDE: '!(FIELD < VALUE)'
+    },
+    NUMERIC_LESS_THAN_OR_EQUAL: {
+      INCLUDE: 'FIELD <= VALUE',
+      EXCLUDE: '!(FIELD <= VALUE)'
+    }
+  };
+  var filterAsJQL = dimensionsFilters
+    .map(function(ands) {
+      return ands
+        .map(function(ors) {
+          switch (ors.operator) {
+            case 'IN_LIST':
+              return operators[ors.operator][ors.type]
+                .replace(/FIELD/g, parseCustomField(ors.fieldName))
+                .replace(
+                  'VALUE',
+                  ors.values
+                    .map(function(value) {
+                      return '"' + value + '"';
+                    })
+                    .join()
+                );
+            default:
+              return operators[ors.operator]
+                ? operators[ors.operator][ors.type]
+                    .replace(/FIELD/g, parseCustomField(ors.fieldName))
+                    .replace('VALUE', ors.values.shift())
+                    .replace('VALUE', ors.values.shift())
+                : DataStudioApp.createCommunityConnector()
+                    .newUserError()
+                    .setDebugText('Unsupported operator: ' + ors.operator)
+                    .setText(
+                      'Filter operator ' +
+                        ors.operator +
+                        ' not supported at the moment.'
+                    )
+                    .throwException();
+          }
+        })
+        .join(' or ');
+    })
+    .join(' and ');
+  return filterAsJQL;
+}
+/**
+ * Parse custom fields to match JQL
+ * @param {String} string to be parsed
+ */
+function parseCustomField(string) {
+  var customFieldId = 'customfield_';
+  return string.indexOf(customFieldId) === 0
+    ? 'cf[' + string.replace(customFieldId, '') + ']'
+    : string;
+}
+
+/**
+ * Determine if filters are applied based on dimensionsFilters
+ * @param {object} dimensionsFilters array containing filtesr from Datastudio
+ * @returns {boolean} true if only supporter filters are applied
+ */
+function isFilterApplied(dimensionsFilters) {
+  return dimensionsFilters.some(function(filtersArray) {
+    return !filtersArray.some(matchUnsupportedFilter);
+  });
+}
+/**
+ * Determine if unsupported filter from the list
+ * @param {object} filter object from dimensionsFilters
+ * @returns {boolean} true if matches
+ */
+function matchUnsupportedFilter(filter) {
+  var unsupportedFilters = ['REGEXP_PARTIAL_MATCH', 'REGEXP_EXACT_MATCH'];
+  return unsupportedFilters.indexOf(filter.operator) > -1;
+}
+
+/**
  * Gets the data for the community connector
  * @param {object} request The request.
  * @return {object} The data.
  */
 function getData(request) {
-  var requestedFieldIds = request.fields.map(function(field) {
-    return field.name;
-  });
+  var requestedFieldIds = request.fields
+    .filter(function(field) {
+      return !field.forFilterOnly;
+    })
+    .map(function(field) {
+      return field.name;
+    });
   var fieldsData = getFromJira('/rest/api/3/field');
   var requestedFields = getFields(fieldsData).forIds(requestedFieldIds);
-  var jql = getJQL(request);
+  var filtersApplied = request.dimensionsFilters
+    ? isFilterApplied(request.dimensionsFilters)
+    : false;
+  var jql = filtersApplied
+    ? getJQL(request) + ' and ' + getFilterAsJQL(request.dimensionsFilters)
+    : getJQL(request);
   var response = null;
   var startAt = 0;
   var total = null;
@@ -117,7 +241,8 @@ function getData(request) {
   var rows = responseToRows(requestedFields, issues, request);
   return {
     schema: requestedFields.build(),
-    rows: rows
+    rows: rows,
+    filtersApplied: filtersApplied
   };
 }
 
