@@ -23,6 +23,8 @@ function responseToRows(requestedFields, response, request) {
           );
         case 'issuekey':
           return row.push(issue.key);
+        case 'statusCategory':
+          return row.push(issue.fields.status.statusCategory.name);
         default:
           var field = issue.fields[fieldId];
           var result = '';
