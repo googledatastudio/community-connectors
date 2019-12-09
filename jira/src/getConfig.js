@@ -6,7 +6,7 @@ var cc = DataStudioApp.createCommunityConnector();
  */
 function getConfig(request) {
   var configParams = request.configParams;
-  var isFirstRequest = configParams ? configParams.mode === undefined : false;
+  var isFirstRequest = configParams === undefined;
   var config = cc.getConfig();
   if (isFirstRequest) {
     config.setIsSteppedConfig(true);
