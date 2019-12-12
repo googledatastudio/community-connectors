@@ -5,9 +5,10 @@
  * @param {object} request object.
  * @return {object} An object containing rows with values.
  */
-function responseToRows(requestedFields, response, request) {
+function responseToRows(requestedFields, response) {
   const timeZone = Session.getScriptTimeZone();
   const format = 'yyyyMMddHH';
+  var resource = getResource().pop();
   // Transform parsed data and filter for requested fields
   return response.map(function(issue) {
     var row = [];
@@ -18,9 +19,7 @@ function responseToRows(requestedFields, response, request) {
         case 'id':
           return row.push(issue.id);
         case 'url':
-          return row.push(
-            'https://' + request.configParams.host + '/browse/' + issue.key
-          );
+          return row.push(resource.url + '/browse/' + issue.key);
         case 'issuekey':
           return row.push(issue.key);
         case 'statusCategory':
@@ -240,7 +239,7 @@ function getData(request) {
       )
       .throwException();
   }
-  var rows = responseToRows(requestedFields, issues, request);
+  var rows = responseToRows(requestedFields, issues);
   return {
     schema: requestedFields.build(),
     rows: rows,
