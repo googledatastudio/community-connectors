@@ -386,8 +386,6 @@ function getSendGridData(request) {
   });
   var requestedFields = getSendGridSchema(request).forIds(requestedFieldIds);
 
-  Logger.log('Get SendGrid data');
-
   var data = [];
   var row = 1;
   json_result.forEach(function (date_entry) {
