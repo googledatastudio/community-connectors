@@ -42,7 +42,7 @@ function getData(request) {
   if (request.configParams.stats_type == undefined || request.configParams.aggregated_by == undefined) {
     throwUserException('Stats Type and Aggregation are required in order to continue.');
   } else {
-
+    Logger.log(request);
     var results = getSendGridData(request);
   }
 

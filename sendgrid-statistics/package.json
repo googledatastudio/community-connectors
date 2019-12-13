@@ -1,0 +1,12 @@
+{
+  "name": "sendgrid-statistics",
+  "version": "1.0.0",
+  "description": "SendGrid Statistics connector for Google Data Studio",
+  "author": "Russell Sinclair",
+  "license": "MIT",
+  "dependencies": {
+    "@google/clasp": "^2.3.0",
+    "@google/dscc-scripts": "^1.0.13",
+    "prettier": "^1.19.1"
+  }
+}

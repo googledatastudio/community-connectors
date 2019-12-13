@@ -1,0 +1,57 @@
+<html>
+<body style="background-color: white;">
+    <table>
+        <tr>
+            <th>date</th>
+            <th>type</th>
+            <th>name</th>
+            <th>requests</th>
+            <th>processed</th>
+            <th>unsubscribes</th>
+            <th>bounce_drops</th>
+            <th>spam_report_drops</th>
+            <th>unsubscribe_drops</th>
+            <th>invalid_emails</th>
+            <th>delivery_rate</th>
+            <th>deferred</th>
+            <th>delivered</th>
+            <th>spam_reports</th>
+            <th>blocks</th>
+            <th>bounces</th>
+            <th>drops</th>
+            <th>clicks</th>
+            <th>unique_clicks</th>
+            <th>opens</th>
+            <th>unique_opens</th>
+        </tr>
+        {{#each @root}}
+            {{#each stats}}
+                <tr>
+                    <td>{{../date}}</td>
+                    <td>{{type}}</td>
+                    <td>{{name}}</td>
+                    <td>{{metrics.requests}}</td>
+                    <td>{{metrics.processed}}</td>
+                    <td>{{metrics.unsubscribes}}</td>
+                    <td>{{metrics.bounce_drops}}</td>
+                    <td>{{metrics.spam_report_drops}}</td>
+                    <td>{{metrics.unsubscribe_drops}}</td>
+                    <td>{{metrics.invalid_emails}}</td>
+                    <td>{{metrics.delivery_rate}}</td>
+                    <td>{{metrics.deferred}}</td>
+                    <td>{{metrics.delivered}}</td>
+                    <td>{{metrics.spam_reports}}</td>
+                    <td>{{metrics.blocks}}</td>
+                    <td>{{metrics.bounces}}</td>
+                    <td>{{metrics.drops}}</td>
+                    <td>{{metrics.clicks}}</td>
+                    <td>{{metrics.unique_clicks}}</td>
+                    <td>{{metrics.opens}}</td>
+                    <td>{{metrics.unique_opens}}</td>
+                </tr>
+            {{/each}}
+        {{/each}}
+    </table>
+</body>
+
+</html>

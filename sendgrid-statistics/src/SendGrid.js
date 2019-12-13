@@ -90,6 +90,11 @@ function getSendGridSchema(request) {
   var fields = cc.getFields();
 
   fields.newDimension()
+    .setId('row')
+    .setName('Row Number')
+    .setType(cc.FieldType.NUMBER);
+
+  fields.newDimension()
     .setId('date')
     .setName('Event Date')
     .setDescription('Date of the event aggregation.')
@@ -98,7 +103,7 @@ function getSendGridSchema(request) {
   switch (request.configParams.stats_type) {
     //Type and name do not appear on global stats
     case 'global':
-        fields.setDefaultDimension('date');
+      fields.setDefaultDimension('date');
       break;
     default: {
       fields.newDimension()
@@ -381,14 +386,21 @@ function getSendGridData(request) {
   });
   var requestedFields = getSendGridSchema(request).forIds(requestedFieldIds);
 
+  Logger.log('Get SendGrid data');
+
   var data = [];
+  var row = 1;
   json_result.forEach(function (date_entry) {
-    // throwUserException(date_entry.date);
+
     date_entry.stats.forEach(function (stats_entry) {
       var values = [];
       requestedFields.asArray().forEach(function (field) {
         var curr_field = field.getId()
         switch (curr_field) {
+          case "row":
+            values.push(row);
+            row++;
+            break;
           case 'date':
             values.push(date_entry.date);
             break;
@@ -402,11 +414,10 @@ function getSendGridData(request) {
             values.push(stats_entry.metrics[curr_field])
             break;
         }
-
-        data.push({
-          values: values
-        });
       })
+      data.push({
+        values: values
+      });
     })
   })
   return {
