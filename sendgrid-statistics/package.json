@@ -1,12 +1,21 @@
 {
-  "name": "sendgrid-statistics",
-  "version": "1.0.0",
-  "description": "SendGrid Statistics connector for Google Data Studio",
-  "author": "Russell Sinclair",
-  "license": "MIT",
-  "dependencies": {
-    "@google/clasp": "^2.3.0",
+  "dsccConnector": {
+    "production": "AKfycbz7iuBSNxwCiB7H5YA_XTObzm8wnTqroixEu1uDYVg1RCSc5BrVGxiju2yis3h6u_3ftQ",
+    "latest": "AKfycbwsqPSQKpiqjUNoHIpZYjtLjKG9oPeCPE22HQ_ZkzMU"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
     "@google/dscc-scripts": "^1.0.13",
-    "prettier": "^1.19.1"
+    "prettier": "^1.16.4"
   }
 }

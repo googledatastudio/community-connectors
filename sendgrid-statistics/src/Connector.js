@@ -2,13 +2,14 @@
 function getAuthType() {
   var cc = DataStudioApp.createCommunityConnector();
 
-  return cc.newAuthTypeResponse()
+  return cc
+    .newAuthTypeResponse()
     .setAuthType(cc.AuthType.KEY)
     .build();
 }
 
 function setCredentials(request) {
-  var key = request.key
+  var key = request.key;
   if (validateAPIKey(key)) {
     var userProperties = PropertiesService.getUserProperties();
     userProperties.setProperty('dscc.key', key);
@@ -39,8 +40,13 @@ function resetAuth() {
 }
 
 function getData(request) {
-  if (request.configParams.stats_type == undefined || request.configParams.aggregated_by == undefined) {
-    throwUserException('Stats Type and Aggregation are required in order to continue.');
+  if (
+    request.configParams.stats_type == undefined ||
+    request.configParams.aggregated_by == undefined
+  ) {
+    throwUserException(
+      'Stats Type and Aggregation are required in order to continue.'
+    );
   } else {
     var results = getSendGridData(request);
   }
