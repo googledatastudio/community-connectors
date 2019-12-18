@@ -107,7 +107,7 @@ function getSendGridConfig(request) {
       case 'subusers':
       case 'mailbox_providers':
       case 'browsers': {
-        //All of these items use named options
+        // All of these items use named options
         config
           .newTextArea()
           .setId('filter')
@@ -152,7 +152,7 @@ function getSendGridConfig(request) {
         break;
       }
       default: {
-        //Need a blank info area to force updates when a user selects a stats_type
+        // Need a blank info area to force updates when a user selects a stats_type
         config.newInfo().setId('info_req');
         break;
       }
@@ -182,7 +182,7 @@ function getSendGridSchema(request) {
     .setType(cc.FieldType.YEAR_MONTH_DAY);
 
   switch (request.configParams.stats_type) {
-    //Type and name do not appear on global stats
+    // Type and name do not appear on global stats
     case 'global':
       fields.setDefaultDimension('date');
       break;
@@ -192,7 +192,7 @@ function getSendGridSchema(request) {
         .setId('type')
         .setName('Segmentation Type')
         .setDescription('Type of the segmentation.')
-        .setIsHidden(true) //Load the field but hide it as it's not really very helpful to anyone
+        .setIsHidden(true) // Load the field but hide it as it's not really very helpful to anyone
         .setType(cc.FieldType.TEXT);
 
       fields
@@ -300,7 +300,7 @@ function getSendGridSchema(request) {
         .setGroup('Interactions')
         .setAggregation(cc.AggregationType.AUTO);
 
-      //Add Drops calculated field
+      // Add Drops calculated field
       fields
         .newMetric()
         .setId('total_drops')
@@ -313,7 +313,7 @@ function getSendGridSchema(request) {
         .setGroup('Failures')
         .setAggregation(cc.AggregationType.AUTO);
 
-      //No break - more fields coming
+      // No break - more fields coming
     }
     case 'mailbox_providers': {
       fields
@@ -407,7 +407,7 @@ function getSendGridSchema(request) {
         .setFormula('SUM($unique_clicks)/SUM($unique_opens)')
         .setAggregation(cc.AggregationType.AUTO);
 
-      //Drops is a static field if we are doing mailbox_stats (calculated field for global)
+      // Drops is a static field if we are doing mailbox_stats (calculated field for global)
       if (request.configParams.stats_type == 'mailbox_providers') {
         fields
           .newMetric()
@@ -443,7 +443,7 @@ function getSendGridSchema(request) {
         .setGroup('Interactions')
         .setAggregation(cc.AggregationType.SUM);
 
-      //Browsers is done at this point - all others keep going
+      // Browsers is done at this point - all others keep going
       if (request.configParams.stats_type == 'browsers') break;
     }
     case 'devices':
@@ -610,17 +610,17 @@ function buildURL(stats_type, aggregated_by, start_date, end_date, filters) {
     'aggregated_by=' + aggregated_by
   ];
 
-  //Setup filters if passed
+  // Setup filters if passed
   if (Array.isArray(filters) && filters.length) {
     var filter_name = stats_type;
     switch (stats_type) {
       case 'global':
       case 'devices':
       case 'clients':
-        //filters not supported
+        // filters not supported
         break;
       case 'geo':
-        //geo is the only filter that doesn't use the same name for the filter and api URL
+        // geo is the only filter that doesn't use the same name for the filter and api URL
         filter_name = 'country';
       default:
         filters.forEach(function(item) {
