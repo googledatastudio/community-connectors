@@ -1,0 +1,27 @@
+{
+  "name": "community-connectors",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prettier": "prettier --write '**/*.js' '**/*.json'",
+    "prettier:check": "prettier --check '**/*.js'",
+    "lint": "eslint '**/*.js' --quiet",
+    "fix": "yarn lint --fix && yarn prettier",
+    "travis": "yarn prettier:check && yarn lint"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "none",
+    "bracketSpacing": false,
+    "arrowParens": "always",
+    "endOfLine": "lf"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-gen": "^2.0.13",
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
+    "prettier": "^1.18.2"
+  }
+}
