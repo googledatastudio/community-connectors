@@ -41,10 +41,10 @@ function throwUserError(message) {
 
 function UptycsExecute(request, CallType) {
   var params = request.configParams;
-  var QueryJson = { type: params.database, query: params.sql_query };
+  var QueryJson = {type: params.database, query: params.sql_query};
   var ApiUrl = params.uptycs_url;
   var QueryJobsUrl = ApiUrl + '/queryJobs';
-  var ApiHeader = { Authorization: 'Bearer ' + params.authorization_bearer };
+  var ApiHeader = {Authorization: 'Bearer ' + params.authorization_bearer};
 
   var PostOptions = {
     headers: ApiHeader,
@@ -162,10 +162,10 @@ function getDataFromUptycs(request, schema) {
       row[i] = item.rowData[colmn['name']];
       i = i + 1;
     });
-    rows[j] = { values: row };
+    rows[j] = {values: row};
     j = j + 1;
   });
-  console.info({ schema: schema, rows: rows });
+  console.info({schema: schema, rows: rows});
   return rows;
 }
 
@@ -188,44 +188,44 @@ function UptycsQueryToFields(UptycsResponse) {
     // Set fields based on data type
     var field;
     switch (column.type.toLowerCase()) {
-    case 'boolean':
-      field = fields
-        .newDimension()
-        .setId(column.name)
-        .setType(types.BOOLEAN);
-      break;
-    case 'number_integer':
-    case 'id':
-      field = fields
-        .newMetric()
-        .setId(column.name)
-        .setType(types.NUMBER);
-      break;
-    case 'char':
-    case 'varchar':
-    case 'string':
-    case 'text':
-    case 'ref':
-      field = fields
-        .newDimension()
-        .setId(column.name)
-        .setType(types.TEXT);
-      break;
-    case 'date':
-      field = fields
-        .newDimension()
-        .setId(column.name)
-        .setType(types.YEAR_MONTH_DAY);
-      break;
-    case 'timestamp':
-    case 'date_time':
-      field = fields
-        .newDimension()
-        .setId(column.name)
-        .setType(types.YEAR_MONTH_DAY_HOUR);
-      break;
-    default:
-      return;
+      case 'boolean':
+        field = fields
+          .newDimension()
+          .setId(column.name)
+          .setType(types.BOOLEAN);
+        break;
+      case 'number_integer':
+      case 'id':
+        field = fields
+          .newMetric()
+          .setId(column.name)
+          .setType(types.NUMBER);
+        break;
+      case 'char':
+      case 'varchar':
+      case 'string':
+      case 'text':
+      case 'ref':
+        field = fields
+          .newDimension()
+          .setId(column.name)
+          .setType(types.TEXT);
+        break;
+      case 'date':
+        field = fields
+          .newDimension()
+          .setId(column.name)
+          .setType(types.YEAR_MONTH_DAY);
+        break;
+      case 'timestamp':
+      case 'date_time':
+        field = fields
+          .newDimension()
+          .setId(column.name)
+          .setType(types.YEAR_MONTH_DAY_HOUR);
+        break;
+      default:
+        return;
     }
 
     // Set field name and description (if any)

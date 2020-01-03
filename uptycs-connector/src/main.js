@@ -17,7 +17,7 @@ function isAdminUser() {
  * @returns {Object} `AuthType` used by the connector.
  */
 function getAuthType() {
-  var response = { type: 'NONE' };
+  var response = {type: 'NONE'};
   return response;
 }
 
@@ -72,7 +72,7 @@ function getSchema(request) {
     var ColumnJSON = UptycsExecute(request, 'columns');
     var fields = UptycsQueryToFields(ColumnJSON).build();
     console.info(fields);
-    return { schema: fields };
+    return {schema: fields};
   } catch (err) {
     throwUserError(err.message);
   }
