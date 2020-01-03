@@ -1,0 +1,17 @@
+{
+  "dataStudio": {
+    "name": "Uptycs Connector",
+    "company": "Uptycs inc.",
+    "logoUrl": "https://github.com/vibhorkum/gstudio-uptycs-connector/raw/master/uptycs.png",
+    "addonUrl": "https://github.com/vibhorkum/gstudio-uptycs-connector/README.md",
+    "supportUrl": "https://github.com/vibhorkum/gstudio-uptycs-connector/issues",
+    "description": "This connector for getting data from Uptycs",
+    "shortDescription": "Uptycs Connector for Data Studio",
+    "authType": ["NONE"],
+    "feeType": ["FREE"]
+  },
+  "timeZone": "America/New_York",
+  "dependencies": {
+  },
+  "exceptionLogging": "STACKDRIVER"
+}
