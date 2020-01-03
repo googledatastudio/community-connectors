@@ -17,7 +17,7 @@ function isAdminUser() {
  * @returns {Object} `AuthType` used by the connector.
  */
 function getAuthType() {
-  var response = { type: 'NONE' };
+  var response = { type: "NONE" };
   return response;
 }
 
@@ -33,29 +33,27 @@ function getConfig(request) {
 
   config
     .newTextInput()
-    .setId('uptycs_url')
-    .setName('Uptycs API URL')
+    .setId("uptycs_url")
+    .setName("Uptycs API URL")
     .setHelpText(
-      'https://<tenant>.uptycs.io/public/api/customers/<customerid>.'
+      "https://<tenant>.uptycs.io/public/api/customers/<customerid>."
     );
 
   config
     .newTextInput()
-    .setId('authorization_bearer')
-    .setName('Authorization Bearer JSON Web token without Bearer Key');
+    .setId("authorization_bearer")
+    .setName("Authorization Bearer JSON Web token without Bearer Key");
 
   config
     .newTextInput()
-    .setId('database')
-    .setName('Uptycs database ')
-    .setHelpText(
-      'Uptycs database [global|realtime|timemachine]'
-    );
+    .setId("database")
+    .setName("Uptycs database ")
+    .setHelpText("Uptycs database [global|realtime|timemachine]");
 
   config
     .newTextArea()
-    .setId('sql_query')
-    .setName('SQL Query');
+    .setId("sql_query")
+    .setName("SQL Query");
 
   config.setDateRangeRequired(true);
 
@@ -71,7 +69,7 @@ function getConfig(request) {
 function getSchema(request) {
   validateConfig(request.configParams);
   try {
-    var ColumnJSON = UptycsExecute(request, 'columns');
+    var ColumnJSON = UptycsExecute(request, "columns");
     var fields = UptycsQueryToFields(ColumnJSON).build();
     console.info(fields);
     return { schema: fields };
@@ -90,7 +88,7 @@ function getData(request) {
   var requestedFieldIds = request.fields.map(function(field) {
     return field.name;
   });
-  var ColumnJSON = UptycsExecute(request, 'columns');
+  var ColumnJSON = UptycsExecute(request, "columns");
   var fields = UptycsQueryToFields(ColumnJSON);
   var requestedFields = fields.forIds(requestedFieldIds);
   var schema = requestedFields.build();
