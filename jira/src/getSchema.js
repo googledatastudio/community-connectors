@@ -25,6 +25,9 @@ function getFields(fieldsData) {
       case 'datetime':
         type = types.YEAR_MONTH_DAY_HOUR;
         break;
+      case 'date':
+        type = types.YEAR_MONTH_DAY_HOUR;
+        break;
       case 'number':
         type = types.NUMBER;
         break;
