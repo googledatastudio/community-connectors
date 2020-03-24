@@ -1,19 +1,19 @@
 function getDateFormated(date) {
-  return Utilities.formatDate(date, "America/Los_Angeles", "YYYYMMddHHmmss");
+  return Utilities.formatDate(date, 'America/Los_Angeles', 'YYYYMMddHHmmss');
 }
 
 function generateQueryString(data) {
-   const params = [];
-   for (var d in data)
-      params.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
-   return  params.join('&');
+  const params = [];
+  for (var d in data)
+    params.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+  return params.join('&');
 }
 
-function getDataArrayName(json){
-  name = "";
+function getDataArrayName(json) {
+  name = '';
   Object.keys(json).forEach(function(key) {
     var value = json[key];
-    if(Array.isArray(value)){
+    if (Array.isArray(value)) {
       name = key;
       return;
     }
@@ -21,11 +21,11 @@ function getDataArrayName(json){
   return name;
 }
 
-function getDataArrayValues(json){
+function getDataArrayValues(json) {
   data_value = [];
   Object.keys(json).forEach(function(key) {
     var value = json[key];
-    if(Array.isArray(value)){
+    if (Array.isArray(value)) {
       data_value = value;
       return;
     }

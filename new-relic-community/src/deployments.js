@@ -5,26 +5,26 @@
  */
 function deploymentFields() {
   var fields = cc.getFields();
-  var types = cc.FieldType;  
+  var types = cc.FieldType;
 
   fields
     .newDimension()
     .setId('deploy_timestamp')
     .setName('Timestamp')
     .setType(types.YEAR_MONTH_DAY_SECOND);
-  
+
   fields
     .newDimension()
     .setId('revision')
     .setName('Revision')
     .setType(types.TEXT);
-  
+
   fields
     .newDimension()
     .setId('deployment_id')
     .setName('Deployment Id')
     .setType(types.TEXT);
-  
+
   fields
     .newDimension()
     .setId('user')
@@ -33,8 +33,6 @@ function deploymentFields() {
 
   return fields;
 }
-
-
 
 /**
  * Formats a single row of data into the required format.

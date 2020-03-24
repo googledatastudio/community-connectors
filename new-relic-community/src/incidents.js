@@ -5,7 +5,7 @@
  */
 function incidentFields() {
   var fields = cc.getFields();
-  var types = cc.FieldType;  
+  var types = cc.FieldType;
 
   fields
     .newDimension()
@@ -18,19 +18,19 @@ function incidentFields() {
     .setId('closed_at')
     .setName('Closed')
     .setType(types.YEAR_MONTH_DAY_SECOND);
-  
+
   fields
     .newDimension()
     .setId('duration')
     .setName('Duration')
     .setType(types.NUMBER);
-  
+
   fields
     .newDimension()
     .setId('incident_id')
     .setName('Incident Id')
     .setType(types.TEXT);
-  
+
   fields
     .newDimension()
     .setId('policy_id')
@@ -39,7 +39,6 @@ function incidentFields() {
 
   return fields;
 }
-
 
 /**
  * Formats a single row of data into the required format.
@@ -71,6 +70,6 @@ function formatIncidentData(requestedFields, incident) {
 }
 
 function minutesBetweenDates(date_opened, date_closed) {
-    var diff = date_closed.getTime() - date_opened.getTime();
-    return Math.round(diff / 60000)
+  var diff = date_closed.getTime() - date_opened.getTime();
+  return Math.round(diff / 60000);
 }

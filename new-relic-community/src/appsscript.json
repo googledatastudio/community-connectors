@@ -1,6 +1,5 @@
 {
-  "dependencies": {
-  },
+  "dependencies": {},
   "urlFetchWhitelist": ["https://api.newrelic.com/"],
   "runtimeVersion": "V8",
   "dataStudio": {
