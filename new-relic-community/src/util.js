@@ -4,8 +4,9 @@ function getDateFormated(date) {
 
 function generateQueryString(data) {
   const params = [];
-  for (var d in data)
+  for (var d in data) {
     params.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+  }
   return params.join('&');
 }
 
