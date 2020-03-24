@@ -1,0 +1,31 @@
+{
+  "name": "new-relic-community",
+  "version": "1.0.0",
+  "description": "New Relic plugin to get application metrics within Data Studio",
+  "main": "/src/main.js",
+  "repository": "https://github.com/googledatastudio/community-connectors/tree/master/new-relic-community",
+  "author": "Clayton Oliveira <claytondev1@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "prettier": "prettier --write '**/*.js' '**/*.json'",
+    "prettier:check": "prettier --check '**/*.js'",
+    "lint": "eslint '**/*.js' --quiet",
+    "fix": "yarn lint --fix && yarn prettier",
+    "travis": "yarn prettier:check && yarn lint"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "none",
+    "bracketSpacing": false,
+    "arrowParens": "always",
+    "endOfLine": "lf"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-gen": "^2.0.13",
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0",
+    "prettier": "^1.18.2"
+  }
+}
