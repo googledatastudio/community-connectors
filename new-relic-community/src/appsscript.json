@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+  },
+  "urlFetchWhitelist": ["https://api.newrelic.com/"],
+  "runtimeVersion": "V8",
+  "dataStudio": {
+    "name": "New Relic - Community",
+    "logoUrl": "https://i.imgur.com/oi8KM0X.png",
+    "company": "Clayton Oliveira",
+    "companyUrl": "https://stackoverflow.com/users/3089649/clayton-oliveira?tab\u003dprofile",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/tree/master/new-relic-community#readme",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues?title\u003dNew%20Relic%20Community%20Connector%20Issue",
+    "description": "Get your applications data from your New Relic account using the REST API.",
+    "sources": ["NEW_RELIC"],
+    "shortDescription": "Get New Relic application data on Google Data Studio."
+  }
+}
