@@ -1,0 +1,12 @@
+{
+  "runtimeVersion": "V8",
+  "dataStudio": {
+    "name": "NovelCOVID API",
+    "company": "Swimming Beaver",
+    "logoUrl": "https://www.pacific.edu/images/marketing/virus-logo-100x100.png",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors",
+    "supportUrl": "https://github.com/linusyoung/COVID-19-Connector",
+    "description": "Accessing data from NovelCOVID API",
+    "useQueryConfig": false
+  }
+}

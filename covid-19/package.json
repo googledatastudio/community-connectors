@@ -1,0 +1,21 @@
+{
+  "dsccConnector": {
+    "production": "AKfycbwo_v4kBG-quHwmnzIv5a9EQn45XAu_1WUcMVz8Ts_Z17yUIfcSi27YclZgSpc18u4",
+    "latest": "AKfycbxykL1_3vlSSXV9zo_e0XeLU4Tr7HsO5bHF7oovww"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-scripts": "^1.0.13",
+    "prettier": "^1.16.4"
+  }
+}
