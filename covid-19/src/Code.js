@@ -1,5 +1,5 @@
 function getAuthType() {
-  var response = { type: "NONE" };
+  var response = {type: 'NONE'};
   return response;
 }
 
@@ -9,9 +9,9 @@ function getConfig(request) {
 
   config
     .newInfo()
-    .setId("instructions")
+    .setId('instructions')
     .setText(
-      "Access all historical data from NovelCOVID API. No configuration required."
+      'Access all historical data from NovelCOVID API. No configuration required.'
     );
 
   return config.build();
@@ -25,23 +25,23 @@ function getFields(request) {
 
   fields
     .newDimension()
-    .setId("country")
+    .setId('country')
     .setType(types.TEXT);
   fields
     .newDimension()
-    .setId("province")
+    .setId('province')
     .setType(types.TEXT);
   fields
     .newDimension()
-    .setId("day")
+    .setId('day')
     .setType(types.YEAR_MONTH_DAY);
   fields
     .newDimension()
-    .setId("cases")
+    .setId('cases')
     .setType(types.NUMBER);
   fields
     .newDimension()
-    .setId("deaths")
+    .setId('deaths')
     .setType(types.NUMBER);
 
   return fields;
@@ -49,7 +49,7 @@ function getFields(request) {
 
 function getSchema(request) {
   var fields = getFields(request).build();
-  return { schema: fields };
+  return {schema: fields};
 }
 
 function responseToRows(requestedFields, response) {
@@ -65,27 +65,27 @@ function responseToRows(requestedFields, response) {
       var row = [];
       requestedFields.asArray().forEach(function(field) {
         switch (field.getId()) {
-          case "country":
+          case 'country':
             return row.push(country);
-          case "province":
+          case 'province':
             return row.push(province);
-          case "day":
-            var datepart = day.split("/");
-            var cYear = "20" + datepart[2];
+          case 'day':
+            var datepart = day.split('/');
+            var cYear = '20' + datepart[2];
             var cMonth =
-              datepart[0].length == 1 ? "0" + datepart[0] : datepart[0];
+              datepart[0].length == 1 ? '0' + datepart[0] : datepart[0];
             var cDay =
-              datepart[1].length == 1 ? "0" + datepart[1] : datepart[1];
+              datepart[1].length == 1 ? '0' + datepart[1] : datepart[1];
             return row.push(cYear + cMonth + cDay);
-          case "cases":
+          case 'cases':
             return row.push(cases[day]);
-          case "deaths":
+          case 'deaths':
             return row.push(deaths[day]);
           default:
-            return row.push("");
+            return row.push('');
         }
       });
-      rows.push({ values: row });
+      rows.push({values: row});
     });
   });
   return rows;
@@ -98,7 +98,7 @@ function getData(request) {
   var requestedFields = getFields().forIds(requestedFieldIds);
 
   // Fetch and parse data from API
-  var url = "https://corona.lmao.ninja/v2/historical";
+  var url = 'https://corona.lmao.ninja/v2/historical';
   var response = UrlFetchApp.fetch(url);
   var parsedResponse = JSON.parse(response);
   var rows = responseToRows(requestedFields, parsedResponse);
