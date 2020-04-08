@@ -1,6 +1,6 @@
 # Shopify Community Connector for Data Studio
 
-*This is not an official Google product* [Brought to you by Sysharmony.com](https://sysharmony.com)
+*This is not an official Google product* [Brought to you by Sysharmony.com](https://sysharmony.com/datastudio/shopify/)
 
 This [Data Studio](https://datastudio.google.com/) [Community Connector](https://developers.google.com/datastudio/connector) lets users query their Shopify sales. 
 
