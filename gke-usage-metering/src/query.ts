@@ -38,8 +38,8 @@ namespace gkeUsageMetering {
       FROM
         \`${fullGCPBillingExportTableID}\`
       WHERE
-        min_usage_start_time >= TIMESTAMP("${startDate}")
-        AND max_usage_end_time <= TIMESTAMP("${endDate}")
+        min_usage_start_time >= DATE("${startDate}")
+        AND max_usage_end_time <= DATE("${endDate}")
         AND project_id = "${projectID}"
       GROUP BY
         project_id,
