@@ -1,5 +1,5 @@
 namespace gkeUsageMetering {
-  const requestTableID = 'gke_cluster_resource_usage';
+  const requestTableID = 'gke_cluster_resource_usage_partitioned';
   const consumptionTableID = 'gke_cluster_resource_consumption';
 
   /**

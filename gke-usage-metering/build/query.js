@@ -1,6 +1,6 @@
 var gkeUsageMetering;
 (function (gkeUsageMetering) {
-    var requestTableID = 'gke_cluster_resource_usage';
+    var requestTableID = 'gke_cluster_resource_usage_partitioned';
     var consumptionTableID = 'gke_cluster_resource_consumption';
     /**
      * Returns the BigQuery query based on whether consumption-based metering
