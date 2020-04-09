@@ -67,8 +67,8 @@ namespace gkeUsageMetering {
               FROM 
                 \`${fullUsageExportTableID}\`
               WHERE
-                      resource_usage.start_time >= DATE("${startDate}")
-                AND resource_usage.end_time <= DATE("${endDate}")  
+                      start_time >= DATE("${startDate}")
+                AND  end_time <= DATE("${endDate}")  
         ) AS resource_usage
       INNER JOIN
         billing_table
