@@ -34,7 +34,7 @@ namespace gkeUsageMetering {
         SUM(amount) AS amount,
         usage_unit AS usage_unit,
         SUM(cost) AS cost,
-        SUM(cost) / SUM(amount) AS rate
+        SUM(cost) / SUM(rate) AS rate
       FROM
         \`${fullGCPBillingExportTableID}\`
       WHERE
