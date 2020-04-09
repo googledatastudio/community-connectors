@@ -21,7 +21,7 @@ namespace gkeUsageMetering {
 
     let fullGCPBillingExportTableID = gcpBillingExportTableID.replace(":", ".");
     let fullUsageExportTableID = usageExportDatasetID.replace(":", ".") + "." + requestTableID;
-    let fullConsumptionUsageExportTableID = usageExportDatasetID.replace(":", ".") + "." + consumptionTableID; 
+    let fullConsumptionUsageExportTableID = usageExportDatasetID.replace(":", ".") + "." + consumptionTableID;
     let projectID = fullUsageExportTableID.split(".")[0]
 
     let queryWithRequestOnly = `
@@ -541,8 +541,9 @@ namespace gkeUsageMetering {
   FROM
     consumption_based_cost_allocation
     `;
-  if (consumptionEnabled) {
-    return queryWithConsumptionEnabled
+    if (consumptionEnabled) {
+      return queryWithConsumptionEnabled
+    }
+    return queryWithRequestOnly
   }
-  return queryWithRequestOnly
 }
