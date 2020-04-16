@@ -24,7 +24,7 @@ function getConfig() {
     .setAllowOverride(false)
     .setId('resourceUsageDatasetID')
     .setName('Enter the fully-qualified name of the BigQuery dataset in which the GKE resource usage data resides')
-    .setHelpText('A full-qualified BigQuery dataset name should be in format ${PROJECT_ID}:${DATASET_ID}')
+    .setHelpText('A full-qualified BigQuery dataset name should be in format ${PROJECT_ID}.${DATASET_ID}')
     .setPlaceholder('${PROJECT_ID}.${DATASET_ID}');
 
   config
@@ -32,7 +32,7 @@ function getConfig() {
     .setAllowOverride(false)
     .setId('gcpBillingExportTableID')
     .setName('Enter the fully-qualified name of the BigQuery table in which the GCP billing data is exported to')
-    .setHelpText('A full-qualified BigQuery dataset name should be in format PROJECT_ID:DATASET_ID.gcp_billing_export_v1_${BILLING_ACCOUNT_ID}')
+    .setHelpText('A full-qualified BigQuery dataset name should be in format ${PROJECT_ID}.${DATASET_ID}.gcp_billing_export_v1_${BILLING_ACCOUNT_ID}')
     .setPlaceholder('${PROJECT_ID}.${DATASET_ID}.${TABLE_ID}');
 
   config
