@@ -153,13 +153,16 @@ namespace gkeUsageMetering {
     }
     // We support two types of project IDs: the current standard, and the previously-supported domain-scoped project IDs,
     // which were in the format of <DOMAIN>.<PROJECT>. The domain can contain ":".
-    let matchFullBillingTableID = "/^[a-z][a-z-\d]{5,29}\.[a-zA-Z_\d]{1,1024}\.[a-zA-Z_\d]{1,1024}$/"
-    let matchDomainScopedBillingTableID = "/^[a-z][a-z-\d]+\.*[a-z][a-z-\d]+:[a-z][a-z-\d]+\.[a-zA-Z_\d]{1,1024}\.[a-zA-Z_\d]{1,1024}$/"
+    let matchFullBillingTableID =
+      /^[a-z][a-z-\d]{5,29}\.[a-zA-Z_\d]{1,1024}\.[a-zA-Z_\d]{1,1024}$/
+    let matchDomainScopedBillingTableID =
+    /^[a-z][a-z-\d]+\.*[a-z][a-z-\d]+:[a-z][a-z-\d]+\.[a-zA-Z_\d]{1,1024}\.[a-zA-Z_\d]{1,1024}$/
     // fullBillingTable should be in the format of ${PROJECT_ID}.${DATASET_ID}.${TABLE_ID}.
     // Bigquery table IDs can contain letters, numbers and underscores.
     if
       (!fullBillingTable.match(matchFullBillingTableID)
-      && !fullBillingTable.match(matchDomainScopedBillingTableID)) {
+      &&
+        !fullBillingTable.match(matchDomainScopedBillingTableID)) {
       return connector
         .newUserError()
         .setText('Invalid GCP billing table ID: table ID must be in the format of \"${PROJECT_ID}.${DATASET_ID}.${TABLE_ID}\"')
