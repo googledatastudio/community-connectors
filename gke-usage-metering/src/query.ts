@@ -19,9 +19,9 @@ namespace gkeUsageMetering {
     consumptionEnabled: boolean,
   ): string {
 
-    let fullGCPBillingExportTableID = gcpBillingExportTableID.replace(":", ".");
-    let fullUsageExportTableID = usageExportDatasetID.replace(":", ".") + "." + requestTableID;
-    let fullConsumptionUsageExportTableID = usageExportDatasetID.replace(":", ".") + "." + consumptionTableID; 
+    let fullGCPBillingExportTableID = gcpBillingExportTableID
+    let fullUsageExportTableID = usageExportDatasetID + "." + requestTableID;
+    let fullConsumptionUsageExportTableID = usageExportDatasetID + "." + consumptionTableID;
     let projectID = fullUsageExportTableID.split(".")[0]
 
     let queryWithRequestOnly = `
@@ -541,8 +541,8 @@ namespace gkeUsageMetering {
   FROM
     consumption_based_cost_allocation
     `;
-  if (consumptionEnabled) {
-    return queryWithConsumptionEnabled
+    if (consumptionEnabled) {
+      return queryWithConsumptionEnabled
+    }
+    return queryWithRequestOnly
   }
-  return queryWithRequestOnly
-}
