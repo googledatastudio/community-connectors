@@ -301,7 +301,8 @@ crux.Schema = [
   {
     name: 'fast_lcp',
     label: 'Fast LCP',
-    description: 'The percent of Fast Largest Contentful Paint.',
+    description:
+      'The percent of Largest Contentful Paint experiences < 2.5 seconds.',
     dataType: 'NUMBER',
     defaultAggregationType: 'SUM',
     semantics: {
@@ -313,7 +314,8 @@ crux.Schema = [
   {
     name: 'avg_lcp',
     label: 'Average LCP',
-    description: 'The percent of Average Largest Contentful Paint.',
+    description:
+      'The percent of Largest Contentful Paint experiences >= 2.5 seconds and < 4 seconds.',
     dataType: 'NUMBER',
     defaultAggregationType: 'SUM',
     semantics: {
@@ -325,7 +327,8 @@ crux.Schema = [
   {
     name: 'slow_lcp',
     label: 'Slow LCP',
-    description: 'The percent of Slow Largest Contentful Paint.',
+    description:
+      'The percent of Largest Contentful Paint experiences >= 4 seconds.',
     dataType: 'NUMBER',
     defaultAggregationType: 'SUM',
     semantics: {
@@ -337,7 +340,7 @@ crux.Schema = [
   {
     name: 'small_cls',
     label: 'Small CLS',
-    description: 'The percent of Small Cumulative Layout Shift.',
+    description: 'The percent of Cumulative Layout Shift experiences < 0.1.',
     dataType: 'NUMBER',
     defaultAggregationType: 'SUM',
     semantics: {
@@ -349,7 +352,8 @@ crux.Schema = [
   {
     name: 'medium_cls',
     label: 'Medium CLS',
-    description: 'The percent of Medium Cumulative Layout Shift.',
+    description:
+      'The percent of Cumulative Layout Shift experiences >= 0.1 and < 0.25.',
     dataType: 'NUMBER',
     defaultAggregationType: 'SUM',
     semantics: {
@@ -361,7 +365,7 @@ crux.Schema = [
   {
     name: 'large_cls',
     label: 'Large CLS',
-    description: 'The percent of Large Cumulative Layout Shift.',
+    description: 'The percent of Cumulative Layout Shift experiences >= 0.25.',
     dataType: 'NUMBER',
     defaultAggregationType: 'SUM',
     semantics: {
