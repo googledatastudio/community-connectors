@@ -7,40 +7,34 @@ function isAdminUser() {
 function getAuthType() {
   var AuthTypes = cc.AuthType;
   return cc
-      .newAuthTypeResponse()
-      .setAuthType(AuthTypes.NONE)
-      .build();
+    .newAuthTypeResponse()
+    .setAuthType(AuthTypes.NONE)
+    .build();
 }
 
 function getConfig() {
   var config = cc.getConfig();
 
   config
-      .newTextInput()
-      .setId('customer_id')
-      .setName(
-          'Enter adwords customer id'
-      )
-      .setHelpText('Enter adwords customer id [xxx-xxx-xxxx]')
-      .setAllowOverride(false);
+    .newTextInput()
+    .setId('customer_id')
+    .setName('Enter adwords customer id')
+    .setHelpText('Enter adwords customer id [xxx-xxx-xxxx]')
+    .setAllowOverride(false);
 
   config
-      .newTextInput()
-      .setId('country_code')
-      .setName(
-          'Enter country code'
-      )
-      .setHelpText('Enter country code [EN]')
-      .setAllowOverride(false);
+    .newTextInput()
+    .setId('country_code')
+    .setName('Enter country code')
+    .setHelpText('Enter country code [EN]')
+    .setAllowOverride(false);
 
   config
-      .newTextInput()
-      .setId('token')
-      .setName(
-          'Enter token'
-      )
-      .setHelpText('Enter token [02t56g74fu2-3ir457]')
-      .setAllowOverride(false);
+    .newTextInput()
+    .setId('token')
+    .setName('Enter token')
+    .setHelpText('Enter token [02t56g74fu2-3ir457]')
+    .setAllowOverride(false);
 
   config.setDateRangeRequired(true);
 
@@ -53,88 +47,88 @@ function getFields() {
   var aggregations = cc.AggregationType;
 
   fields
-      .newDimension()
-      .setId('date')
-      .setName('Date')
-      .setType(types.YEAR_MONTH_DAY);
+    .newDimension()
+    .setId('date')
+    .setName('Date')
+    .setType(types.YEAR_MONTH_DAY);
 
   fields
-      .newDimension()
-      .setId('customer_id')
-      .setName('Customer id')
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('customer_id')
+    .setName('Customer id')
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('customer_full_name')
-      .setName('Customer full name')
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('customer_full_name')
+    .setName('Customer full name')
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('campaign_id')
-      .setName('Campaign id')
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('campaign_id')
+    .setName('Campaign id')
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('domain')
-      .setName('Domain')
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('domain')
+    .setName('Domain')
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('changed_entity')
-      .setName('Changed entity')
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('changed_entity')
+    .setName('Changed entity')
+    .setType(types.TEXT);
 
   fields
-      .newDimension()
-      .setId('changed_operation')
-      .setName('Changed operation')
-      .setType(types.TEXT);
+    .newDimension()
+    .setId('changed_operation')
+    .setName('Changed operation')
+    .setType(types.TEXT);
 
   fields
-      .newMetric()
-      .setId('changed_value')
-      .setName('Changed value')
-      .setType(types.NUMBER)
-      .setAggregation(aggregations.SUM);
+    .newMetric()
+    .setId('changed_value')
+    .setName('Changed value')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.SUM);
 
   fields
-      .newMetric()
-      .setId('impressions')
-      .setName('Impressions')
-      .setType(types.NUMBER)
-      .setAggregation(aggregations.SUM);
+    .newMetric()
+    .setId('impressions')
+    .setName('Impressions')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.SUM);
 
   fields
-      .newMetric()
-      .setId('overlap_rate')
-      .setName('Overlap rate')
-      .setType(types.NUMBER)
-      .setAggregation(aggregations.AVG);
+    .newMetric()
+    .setId('overlap_rate')
+    .setName('Overlap rate')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG);
 
   fields
-      .newMetric()
-      .setId('competitor_above_rate')
-      .setName('Competitor above rate')
-      .setType(types.NUMBER)
-      .setAggregation(aggregations.AVG);
+    .newMetric()
+    .setId('competitor_above_rate')
+    .setName('Competitor above rate')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG);
 
   fields
-      .newMetric()
-      .setId('promoted_rate')
-      .setName('Promoted rate')
-      .setType(types.NUMBER)
-      .setAggregation(aggregations.AVG);
+    .newMetric()
+    .setId('promoted_rate')
+    .setName('Promoted rate')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG);
 
   fields
-      .newMetric()
-      .setId('outranking_share')
-      .setName('Outranking share')
-      .setType(types.NUMBER)
-      .setAggregation(aggregations.AVG);
+    .newMetric()
+    .setId('outranking_share')
+    .setName('Outranking share')
+    .setType(types.NUMBER)
+    .setAggregation(aggregations.AVG);
 
   return fields;
 }
@@ -145,9 +139,9 @@ function getSchema(request) {
 
 function getData(request) {
   var requestedFields = getFields().forIds(
-      request.fields.map(function(field) {
-        return field.name;
-      })
+    request.fields.map(function(field) {
+      return field.name;
+    })
   );
   var requestedFieldsArray = request.fields.map(function(field) {
     return field.name;
@@ -161,13 +155,13 @@ function getData(request) {
     throw new Error('Invalid token');
   }
   var host = '';
-  switch(request.configParams.country_code) {
+  switch (request.configParams.country_code) {
     case 'PL':
     case 'EN':
       host = 'promonavigator.com';
       break;
     case 'ID':
-      host = 'promonaviasia.com'
+      host = 'promonaviasia.com';
       break;
     default:
       throw new Error('Unsupported country');
