@@ -1,0 +1,23 @@
+{
+  "timeZone": "GMT",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dependencies": {},
+  "dataStudio": {
+    "name": "Promonavi data connector",
+    "logoUrl": "https://promonavigator.com/assets/img/logo64.jpg",
+    "company": "Promonavigator",
+    "companyUrl": "https://promonavigator.com",
+    "addonUrl": "https://github.com/googledatastudio/community-connectors/blob/master/promonavi/README.md",
+    "supportUrl": "https://github.com/googledatastudio/community-connectors/issues/new?title=Promonavi%20Report%20Data%20Connector%20Issue",
+    "description": "Promonavi report data connector",
+    "shortDescription": "Get competitors for site optimization.",
+    "authType": ["NONE"],
+    "feeType": ["FREE"],
+    "sources": []
+  },
+  "urlFetchWhitelist": [
+    "https://promonavigator.com/",
+    "https://promonaviasia.com/"
+  ]
+}
