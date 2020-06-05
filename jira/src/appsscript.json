@@ -5,11 +5,12 @@
       {
         "userSymbol": "OAuth2",
         "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
-        "version": "35"
+        "version": "38"
       }
     ]
   },
   "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
   "dataStudio": {
     "name": "Jira Issues",
     "logoUrl": "https://raw.githubusercontent.com/EnmanuelParache/community-connectors/jira/jira/logo.png",
