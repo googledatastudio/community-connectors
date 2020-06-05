@@ -262,7 +262,7 @@ function getParams() {
     method: 'get',
     validateHttpsCertificates: false,
     followRedirects: true,
-    muteHttpExceptions: true,
+    muteHttpExceptions: false,
     escaping: true
   };
   return params;
@@ -272,37 +272,13 @@ function getParams() {
  * @returns {object} response object containing resources.
  */
 function getResource() {
-  var url = 'https://api.atlassian.com/oauth/token/accessible-resources';
-  var params = getParams();
-  var response = UrlFetchApp.fetch(url, params);
-
-  return JSON.parse(handleResponse(response));
-}
-
-/**
- * Handles HTTPResponse depending on status code
- * @param {object} response HTTPResponse
- * @param {object} callback function to process response
- * @returns callback, if not passed response is returned
- */
-function handleResponse(response, callback) {
-  if (response.getResponseCode() === 200) {
-    if (callback) {
-      return callback(response);
-    } else {
-      return response;
-    }
-  } else {
-    switch (response.getResponseCode()) {
-      case 400:
-        throw 'Bad request.';
-      case 401:
-        throw 'Unauthorized. Please validate credentials.';
-      case 500:
-        throw 'Server error.';
-      default:
-        throw 'Error code ' + response.getResponseCode();
-    }
+  try {
+    var url = 'https://api.atlassian.com/oauth/token/accessible-resources';
+    var params = getParams();
+    var response = UrlFetchApp.fetch(url, params);
+    return JSON.parse(response);
+  } catch (error) {
+    handleError(error, 'Something went wrong while fetching resources.');
   }
 }
 /**
@@ -312,23 +288,39 @@ function handleResponse(response, callback) {
  * @returns {object} Data returned by endpoint
  */
 function getFromJira(endpoint, params) {
-  var host = 'https://api.atlassian.com/ex/jira/';
-  var resource = getResource().pop();
-  var queryParams = [];
+  try {
+    var host = 'https://api.atlassian.com/ex/jira/';
+    var resource = getResource().pop();
+    var queryParams = [];
 
-  if (endpoint.substr(0, 1) != '/') {
-    throw 'Endpoint must start with /';
-  }
-
-  if (params) {
-    for (var key in params) {
-      queryParams.push(key + '=' + params[key]);
+    if (endpoint.substr(0, 1) != '/') {
+      throw 'Endpoint must start with /';
     }
-  }
-  var url = [host, resource.id, endpoint, '?', queryParams.join('&')].join('');
 
-  var response = UrlFetchApp.fetch(encodeURI(url), getParams());
-  return handleResponse(response, function(response) {
+    if (params) {
+      for (var key in params) {
+        queryParams.push(key + '=' + params[key]);
+      }
+    }
+    var url = [host, resource.id, endpoint, '?', queryParams.join('&')].join(
+      ''
+    );
+
+    var response = UrlFetchApp.fetch(encodeURI(url), getParams());
     return JSON.parse(response);
-  });
+  } catch (error) {
+    handleError(error, 'Something went wrong while fetching ' + enpoint);
+  }
+}
+/**
+ * Handles error creating Data studio error
+ * @param {Object} error thrown
+ * @param {String} message for user
+ */
+function handleError(error, message) {
+  DataStudioApp.createCommunityConnector()
+    .newUserError()
+    .setDebugText(error)
+    .setText(message)
+    .throwException();
 }
