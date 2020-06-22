@@ -1,6 +1,6 @@
 /** @constant - 15min */
 DataCache.DEFAULT_TIMEOUT_SECONDS = 15 * 60; // 15min
-DataCache.MAX_TIMEOUT_SECONDS = 6 * 60 * 60;  // 6h (Google Maximum)
+DataCache.MAX_TIMEOUT_SECONDS = 6 * 60 * 60; // 6h (Google Maximum)
 
 /** @constant - 255 chars */
 DataCache.MAX_KEY_LENGTH = 255;
@@ -10,7 +10,7 @@ DataCache.MAX_CACHE_SIZE = 100 * 1024;
 
 /**
  * Constructor for DataCache.
- * 
+ *
  * see https://developers.google.com/apps-script/reference/cache (remark: use different cache for each domain)
  *
  * @constructor
@@ -24,7 +24,10 @@ DataCache.MAX_CACHE_SIZE = 100 * 1024;
 function DataCache(cacheService, timeoutSeconds, prefix, params) {
   this.service = cacheService;
   // ToDo: check if a timeoutSeconds of undefined should be treated as 0 (no caching) or as DataCache.DEFAULT_TIMEOUT_SECONDS
-  this.timeout = timeoutSeconds && Number.isInteger(timeoutSeconds) ? Math.min(timeoutSeconds, DataCache.MAX_TIMEOUT_SECONDS) : DataCache.DEFAULT_TIMEOUT_SECONDS;
+  this.timeout =
+    timeoutSeconds && Number.isInteger(timeoutSeconds)
+      ? Math.min(timeoutSeconds, DataCache.MAX_TIMEOUT_SECONDS)
+      : DataCache.DEFAULT_TIMEOUT_SECONDS;
   this.cacheKey = this.buildCacheKey(prefix, params);
 
   return this;
@@ -38,15 +41,13 @@ function DataCache(cacheService, timeoutSeconds, prefix, params) {
  * @returns {String} cache key
  */
 DataCache.prototype.buildCacheKey = function(prefix, params) {
-  
   var key = prefix;
   if (params && Object.keys(params).length > 0)
-    key = prefix + '_' + JSON.stringify(params);
-  
+    key = prefix + "_" + JSON.stringify(params);
+
   this.identifier = key;
-  if (key.length > DataCache.MAX_KEY_LENGTH)
-    key = key.cyrb53();
-  
+  if (key.length > DataCache.MAX_KEY_LENGTH) key = key.cyrb53();
+
   return key;
 };
 
@@ -56,14 +57,14 @@ DataCache.prototype.buildCacheKey = function(prefix, params) {
  * @returns {String} - the retrieved value
  */
 DataCache.prototype.get = function() {
-  var value = '';
-  var chunk = '';
+  var value = "";
+  var chunk = "";
   var chunkIndex = 0;
 
   do {
     var chunkKey = this.getChunkKey(chunkIndex);
     chunk = this.service.get(chunkKey);
-    value += (chunk || '');
+    value += chunk || "";
     chunkIndex++;
   } while (chunk && chunk.length == DataCache.MAX_CACHE_SIZE);
 
@@ -81,7 +82,7 @@ DataCache.prototype.set = function(value) {
 
 /**
  * Splits the value into chunks of DataCache.MAX_CACHE_SIZE and stores them using the initialy built key as prefix.
- * 
+ *
  * @param {String} value - the value to store
  */
 DataCache.prototype.storeChunks = function(value) {
@@ -95,17 +96,17 @@ DataCache.prototype.storeChunks = function(value) {
 
 /**
  * Builds a key for the given chunk index
- * 
+ *
  * @param {int} chunkIndex - the chunk index
  * @returns {String} key
  */
 DataCache.prototype.getChunkKey = function(chunkIndex) {
-  return this.cacheKey + '_' + chunkIndex;
+  return this.cacheKey + "_" + chunkIndex;
 };
 
 /**
  * Splits the value into chunks of DataCache.MAX_CACHE_SIZE.
- * 
+ *
  * @param {String} str - the string value
  * @returns {Array} chunks in an aray of strings
  */
@@ -130,13 +131,13 @@ DataCache.prototype.getJson = function() {
   var json;
   try {
     json = JSON.parse(this.get());
-    console.log('Got JSON data from cache. ' + this.identifier);
-  } catch(e) {
-    console.log('Could not get JSON data from cache. ' + this.identifier, e);
+    console.log("Got JSON data from cache. " + this.identifier);
+  } catch (e) {
+    console.log("Could not get JSON data from cache. " + this.identifier, e);
   }
-  
+
   return json;
-}
+};
 
 /**
  * Stores a value of type object using the built key.
@@ -146,8 +147,8 @@ DataCache.prototype.getJson = function() {
 DataCache.prototype.setJson = function(value) {
   try {
     this.set(JSON.stringify(value));
-    console.log('JSON data set to cache. ' + this.identifier);
+    console.log("JSON data set to cache. " + this.identifier);
   } catch (e) {
-    console.log('Could not set JSON data to cache. ' + this.identifier, e);
+    console.log("Could not set JSON data to cache. " + this.identifier, e);
   }
-}
+};
