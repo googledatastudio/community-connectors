@@ -21,7 +21,7 @@ MiteCustomers.API_ARCHIVED = "customers/archived";
  *
  * @returns {MiteInterface} - the connector and Mite API wrapper
  */
-MiteCustomers.prototype.createApi = function() {
+MiteCustomers.prototype.createApi = function () {
   return new MiteInterface(
     this.getDimensions,
     undefined,
@@ -36,37 +36,37 @@ MiteCustomers.prototype.createApi = function() {
  *
  * @returns {object} an array of fields whereas each dimension is a dictionary (object in JSON notation).
  */
-MiteCustomers.prototype.getDimensions = function() {
+MiteCustomers.prototype.getDimensions = function () {
   var types = cc.FieldType;
 
   return [
     {
       id: "id",
       name: "ID",
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "name",
       name: "Name",
       filter: true,
       type: types.TEXT,
-      isDefault: true
+      isDefault: true,
     },
     {
       id: "note",
       name: "Note",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "hourly_rate",
       name: "Hourly Rate",
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "archived",
       name: "Archived",
       filter: true,
-      type: types.BOOLEAN
-    }
+      type: types.BOOLEAN,
+    },
   ];
 };

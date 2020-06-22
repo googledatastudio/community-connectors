@@ -23,15 +23,15 @@ function Filter(schema, filter, filterType) {
 
     if (filterType == Filter.AND)
       this.filter = filter.map(
-        orFilter => new Filter(schema, orFilter, Filter.OR)
+        (orFilter) => new Filter(schema, orFilter, Filter.OR)
       );
     else if (filterType == Filter.OR)
       this.filter = filter.map(
-        matchFilter => new Filter(schema, matchFilter, Filter.MATCH)
+        (matchFilter) => new Filter(schema, matchFilter, Filter.MATCH)
       );
     else {
       this.id = filter.fieldName;
-      this.field = schema.find(field => field.id == this.id);
+      this.field = schema.find((field) => field.id == this.id);
       if (this.field.hasOwnProperty("api")) this.id = this.field.api;
     }
   }
@@ -40,7 +40,7 @@ function Filter(schema, filter, filterType) {
    * Tests if this instance is an AND filter having children that will be logically combined by an AND condition.
    * @returns {boolean} true if AND; false else
    */
-  this.isAnd = function() {
+  this.isAnd = function () {
     return this.filterType == Filter.AND;
   };
 
@@ -49,7 +49,7 @@ function Filter(schema, filter, filterType) {
    *
    * @returns {boolean} true if OR; false else
    */
-  this.isOr = function() {
+  this.isOr = function () {
     return this.filterType == Filter.OR;
   };
 
@@ -58,7 +58,7 @@ function Filter(schema, filter, filterType) {
    *
    * @returns {boolean} true if a leaf; false else
    */
-  this.isFilter = function() {
+  this.isFilter = function () {
     return this.filterType == Filter.MATCH;
   };
 
@@ -67,7 +67,7 @@ function Filter(schema, filter, filterType) {
    *
    * @returns {boolean} true if low-level API filtering is supported; false else
    */
-  this.isBooleanPreFilter = function() {
+  this.isBooleanPreFilter = function () {
     var field = this.field;
     var filter = this.filter;
     if (!field || !filter) return false;
@@ -84,7 +84,7 @@ function Filter(schema, filter, filterType) {
    *
    * @returns {boolean} true if low-level API filtering is supported; false else
    */
-  this.isTextPreFilter = function() {
+  this.isTextPreFilter = function () {
     var field = this.field;
     var filter = this.filter;
     if (!field || !filter) return false;
@@ -102,7 +102,7 @@ function Filter(schema, filter, filterType) {
    *
    * @returns {boolean} true if low-level API filtering is supported; false else
    */
-  this.isDefaultPreFilter = function() {
+  this.isDefaultPreFilter = function () {
     var field = this.field;
     var filter = this.filter;
     if (!field || !filter) return false;
@@ -119,7 +119,7 @@ function Filter(schema, filter, filterType) {
    *
    * @returns {boolean} true if low-level API filtering is supported; false else
    */
-  this.isPreFilter = function() {
+  this.isPreFilter = function () {
     if (this.key) return this.key.isPreFilter();
 
     return (
@@ -134,7 +134,7 @@ function Filter(schema, filter, filterType) {
    *
    * @param {object} params - the HTTP GET query parameters as an object in JSON notation (dictionary)
    */
-  this.preFilterDefault = function(params) {
+  this.preFilterDefault = function (params) {
     if (!params) return;
 
     var values = [];
@@ -148,7 +148,7 @@ function Filter(schema, filter, filterType) {
    *
    * @param {object} params - the HTTP GET query parameters as an object in JSON notation (dictionary)
    */
-  this.preFilterBoolean = function(params) {
+  this.preFilterBoolean = function (params) {
     if (!params || this.field.type != cc.FieldType.BOOLEAN) return;
 
     var value = this.filter.values[0];
@@ -162,7 +162,7 @@ function Filter(schema, filter, filterType) {
    *
    * @param {object} params - the HTTP GET query parameters as an object in JSON notation (dictionary)
    */
-  this.preFilterText = function(params) {
+  this.preFilterText = function (params) {
     if (
       !params ||
       this.field.type != cc.FieldType.TEXT ||
@@ -182,9 +182,11 @@ function Filter(schema, filter, filterType) {
    * @param {object} mappings - the known key-value mappings whereas the key is the original field name (e.g. user_name) and the value is a dictionary with original values (e.g. user_name="John Doe") as keys and their corresponding id as value (e.g. user_id=123).
    * @param {object} schema - the data schema in JSON object notation
    */
-  this.resolveIdMappings = function(mappings, schema) {
+  this.resolveIdMappings = function (mappings, schema) {
     if (this.isAnd() || this.isOr()) {
-      this.filter.forEach(filter => filter.resolveIdMappings(mappings, schema));
+      this.filter.forEach((filter) =>
+        filter.resolveIdMappings(mappings, schema)
+      );
       return;
     }
 
@@ -193,7 +195,7 @@ function Filter(schema, filter, filterType) {
 
     // get the field onto which is mapped; e.g. 'user' => 'user_id'
     var key = this.field["key"];
-    var idField = schema.find(field => field.id == key);
+    var idField = schema.find((field) => field.id == key);
     if (!idField) return;
 
     // get currently known / cached mappings for the current filter; e.g. 'user'
@@ -207,7 +209,7 @@ function Filter(schema, filter, filterType) {
     );
 
     // if there has been more than one filter value, make sure all mapped values have been found in the known / cached values
-    var allFound = mappedValues.every(value => value);
+    var allFound = mappedValues.every((value) => value);
     if (!allFound) return;
 
     // now we can finally change the filter from 'user' to 'user_id'
@@ -226,11 +228,11 @@ function Filter(schema, filter, filterType) {
    *
    * @param {object} params - the HTTP GET query parameters as an object in JSON notation (dictionary)
    */
-  this.preFilter = function(params) {
+  this.preFilter = function (params) {
     if (!params || !this.filter) return;
 
     if (!this.isFilter())
-      this.filter.forEach(filter => filter.preFilter(params));
+      this.filter.forEach((filter) => filter.preFilter(params));
     else if (this.key) return this.key.preFilter(params);
     else if (this.isBooleanPreFilter()) return this.preFilterBoolean(params);
     else if (this.isTextPreFilter()) return this.preFilterText(params);
@@ -244,15 +246,15 @@ function Filter(schema, filter, filterType) {
    *
    * @param {object} row - the data row as an object in JSON notation (dictionary)
    */
-  this.match = function(row) {
+  this.match = function (row) {
     if (!this.filter || this.isPreFilter())
       // no filters defined
       return true;
 
     if (this.isAnd())
-      return this.filter.every(filter => filter.match(row) == true);
+      return this.filter.every((filter) => filter.match(row) == true);
     if (this.isOr())
-      return this.filter.some(filter => filter.match(row) == true);
+      return this.filter.some((filter) => filter.match(row) == true);
     if (this.key) return this.key.match(row);
 
     var filter = this.filter;
@@ -261,22 +263,22 @@ function Filter(schema, filter, filterType) {
 
     switch (filter.operator) {
       case "EQUALS":
-        match = filter.values.every(v => value == v);
+        match = filter.values.every((v) => value == v);
         break;
       case "CONTAINS":
         // ToDo: check if CONTAINS applies for Strings only; what about numbers?
-        match = filter.values.every(v => String(value).includes(v));
+        match = filter.values.every((v) => String(value).includes(v));
         break;
       case "REGEXP_PARTIAL_MATCH":
       case "REGEXP_EXACT_MATCH":
-        match = filter.values.every(function(v) {
+        match = filter.values.every(function (v) {
           var pattern = new RegExp(v);
           var test = pattern.exec(value);
           return test && test.length > 0;
         });
         break;
       case "IN_LIST":
-        match = filter.values.some(v => value == v);
+        match = filter.values.some((v) => value == v);
         break;
       case "IS_NULL":
         match = !value || value == null || isNaN(value);
@@ -285,16 +287,16 @@ function Filter(schema, filter, filterType) {
         match = value >= filter.values[0] && value <= filter.values[1];
         break;
       case "NUMERIC_GREATER_THAN":
-        match = filter.values.every(v => value > v);
+        match = filter.values.every((v) => value > v);
         break;
       case "NUMERIC_GREATER_THAN_OR_EQUAL":
-        match = filter.values.every(v => value => v);
+        match = filter.values.every((v) => (value) => v);
         break;
       case "NUMERIC_LESS_THAN":
-        match = filter.values.every(v => value < v);
+        match = filter.values.every((v) => value < v);
         break;
       case "NUMERIC_LESS_THAN_OR_EQUAL":
-        match = filter.values.every(v => value <= v);
+        match = filter.values.every((v) => value <= v);
         break;
     }
 
@@ -320,7 +322,7 @@ function testFilters() {
   var request = {
     dateRange: {
       endDate: "2020-05-04",
-      startDate: "2020-05-04"
+      startDate: "2020-05-04",
     },
     dimensionsFilters: [
       [
@@ -328,54 +330,54 @@ function testFilters() {
           fieldName: "customer_id",
           type: "INCLUDE",
           values: [437380.0],
-          operator: "EQUALS"
+          operator: "EQUALS",
         },
         {
           fieldName: "customer_id",
           type: "INCLUDE",
           values: [493646.0],
-          operator: "EQUALS"
-        }
+          operator: "EQUALS",
+        },
       ],
       [
         {
           fieldName: "billable",
           type: "INCLUDE",
           values: [true],
-          operator: "EQUALS"
+          operator: "EQUALS",
         },
         {
           fieldName: "locked",
           type: "INCLUDE",
           values: [false],
-          operator: "EQUALS"
-        }
-      ]
+          operator: "EQUALS",
+        },
+      ],
     ],
     configParams: {
-      api: "time_entries"
+      api: "time_entries",
     },
     scriptParams: {
-      lastRefresh: 1588712095513
+      lastRefresh: 1588712095513,
     },
     fields: [
       {
-        name: "customer"
+        name: "customer",
       },
       {
-        name: "project"
+        name: "project",
       },
       {
         name: "project_id",
-        forFilterOnly: true
+        forFilterOnly: true,
       },
       {
-        name: "time"
+        name: "time",
       },
       {
-        name: "user"
-      }
-    ]
+        name: "user",
+      },
+    ],
   };
 
   var date = Utilities.formatDate(
@@ -386,7 +388,7 @@ function testFilters() {
   var params = {
     from: date,
     to: date,
-    limit: 20
+    limit: 20,
   };
 
   var api_ = new MiteTimeEntries();

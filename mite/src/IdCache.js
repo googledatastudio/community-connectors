@@ -19,9 +19,9 @@ function IdCache(cacheService, prefix, schema) {
  *
  * @returns {object} a dictionary (object in JSON notation) having the original field as parameter (key; e.g. user_name) and the mapped field as value (e.g. user_id).
  */
-IdCache.prototype.buildParams = function(schema) {
+IdCache.prototype.buildParams = function (schema) {
   return schema
-    .filter(field => field.hasOwnProperty("key"))
+    .filter((field) => field.hasOwnProperty("key"))
     .reduce((mappings, field) => ({ ...mappings, [field.id]: field.key }), {});
 };
 
@@ -31,7 +31,7 @@ IdCache.prototype.buildParams = function(schema) {
  *
  * @returns {object} the known key-value mappings whereas the key is the original field name (e.g. user_name) and the value is a dictionary with original values (e.g. user_name="John Doe") as keys and their corresponding id as value (e.g. user_id=123).
  */
-IdCache.prototype.get = function() {
+IdCache.prototype.get = function () {
   return this.cache.getJson();
 };
 
@@ -39,13 +39,13 @@ IdCache.prototype.get = function() {
  * Scans the data being retrieved from the API for key-value mappings (as defined in the schema; e.g. user_name to user_id) and stores the values for those mappings.
  * Data is stored as an object in JSON notation (dictionary) whereas the key is the original field name (e.g. user_name) and the value is a dictionary with original values (e.g. user_name="John Doe") as keys and their corresponding id as value (e.g. user_id=123).
  */
-IdCache.prototype.set = function(rows) {
+IdCache.prototype.set = function (rows) {
   var data = this.get();
   if (!data) data = {};
 
   var params = this.params;
 
-  Object.keys(params).forEach(function(field) {
+  Object.keys(params).forEach(function (field) {
     // example: field=project_name; key=project_id;
     var key = params[field];
     var values = data[field];

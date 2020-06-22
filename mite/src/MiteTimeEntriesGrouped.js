@@ -10,7 +10,7 @@ var cc = DataStudioApp.createCommunityConnector();
  */
 function MiteTimeEntriesGrouped(timeEntriesApi, groupConfig) {
   this.api = timeEntriesApi;
-  this.groups = groupConfig.split(",").map(group => group.trim());
+  this.groups = groupConfig.split(",").map((group) => group.trim());
 
   return this;
 }
@@ -51,7 +51,7 @@ const GROUPBY_LOCKED = "locked";
  * @param {MiteTimeEntriesGrouped} this
  * @returns {Array} an array containing all groups that are related to grouping by time (e.g. day, week, month and year)
  */
-MiteTimeEntriesGrouped.prototype.getTimeGroups = function() {
+MiteTimeEntriesGrouped.prototype.getTimeGroups = function () {
   return [GROUPBY_DAY, GROUPBY_WEEK, GROUPBY_MONTH, GROUPBY_YEAR];
 };
 
@@ -61,9 +61,9 @@ MiteTimeEntriesGrouped.prototype.getTimeGroups = function() {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {boolean} true if the current configuration is grouped by time (e.g. day, week, month or year); false else.
  */
-MiteTimeEntriesGrouped.prototype.isGroupedByTime = function() {
+MiteTimeEntriesGrouped.prototype.isGroupedByTime = function () {
   var times = this.getTimeGroups();
-  return this.groups.some(group => times.includes(group));
+  return this.groups.some((group) => times.includes(group));
 };
 
 /**
@@ -72,9 +72,9 @@ MiteTimeEntriesGrouped.prototype.isGroupedByTime = function() {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {string} The group if the current configuration is grouped by time (e.g. day, week, month or year); undefined else.
  */
-MiteTimeEntriesGrouped.prototype.findTimeGroup = function() {
+MiteTimeEntriesGrouped.prototype.findTimeGroup = function () {
   var times = this.getTimeGroups();
-  return this.groups.find(group => times.includes(group));
+  return this.groups.find((group) => times.includes(group));
 };
 
 /**
@@ -83,11 +83,11 @@ MiteTimeEntriesGrouped.prototype.findTimeGroup = function() {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {object} an array of fields whereas each dimension is a dictionary (object in JSON notation).
  */
-MiteTimeEntriesGrouped.prototype.getDimensions = function() {
+MiteTimeEntriesGrouped.prototype.getDimensions = function () {
   var dimensions = this.api
     .getDimensions()
     .filter(
-      field =>
+      (field) =>
         field.hasOwnProperty("group") && this.groups.includes(field.group)
     );
 
@@ -102,7 +102,7 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function() {
           id: "day",
           name: "Day",
           isDefault: true,
-          type: types.YEAR_MONTH_DAY
+          type: types.YEAR_MONTH_DAY,
         };
         break;
       case GROUPBY_WEEK:
@@ -110,7 +110,7 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function() {
           id: "week",
           name: "Week",
           isDefault: true,
-          type: types.YEAR_WEEK
+          type: types.YEAR_WEEK,
         };
         break;
       case GROUPBY_MONTH:
@@ -118,7 +118,7 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function() {
           id: "month",
           name: "Month",
           isDefault: true,
-          type: types.YEAR_MONTH
+          type: types.YEAR_MONTH,
         };
         break;
       case GROUPBY_YEAR:
@@ -126,7 +126,7 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function() {
           id: "week",
           name: "Week",
           isDefault: true,
-          type: types.YEAR
+          type: types.YEAR,
         };
         break;
     }
@@ -137,12 +137,12 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function() {
       {
         id: "from",
         name: "From",
-        type: types.YEAR_MONTH_DAY
+        type: types.YEAR_MONTH_DAY,
       },
       {
         id: "to",
         name: "To",
-        type: types.YEAR_MONTH_DAY
+        type: types.YEAR_MONTH_DAY,
       }
     );
   }
@@ -155,7 +155,7 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function() {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {object} an array of fields whereas each dimension is a dictionary (object in JSON notation).
  */
-MiteTimeEntriesGrouped.prototype.getMetrics = function() {
+MiteTimeEntriesGrouped.prototype.getMetrics = function () {
   return this.api.getMetrics();
 };
 
@@ -165,7 +165,7 @@ MiteTimeEntriesGrouped.prototype.getMetrics = function() {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {Array} an array of fields given in JSON object notation
  */
-MiteTimeEntriesGrouped.prototype.getSchema = function() {
+MiteTimeEntriesGrouped.prototype.getSchema = function () {
   return this.getDimensions().concat(this.getMetrics());
 };
 
@@ -175,9 +175,9 @@ MiteTimeEntriesGrouped.prototype.getSchema = function() {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {object} a dictionary having the original fields as keys and the mapped fields as values
  */
-MiteTimeEntriesGrouped.prototype.getFieldMappings = function() {
+MiteTimeEntriesGrouped.prototype.getFieldMappings = function () {
   return this.getSchema()
-    .filter(field => field.hasOwnProperty("api"))
+    .filter((field) => field.hasOwnProperty("api"))
     .reduce((mappings, field) => ({ ...mappings, [field.id]: field.api }), {});
 };
 
@@ -188,19 +188,19 @@ MiteTimeEntriesGrouped.prototype.getFieldMappings = function() {
  * @param {object} request - the current (e.g. original) request
  * @returns {object} the fields in Google Data Studio format
  */
-MiteTimeEntriesGrouped.prototype.getFields = function(request) {
+MiteTimeEntriesGrouped.prototype.getFields = function (request) {
   var fields = cc.getFields();
 
   var dimensions = this.getDimensions();
   var metrics = this.getMetrics();
-  dimensions.forEach(dimension =>
+  dimensions.forEach((dimension) =>
     fields
       .newDimension()
       .setId(dimension.id)
       .setName(dimension.name)
       .setType(dimension.type)
   );
-  metrics.forEach(metric =>
+  metrics.forEach((metric) =>
     fields
       .newMetric()
       .setId(metric.id)
@@ -210,10 +210,10 @@ MiteTimeEntriesGrouped.prototype.getFields = function(request) {
   );
 
   var defaultDimension = dimensions.find(
-    field => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
   );
   var defaultMetric = metrics.find(
-    field => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
   );
 
   if (defaultDimension) fields.setDefaultDimension(defaultDimension.id);
@@ -228,7 +228,7 @@ MiteTimeEntriesGrouped.prototype.getFields = function(request) {
  * @param {MiteTimeEntriesGrouped} this
  * @returns {string} the JSON tag name
  */
-MiteTimeEntriesGrouped.prototype.getTag = function() {
+MiteTimeEntriesGrouped.prototype.getTag = function () {
   return MiteTimeEntriesGrouped.TAG;
 };
 
@@ -241,7 +241,7 @@ MiteTimeEntriesGrouped.prototype.getTag = function() {
  * @param {string} id - the field id or name
  * @returns {object} the converted value
  */
-MiteTimeEntriesGrouped.prototype.convertValue = function(value, id) {
+MiteTimeEntriesGrouped.prototype.convertValue = function (value, id) {
   switch (id) {
     case "from":
     case "to":
@@ -274,7 +274,7 @@ MiteTimeEntriesGrouped.prototype.convertValue = function(value, id) {
  * @param {object} request - the current (e.g. original) data request
  * @returns {object} newly created HTTP GET parameters as a dictionary including date ranges and pagination but excluding low-level API/query filters
  */
-MiteTimeEntriesGrouped.prototype.getParams = function(request) {
+MiteTimeEntriesGrouped.prototype.getParams = function (request) {
   var schema = this.getSchema();
   var params = this.api.getParams(request);
 
@@ -292,6 +292,6 @@ MiteTimeEntriesGrouped.prototype.getParams = function(request) {
  * @param {object} credentials - the credentials holding the domain and the API key.
  * @param {object} params - HTTP GET parameters as a dictionary that may include low-level API/query filters and date ranges
  */
-MiteTimeEntriesGrouped.prototype.getJson = function(credentials, params) {
+MiteTimeEntriesGrouped.prototype.getJson = function (credentials, params) {
   return this.api.getJson(credentials, params);
 };

@@ -34,7 +34,7 @@ function MiteInterface(
  * @param {MiteInterface} this
  * @returns {Array} an array of fields given in JSON object notation
  */
-MiteInterface.prototype.getDimensions = function() {
+MiteInterface.prototype.getDimensions = function () {
   return this.dimensionsCallback ? this.dimensionsCallback() : [];
 };
 
@@ -44,7 +44,7 @@ MiteInterface.prototype.getDimensions = function() {
  * @param {MiteInterface} this
  * @returns {Array} an array of fields given in JSON object notation
  */
-MiteInterface.prototype.getMetrics = function() {
+MiteInterface.prototype.getMetrics = function () {
   return this.metricsCallback ? this.metricsCallback() : [];
 };
 
@@ -54,7 +54,7 @@ MiteInterface.prototype.getMetrics = function() {
  * @param {MiteInterface} this
  * @returns {Array} an array of fields given in JSON object notation
  */
-MiteInterface.prototype.getSchema = function() {
+MiteInterface.prototype.getSchema = function () {
   return this.getDimensions().concat(this.getMetrics());
 };
 
@@ -64,9 +64,9 @@ MiteInterface.prototype.getSchema = function() {
  * @param {MiteInterface} this
  * @returns {object} a dictionary having the original fields as keys and the mapped fields as values
  */
-MiteInterface.prototype.getFieldMappings = function() {
+MiteInterface.prototype.getFieldMappings = function () {
   return this.getSchema()
-    .filter(field => field.hasOwnProperty("api"))
+    .filter((field) => field.hasOwnProperty("api"))
     .reduce((mappings, field) => ({ ...mappings, [field.id]: field.api }), {});
 };
 
@@ -77,19 +77,19 @@ MiteInterface.prototype.getFieldMappings = function() {
  * @param {object} request - the current (e.g. original) request
  * @returns {object} the fields in Google Data Studio format
  */
-MiteInterface.prototype.getFields = function(request) {
+MiteInterface.prototype.getFields = function (request) {
   var fields = cc.getFields();
 
   var dimensions = this.getDimensions();
   var metrics = this.getMetrics();
-  dimensions.forEach(dimension =>
+  dimensions.forEach((dimension) =>
     fields
       .newDimension()
       .setId(dimension.id)
       .setName(dimension.name)
       .setType(dimension.type)
   );
-  metrics.forEach(metric =>
+  metrics.forEach((metric) =>
     fields
       .newMetric()
       .setId(metric.id)
@@ -99,10 +99,10 @@ MiteInterface.prototype.getFields = function(request) {
   );
 
   var defaultDimension = dimensions.find(
-    field => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
   );
   var defaultMetric = metrics.find(
-    field => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
   );
 
   if (defaultDimension) fields.setDefaultDimension(defaultDimension.id);
@@ -117,7 +117,7 @@ MiteInterface.prototype.getFields = function(request) {
  * @param {MiteInterface} this
  * @returns {string} the JSON tag name
  */
-MiteInterface.prototype.getTag = function() {
+MiteInterface.prototype.getTag = function () {
   return this.tag;
 };
 
@@ -129,7 +129,7 @@ MiteInterface.prototype.getTag = function() {
  * @param {string} id - the field id or name
  * @returns {object} the converted value
  */
-MiteInterface.prototype.convertValue = function(value, id) {
+MiteInterface.prototype.convertValue = function (value, id) {
   switch (id) {
     default:
       // value will be converted automatically
@@ -145,7 +145,7 @@ MiteInterface.prototype.convertValue = function(value, id) {
  * @param {object} request - the current (e.g. original) data request
  * @returns {object} newly created HTTP GET parameters as a dictionary including date ranges and pagination but excluding low-level API/query filters
  */
-MiteInterface.prototype.getParams = function(request) {
+MiteInterface.prototype.getParams = function (request) {
   var schema = this.getSchema();
   var params;
 
@@ -157,13 +157,13 @@ MiteInterface.prototype.getParams = function(request) {
         page: Math.floor(
           (request.pagination.rowCount + request.pagination.startRow) /
             request.pagination.rowCount
-        )
+        ),
       };
     } else params = {};
   } else {
     // preview only
     params = {
-      limit: 20
+      limit: 20,
     };
   }
 
@@ -179,7 +179,7 @@ MiteInterface.prototype.getParams = function(request) {
  * @param {object} credentials - the credentials holding the domain and the API key.
  * @param {object} params - HTTP GET parameters as a dictionary that may include low-level API/query filters and date ranges
  */
-MiteInterface.prototype.getJson = function(credentials, params) {
+MiteInterface.prototype.getJson = function (credentials, params) {
   // check if the params are containing the archived filter
   var showArchivedOnly = params && params.archived == true;
   var api = this.api;

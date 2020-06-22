@@ -5,7 +5,7 @@
  * @param {string} this - the string format including placeholders (e.g. "current balance: {0} EUR")
  * @returns the string with actual values (e.g. "current balance: 1234 EUR")
  */
-String.prototype.format = function() {
+String.prototype.format = function () {
   // https://coderwall.com/p/flonoa/simple-string-format-in-javascript
   a = this;
   for (k in arguments) {
@@ -20,7 +20,7 @@ String.prototype.format = function() {
  * @param {string} this - the string value
  * @returns {string} the hash code
  */
-String.prototype.hashCode = function() {
+String.prototype.hashCode = function () {
   // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
   var hash = 0,
     i,
@@ -38,9 +38,9 @@ String.prototype.hashCode = function() {
  *
  * @returns {string} a random 128-bit UUID
  */
-const uuid = function() {
+const uuid = function () {
   // https://stackoverflow.com/questions/105034/how-to-create-guid-uuid
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0,
       v = c == "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -54,7 +54,7 @@ const uuid = function() {
  * @param {int} seed - a random seed value that improves the avoidance of hash code collisions.
  * @returns {string} the hash code
  */
-String.prototype.cyrb53 = function(seed = 0) {
+String.prototype.cyrb53 = function (seed = 0) {
   // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
   let h1 = 0xdeadbeef ^ seed,
     h2 = 0x41c6ce57 ^ seed;

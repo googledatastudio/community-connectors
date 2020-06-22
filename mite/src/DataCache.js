@@ -40,7 +40,7 @@ function DataCache(cacheService, timeoutSeconds, prefix, params) {
  * @param {object} params - the parameters that have been used for data retrieval; they are used for building the key
  * @returns {String} cache key
  */
-DataCache.prototype.buildCacheKey = function(prefix, params) {
+DataCache.prototype.buildCacheKey = function (prefix, params) {
   var key = prefix;
   if (params && Object.keys(params).length > 0)
     key = prefix + "_" + JSON.stringify(params);
@@ -56,7 +56,7 @@ DataCache.prototype.buildCacheKey = function(prefix, params) {
  *
  * @returns {String} - the retrieved value
  */
-DataCache.prototype.get = function() {
+DataCache.prototype.get = function () {
   var value = "";
   var chunk = "";
   var chunkIndex = 0;
@@ -76,7 +76,7 @@ DataCache.prototype.get = function() {
  *
  * @param {String} value - the string value to store
  */
-DataCache.prototype.set = function(value) {
+DataCache.prototype.set = function (value) {
   this.storeChunks(value);
 };
 
@@ -85,7 +85,7 @@ DataCache.prototype.set = function(value) {
  *
  * @param {String} value - the value to store
  */
-DataCache.prototype.storeChunks = function(value) {
+DataCache.prototype.storeChunks = function (value) {
   var chunks = this.splitInChunks(value);
 
   for (var i = 0; i < chunks.length; i++) {
@@ -100,7 +100,7 @@ DataCache.prototype.storeChunks = function(value) {
  * @param {int} chunkIndex - the chunk index
  * @returns {String} key
  */
-DataCache.prototype.getChunkKey = function(chunkIndex) {
+DataCache.prototype.getChunkKey = function (chunkIndex) {
   return this.cacheKey + "_" + chunkIndex;
 };
 
@@ -110,7 +110,7 @@ DataCache.prototype.getChunkKey = function(chunkIndex) {
  * @param {String} str - the string value
  * @returns {Array} chunks in an aray of strings
  */
-DataCache.prototype.splitInChunks = function(str) {
+DataCache.prototype.splitInChunks = function (str) {
   var size = DataCache.MAX_CACHE_SIZE;
   var numChunks = Math.ceil(str.length / size);
   var chunks = new Array(numChunks);
@@ -127,7 +127,7 @@ DataCache.prototype.splitInChunks = function(str) {
  *
  * @returns {object} - the retrieved value as a JSON object
  */
-DataCache.prototype.getJson = function() {
+DataCache.prototype.getJson = function () {
   var json;
   try {
     json = JSON.parse(this.get());
@@ -144,7 +144,7 @@ DataCache.prototype.getJson = function() {
  *
  * @param {object} value - the value to store
  */
-DataCache.prototype.setJson = function(value) {
+DataCache.prototype.setJson = function (value) {
   try {
     this.set(JSON.stringify(value));
     console.log("JSON data set to cache. " + this.identifier);

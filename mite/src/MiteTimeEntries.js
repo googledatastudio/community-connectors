@@ -22,27 +22,27 @@ MiteTimeEntries.TAG = "time_entry";
  * @param {MiteTimeEntries} this
  * @returns {object} an array of fields whereas each dimension is a dictionary (object in JSON notation).
  */
-MiteTimeEntries.prototype.getDimensions = function() {
+MiteTimeEntries.prototype.getDimensions = function () {
   var types = cc.FieldType;
 
   return [
     {
       id: "id",
       name: "ID",
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "date",
       name: "Date",
       api: "date_at",
-      type: types.YEAR_MONTH_DAY
+      type: types.YEAR_MONTH_DAY,
     },
     {
       id: "user_id",
       name: "User ID",
       group: "user",
       filter: true,
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "user",
@@ -51,20 +51,20 @@ MiteTimeEntries.prototype.getDimensions = function() {
       name: "User",
       api: "user_name",
       isDefault: true,
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "note",
       name: "Note",
       filter: true,
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "project_id",
       name: "Project ID",
       group: "project",
       filter: true,
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "project",
@@ -72,14 +72,14 @@ MiteTimeEntries.prototype.getDimensions = function() {
       name: "Project",
       group: "project",
       api: "project_name",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "service_id",
       name: "Service ID",
       group: "service",
       filter: true,
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "service",
@@ -87,14 +87,14 @@ MiteTimeEntries.prototype.getDimensions = function() {
       name: "Service",
       group: "service",
       api: "service_name",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "customer_id",
       name: "Customer ID",
       group: "customer",
       filter: true,
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "customer",
@@ -102,26 +102,26 @@ MiteTimeEntries.prototype.getDimensions = function() {
       name: "Customer",
       group: "customer",
       api: "customer_name",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "billable",
       name: "Billable",
       filter: true,
-      type: types.BOOLEAN
+      type: types.BOOLEAN,
     },
     {
       id: "locked",
       name: "Locked",
       group: "locked",
       filter: true,
-      type: types.BOOLEAN
+      type: types.BOOLEAN,
     },
     {
       id: "hourly_rate",
       name: "Hourly rate",
-      type: types.CURRENCY_EUR
-    }
+      type: types.CURRENCY_EUR,
+    },
   ];
 };
 
@@ -131,7 +131,7 @@ MiteTimeEntries.prototype.getDimensions = function() {
  * @param {MiteTimeEntries} this
  * @returns {object} an array of fields whereas each dimension is a dictionary (object in JSON notation).
  */
-MiteTimeEntries.prototype.getMetrics = function() {
+MiteTimeEntries.prototype.getMetrics = function () {
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
 
@@ -142,14 +142,14 @@ MiteTimeEntries.prototype.getMetrics = function() {
       api: "minutes",
       type: types.NUMBER,
       isDefault: true,
-      aggregation: aggregations.SUM
+      aggregation: aggregations.SUM,
     },
     {
       id: "revenue",
       name: "Revenue",
       type: types.YEAR_MONTH_DAY,
-      aggregation: aggregations.SUM
-    }
+      aggregation: aggregations.SUM,
+    },
   ];
 };
 
@@ -159,7 +159,7 @@ MiteTimeEntries.prototype.getMetrics = function() {
  * @param {MiteTimeEntries} this
  * @returns {Array} an array of fields given in JSON object notation
  */
-MiteTimeEntries.prototype.getSchema = function() {
+MiteTimeEntries.prototype.getSchema = function () {
   return this.getDimensions().concat(this.getMetrics());
 };
 
@@ -169,9 +169,9 @@ MiteTimeEntries.prototype.getSchema = function() {
  * @param {MiteTimeEntries} this
  * @returns {object} a dictionary having the original fields as keys and the mapped fields as values
  */
-MiteTimeEntries.prototype.getFieldMappings = function() {
+MiteTimeEntries.prototype.getFieldMappings = function () {
   return this.getSchema()
-    .filter(field => field.hasOwnProperty("api"))
+    .filter((field) => field.hasOwnProperty("api"))
     .reduce((mappings, field) => ({ ...mappings, [field.id]: field.api }), {});
 };
 
@@ -182,12 +182,12 @@ MiteTimeEntries.prototype.getFieldMappings = function() {
  * @param {object} request - the current (e.g. original) request
  * @returns {object} the fields in Google Data Studio format
  */
-MiteTimeEntries.prototype.getFields = function(request) {
+MiteTimeEntries.prototype.getFields = function (request) {
   var fields = cc.getFields();
   var types = cc.FieldType;
   var aggregations = cc.AggregationType;
 
-  this.getDimensions().forEach(dimension =>
+  this.getDimensions().forEach((dimension) =>
     fields
       .newDimension()
       .setId(dimension.id)
@@ -222,7 +222,7 @@ MiteTimeEntries.prototype.getFields = function(request) {
  * @param {MiteTimeEntries} this
  * @returns {string} the JSON tag name
  */
-MiteTimeEntries.prototype.getTag = function() {
+MiteTimeEntries.prototype.getTag = function () {
   return MiteTimeEntries.TAG;
 };
 
@@ -235,7 +235,7 @@ MiteTimeEntries.prototype.getTag = function() {
  * @param {string} id - the field id or name
  * @returns {object} the converted value
  */
-MiteTimeEntries.prototype.convertValue = function(value, id) {
+MiteTimeEntries.prototype.convertValue = function (value, id) {
   switch (id) {
     case "minutes":
       // convert minutes to seconds since data type duration is given in seconds only
@@ -261,7 +261,7 @@ MiteTimeEntries.prototype.convertValue = function(value, id) {
  * @param {object} request - the current (e.g. original) data request
  * @returns {object} newly created HTTP GET parameters as a dictionary including date ranges and pagination but excluding low-level API/query filters
  */
-MiteTimeEntries.prototype.getParams = function(request) {
+MiteTimeEntries.prototype.getParams = function (request) {
   var schema = this.getSchema();
   var params;
 
@@ -275,7 +275,7 @@ MiteTimeEntries.prototype.getParams = function(request) {
     */
     params = {
       from: request.dateRange.startDate,
-      to: request.dateRange.endDate
+      to: request.dateRange.endDate,
     };
 
     if (request.pagination) {
@@ -307,7 +307,7 @@ MiteTimeEntries.prototype.getParams = function(request) {
     params = {
       from: date,
       to: date,
-      limit: 20
+      limit: 20,
     };
   }
 
@@ -323,7 +323,7 @@ MiteTimeEntries.prototype.getParams = function(request) {
  * @param {object} credentials - the credentials holding the domain and the API key.
  * @param {object} params - HTTP GET parameters as a dictionary that may include low-level API/query filters and date ranges
  */
-MiteTimeEntries.prototype.getJson = function(credentials, params) {
+MiteTimeEntries.prototype.getJson = function (credentials, params) {
   var response = miteGet(
     credentials.domain,
     credentials.key,

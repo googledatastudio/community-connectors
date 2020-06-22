@@ -64,12 +64,7 @@ function getConfig(request) {
         .setLabel("6 Hours")
         .setValue(6 * 60 * 60)
     )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel("Off")
-        .setValue(0)
-    );
+    .addOption(config.newOptionBuilder().setLabel("Off").setValue(0));
 
   config
     .newSelectSingle()
@@ -85,17 +80,9 @@ function getConfig(request) {
         .setValue(MiteTimeEntries.API)
     )
     .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel("Projects")
-        .setValue("projects")
+      config.newOptionBuilder().setLabel("Projects").setValue("projects")
     )
-    .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel("Users")
-        .setValue("users")
-    )
+    .addOption(config.newOptionBuilder().setLabel("Users").setValue("users"))
     .addOption(
       config
         .newOptionBuilder()
@@ -103,10 +90,7 @@ function getConfig(request) {
         .setValue(MiteCustomers.API)
     )
     .addOption(
-      config
-        .newOptionBuilder()
-        .setLabel("Services")
-        .setValue("services")
+      config.newOptionBuilder().setLabel("Services").setValue("services")
     );
 
   if (params && params.api == MiteTimeEntries.API) {
@@ -125,23 +109,10 @@ function getConfig(request) {
       .setName("Services")
       .setHelpText("e.g. all services, or just billable or non-billable")
       .setAllowOverride(true)
+      .addOption(config.newOptionBuilder().setLabel("all").setValue(0))
+      .addOption(config.newOptionBuilder().setLabel("billable").setValue(1))
       .addOption(
-        config
-          .newOptionBuilder()
-          .setLabel("all")
-          .setValue(0)
-      )
-      .addOption(
-        config
-          .newOptionBuilder()
-          .setLabel("billable")
-          .setValue(1)
-      )
-      .addOption(
-        config
-          .newOptionBuilder()
-          .setLabel("bon-billable")
-          .setValue(2)
+        config.newOptionBuilder().setLabel("bon-billable").setValue(2)
       );
 
     config.setDateRangeRequired(true);
@@ -219,10 +190,10 @@ function getSchema(request) {
  * @returns {Array} an array of data rows whereas each row is a dictionary holding the fields as keys and the values per field.
  */
 function entriesToDicts(schema, data, converter, tag) {
-  return data.map(function(element) {
+  return data.map(function (element) {
     var entry = element[tag];
     var row = {};
-    schema.forEach(function(field) {
+    schema.forEach(function (field) {
       // field has same name in connector and original data source
       var id = field.id;
       if (field.api)
@@ -256,8 +227,8 @@ function dictsToRows(requestedFields, rows) {
         values: requestedFields.reduce(
           (values, field) => [...values, row[field]],
           []
-        )
-      }
+        ),
+      },
     ],
     []
   );
@@ -287,13 +258,13 @@ function getData(request) {
     cacheTimespanSec = parseInt(request.configParams.cache);
     // make sure the ordering of the requested fields is kept correct in the resulting data
     requestedFields = request.fields
-      .filter(field => !field.forFilterOnly)
-      .map(field => field.name);
+      .filter((field) => !field.forFilterOnly)
+      .map((field) => field.name);
     //requestedFields = request.fields.map(field => field.name); // for debugging only
     requestedSchema = api.getFields(request).forIds(requestedFields);
   } else {
     // use all fields from schema
-    requestedFields = schema.map(field => field.id);
+    requestedFields = schema.map((field) => field.id);
     requestedSchema = api.getFields(request);
   }
 
@@ -361,7 +332,7 @@ function getData(request) {
 
   if (filter)
     // match rows against filter
-    rows = rows.filter(row => filter.match(row) == true);
+    rows = rows.filter((row) => filter.match(row) == true);
 
   // remove non-requested fields
   var result = dictsToRows(requestedFields, rows);
@@ -372,7 +343,7 @@ function getData(request) {
   return {
     schema: requestedSchema.build(),
     rows: result,
-    filtersApplied: filter ? true : false
+    filtersApplied: filter ? true : false,
   };
 }
 
@@ -388,7 +359,7 @@ function testTimeEntriesApi() {
   request = {
     dateRange: {
       endDate: "2020-05-01",
-      startDate: "2020-05-05"
+      startDate: "2020-05-05",
     },
     dimensionsFilters: [
       [
@@ -396,34 +367,34 @@ function testTimeEntriesApi() {
           operator: "EQUALS",
           fieldName: "project_id",
           type: "INCLUDE",
-          values: [3034258.0]
-        }
+          values: [3034258.0],
+        },
       ],
       [
         {
           operator: "EQUALS",
           fieldName: "user",
           type: "INCLUDE",
-          values: ["Matthias Heise"]
-        }
-      ]
+          values: ["Matthias Heise"],
+        },
+      ],
     ],
     configParams: {
-      api: "time_entries"
+      api: "time_entries",
     },
     scriptParams: {
-      lastRefresh: 1588712095513
+      lastRefresh: 1588712095513,
     },
     fields: [
       { name: "customer" },
       { name: "project" },
       {
         name: "project_id",
-        forFilterOnly: true
+        forFilterOnly: true,
       },
       { name: "time" },
-      { name: "user" }
-    ]
+      { name: "user" },
+    ],
   };
 
   var rows = getData(request);
@@ -442,7 +413,7 @@ function testTimeEntriesGroupedByApi() {
   request = {
     dateRange: {
       endDate: "2020-05-01",
-      startDate: "2020-05-05"
+      startDate: "2020-05-05",
     },
     dimensionsFilters: [
       [
@@ -450,25 +421,25 @@ function testTimeEntriesGroupedByApi() {
           operator: "EQUALS",
           fieldName: "project_id",
           type: "INCLUDE",
-          values: [3034258.0]
-        }
-      ]
+          values: [3034258.0],
+        },
+      ],
     ],
     configParams: {
       api: "time_entries",
       group_by: "week, project, user",
-      billable: 1
+      billable: 1,
     },
     scriptParams: {
-      lastRefresh: 1588712095513
+      lastRefresh: 1588712095513,
     },
     fields: [
       { name: "week" },
       { name: "project" },
       { name: "user" },
       { name: "time" },
-      { name: "revenue" }
-    ]
+      { name: "revenue" },
+    ],
   };
 
   var rows = getData(request);
@@ -491,18 +462,18 @@ function testCustomersApi() {
           operator: "EQUALS",
           fieldName: "archived",
           type: "INCLUDE",
-          values: [true]
-        }
-      ]
+          values: [true],
+        },
+      ],
     ],
     configParams: {
       api: "customers",
-      cache: 15 * 60
+      cache: 15 * 60,
     },
     scriptParams: {
-      lastRefresh: 1588712095513
+      lastRefresh: 1588712095513,
     },
-    fields: [{ name: "id" }, { name: "name" }, { name: "note" }]
+    fields: [{ name: "id" }, { name: "name" }, { name: "note" }],
   };
 
   var rows = getData(request);
@@ -525,23 +496,23 @@ function testProjectsApi() {
           operator: "EQUALS",
           fieldName: "customer_id",
           type: "INCLUDE",
-          values: [493646]
-        }
-      ]
+          values: [493646],
+        },
+      ],
     ],
     configParams: {
       api: "projects",
-      cache: 15 * 60
+      cache: 15 * 60,
     },
     scriptParams: {
-      lastRefresh: 1588712095513
+      lastRefresh: 1588712095513,
     },
     fields: [
       { name: "id" },
       { name: "name" },
       { name: "budget" },
-      { name: "budget_type" }
-    ]
+      { name: "budget_type" },
+    ],
   };
 
   var rows = getData(request);

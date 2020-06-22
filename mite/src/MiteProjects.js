@@ -21,7 +21,7 @@ MiteProjects.API_ARCHIVED = "projects/archived";
  *
  * @returns {MiteInterface} - the connector and Mite API wrapper
  */
-MiteProjects.prototype.createApi = function() {
+MiteProjects.prototype.createApi = function () {
   return new MiteInterface(
     this.getDimensions,
     undefined,
@@ -36,60 +36,60 @@ MiteProjects.prototype.createApi = function() {
  *
  * @returns {object} an array of fields whereas each dimension is a dictionary (object in JSON notation).
  */
-MiteProjects.prototype.getDimensions = function() {
+MiteProjects.prototype.getDimensions = function () {
   var types = cc.FieldType;
 
   return [
     {
       id: "id",
       name: "ID",
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "name",
       name: "Name",
       filter: true,
       isDefault: true,
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "note",
       name: "Note",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "customer_id",
       name: "Customer ID",
       filter: true,
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "customer",
       key: "customer_id",
       name: "Customer",
       api: "customer_name",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "budget",
       name: "Budget",
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "budget_type",
       name: "Budget Type",
-      type: types.TEXT
+      type: types.TEXT,
     },
     {
       id: "hourly_rate",
       name: "Hourly Rate",
-      type: types.NUMBER
+      type: types.NUMBER,
     },
     {
       id: "archived",
       name: "Archived",
       filter: true,
-      type: types.BOOLEAN
-    }
+      type: types.BOOLEAN,
+    },
   ];
 };

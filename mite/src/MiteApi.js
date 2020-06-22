@@ -26,11 +26,11 @@ function miteGet(domain, api_key, api, params) {
 
   var headers = {
     "X-MiteApiKey": api_key,
-    "User-Agent": userAgent
+    "User-Agent": userAgent,
   };
 
   var options = {
-    headers: headers
+    headers: headers,
   };
 
   var url = "{0}/{1}.json".format(MITE_URL.format(domain), api);
@@ -58,7 +58,7 @@ function miteGet(domain, api_key, api, params) {
 
     return {
       code: response.getResponseCode(),
-      json: data
+      json: data,
     };
   } catch (e) {
     throwConnectorError(e);

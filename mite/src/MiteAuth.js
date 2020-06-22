@@ -13,7 +13,7 @@ function getCredentials() {
   var userProperties = PropertiesService.getUserProperties();
   return {
     domain: userProperties.getProperty(MITE_DOMAIN),
-    key: userProperties.getProperty(MITE_KEY)
+    key: userProperties.getProperty(MITE_KEY),
   };
 }
 
@@ -96,7 +96,7 @@ function setCredentials(request) {
   var creds = request.userToken;
   var credentials = {
     domain: creds.username,
-    key: creds.token
+    key: creds.token,
   };
 
   var response = validateCredentials(credentials.domain, credentials.key);
@@ -111,10 +111,7 @@ function setCredentials(request) {
   }
 
   var cc = DataStudioApp.createCommunityConnector();
-  return cc
-    .newSetCredentialsResponse()
-    .setIsValid(isValid)
-    .build();
+  return cc.newSetCredentialsResponse().setIsValid(isValid).build();
 }
 
 /**
