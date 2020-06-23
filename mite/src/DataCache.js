@@ -43,7 +43,7 @@ function DataCache(cacheService, timeoutSeconds, prefix, params) {
 DataCache.prototype.buildCacheKey = function (prefix, params) {
   var key = prefix;
   if (params && Object.keys(params).length > 0)
-    key = prefix + "_" + JSON.stringify(params);
+    key = prefix + '_' + JSON.stringify(params);
 
   this.identifier = key;
   if (key.length > DataCache.MAX_KEY_LENGTH) key = key.cyrb53();
@@ -57,14 +57,14 @@ DataCache.prototype.buildCacheKey = function (prefix, params) {
  * @returns {String} - the retrieved value
  */
 DataCache.prototype.get = function () {
-  var value = "";
-  var chunk = "";
+  var value = '';
+  var chunk = '';
   var chunkIndex = 0;
 
   do {
     var chunkKey = this.getChunkKey(chunkIndex);
     chunk = this.service.get(chunkKey);
-    value += chunk || "";
+    value += chunk || '';
     chunkIndex++;
   } while (chunk && chunk.length == DataCache.MAX_CACHE_SIZE);
 
@@ -101,7 +101,7 @@ DataCache.prototype.storeChunks = function (value) {
  * @returns {String} key
  */
 DataCache.prototype.getChunkKey = function (chunkIndex) {
-  return this.cacheKey + "_" + chunkIndex;
+  return this.cacheKey + '_' + chunkIndex;
 };
 
 /**
@@ -131,9 +131,9 @@ DataCache.prototype.getJson = function () {
   var json;
   try {
     json = JSON.parse(this.get());
-    console.log("Got JSON data from cache. " + this.identifier);
+    console.log('Got JSON data from cache. ' + this.identifier);
   } catch (e) {
-    console.log("Could not get JSON data from cache. " + this.identifier, e);
+    console.log('Could not get JSON data from cache. ' + this.identifier, e);
   }
 
   return json;
@@ -147,8 +147,8 @@ DataCache.prototype.getJson = function () {
 DataCache.prototype.setJson = function (value) {
   try {
     this.set(JSON.stringify(value));
-    console.log("JSON data set to cache. " + this.identifier);
+    console.log('JSON data set to cache. ' + this.identifier);
   } catch (e) {
-    console.log("Could not set JSON data to cache. " + this.identifier, e);
+    console.log('Could not set JSON data to cache. ' + this.identifier, e);
   }
 };

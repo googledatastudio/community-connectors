@@ -1,8 +1,8 @@
 /** @const the key used for storing the Mite domain (account name) in the users properties. */
-const MITE_DOMAIN = "mite.domain";
+const MITE_DOMAIN = 'mite.domain';
 
 /** @const the key used for storing the Mite API key in the users properties. */
-const MITE_KEY = "mite.key";
+const MITE_KEY = 'mite.key';
 
 /**
  * Retrieves the credentials (Mite domain and API key) from the user properties.
@@ -13,7 +13,7 @@ function getCredentials() {
   var userProperties = PropertiesService.getUserProperties();
   return {
     domain: userProperties.getProperty(MITE_DOMAIN),
-    key: userProperties.getProperty(MITE_KEY),
+    key: userProperties.getProperty(MITE_KEY)
   };
 }
 
@@ -27,16 +27,16 @@ function getCredentials() {
 function validateCredentials(domain, key) {
   if (!domain || !key) return false;
 
-  var response = miteGetMyself(domain, key, "myself");
+  var response = miteGetMyself(domain, key, 'myself');
 
   if (response.code == 200)
     console.log(
-      "API key for the Mite domain %s successfully validated",
+      'API key for the Mite domain %s successfully validated',
       domain
     );
   else
     console.error(
-      "API key for the Mite domain %s is invalid. Code: %s",
+      'API key for the Mite domain %s is invalid. Code: %s',
       domain,
       response.code
     );
@@ -54,7 +54,7 @@ function getAuthType() {
   return cc
     .newAuthTypeResponse()
     .setAuthType(cc.AuthType.USER_TOKEN)
-    .setHelpUrl("https://mite.yo.lk/api/index.html#authentication")
+    .setHelpUrl('https://mite.yo.lk/api/index.html#authentication')
     .build();
 }
 
@@ -66,7 +66,7 @@ function resetAuth() {
   userProperties.deleteProperty(MITE_DOMAIN);
   userProperties.deleteProperty(MITE_KEY);
 
-  console.info("Mite domain and API key deleted");
+  console.info('Mite domain and API key deleted');
 }
 
 /**
@@ -78,7 +78,7 @@ function resetAuth() {
 function isAuthValid() {
   var credentials = getCredentials();
   if (credentials == null) {
-    console.info("Neither Mite domain nor API key found");
+    console.info('Neither Mite domain nor API key found');
     return false;
   }
 
@@ -96,7 +96,7 @@ function setCredentials(request) {
   var creds = request.userToken;
   var credentials = {
     domain: creds.username,
-    key: creds.token,
+    key: creds.token
   };
 
   var response = validateCredentials(credentials.domain, credentials.key);
@@ -107,7 +107,7 @@ function setCredentials(request) {
     userProperties.setProperty(MITE_DOMAIN, credentials.domain);
     userProperties.setProperty(MITE_KEY, credentials.key);
 
-    console.info("Mite domain and API key stored");
+    console.info('Mite domain and API key stored');
   }
 
   var cc = DataStudioApp.createCommunityConnector();

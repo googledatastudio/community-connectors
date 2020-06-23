@@ -11,10 +11,10 @@ function MiteUsers() {
 }
 
 /** @constant API for active users; the relative path for the dedicated Mite API to call */
-MiteUsers.API = "users";
+MiteUsers.API = 'users';
 
 /** @constant API_ARCHIVED for archived users; the relative path for the dedicated Mite API to call */
-MiteUsers.API_ARCHIVED = "users/archived";
+MiteUsers.API_ARCHIVED = 'users/archived';
 
 /**
  * Created the wrapper that handles all Mite and connector functionalities since this instance handles the data schema only.
@@ -25,7 +25,7 @@ MiteUsers.prototype.createApi = function () {
   return new MiteInterface(
     this.getDimensions,
     undefined,
-    "user",
+    'user',
     MiteUsers.API,
     MiteUsers.API_ARCHIVED
   );
@@ -41,43 +41,43 @@ MiteUsers.prototype.getDimensions = function () {
 
   return [
     {
-      id: "id",
-      name: "ID",
-      type: types.NUMBER,
+      id: 'id',
+      name: 'ID',
+      type: types.NUMBER
     },
     {
-      id: "name",
-      name: "Name",
+      id: 'name',
+      name: 'Name',
       filter: true,
       isDefault: true,
-      type: types.TEXT,
+      type: types.TEXT
     },
     {
-      id: "email",
-      name: "Email",
+      id: 'email',
+      name: 'Email',
       filter: true,
-      type: types.TEXT,
+      type: types.TEXT
     },
     {
-      id: "note",
-      name: "Note",
-      type: types.TEXT,
+      id: 'note',
+      name: 'Note',
+      type: types.TEXT
     },
     {
-      id: "language",
-      name: "Language",
-      type: types.TEXT,
+      id: 'language',
+      name: 'Language',
+      type: types.TEXT
     },
     {
-      id: "role",
-      name: "Role",
-      type: types.TEXT,
+      id: 'role',
+      name: 'Role',
+      type: types.TEXT
     },
     {
-      id: "archived",
-      name: "Archived",
+      id: 'archived',
+      name: 'Archived',
       filter: true,
-      type: types.BOOLEAN,
-    },
+      type: types.BOOLEAN
+    }
   ];
 };

@@ -32,7 +32,7 @@ function Filter(schema, filter, filterType) {
     else {
       this.id = filter.fieldName;
       this.field = schema.find((field) => field.id == this.id);
-      if (this.field.hasOwnProperty("api")) this.id = this.field.api;
+      if (this.field.hasOwnProperty('api')) this.id = this.field.api;
     }
   }
 
@@ -75,7 +75,7 @@ function Filter(schema, filter, filterType) {
     return (
       field.filter == true &&
       field.type == cc.FieldType.BOOLEAN &&
-      filter.operator == "EQUALS"
+      filter.operator == 'EQUALS'
     );
   };
 
@@ -92,8 +92,8 @@ function Filter(schema, filter, filterType) {
     return (
       field.filter == true &&
       field.type == cc.FieldType.TEXT &&
-      filter.type == "INCLUDE" &&
-      (filter.operator == "EQUALS" || filter.operator == "CONTAINS")
+      filter.type == 'INCLUDE' &&
+      (filter.operator == 'EQUALS' || filter.operator == 'CONTAINS')
     );
   };
 
@@ -109,8 +109,8 @@ function Filter(schema, filter, filterType) {
 
     return (
       field.filter == true &&
-      filter.type == "INCLUDE" &&
-      (filter.operator == "EQUALS" || filter.operator == "IN_LIST")
+      filter.type == 'INCLUDE' &&
+      (filter.operator == 'EQUALS' || filter.operator == 'IN_LIST')
     );
   };
 
@@ -152,7 +152,7 @@ function Filter(schema, filter, filterType) {
     if (!params || this.field.type != cc.FieldType.BOOLEAN) return;
 
     var value = this.filter.values[0];
-    if (this.filter.type == "EXCLUDE") value = !value;
+    if (this.filter.type == 'EXCLUDE') value = !value;
 
     params[this.id] = value;
   };
@@ -166,7 +166,7 @@ function Filter(schema, filter, filterType) {
     if (
       !params ||
       this.field.type != cc.FieldType.TEXT ||
-      this.filter.type != "INCLUDE"
+      this.filter.type != 'INCLUDE'
     )
       return;
 
@@ -191,10 +191,10 @@ function Filter(schema, filter, filterType) {
     }
 
     // 'user' as type string might be mapped onto 'user_id' of type number
-    if (!this.field.hasOwnProperty("key")) return;
+    if (!this.field.hasOwnProperty('key')) return;
 
     // get the field onto which is mapped; e.g. 'user' => 'user_id'
-    var key = this.field["key"];
+    var key = this.field['key'];
     var idField = schema.find((field) => field.id == key);
     if (!idField) return;
 
@@ -262,45 +262,45 @@ function Filter(schema, filter, filterType) {
     var match = false;
 
     switch (filter.operator) {
-      case "EQUALS":
+      case 'EQUALS':
         match = filter.values.every((v) => value == v);
         break;
-      case "CONTAINS":
+      case 'CONTAINS':
         // ToDo: check if CONTAINS applies for Strings only; what about numbers?
         match = filter.values.every((v) => String(value).includes(v));
         break;
-      case "REGEXP_PARTIAL_MATCH":
-      case "REGEXP_EXACT_MATCH":
+      case 'REGEXP_PARTIAL_MATCH':
+      case 'REGEXP_EXACT_MATCH':
         match = filter.values.every(function (v) {
           var pattern = new RegExp(v);
           var test = pattern.exec(value);
           return test && test.length > 0;
         });
         break;
-      case "IN_LIST":
+      case 'IN_LIST':
         match = filter.values.some((v) => value == v);
         break;
-      case "IS_NULL":
+      case 'IS_NULL':
         match = !value || value == null || isNaN(value);
         break;
-      case "BETWEEN":
+      case 'BETWEEN':
         match = value >= filter.values[0] && value <= filter.values[1];
         break;
-      case "NUMERIC_GREATER_THAN":
+      case 'NUMERIC_GREATER_THAN':
         match = filter.values.every((v) => value > v);
         break;
-      case "NUMERIC_GREATER_THAN_OR_EQUAL":
+      case 'NUMERIC_GREATER_THAN_OR_EQUAL':
         match = filter.values.every((v) => (value) => v);
         break;
-      case "NUMERIC_LESS_THAN":
+      case 'NUMERIC_LESS_THAN':
         match = filter.values.every((v) => value < v);
         break;
-      case "NUMERIC_LESS_THAN_OR_EQUAL":
+      case 'NUMERIC_LESS_THAN_OR_EQUAL':
         match = filter.values.every((v) => value <= v);
         break;
     }
 
-    return filter.type == "INCLUDE" ? match : !match;
+    return filter.type == 'INCLUDE' ? match : !match;
   };
 
   return this;
@@ -321,74 +321,74 @@ Filter.MATCH = 2;
 function testFilters() {
   var request = {
     dateRange: {
-      endDate: "2020-05-04",
-      startDate: "2020-05-04",
+      endDate: '2020-05-04',
+      startDate: '2020-05-04'
     },
     dimensionsFilters: [
       [
         {
-          fieldName: "customer_id",
-          type: "INCLUDE",
+          fieldName: 'customer_id',
+          type: 'INCLUDE',
           values: [437380.0],
-          operator: "EQUALS",
+          operator: 'EQUALS'
         },
         {
-          fieldName: "customer_id",
-          type: "INCLUDE",
+          fieldName: 'customer_id',
+          type: 'INCLUDE',
           values: [493646.0],
-          operator: "EQUALS",
-        },
+          operator: 'EQUALS'
+        }
       ],
       [
         {
-          fieldName: "billable",
-          type: "INCLUDE",
+          fieldName: 'billable',
+          type: 'INCLUDE',
           values: [true],
-          operator: "EQUALS",
+          operator: 'EQUALS'
         },
         {
-          fieldName: "locked",
-          type: "INCLUDE",
+          fieldName: 'locked',
+          type: 'INCLUDE',
           values: [false],
-          operator: "EQUALS",
-        },
-      ],
+          operator: 'EQUALS'
+        }
+      ]
     ],
     configParams: {
-      api: "time_entries",
+      api: 'time_entries'
     },
     scriptParams: {
-      lastRefresh: 1588712095513,
+      lastRefresh: 1588712095513
     },
     fields: [
       {
-        name: "customer",
+        name: 'customer'
       },
       {
-        name: "project",
+        name: 'project'
       },
       {
-        name: "project_id",
-        forFilterOnly: true,
+        name: 'project_id',
+        forFilterOnly: true
       },
       {
-        name: "time",
+        name: 'time'
       },
       {
-        name: "user",
-      },
-    ],
+        name: 'user'
+      }
+    ]
   };
 
   var date = Utilities.formatDate(
     new Date(),
     Session.getScriptTimeZone(),
-    "yyyy-MM-dd"
+    'yyyy-MM-dd'
   );
   var params = {
     from: date,
     to: date,
-    limit: 20,
+    limit: 20
   };
 
   var api_ = new MiteTimeEntries();

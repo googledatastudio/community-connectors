@@ -28,91 +28,91 @@ function getConfig(request) {
 
   config
     .newSelectSingle()
-    .setId("cache")
-    .setName("Data Caching")
+    .setId('cache')
+    .setName('Data Caching')
     .setHelpText(
-      "e.g. data that is retrieved from the Mite API will be cache in order to reduce API calls and increase performance"
+      'e.g. data that is retrieved from the Mite API will be cache in order to reduce API calls and increase performance'
     )
     .setAllowOverride(true)
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("15 Minutes (Default)")
+        .setLabel('15 Minutes (Default)')
         .setValue(15 * 60)
     )
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("30 Minutes")
+        .setLabel('30 Minutes')
         .setValue(30 * 60)
     )
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("1 Hour")
+        .setLabel('1 Hour')
         .setValue(1 * 60 * 60)
     )
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("3 Hours")
+        .setLabel('3 Hours')
         .setValue(3 * 60 * 60)
     )
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("6 Hours")
+        .setLabel('6 Hours')
         .setValue(6 * 60 * 60)
     )
-    .addOption(config.newOptionBuilder().setLabel("Off").setValue(0));
+    .addOption(config.newOptionBuilder().setLabel('Off').setValue(0));
 
   config
     .newSelectSingle()
-    .setId("api")
-    .setName("Mite API")
-    .setHelpText("e.g. time entries, projects and more")
+    .setId('api')
+    .setName('Mite API')
+    .setHelpText('e.g. time entries, projects and more')
     .setIsDynamic(true)
     .setAllowOverride(false)
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("Time entries")
+        .setLabel('Time entries')
         .setValue(MiteTimeEntries.API)
     )
     .addOption(
-      config.newOptionBuilder().setLabel("Projects").setValue("projects")
+      config.newOptionBuilder().setLabel('Projects').setValue('projects')
     )
-    .addOption(config.newOptionBuilder().setLabel("Users").setValue("users"))
+    .addOption(config.newOptionBuilder().setLabel('Users').setValue('users'))
     .addOption(
       config
         .newOptionBuilder()
-        .setLabel("Customers")
+        .setLabel('Customers')
         .setValue(MiteCustomers.API)
     )
     .addOption(
-      config.newOptionBuilder().setLabel("Services").setValue("services")
+      config.newOptionBuilder().setLabel('Services').setValue('services')
     );
 
   if (params && params.api == MiteTimeEntries.API) {
     config
       .newTextInput()
-      .setId("group_by")
-      .setName("Group by")
+      .setId('group_by')
+      .setName('Group by')
       .setHelpText(
-        "e.g. free combination of user, customer, project, service and time (day, week, month or year) with values separated by comma. Leave blank for no grouping. Example: project, user, day"
+        'e.g. free combination of user, customer, project, service and time (day, week, month or year) with values separated by comma. Leave blank for no grouping. Example: project, user, day'
       )
       .setAllowOverride(false);
 
     config
       .newSelectSingle()
-      .setId("billable")
-      .setName("Services")
-      .setHelpText("e.g. all services, or just billable or non-billable")
+      .setId('billable')
+      .setName('Services')
+      .setHelpText('e.g. all services, or just billable or non-billable')
       .setAllowOverride(true)
-      .addOption(config.newOptionBuilder().setLabel("all").setValue(0))
-      .addOption(config.newOptionBuilder().setLabel("billable").setValue(1))
+      .addOption(config.newOptionBuilder().setLabel('all').setValue(0))
+      .addOption(config.newOptionBuilder().setLabel('billable').setValue(1))
       .addOption(
-        config.newOptionBuilder().setLabel("bon-billable").setValue(2)
+        config.newOptionBuilder().setLabel('bon-billable').setValue(2)
       );
 
     config.setDateRangeRequired(true);
@@ -177,7 +177,7 @@ function getFields(request) {
  */
 function getSchema(request) {
   var fields = getFields(request).build();
-  return { schema: fields };
+  return {schema: fields};
 }
 
 /**
@@ -227,8 +227,8 @@ function dictsToRows(requestedFields, rows) {
         values: requestedFields.reduce(
           (values, field) => [...values, row[field]],
           []
-        ),
-      },
+        )
+      }
     ],
     []
   );
@@ -337,13 +337,13 @@ function getData(request) {
   // remove non-requested fields
   var result = dictsToRows(requestedFields, rows);
 
-  console.log("{0} rows received".format(result.length));
+  console.log('{0} rows received'.format(result.length));
   //console.log(result);
 
   return {
     schema: requestedSchema.build(),
     rows: result,
-    filtersApplied: filter ? true : false,
+    filtersApplied: filter ? true : false
   };
 }
 
@@ -358,43 +358,43 @@ function testTimeEntriesApi() {
 
   request = {
     dateRange: {
-      endDate: "2020-05-01",
-      startDate: "2020-05-05",
+      endDate: '2020-05-01',
+      startDate: '2020-05-05'
     },
     dimensionsFilters: [
       [
         {
-          operator: "EQUALS",
-          fieldName: "project_id",
-          type: "INCLUDE",
-          values: [3034258.0],
-        },
+          operator: 'EQUALS',
+          fieldName: 'project_id',
+          type: 'INCLUDE',
+          values: [3034258.0]
+        }
       ],
       [
         {
-          operator: "EQUALS",
-          fieldName: "user",
-          type: "INCLUDE",
-          values: ["Matthias Heise"],
-        },
-      ],
+          operator: 'EQUALS',
+          fieldName: 'user',
+          type: 'INCLUDE',
+          values: ['Matthias Heise']
+        }
+      ]
     ],
     configParams: {
-      api: "time_entries",
+      api: 'time_entries'
     },
     scriptParams: {
-      lastRefresh: 1588712095513,
+      lastRefresh: 1588712095513
     },
     fields: [
-      { name: "customer" },
-      { name: "project" },
+      {name: 'customer'},
+      {name: 'project'},
       {
-        name: "project_id",
-        forFilterOnly: true,
+        name: 'project_id',
+        forFilterOnly: true
       },
-      { name: "time" },
-      { name: "user" },
-    ],
+      {name: 'time'},
+      {name: 'user'}
+    ]
   };
 
   var rows = getData(request);
@@ -412,34 +412,34 @@ function testTimeEntriesGroupedByApi() {
 
   request = {
     dateRange: {
-      endDate: "2020-05-01",
-      startDate: "2020-05-05",
+      endDate: '2020-05-01',
+      startDate: '2020-05-05'
     },
     dimensionsFilters: [
       [
         {
-          operator: "EQUALS",
-          fieldName: "project_id",
-          type: "INCLUDE",
-          values: [3034258.0],
-        },
-      ],
+          operator: 'EQUALS',
+          fieldName: 'project_id',
+          type: 'INCLUDE',
+          values: [3034258.0]
+        }
+      ]
     ],
     configParams: {
-      api: "time_entries",
-      group_by: "week, project, user",
-      billable: 1,
+      api: 'time_entries',
+      group_by: 'week, project, user',
+      billable: 1
     },
     scriptParams: {
-      lastRefresh: 1588712095513,
+      lastRefresh: 1588712095513
     },
     fields: [
-      { name: "week" },
-      { name: "project" },
-      { name: "user" },
-      { name: "time" },
-      { name: "revenue" },
-    ],
+      {name: 'week'},
+      {name: 'project'},
+      {name: 'user'},
+      {name: 'time'},
+      {name: 'revenue'}
+    ]
   };
 
   var rows = getData(request);
@@ -459,21 +459,21 @@ function testCustomersApi() {
     dimensionsFilters: [
       [
         {
-          operator: "EQUALS",
-          fieldName: "archived",
-          type: "INCLUDE",
-          values: [true],
-        },
-      ],
+          operator: 'EQUALS',
+          fieldName: 'archived',
+          type: 'INCLUDE',
+          values: [true]
+        }
+      ]
     ],
     configParams: {
-      api: "customers",
-      cache: 15 * 60,
+      api: 'customers',
+      cache: 15 * 60
     },
     scriptParams: {
-      lastRefresh: 1588712095513,
+      lastRefresh: 1588712095513
     },
-    fields: [{ name: "id" }, { name: "name" }, { name: "note" }],
+    fields: [{name: 'id'}, {name: 'name'}, {name: 'note'}]
   };
 
   var rows = getData(request);
@@ -493,26 +493,26 @@ function testProjectsApi() {
     dimensionsFilters: [
       [
         {
-          operator: "EQUALS",
-          fieldName: "customer_id",
-          type: "INCLUDE",
-          values: [493646],
-        },
-      ],
+          operator: 'EQUALS',
+          fieldName: 'customer_id',
+          type: 'INCLUDE',
+          values: [493646]
+        }
+      ]
     ],
     configParams: {
-      api: "projects",
-      cache: 15 * 60,
+      api: 'projects',
+      cache: 15 * 60
     },
     scriptParams: {
-      lastRefresh: 1588712095513,
+      lastRefresh: 1588712095513
     },
     fields: [
-      { name: "id" },
-      { name: "name" },
-      { name: "budget" },
-      { name: "budget_type" },
-    ],
+      {name: 'id'},
+      {name: 'name'},
+      {name: 'budget'},
+      {name: 'budget_type'}
+    ]
   };
 
   var rows = getData(request);

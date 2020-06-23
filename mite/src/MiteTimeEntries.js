@@ -11,10 +11,10 @@ function MiteTimeEntries() {
 }
 
 /** @constant API - the relative path for the Mite time entries API */
-MiteTimeEntries.API = "time_entries";
+MiteTimeEntries.API = 'time_entries';
 
 /** @constant TAG - the JSON tag name used by the flat Mite time entries API */
-MiteTimeEntries.TAG = "time_entry";
+MiteTimeEntries.TAG = 'time_entry';
 
 /**
  * Gets all dimensions supported by the Mite time entries API.
@@ -27,101 +27,101 @@ MiteTimeEntries.prototype.getDimensions = function () {
 
   return [
     {
-      id: "id",
-      name: "ID",
-      type: types.NUMBER,
+      id: 'id',
+      name: 'ID',
+      type: types.NUMBER
     },
     {
-      id: "date",
-      name: "Date",
-      api: "date_at",
-      type: types.YEAR_MONTH_DAY,
+      id: 'date',
+      name: 'Date',
+      api: 'date_at',
+      type: types.YEAR_MONTH_DAY
     },
     {
-      id: "user_id",
-      name: "User ID",
-      group: "user",
+      id: 'user_id',
+      name: 'User ID',
+      group: 'user',
       filter: true,
-      type: types.NUMBER,
+      type: types.NUMBER
     },
     {
-      id: "user",
-      key: "user_id",
-      group: "user",
-      name: "User",
-      api: "user_name",
+      id: 'user',
+      key: 'user_id',
+      group: 'user',
+      name: 'User',
+      api: 'user_name',
       isDefault: true,
-      type: types.TEXT,
+      type: types.TEXT
     },
     {
-      id: "note",
-      name: "Note",
+      id: 'note',
+      name: 'Note',
       filter: true,
-      type: types.TEXT,
+      type: types.TEXT
     },
     {
-      id: "project_id",
-      name: "Project ID",
-      group: "project",
+      id: 'project_id',
+      name: 'Project ID',
+      group: 'project',
       filter: true,
-      type: types.NUMBER,
+      type: types.NUMBER
     },
     {
-      id: "project",
-      key: "project_id",
-      name: "Project",
-      group: "project",
-      api: "project_name",
-      type: types.TEXT,
+      id: 'project',
+      key: 'project_id',
+      name: 'Project',
+      group: 'project',
+      api: 'project_name',
+      type: types.TEXT
     },
     {
-      id: "service_id",
-      name: "Service ID",
-      group: "service",
+      id: 'service_id',
+      name: 'Service ID',
+      group: 'service',
       filter: true,
-      type: types.NUMBER,
+      type: types.NUMBER
     },
     {
-      id: "service",
-      key: "service_id",
-      name: "Service",
-      group: "service",
-      api: "service_name",
-      type: types.TEXT,
+      id: 'service',
+      key: 'service_id',
+      name: 'Service',
+      group: 'service',
+      api: 'service_name',
+      type: types.TEXT
     },
     {
-      id: "customer_id",
-      name: "Customer ID",
-      group: "customer",
+      id: 'customer_id',
+      name: 'Customer ID',
+      group: 'customer',
       filter: true,
-      type: types.NUMBER,
+      type: types.NUMBER
     },
     {
-      id: "customer",
-      key: "customer_id",
-      name: "Customer",
-      group: "customer",
-      api: "customer_name",
-      type: types.TEXT,
+      id: 'customer',
+      key: 'customer_id',
+      name: 'Customer',
+      group: 'customer',
+      api: 'customer_name',
+      type: types.TEXT
     },
     {
-      id: "billable",
-      name: "Billable",
+      id: 'billable',
+      name: 'Billable',
       filter: true,
-      type: types.BOOLEAN,
+      type: types.BOOLEAN
     },
     {
-      id: "locked",
-      name: "Locked",
-      group: "locked",
+      id: 'locked',
+      name: 'Locked',
+      group: 'locked',
       filter: true,
-      type: types.BOOLEAN,
+      type: types.BOOLEAN
     },
     {
-      id: "hourly_rate",
-      name: "Hourly rate",
-      type: types.CURRENCY_EUR,
-    },
+      id: 'hourly_rate',
+      name: 'Hourly rate',
+      type: types.CURRENCY_EUR
+    }
   ];
 };
 
@@ -137,19 +137,19 @@ MiteTimeEntries.prototype.getMetrics = function () {
 
   return [
     {
-      id: "time",
-      name: "Time",
-      api: "minutes",
+      id: 'time',
+      name: 'Time',
+      api: 'minutes',
       type: types.NUMBER,
       isDefault: true,
-      aggregation: aggregations.SUM,
+      aggregation: aggregations.SUM
     },
     {
-      id: "revenue",
-      name: "Revenue",
+      id: 'revenue',
+      name: 'Revenue',
       type: types.YEAR_MONTH_DAY,
-      aggregation: aggregations.SUM,
-    },
+      aggregation: aggregations.SUM
+    }
   ];
 };
 
@@ -171,8 +171,8 @@ MiteTimeEntries.prototype.getSchema = function () {
  */
 MiteTimeEntries.prototype.getFieldMappings = function () {
   return this.getSchema()
-    .filter((field) => field.hasOwnProperty("api"))
-    .reduce((mappings, field) => ({ ...mappings, [field.id]: field.api }), {});
+    .filter((field) => field.hasOwnProperty('api'))
+    .reduce((mappings, field) => ({...mappings, [field.id]: field.api}), {});
 };
 
 /**
@@ -199,19 +199,19 @@ MiteTimeEntries.prototype.getFields = function (request) {
   //fields.newMetric().setId('time').setName('Time').setType(types.DURATION).setAggregation(aggregations.SUM);
   fields
     .newMetric()
-    .setId("time")
-    .setName("Time")
+    .setId('time')
+    .setName('Time')
     .setType(types.NUMBER)
     .setAggregation(aggregations.SUM);
   fields
     .newMetric()
-    .setId("revenue")
-    .setName("Revenue")
+    .setId('revenue')
+    .setName('Revenue')
     .setType(types.CURRENCY_EUR)
     .setAggregation(aggregations.SUM);
 
-  fields.setDefaultDimension("user");
-  fields.setDefaultMetric("time");
+  fields.setDefaultDimension('user');
+  fields.setDefaultMetric('time');
 
   return fields;
 };
@@ -237,15 +237,15 @@ MiteTimeEntries.prototype.getTag = function () {
  */
 MiteTimeEntries.prototype.convertValue = function (value, id) {
   switch (id) {
-    case "minutes":
+    case 'minutes':
       // convert minutes to seconds since data type duration is given in seconds only
       return value[id] * 60;
-    case "date_at":
+    case 'date_at':
       var date = new Date(value[id]);
       return Utilities.formatDate(
         date,
         Session.getScriptTimeZone(),
-        "yyyyMMdd"
+        'yyyyMMdd'
       );
     default:
       // value will be converted automatically
@@ -275,13 +275,13 @@ MiteTimeEntries.prototype.getParams = function (request) {
     */
     params = {
       from: request.dateRange.startDate,
-      to: request.dateRange.endDate,
+      to: request.dateRange.endDate
     };
 
     if (request.pagination) {
       // pagination={startRow=1.0, rowCount=100.0} --> see limit + page in Mite API
-      params["limit"] = request.pagination.rowCount;
-      params["page"] = Math.floor(
+      params['limit'] = request.pagination.rowCount;
+      params['page'] = Math.floor(
         (request.pagination.rowCount + request.pagination.startRow) /
           request.pagination.rowCount
       );
@@ -290,10 +290,10 @@ MiteTimeEntries.prototype.getParams = function (request) {
     if (request.configParams && request.configParams.billable) {
       switch (parseInt(request.configParams.billable)) {
         case 1:
-          params["billable"] = true;
+          params['billable'] = true;
           break;
         case 2:
-          params["billable"] = false;
+          params['billable'] = false;
           break;
       }
     }
@@ -302,12 +302,12 @@ MiteTimeEntries.prototype.getParams = function (request) {
     var date = Utilities.formatDate(
       new Date(),
       Session.getScriptTimeZone(),
-      "yyyy-MM-dd"
+      'yyyy-MM-dd'
     );
     params = {
       from: date,
       to: date,
-      limit: 20,
+      limit: 20
     };
   }
 

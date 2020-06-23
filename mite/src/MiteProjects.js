@@ -11,10 +11,10 @@ function MiteProjects() {
 }
 
 /** @constant API for active projects; the relative path for the dedicated Mite API to call */
-MiteProjects.API = "projects";
+MiteProjects.API = 'projects';
 
 /** @constant API_ARCHIVED for archived projects; the relative path for the dedicated Mite API to call */
-MiteProjects.API_ARCHIVED = "projects/archived";
+MiteProjects.API_ARCHIVED = 'projects/archived';
 
 /**
  * Created the wrapper that handles all Mite and connector functionalities since this instance handles the data schema only.
@@ -25,7 +25,7 @@ MiteProjects.prototype.createApi = function () {
   return new MiteInterface(
     this.getDimensions,
     undefined,
-    "project",
+    'project',
     MiteProjects.API,
     MiteProjects.API_ARCHIVED
   );
@@ -41,55 +41,55 @@ MiteProjects.prototype.getDimensions = function () {
 
   return [
     {
-      id: "id",
-      name: "ID",
-      type: types.NUMBER,
+      id: 'id',
+      name: 'ID',
+      type: types.NUMBER
     },
     {
-      id: "name",
-      name: "Name",
+      id: 'name',
+      name: 'Name',
       filter: true,
       isDefault: true,
-      type: types.TEXT,
+      type: types.TEXT
     },
     {
-      id: "note",
-      name: "Note",
-      type: types.TEXT,
+      id: 'note',
+      name: 'Note',
+      type: types.TEXT
     },
     {
-      id: "customer_id",
-      name: "Customer ID",
+      id: 'customer_id',
+      name: 'Customer ID',
       filter: true,
-      type: types.NUMBER,
+      type: types.NUMBER
     },
     {
-      id: "customer",
-      key: "customer_id",
-      name: "Customer",
-      api: "customer_name",
-      type: types.TEXT,
+      id: 'customer',
+      key: 'customer_id',
+      name: 'Customer',
+      api: 'customer_name',
+      type: types.TEXT
     },
     {
-      id: "budget",
-      name: "Budget",
-      type: types.NUMBER,
+      id: 'budget',
+      name: 'Budget',
+      type: types.NUMBER
     },
     {
-      id: "budget_type",
-      name: "Budget Type",
-      type: types.TEXT,
+      id: 'budget_type',
+      name: 'Budget Type',
+      type: types.TEXT
     },
     {
-      id: "hourly_rate",
-      name: "Hourly Rate",
-      type: types.NUMBER,
+      id: 'hourly_rate',
+      name: 'Hourly Rate',
+      type: types.NUMBER
     },
     {
-      id: "archived",
-      name: "Archived",
+      id: 'archived',
+      name: 'Archived',
       filter: true,
-      type: types.BOOLEAN,
-    },
+      type: types.BOOLEAN
+    }
   ];
 };

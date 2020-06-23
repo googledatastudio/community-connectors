@@ -21,8 +21,8 @@ function IdCache(cacheService, prefix, schema) {
  */
 IdCache.prototype.buildParams = function (schema) {
   return schema
-    .filter((field) => field.hasOwnProperty("key"))
-    .reduce((mappings, field) => ({ ...mappings, [field.id]: field.key }), {});
+    .filter((field) => field.hasOwnProperty('key'))
+    .reduce((mappings, field) => ({...mappings, [field.id]: field.key}), {});
 };
 
 /**
@@ -52,7 +52,7 @@ IdCache.prototype.set = function (rows) {
     if (!values) values = {};
 
     values = rows.reduce(
-      (mappings, row) => ({ ...mappings, [row[field]]: row[key] }),
+      (mappings, row) => ({...mappings, [row[field]]: row[key]}),
       values
     );
 

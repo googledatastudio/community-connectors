@@ -11,10 +11,10 @@ function MiteCustomers() {
 }
 
 /** @constant API for active customers; the relative path for the dedicated Mite API to call */
-MiteCustomers.API = "customers";
+MiteCustomers.API = 'customers';
 
 /** @constant API_ARCHIVED for archived customers; the relative path for the dedicated Mite API to call */
-MiteCustomers.API_ARCHIVED = "customers/archived";
+MiteCustomers.API_ARCHIVED = 'customers/archived';
 
 /**
  * Created the wrapper that handles all Mite and connector functionalities since this instance handles the data schema only.
@@ -25,7 +25,7 @@ MiteCustomers.prototype.createApi = function () {
   return new MiteInterface(
     this.getDimensions,
     undefined,
-    "customer",
+    'customer',
     MiteCustomers.API,
     MiteCustomers.API_ARCHIVED
   );
@@ -41,32 +41,32 @@ MiteCustomers.prototype.getDimensions = function () {
 
   return [
     {
-      id: "id",
-      name: "ID",
-      type: types.NUMBER,
+      id: 'id',
+      name: 'ID',
+      type: types.NUMBER
     },
     {
-      id: "name",
-      name: "Name",
+      id: 'name',
+      name: 'Name',
       filter: true,
       type: types.TEXT,
-      isDefault: true,
+      isDefault: true
     },
     {
-      id: "note",
-      name: "Note",
-      type: types.TEXT,
+      id: 'note',
+      name: 'Note',
+      type: types.TEXT
     },
     {
-      id: "hourly_rate",
-      name: "Hourly Rate",
-      type: types.NUMBER,
+      id: 'hourly_rate',
+      name: 'Hourly Rate',
+      type: types.NUMBER
     },
     {
-      id: "archived",
-      name: "Archived",
+      id: 'archived',
+      name: 'Archived',
       filter: true,
-      type: types.BOOLEAN,
-    },
+      type: types.BOOLEAN
+    }
   ];
 };

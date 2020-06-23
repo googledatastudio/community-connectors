@@ -1,5 +1,5 @@
 /** @constant the Mite API including a wildcard. also see connector URL whitelisting in the manifest file */
-const MITE_URL = "https://{0}.mite.yo.lk";
+const MITE_URL = 'https://{0}.mite.yo.lk';
 
 /** @constant the current version of the user-agent (e.g. Google Data Studio connector) */
 const AGENT_VERSION = 1.01;
@@ -17,7 +17,7 @@ function miteGet(domain, api_key, api, params) {
   var activeUser = Session.getActiveUser().getEmail();
   var scriptUser = Session.getEffectiveUser().getEmail();
 
-  var userAgent = "Mite Connector for Google Datastudio v{0}; user: {1}; credentials: {2}; The unbelievable Machine Company GmbH".format(
+  var userAgent = 'Mite Connector for Google Datastudio v{0}; user: {1}; credentials: {2}; The unbelievable Machine Company GmbH'.format(
     AGENT_VERSION,
     activeUser,
     scriptUser
@@ -25,32 +25,32 @@ function miteGet(domain, api_key, api, params) {
   console.log(userAgent);
 
   var headers = {
-    "X-MiteApiKey": api_key,
-    "User-Agent": userAgent,
+    'X-MiteApiKey': api_key,
+    'User-Agent': userAgent
   };
 
   var options = {
-    headers: headers,
+    headers: headers
   };
 
-  var url = "{0}/{1}.json".format(MITE_URL.format(domain), api);
+  var url = '{0}/{1}.json'.format(MITE_URL.format(domain), api);
   if (params && Object.keys(params).length > 0) {
     var params_ = [];
     for (const [key, value] of Object.entries(params)) {
       var value_ = value;
-      if (Array.isArray(value)) value_ = value.join(",");
+      if (Array.isArray(value)) value_ = value.join(',');
 
-      params_.push("{0}={1}".format(key, encodeURIComponent(value_)));
+      params_.push('{0}={1}'.format(key, encodeURIComponent(value_)));
     }
 
-    var query = params_.join("&");
-    url = "{0}?{1}".format(url, query);
+    var query = params_.join('&');
+    url = '{0}?{1}'.format(url, query);
   }
 
   try {
     // ToDo: handling of ETag; see https://mite.yo.lk/api/index.html#conditional-requests (remark: HTTP result might be 304 instead of 200)
 
-    console.log("HTTP GET %s", url);
+    console.log('HTTP GET %s', url);
     var response = UrlFetchApp.fetch(url, options);
 
     var data = JSON.parse(response.getContentText());
@@ -58,7 +58,7 @@ function miteGet(domain, api_key, api, params) {
 
     return {
       code: response.getResponseCode(),
-      json: data,
+      json: data
     };
   } catch (e) {
     throwConnectorError(e);
@@ -73,5 +73,5 @@ function miteGet(domain, api_key, api, params) {
  * @returns {object} an object with the HTTP response code as code property and the user/account data as json property (e.g. object in JSON notation).
  */
 function miteGetMyself(domain, api_key) {
-  return miteGet(domain, api_key, "myself");
+  return miteGet(domain, api_key, 'myself');
 }

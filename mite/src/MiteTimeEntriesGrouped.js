@@ -10,40 +10,40 @@ var cc = DataStudioApp.createCommunityConnector();
  */
 function MiteTimeEntriesGrouped(timeEntriesApi, groupConfig) {
   this.api = timeEntriesApi;
-  this.groups = groupConfig.split(",").map((group) => group.trim());
+  this.groups = groupConfig.split(',').map((group) => group.trim());
 
   return this;
 }
 
 /** @constant TAG - the JSON tag name used by the grouped Mite time entries API */
-MiteTimeEntriesGrouped.TAG = "time_entry_group";
+MiteTimeEntriesGrouped.TAG = 'time_entry_group';
 
 /** @constant GROUPBY_USER group by user */
-const GROUPBY_USER = "user";
+const GROUPBY_USER = 'user';
 
 /** @constant GROUPBY_CUSTOMER group by customer */
-const GROUPBY_CUSTOMER = "customer";
+const GROUPBY_CUSTOMER = 'customer';
 
 /** @constant GROUPBY_PROJECT group by project */
-const GROUPBY_PROJECT = "project";
+const GROUPBY_PROJECT = 'project';
 
 /** @constant GROUPBY_SERVICE group by service */
-const GROUPBY_SERVICE = "service";
+const GROUPBY_SERVICE = 'service';
 
 /** @constant GROUPBY_DAY group by day */
-const GROUPBY_DAY = "day";
+const GROUPBY_DAY = 'day';
 
 /** @constant GROUPBY_WEEK group by week */
-const GROUPBY_WEEK = "week";
+const GROUPBY_WEEK = 'week';
 
 /** @constant GROUPBY_MONTH group by month */
-const GROUPBY_MONTH = "month";
+const GROUPBY_MONTH = 'month';
 
 /** @constant GROUPBY_YEAR group by year */
-const GROUPBY_YEAR = "year";
+const GROUPBY_YEAR = 'year';
 
 /** @constant GROUPBY_LOCKED group by locked/unlocked */
-const GROUPBY_LOCKED = "locked";
+const GROUPBY_LOCKED = 'locked';
 
 /**
  * Gets all groups that are related to grouping by time (e.g. day, week, month and year).
@@ -88,7 +88,7 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function () {
     .getDimensions()
     .filter(
       (field) =>
-        field.hasOwnProperty("group") && this.groups.includes(field.group)
+        field.hasOwnProperty('group') && this.groups.includes(field.group)
     );
 
   var types = cc.FieldType;
@@ -99,34 +99,34 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function () {
     switch (group) {
       case GROUPBY_DAY:
         field = {
-          id: "day",
-          name: "Day",
+          id: 'day',
+          name: 'Day',
           isDefault: true,
-          type: types.YEAR_MONTH_DAY,
+          type: types.YEAR_MONTH_DAY
         };
         break;
       case GROUPBY_WEEK:
         field = {
-          id: "week",
-          name: "Week",
+          id: 'week',
+          name: 'Week',
           isDefault: true,
-          type: types.YEAR_WEEK,
+          type: types.YEAR_WEEK
         };
         break;
       case GROUPBY_MONTH:
         field = {
-          id: "month",
-          name: "Month",
+          id: 'month',
+          name: 'Month',
           isDefault: true,
-          type: types.YEAR_MONTH,
+          type: types.YEAR_MONTH
         };
         break;
       case GROUPBY_YEAR:
         field = {
-          id: "week",
-          name: "Week",
+          id: 'week',
+          name: 'Week',
           isDefault: true,
-          type: types.YEAR,
+          type: types.YEAR
         };
         break;
     }
@@ -135,14 +135,14 @@ MiteTimeEntriesGrouped.prototype.getDimensions = function () {
   } else {
     dimensions.push(
       {
-        id: "from",
-        name: "From",
-        type: types.YEAR_MONTH_DAY,
+        id: 'from',
+        name: 'From',
+        type: types.YEAR_MONTH_DAY
       },
       {
-        id: "to",
-        name: "To",
-        type: types.YEAR_MONTH_DAY,
+        id: 'to',
+        name: 'To',
+        type: types.YEAR_MONTH_DAY
       }
     );
   }
@@ -177,8 +177,8 @@ MiteTimeEntriesGrouped.prototype.getSchema = function () {
  */
 MiteTimeEntriesGrouped.prototype.getFieldMappings = function () {
   return this.getSchema()
-    .filter((field) => field.hasOwnProperty("api"))
-    .reduce((mappings, field) => ({ ...mappings, [field.id]: field.api }), {});
+    .filter((field) => field.hasOwnProperty('api'))
+    .reduce((mappings, field) => ({...mappings, [field.id]: field.api}), {});
 };
 
 /**
@@ -210,10 +210,10 @@ MiteTimeEntriesGrouped.prototype.getFields = function (request) {
   );
 
   var defaultDimension = dimensions.find(
-    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty('isDefault') && field.isDefault == true
   );
   var defaultMetric = metrics.find(
-    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty('isDefault') && field.isDefault == true
   );
 
   if (defaultDimension) fields.setDefaultDimension(defaultDimension.id);
@@ -243,21 +243,21 @@ MiteTimeEntriesGrouped.prototype.getTag = function () {
  */
 MiteTimeEntriesGrouped.prototype.convertValue = function (value, id) {
   switch (id) {
-    case "from":
-    case "to":
-    case "day":
+    case 'from':
+    case 'to':
+    case 'day':
       var date = new Date(value[id]);
       return Utilities.formatDate(
         date,
         Session.getScriptTimeZone(),
-        "yyyyMMdd"
+        'yyyyMMdd'
       );
-    case "week":
-    case "month":
-    case "year":
+    case 'week':
+    case 'month':
+    case 'year':
       // no conversion necessary since the original format fits the Google requirements; value will be recognized automatically
       return value[id];
-    case "minutes":
+    case 'minutes':
       // convert minutes to seconds since data type duration is given in seconds only
       return value[id] * 60;
     default:
@@ -278,7 +278,7 @@ MiteTimeEntriesGrouped.prototype.getParams = function (request) {
   var schema = this.getSchema();
   var params = this.api.getParams(request);
 
-  if (params) params["group_by"] = this.groups;
+  if (params) params['group_by'] = this.groups;
 
   return params;
 };

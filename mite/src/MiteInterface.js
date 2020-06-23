@@ -66,8 +66,8 @@ MiteInterface.prototype.getSchema = function () {
  */
 MiteInterface.prototype.getFieldMappings = function () {
   return this.getSchema()
-    .filter((field) => field.hasOwnProperty("api"))
-    .reduce((mappings, field) => ({ ...mappings, [field.id]: field.api }), {});
+    .filter((field) => field.hasOwnProperty('api'))
+    .reduce((mappings, field) => ({...mappings, [field.id]: field.api}), {});
 };
 
 /**
@@ -99,10 +99,10 @@ MiteInterface.prototype.getFields = function (request) {
   );
 
   var defaultDimension = dimensions.find(
-    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty('isDefault') && field.isDefault == true
   );
   var defaultMetric = metrics.find(
-    (field) => field.hasOwnProperty("isDefault") && field.isDefault == true
+    (field) => field.hasOwnProperty('isDefault') && field.isDefault == true
   );
 
   if (defaultDimension) fields.setDefaultDimension(defaultDimension.id);
@@ -157,13 +157,13 @@ MiteInterface.prototype.getParams = function (request) {
         page: Math.floor(
           (request.pagination.rowCount + request.pagination.startRow) /
             request.pagination.rowCount
-        ),
+        )
       };
     } else params = {};
   } else {
     // preview only
     params = {
-      limit: 20,
+      limit: 20
     };
   }
 
