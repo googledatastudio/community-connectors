@@ -5,7 +5,7 @@
 This [Data Studio][Community Connector] lets users query the [Chrome UX Dataset]
 from [Chrome User Experience Report] for a defined URL/origin.
 
-Visit [Chrome UX Report Community Connector] to try the connector.
+Visit [Chrome UX Report Community Connector] to try the connector. *Note that this example code may not necessarily reflect the version used by the connector in production.*
 
 ![Screenshot of a dashboard using Chrome UX Report Community Connector][screenshot]
 
