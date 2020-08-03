@@ -309,7 +309,7 @@ function getFromJira(endpoint, params) {
     var response = UrlFetchApp.fetch(encodeURI(url), getParams());
     return JSON.parse(response);
   } catch (error) {
-    handleError(error, 'Something went wrong while fetching ' + enpoint);
+    handleError(error, 'Something went wrong while fetching ' + endpoint);
   }
 }
 /**
