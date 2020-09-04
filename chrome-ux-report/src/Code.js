@@ -299,6 +299,82 @@ crux.Schema = [
     }
   },
   {
+    name: 'fast_lcp',
+    label: 'Fast LCP',
+    description:
+      'The percent of Largest Contentful Paint experiences < 2.5 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
+    semantics: {
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true
+    }
+  },
+  {
+    name: 'avg_lcp',
+    label: 'Average LCP',
+    description:
+      'The percent of Largest Contentful Paint experiences >= 2.5 seconds and < 4 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
+    semantics: {
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true
+    }
+  },
+  {
+    name: 'slow_lcp',
+    label: 'Slow LCP',
+    description:
+      'The percent of Largest Contentful Paint experiences >= 4 seconds.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
+    semantics: {
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true
+    }
+  },
+  {
+    name: 'small_cls',
+    label: 'Small CLS',
+    description: 'The percent of Cumulative Layout Shift experiences < 0.1.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
+    semantics: {
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true
+    }
+  },
+  {
+    name: 'medium_cls',
+    label: 'Medium CLS',
+    description:
+      'The percent of Cumulative Layout Shift experiences >= 0.1 and < 0.25.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
+    semantics: {
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true
+    }
+  },
+  {
+    name: 'large_cls',
+    label: 'Large CLS',
+    description: 'The percent of Cumulative Layout Shift experiences >= 0.25.',
+    dataType: 'NUMBER',
+    defaultAggregationType: 'SUM',
+    semantics: {
+      conceptType: 'METRIC',
+      semanticType: 'PERCENT',
+      isReaggregatable: true
+    }
+  },
+  {
     name: 'desktopDensity',
     label: 'Desktop',
     description: 'The proportion of experiences on desktop devices.',
