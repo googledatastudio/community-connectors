@@ -1,0 +1,31 @@
+{
+  "oauthScopes": ["https://www.googleapis.com/auth/script.scriptapp","https://www.googleapis.com/auth/script.external_request"],
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "libraries": [{
+      "userSymbol": "USER_TOKEN",
+      "libraryId": "1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF",
+      "version": "37"
+    }]
+  },
+  "dataStudio": {
+    "name": "Shopify",
+    "logoUrl": "http://sysharmony.com/static/shopify/assets/logo.png",
+    "company": "Sysharmony",
+    "companyUrl": "https://sysharmony.com/",
+    
+    "addonUrl": "https://sysharmony.com/datastudio/shopify",
+    "supportUrl": "https://sysharmony.com/support",
+    
+    "description": "Acces your Shopify sales data with Data Studio connector. Make sure you add read_orders scope when generating the access token on Shopify private apps.",
+    "shortDescription": "Acces your Shopify sales data with this Data Studio connector.",
+    "privacyPolicyUrl": "https://sysharmony.com/pages/privacy",
+    "authType": ["USER_TOKEN"],
+    "feeType": ["FREE"],
+    "sources": ["SHOPIFY"],
+    "templates": {
+      "default": "63cd9744-6d25-467a-88d4-bbd93d2399c2"
+    }
+  }
+  
+}
