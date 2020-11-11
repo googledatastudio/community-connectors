@@ -1,0 +1,34 @@
+{
+  "timeZone": "Europe/Vienna",
+  "dependencies": {},
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "urlFetchWhitelist": ["https://*.mite.yo.lk/"],
+  "dataStudio": {
+    "name": "Mite time tracking DEV",
+    "logoUrl": "https://mite.yo.lk/assets/img/logo/mite-logo-zeiterfassung.png",
+    "company": "The unbelievable Machine Company GmbH",
+    "companyUrl": "https://www.unbelievable-machine.com/",
+    "addonUrl": "https://mite.yo.lk/en/api/",
+    "supportUrl": "https://github.com/nagilo1",
+    "description": "Retrieves data from the Mite time tracking. It supports time tracking, users, customers, projects and services.",
+    "authType": ["USER_TOKEN"],
+    "feeType": ["FREE"],
+    "sources": [
+      "MiteConnector",
+      "MiteApi",
+      "MiteAuth",
+      "MiteInterface",
+      "MiteTimeEntries",
+      "MiteTimeEntriesGrouped",
+      "MiteCustomers",
+      "MiteProjects",
+      "MiteServices",
+      "MiteUsers",
+      "Utils",
+      "DataCache",
+      "Filter",
+      "IdCache"
+    ]
+  }
+}
