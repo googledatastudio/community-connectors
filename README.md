@@ -1,3 +1,7 @@
+# This repo is no longer actively maintained
+
+Issues and pull requests will not be accepted. Examples might be valid but explore than at your own risk
+
 # Community Connectors for Google Data Studio
 
 <a href="https://travis-ci.org/googledatastudio/community-connectors"><img src="https://travis-ci.org/googledatastudio/community-connectors.svg?branch=master" alt="Build Status"></a>
