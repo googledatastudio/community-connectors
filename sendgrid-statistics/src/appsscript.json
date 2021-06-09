@@ -1,0 +1,12 @@
+{
+  "dataStudio": {
+    "name": "SendGrid Statistics",
+    "logoUrl": "https://sendgrid.com/wp-content/themes/sgdotcom/pages/resource/brand//2016/SendGrid-Logomark.png",
+    "company": "Prevu",
+    "companyUrl": "https://www.prevu.com/",
+    "addonUrl": "https://github.com/google/datastudio/tree/master/community-connectors/sendgrid-statistics",
+    "supportUrl": "https://github.com/google/datastudio/issues",
+    "description": "Get SendGrid email statistics.",
+    "sources":["SendGrid"]
+  }
+}
