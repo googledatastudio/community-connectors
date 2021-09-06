@@ -3,7 +3,7 @@
  * {boolean} true if user is current user is admin.
  */
 function isAdminUser() {
-  return false;
+  return true;
 }
 
 /**
